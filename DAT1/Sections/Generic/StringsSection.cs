@@ -1,0 +1,54 @@
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Text;
+
+namespace DAT1.Sections.Generic {
+	public class StringsSection: Section {
+		public List<string> Strings = new List<string>();
+		protected Dictionary<string, uint> offsetByKey = new Dictionary<string, uint>();
+		protected Dictionary<uint, string> keyByOffset = new Dictionary<uint, string>();
+
+		public StringsSection(BinaryReader r, uint size) {
+			byte[] data = r.ReadBytes((int)size);
+
+			int start_offset = 0;
+			for (int i = 0; i < size; ++i) {
+				if (i == size-1 || data[i] == 0) {
+					string s = Encoding.UTF8.GetString(data, start_offset, i - start_offset);
+					offsetByKey[s] = (uint)start_offset;
+					keyByOffset[(uint)start_offset] = s;
+					Strings.Add(s);
+					start_offset = i + 1;
+				}
+			}
+		}
+
+		override public byte[] Save() {
+			return null; // TODO
+
+			var s = new MemoryStream();
+			var w = new BinaryWriter(s);
+			/*
+			foreach (var e in Entries) {
+				w.Write((UInt64)e.AssetId);
+				w.Write((uint)e.AssetPathStringOffset);
+				w.Write((uint)e.ExtensionHash);
+			}
+			*/
+			return s.ToArray();
+		}
+
+		public string GetStringByOffset(uint offset) {
+			string result = null;
+			keyByOffset.TryGetValue(offset, out result);
+			return result;
+		}
+
+		public int GetOffsetByKey(string key) {
+			if (!offsetByKey.ContainsKey(key))
+				return -1;
+
+			return (int)offsetByKey[key];
+		}
+	}
+}
