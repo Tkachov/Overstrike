@@ -1,16 +1,10 @@
-﻿using DAT1.Sections;
-using DAT1.Sections.Config;
+﻿using DAT1.Sections.Config;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DAT1.Files
-{
-    public class Config : DAT1
+namespace DAT1.Files {
+	public class Config : DAT1
     {
         public const uint MAGIC = 0x21A56F68;
 

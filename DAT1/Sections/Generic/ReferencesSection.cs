@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DAT1.Sections
-{
-    public class ReferencesSection : Section
+namespace DAT1.Sections.Generic {
+	public class ReferencesSection : Section
     {
         public class ReferenceEntry
         {
-            public UInt64 AssetId;
+            public ulong AssetId;
             public uint AssetPathStringOffset;
             public uint ExtensionHash;
         }
@@ -36,9 +31,9 @@ namespace DAT1.Sections
             var w = new BinaryWriter(s);
             foreach (var e in Entries)
             {
-                w.Write((UInt64)e.AssetId);
-                w.Write((uint)e.AssetPathStringOffset);
-                w.Write((uint)e.ExtensionHash);
+                w.Write(e.AssetId);
+                w.Write(e.AssetPathStringOffset);
+                w.Write(e.ExtensionHash);
             }
             return s.ToArray();
         }

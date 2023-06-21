@@ -1,12 +1,6 @@
-﻿using DAT1.Sections.Config;
-using DAT1.Sections.Localization;
-using System;
-using System.Collections.Generic;
+﻿using DAT1.Sections.Localization;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DAT1.Files {
 	public class Localization: DAT1 {

@@ -1,21 +1,12 @@
-﻿using DAT1.Sections;
-using Ionic.Zlib;
+﻿using Ionic.Zlib;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using static DAT1.Sections.SectionArchivesMap;
-using static DAT1.Sections.SectionOffsets;
-using static System.Net.WebRequestMethods;
+using static DAT1.Sections.TOC.ArchivesMapSection;
 
 namespace DAT1
 {
-	public class AssetEntry
+    public class AssetEntry
 	{
 		public int index;
 		public UInt64 id;
@@ -32,9 +23,9 @@ namespace DAT1
 
 		private const uint TOC_MAGIC = 0x77AF12AF;
 
-		public bool Load(String filename) {
+		public bool Load(string filename) {
 			try {
-				var f = System.IO.File.OpenRead(filename);
+				var f = File.OpenRead(filename);
 				var r = new BinaryReader(f);
 				uint magic = r.ReadUInt32();
 				if (magic != TOC_MAGIC) {

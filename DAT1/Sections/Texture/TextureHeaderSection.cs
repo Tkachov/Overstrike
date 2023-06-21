@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DAT1.Sections.Texture
-{
-    public class TextureHeaderSection : Section
+namespace DAT1.Sections.Texture {
+	public class TextureHeaderSection : Section
     {
         public const uint TAG = 0x4EDE3593;
 

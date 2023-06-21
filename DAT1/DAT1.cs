@@ -2,18 +2,15 @@
 using DAT1.Sections.Config;
 using DAT1.Sections.Localization;
 using DAT1.Sections.Texture;
+using DAT1.Sections.TOC;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace DAT1
 {
-	public class DAT1
+    public class DAT1
 	{
 		// header
 		uint magic, unk1, size, sectionsCount;
@@ -31,10 +28,10 @@ namespace DAT1
         private const uint SIZE_ENTRIES_SECTION_TAG = 0x65BCF461;
 		private const uint OFFSETS_SECTION_TAG = 0xDCD720B5;
 
-        public SectionArchivesMap ArchivesSection => (SectionArchivesMap)sections[ARCHIVES_SECTION_TAG];
-        public SectionAssetIds AssetIdsSection => (SectionAssetIds)sections[ASSET_IDS_SECTION_TAG];
-		public SectionSizeEntries SizesSection => (SectionSizeEntries)sections[SIZE_ENTRIES_SECTION_TAG];
-		public SectionOffsets OffsetsSection => (SectionOffsets)sections[OFFSETS_SECTION_TAG];
+        public ArchivesMapSection ArchivesSection => (ArchivesMapSection)sections[ARCHIVES_SECTION_TAG];
+        public AssetIdsSection AssetIdsSection => (AssetIdsSection)sections[ASSET_IDS_SECTION_TAG];
+		public SizeEntriesSection SizesSection => (SizeEntriesSection)sections[SIZE_ENTRIES_SECTION_TAG];
+		public OffsetsSection OffsetsSection => (OffsetsSection)sections[OFFSETS_SECTION_TAG];
 
 		protected DAT1()
 		{
@@ -88,12 +85,12 @@ namespace DAT1
         private Section ReadSection(uint tag, BinaryReader r, uint size) {
 			switch (tag) {
 				// toc
-				case SIZE_ENTRIES_SECTION_TAG: return new SectionSizeEntries(r, size);
-				case ARCHIVES_SECTION_TAG: return new SectionArchivesMap(r, size);
-				case ASSET_IDS_SECTION_TAG: return new SectionAssetIds(r, size);
-				case 0x6D921D7B: return new SectionKeyAssets(r, size);
-				case OFFSETS_SECTION_TAG: return new SectionOffsets(r, size);
-				case 0xEDE8ADA9: return new SectionSpans(r, size);
+				case SIZE_ENTRIES_SECTION_TAG: return new SizeEntriesSection(r, size);
+				case ARCHIVES_SECTION_TAG: return new ArchivesMapSection(r, size);
+				case ASSET_IDS_SECTION_TAG: return new AssetIdsSection(r, size);
+				case 0x6D921D7B: return new KeyAssetsSection(r, size);
+				case OFFSETS_SECTION_TAG: return new OffsetsSection(r, size);
+				case 0xEDE8ADA9: return new SpansSection(r, size);
 
 				// config
 				case ConfigTypeSection.TAG: return new ConfigTypeSection(this, r, size);
@@ -115,7 +112,7 @@ namespace DAT1
 		}
 
 		public uint AddNewArchive(string filename) {
-			SectionArchivesMap section = (SectionArchivesMap)sections[ARCHIVES_SECTION_TAG];
+			ArchivesMapSection section = (ArchivesMapSection)sections[ARCHIVES_SECTION_TAG];
 			uint new_index = 0;
 			foreach (var a in section.Entries) {
 				if (a.InstallBucket != 0)
@@ -129,13 +126,13 @@ namespace DAT1
 			byte[] byteFilename = new byte[64];
 			System.Buffer.BlockCopy(bytes, 0, byteFilename, 0, min(bytes.Length, 64));
 
-			section.Entries.Insert((int)new_index, new SectionArchivesMap.ArchiveFileEntry() { InstallBucket = 0, Chunkmap = 10000 + new_index, Filename = byteFilename });
+			section.Entries.Insert((int)new_index, new ArchivesMapSection.ArchiveFileEntry() { InstallBucket = 0, Chunkmap = 10000 + new_index, Filename = byteFilename });
 			return new_index;
 		}
 
 		public Dictionary<UInt64, int> FindAssetsIndexes(HashSet<UInt64> assetsIds) {
 			Dictionary<UInt64, int> result = new Dictionary<ulong, int>();
-			SectionAssetIds section = (SectionAssetIds)sections[ASSET_IDS_SECTION_TAG];
+			AssetIdsSection section = (AssetIdsSection)sections[ASSET_IDS_SECTION_TAG];
 
 			int i = 0;
 			while (i < section.Ids.Count && assetsIds.Count > 0) {

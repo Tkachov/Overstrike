@@ -1,16 +1,9 @@
-﻿using DAT1.Sections.Config;
-using DAT1.Sections.Texture;
-using System;
-using System.Collections.Generic;
+﻿using DAT1.Sections.Texture;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DAT1.Files
-{
-    public class Texture : DAT1
+namespace DAT1.Files {
+	public class Texture : DAT1
     {
         public const uint MAGIC = 0x5C4580B9;
 

@@ -1,5 +1,4 @@
 ﻿using DAT1.Sections.Generic;
-using System.Collections.Generic;
 using System.IO;
 
 namespace DAT1.Sections.Localization {
