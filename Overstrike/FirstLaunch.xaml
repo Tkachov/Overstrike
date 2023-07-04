@@ -1,0 +1,51 @@
+﻿<Window x:Class="Overstrike.FirstLaunch"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Overstrike"
+        mc:Ignorable="d"
+        Title="Overstrike" Height="550" Width="800" MinWidth="300">
+
+	<Border BorderThickness="0,1,0,0" BorderBrush="#EEE">
+		<Grid Background="#FFF">
+			<TextBlock Text="Welcome!" FontWeight="Bold" VerticalAlignment="Top" Margin="10,10,10,0" />
+			<TextBlock Text="Looks like this is your first time here." VerticalAlignment="Top" Margin="10,34,10,0" />
+
+			<Grid x:Name="InstallationsFound" Visibility="Hidden">
+				<TextBlock Text="The app have found these installations. Please choose which do you want to add:" VerticalAlignment="Top" Margin="10,58,10,0" />
+
+				<TextBlock Text="Or, you can add the game manually:" VerticalAlignment="Top" Margin="10,208,10,0" />
+				<Button Content="Add game" Margin="10,230,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" />
+			</Grid>
+
+			<Grid x:Name="NoInstallationsFound">
+				<TextBlock Text="The app have not found games in usual places. Please, add the game manually:" VerticalAlignment="Top" Margin="10,58,10,0" />
+				<Button Content="Add game" Margin="10,80,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" />
+			</Grid>
+
+			<Grid x:Name="SuitInfo" Visibility="Collapsed">
+				<Image x:Name="BigIcon" HorizontalAlignment="Left" Margin="7,331,0,0" VerticalAlignment="Top" Stretch="Fill" Width="298" Height="118" />
+
+				<Label Content="Profile:" HorizontalAlignment="Left" Margin="5,87,0,0" VerticalAlignment="Top" Width="55"/>
+				<ComboBox x:Name="SuitLoadoutComboBox" Margin="60,89,5,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="180">
+					<!-- SelectionChanged="SuitLoadoutComboBox_SelectionChanged" -->
+					<ComboBox.ItemTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding Name}"  />
+						</DataTemplate>
+					</ComboBox.ItemTemplate>
+				</ComboBox>
+				<Label x:Name="ProfileGamePath" Content="C:/Path/To/MSMR" Margin="260,87,5,0" VerticalAlignment="Top" />
+			</Grid>
+
+			<Grid x:Name="Modified" VerticalAlignment="Bottom" Margin="5,0,5,5">
+				<Label Content="There are unsaved changes!" HorizontalAlignment="Left" Margin="0,0,0,3" VerticalAlignment="Bottom"/>
+
+				<Button Content="Undo" HorizontalAlignment="Right" Margin="0,0,75,5" VerticalAlignment="Bottom" Width="60" />
+				<Button Content="Save" HorizontalAlignment="Right" Margin="0,0,2,5" VerticalAlignment="Bottom" Width="60" />
+				<!-- Click="SaveChangesButtonClicked" -->
+			</Grid>
+		</Grid>
+	</Border>
+</Window>
