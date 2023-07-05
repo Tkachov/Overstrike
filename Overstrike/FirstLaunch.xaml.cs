@@ -23,5 +23,15 @@ namespace Overstrike
         {
             InitializeComponent();
         }
+
+		private void Button_Click(object sender, RoutedEventArgs e) {
+			var window = new CreateProfile();
+			window.ShowDialog();
+
+            var p = window.GetProfile();
+            if (p != null) {                
+                Close();
+            }
+		}
     }
 }

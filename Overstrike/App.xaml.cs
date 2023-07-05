@@ -14,11 +14,17 @@ namespace Overstrike {
 			ReadSettings();
 			LoadProfiles();
 
+			ShutdownMode = ShutdownMode.OnExplicitShutdown;
+			if (Profiles.Count == 0) {
+				var window = new FirstLaunch();
+				window.ShowDialog();
+
+				LoadProfiles();
+			}
+
+			ShutdownMode = ShutdownMode.OnLastWindowClose;
 			if (Profiles.Count > 0) {
 				var window = new MainWindow(Settings, Profiles);
-				window.Show();
-			} else {
-				var window = new FirstLaunch();
 				window.Show();
 			}
 		}

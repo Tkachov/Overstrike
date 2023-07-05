@@ -21,7 +21,7 @@
 
 			<Grid x:Name="NoInstallationsFound">
 				<TextBlock Text="The app have not found games in usual places. Please, add the game manually:" VerticalAlignment="Top" Margin="10,58,10,0" />
-				<Button Content="Add game" Margin="10,80,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" />
+				<Button Content="Add game" Margin="10,80,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Click="Button_Click" />
 			</Grid>
 
 			<Grid x:Name="SuitInfo" Visibility="Collapsed">

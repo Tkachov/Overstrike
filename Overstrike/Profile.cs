@@ -1,12 +1,14 @@
 ﻿using Newtonsoft.Json.Linq;
+using System;
 using System.IO;
 
 namespace Overstrike {
 	public class Profile {
-        public static readonly string GAME_MSMR = "MSMR";
+        public const string GAME_MSMR = "MSMR";
+		public const string GAME_MM = "MM";
 
-        // meta
-        public string FullPath;
+		// meta
+		public string FullPath;
         public string Name;
 
         // game
@@ -21,7 +23,27 @@ namespace Overstrike {
 			Game = (string)json["game"];
 			GamePath = (string)json["path"];
 
-            if (Game == null || GamePath == null) { throw new System.Exception("bad profile"); }
+            if (Game == null || GamePath == null) { throw new Exception("bad profile"); }
 		}
+
+        public Profile(string name, string game, string gamePath) {
+            Name = name;
+            FullPath = Path.Combine(Directory.GetCurrentDirectory(), "Profiles/", Name + ".json");
+
+            Game = game;
+            GamePath = gamePath;
+        }
+
+        public bool Save() {
+            try {
+                JObject j = new JObject();
+                j["game"] = Game;
+                j["path"] = GamePath;
+                File.WriteAllText(FullPath, j.ToString());
+                return true;
+            } catch (Exception) {}
+
+            return false;
+        }
     }
 }
