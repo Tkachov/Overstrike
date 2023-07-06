@@ -65,6 +65,8 @@ namespace Overstrike {
 		}
 
 		private void LoadProfiles() {
+			Profiles.Clear();
+
 			var cwd = Directory.GetCurrentDirectory();
 			var path = Path.Combine(cwd, "Profiles");
 
@@ -86,6 +88,11 @@ namespace Overstrike {
 					Profiles.Add(p);
 				}
 			} catch (Exception) {}
+		}
+
+		public List<Profile> ReloadProfiles() {
+			LoadProfiles();
+			return Profiles;
 		}
 	}
 }
