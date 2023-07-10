@@ -14,5 +14,11 @@ namespace Overstrike {
 
 			CurrentProfile = (string)json["profile"];
 		}
+
+		public void Save(string file) {
+			JObject j = new JObject();
+			j["profile"] = CurrentProfile;
+			File.WriteAllText(file, j.ToString());
+		}
 	}
 }

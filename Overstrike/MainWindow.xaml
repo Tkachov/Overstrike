@@ -5,16 +5,27 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Overstrike"
         mc:Ignorable="d"
-        Title="Overstrike" Height="550" Width="800" MinWidth="300">
-	
+        Title="Overstrike" Height="550" Width="600" MinWidth="300">
+	<Window.Resources>
+		<ItemsPanelTemplate x:Key="ThumbnailListTemplate">
+			<WrapPanel Orientation="Horizontal" />
+		</ItemsPanelTemplate>
+		<Style TargetType="{x:Type ListViewItem}" x:Key="NotemanagerContainerStyle"></Style>
+
+
+	</Window.Resources>
 	<Border BorderThickness="0,1,0,0" BorderBrush="#EEE">
-		<Grid Background="#FFF"> <!--  HorizontalAlignment="Stretch"-->
+		<Grid Background="#FFF">
+			<!--  HorizontalAlignment="Stretch"-->
+			<Grid x:Name="Gradient" VerticalAlignment="Top" Height="80">
+				<Image x:Name="GradientImage" Stretch="Fill" />
+			</Grid>
+			<Grid x:Name="Logo" Panel.ZIndex="1" VerticalAlignment="Top" Height="80">
+				<Image x:Name="LogoImage" HorizontalAlignment="Left" />
+				<Image x:Name="LogoImage2" HorizontalAlignment="Right" />
+			</Grid>
 
-			<TextBlock x:Name="SuitName" Text="SUIT NAME" Margin="10,308,5,0" VerticalAlignment="Top" FontWeight="Bold"/>
-
-			<Grid x:Name="SuitInfo">
-				<Image x:Name="BigIcon" HorizontalAlignment="Left" Margin="7,331,0,0" VerticalAlignment="Top" Stretch="Fill" Width="298" Height="118" />
-
+			<Grid>
 				<Label Content="Profile:" HorizontalAlignment="Left" Margin="5,87,0,0" VerticalAlignment="Top" Width="55"/>
 				<ComboBox x:Name="ProfileComboBox" Margin="60,89,5,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="180" SelectionChanged="ProfileComboBox_SelectionChanged">
 					<ComboBox.ItemTemplate>
@@ -26,12 +37,56 @@
 				<Label x:Name="ProfileGamePath" Content="C:/Path/To/MSMR" Margin="260,87,5,0" VerticalAlignment="Top" />
 			</Grid>
 
-			<Grid x:Name="Modified" VerticalAlignment="Bottom" Margin="5,0,5,5">
-				<Label Content="There are unsaved changes!" HorizontalAlignment="Left" Margin="0,0,0,3" VerticalAlignment="Bottom"/>
+			<TabControl x:Name="tabControl" Margin="-1,125,-1,-1">
+				<TabControl.Resources>
+					<Style TargetType="TabPanel">
+						<Setter Property="Margin" Value="50,100,5,10"/>
+						<Setter Property="RenderTransform" Value="1,0,0,1,6,0"/>
+					</Style>
+				</TabControl.Resources>
+				<TabItem Header="Mods">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="28" />
+							<RowDefinition />
+							<RowDefinition Height="32" />
+						</Grid.RowDefinitions>
 
-				<Button Content="Undo" HorizontalAlignment="Right" Margin="0,0,75,5" VerticalAlignment="Bottom" Width="60" />
-				<Button Content="Save" HorizontalAlignment="Right" Margin="0,0,2,5" VerticalAlignment="Bottom" Width="60" /> <!-- Click="SaveChangesButtonClicked" -->
-			</Grid>
+						<Grid DockPanel.Dock="Top" Height="22" Margin="4,6,4,0" VerticalAlignment="Top" Grid.Row="0">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition />
+								<ColumnDefinition Width="80" />
+								<ColumnDefinition Width="75" />
+							</Grid.ColumnDefinitions>
+							<TextBox Grid.Column="0" Text="Filter..." HorizontalAlignment="Left" Width="250" />
+							<Button Grid.Column="1" Content="Add mods" VerticalAlignment="Top" Height="22" Margin="0,0,5,0" />
+							<Button Grid.Column="2" Content="Refresh" VerticalAlignment="Top" Height="22" />
+						</Grid>
+
+						<local:ListViewEx Grid.Row="1" Margin="4,6,4,0" BorderThickness="1" Padding="0,0,1,0"
+										  VirtualizingStackPanel.VirtualizationMode="Recycling" x:Name="NoteThumbnailList"
+										  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible"
+										  SelectionMode="Extended" 
+										  SelectionChanged="NoteThumbnailList_SelectionChanged" MouseLeftButtonDown="NoteThumbnailList_MouseLeftButtonDown" MouseMove="NoteThumbnailList_MouseMove" DragEnter="NoteThumbnailList_DragEnter" Drop="NoteThumbnailList_Drop" AllowDrop="True">
+							<ListView.Resources>
+								<DataTemplate DataType="{x:Type local:ModEntry}">
+									<Grid Height="26">
+										<Label Content="{Binding Order}" HorizontalAlignment="Left" Margin="-3,0,0,0" Foreground="#AAA" VerticalAlignment="Top" />
+
+										<CheckBox IsChecked="{Binding Install}" HorizontalAlignment="Left" Margin="20,6,0,0"  VerticalAlignment="Top" />
+
+										<Image Source="{Binding Badge}" HorizontalAlignment="Left" Margin="40,7,0,0" Width="30" Height="13" Stretch="Fill" VerticalAlignment="Top"  />
+
+										<Label Content="{Binding Name}" HorizontalAlignment="Left" Margin="70,0,0,0" VerticalAlignment="Top"  />
+									</Grid>
+								</DataTemplate>
+							</ListView.Resources>
+						</local:ListViewEx>
+
+						<Button x:Name="InstallModsButton" Margin="4,6,4,4" Grid.Row="2" Content="Install mods" VerticalAlignment="Top"  HorizontalAlignment="Right" Width="150" Height="22" Click="InstallModsButton_Click" />
+					</Grid>
+				</TabItem>
+			</TabControl>
 		</Grid>
 	</Border>
 </Window>

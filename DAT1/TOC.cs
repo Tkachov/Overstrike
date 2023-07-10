@@ -1,7 +1,9 @@
-﻿using Ionic.Zlib;
+﻿using DAT1.Sections.TOC;
+using Ionic.Zlib;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using static DAT1.Sections.TOC.ArchivesMapSection;
 
 namespace DAT1
@@ -371,5 +373,58 @@ namespace DAT1
 			p.compressed = compressed;
 			return p;
         }
-    }
+
+		public enum ArchiveAddingImpl {
+			DEFAULT,
+			SMPCTOOL
+		}
+
+		public uint AddNewArchive(string filename, ArchiveAddingImpl impl) {
+			switch (impl) {
+				case ArchiveAddingImpl.DEFAULT: return AddNewArchive_Default(filename);
+				case ArchiveAddingImpl.SMPCTOOL: return AddNewArchive_SMPCTool(filename);
+				default: return 0;
+			}
+		}
+
+		private uint AddNewArchive_Default(string filename) {
+			int index = 0;
+			foreach (var entry in Dat1.ArchivesSection.Entries) {
+				if (entry.InstallBucket != 0) break;
+				++index;
+			}
+
+			byte[] bytes = new byte[64];
+			for (int i = 0; i < 64; ++i) bytes[i] = 0;
+			byte[] fn = Encoding.ASCII.GetBytes(filename);
+			fn.CopyTo(bytes, 0);
+			bytes[fn.Length] = 0;
+
+			Dat1.ArchivesSection.Entries.Insert(index, new ArchiveFileEntry() {
+				InstallBucket = 0,
+				Chunkmap = (uint)(10000 + index),
+				Filename = bytes
+			});
+
+			return (uint)index;
+		}
+
+		private uint AddNewArchive_SMPCTool(string filename) {
+			int index = Dat1.ArchivesSection.Entries.Count;
+
+			byte[] bytes = new byte[64];
+			for (int i = 0; i < 64; ++i) bytes[i] = 0;
+			byte[] fn = Encoding.ASCII.GetBytes(filename);
+			fn.CopyTo(bytes, 0);
+			bytes[fn.Length] = 0;
+
+			Dat1.ArchivesSection.Entries.Add(new ArchiveFileEntry() {
+				InstallBucket = 0,
+				Chunkmap = 0,
+				Filename = bytes
+			});
+
+			return (uint)index;
+		}
+	}
 }
