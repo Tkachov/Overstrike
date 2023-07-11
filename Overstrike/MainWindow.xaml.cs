@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -244,7 +245,6 @@ namespace Overstrike {
 
 			// get the data for the ListViewItem
 			ModEntry name = listView.ItemContainerGenerator.ItemFromContainer(listViewItem) as ModEntry;
-			int indexBefore = _modsList.IndexOf(name);
 
 			//setup the drag adorner.
 			InitialiseAdorner(listViewItem);
@@ -263,7 +263,7 @@ namespace Overstrike {
 			list.Sort((x, y) => _modsList.IndexOf(x) - _modsList.IndexOf(y));
 
 			DataObject data = new DataObject("dataFormat", list); // name);
-			DragDropEffects de = DragDrop.DoDragDrop(this.ModsList, data, DragDropEffects.Move);
+			DragDrop.DoDragDrop(this.ModsList, data, DragDropEffects.Move);
 
 			//cleanup
 			ModsList.PreviewDragOver -= ModsList_DragOver;
@@ -275,15 +275,7 @@ namespace Overstrike {
 				_adorner = null;
 			}
 
-			// SuitDeselected();
-			//SuitSelected(name);
-			listView.SelectedItem = name; // listViewItem;
-
-			int indexAfter = _modsList.IndexOf(name);
-			// +TODO [REQUIRED]: determine if order changed => raise hasChanges
-			if (indexBefore != indexAfter) {
-				///hasChanges = true;
-			}
+			listView.SelectedItem = name;
 
 			List<int> indexes = new List<int>();
 			int index = 0;
@@ -385,13 +377,17 @@ namespace Overstrike {
 		// Helper to search up the VisualTree
 		private static T FindAnchestor<T>(DependencyObject current)
 			where T : DependencyObject {
-			do {
-				if (current is T) {
-					return (T)current;
+			try { 
+				do {
+					if (current is T) {
+						return (T)current;
+					}
+					current = VisualTreeHelper.GetParent(current);
 				}
-				current = VisualTreeHelper.GetParent(current);
+				while (current != null);
+			} catch (Exception ex) {
+				// happens when listview is filtered
 			}
-			while (current != null);
 			return null;
 		}
 
@@ -527,6 +523,25 @@ namespace Overstrike {
 		private void RefreshButton_Click(object sender, RoutedEventArgs e) {
 			_mods = ((App)App.Current).ReloadMods();
 			MakeModsItems();
+		}
+
+		private void FilterTextBox_TextChanged(object sender, TextChangedEventArgs e) {
+			ICollectionView view = CollectionViewSource.GetDefaultView(_modsList);
+
+			string filter = FilterTextBox.Text.Trim();
+			if (filter == "") {
+				view.Filter = null;
+			} else {
+				string[] words = filter.Split(' ');
+				view.Filter = (item) => {
+					foreach (var word in words) {
+						if (!((ModEntry)item).Name.Contains(word, StringComparison.OrdinalIgnoreCase)) {
+							return false;
+						}
+					}
+					return true;
+				};
+			}
 		}
 	}
 }
