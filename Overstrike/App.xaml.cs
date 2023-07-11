@@ -192,5 +192,10 @@ namespace Overstrike {
 			}
 			return result;
 		}
+
+		public List<ModEntry> ReloadMods() {
+			DetectMods();
+			return Mods;
+		}
 	}
 }

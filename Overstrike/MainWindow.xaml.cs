@@ -18,13 +18,6 @@ using System.Windows.Media;
 
 namespace Overstrike {
 	public partial class MainWindow: Window {
-		private ObservableCollection<ModEntry> thumbnailListData = new ObservableCollection<ModEntry>();
-		private Point _startPoint;
-		private DragAdorner _adorner;
-		private AdornerLayer _layer;
-		private bool _dragIsOutOfScope = false;
-		private Point position;
-
 		private AppSettings _settings;
 		private List<Profile> _profiles;
 		private List<ModEntry> _mods;
@@ -36,6 +29,13 @@ namespace Overstrike {
 		}
 
 		private ObservableCollection<ProfileItem> _profilesItems = new ObservableCollection<ProfileItem>();
+		private ObservableCollection<ModEntry> _modsList = new ObservableCollection<ModEntry>();
+
+		private Point _dragStartPosition;
+		private DragAdorner _adorner;
+		private AdornerLayer _layer;
+		private bool _dragIsOutOfScope = false;
+		private Point _dragCurrentPosition;
 
 		public MainWindow(AppSettings settings, List<Profile> profiles, List<ModEntry> mods) {
 			InitializeComponent();
@@ -126,29 +126,29 @@ namespace Overstrike {
 				availableMods[mod.Path] = mod;
 			}
 
-			thumbnailListData.Clear();
+			_modsList.Clear();
 
 			var index = 1;
 			foreach (var mod in _selectedProfile.Mods) { // first, adding previously known mods
 				if (availableMods.ContainsKey(mod.Path)) {
 					var install = mod.Install && profileInstalled[mod.Path];
-					thumbnailListData.Add(new ModEntry(availableMods[mod.Path], install, index));
+					_modsList.Add(new ModEntry(availableMods[mod.Path], install, index));
 					++index;
 				}
 			}
 			foreach (var mod in _mods) {
 				if (availableMods.ContainsKey(mod.Path) && !profileInstalled.ContainsKey(mod.Path)) { // then, adding new mods
-					thumbnailListData.Add(new ModEntry(availableMods[mod.Path], mod.Install, index));
+					_modsList.Add(new ModEntry(availableMods[mod.Path], mod.Install, index));
 					++index;
 				}
 			}
 
-			foreach (var mod in thumbnailListData) {
+			foreach (var mod in _modsList) {
 				mod.PropertyChanged += OnModPropertyChanged;
 			}
 
-			NoteThumbnailList.ItemsSource = new CompositeCollection {
-				new CollectionContainer() { Collection = thumbnailListData }
+			ModsList.ItemsSource = new CompositeCollection {
+				new CollectionContainer() { Collection = _modsList }
 			};
 		}
 
@@ -218,16 +218,16 @@ namespace Overstrike {
 
 		#region SheetList Drag and Drop
 
-		private void NoteThumbnailList_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-			_startPoint = e.GetPosition(null);
+		private void ModsList_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+			_dragStartPosition = e.GetPosition(null);
 		}
 
-		private void NoteThumbnailList_MouseMove(object sender, MouseEventArgs e) {
+		private void ModsList_MouseMove(object sender, MouseEventArgs e) {
 			if (e.LeftButton == MouseButtonState.Pressed) {
-				position = e.GetPosition(null);
+				_dragCurrentPosition = e.GetPosition(null);
 
-				if (Math.Abs(position.X - _startPoint.X) > SystemParameters.MinimumHorizontalDragDistance ||
-					Math.Abs(position.Y - _startPoint.Y) > SystemParameters.MinimumVerticalDragDistance) {
+				if (Math.Abs(_dragCurrentPosition.X - _dragStartPosition.X) > SystemParameters.MinimumHorizontalDragDistance ||
+					Math.Abs(_dragCurrentPosition.Y - _dragStartPosition.Y) > SystemParameters.MinimumVerticalDragDistance) {
 					BeginDrag(e);
 				}
 			}
@@ -235,7 +235,7 @@ namespace Overstrike {
 
 		private void BeginDrag(MouseEventArgs e) {
 
-			ListView listView = this.NoteThumbnailList;
+			ListView listView = this.ModsList;
 			ListViewItem listViewItem =
 				FindAnchestor<ListViewItem>((DependencyObject)e.OriginalSource);
 
@@ -244,31 +244,31 @@ namespace Overstrike {
 
 			// get the data for the ListViewItem
 			ModEntry name = listView.ItemContainerGenerator.ItemFromContainer(listViewItem) as ModEntry;
-			int indexBefore = thumbnailListData.IndexOf(name);
+			int indexBefore = _modsList.IndexOf(name);
 
 			//setup the drag adorner.
 			InitialiseAdorner(listViewItem);
 
 			//add handles to update the adorner.
-			NoteThumbnailList.PreviewDragOver += NoteThumbnailList_DragOver;
-			NoteThumbnailList.DragLeave += NoteThumbnailList_DragLeave;
-			NoteThumbnailList.DragEnter += NoteThumbnailList_DragEnter;
+			ModsList.PreviewDragOver += ModsList_DragOver;
+			ModsList.DragLeave += ModsList_DragLeave;
+			ModsList.DragEnter += ModsList_DragEnter;
 
 
-			var selitems = NoteThumbnailList.SelectedItems;
+			var selitems = ModsList.SelectedItems;
 			List<ModEntry> list = new List<ModEntry>();
 			foreach (ModEntry entry in selitems) {
 				list.Add(entry);
 			}
-			list.Sort((x, y) => thumbnailListData.IndexOf(x) - thumbnailListData.IndexOf(y));
+			list.Sort((x, y) => _modsList.IndexOf(x) - _modsList.IndexOf(y));
 
 			DataObject data = new DataObject("dataFormat", list); // name);
-			DragDropEffects de = DragDrop.DoDragDrop(this.NoteThumbnailList, data, DragDropEffects.Move);
+			DragDropEffects de = DragDrop.DoDragDrop(this.ModsList, data, DragDropEffects.Move);
 
 			//cleanup
-			NoteThumbnailList.PreviewDragOver -= NoteThumbnailList_DragOver;
-			NoteThumbnailList.DragLeave -= NoteThumbnailList_DragLeave;
-			NoteThumbnailList.DragEnter -= NoteThumbnailList_DragEnter;
+			ModsList.PreviewDragOver -= ModsList_DragOver;
+			ModsList.DragLeave -= ModsList_DragLeave;
+			ModsList.DragEnter -= ModsList_DragEnter;
 
 			if (_adorner != null) {
 				AdornerLayer.GetAdornerLayer(listView).Remove(_adorner);
@@ -279,7 +279,7 @@ namespace Overstrike {
 			//SuitSelected(name);
 			listView.SelectedItem = name; // listViewItem;
 
-			int indexAfter = thumbnailListData.IndexOf(name);
+			int indexAfter = _modsList.IndexOf(name);
 			// +TODO [REQUIRED]: determine if order changed => raise hasChanges
 			if (indexBefore != indexAfter) {
 				///hasChanges = true;
@@ -287,7 +287,7 @@ namespace Overstrike {
 
 			List<int> indexes = new List<int>();
 			int index = 0;
-			foreach (var item in thumbnailListData) {
+			foreach (var item in _modsList) {
 				if (item.Order != index+1) {
 					indexes.Add(index);
 				}
@@ -296,59 +296,59 @@ namespace Overstrike {
 
 			if (indexes.Count > 0) {
 				foreach (var index2 in indexes) {
-					var item = thumbnailListData[index2];
+					var item = _modsList[index2];
 					item.Order = index2 + 1;
-					thumbnailListData.RemoveAt(index2);
-					thumbnailListData.Insert(index2, item);
+					_modsList.RemoveAt(index2);
+					_modsList.Insert(index2, item);
 				}
-				NoteThumbnailList.ItemsSource = thumbnailListData;
+				ModsList.ItemsSource = _modsList;
 			}
 
 			OnModsOrderChanged();
 		}
 
-		private void NoteThumbnailList_DragEnter(object sender, DragEventArgs e) {
+		private void ModsList_DragEnter(object sender, DragEventArgs e) {
 			if (!e.Data.GetDataPresent("dataFormat") ||
 				sender == e.Source) {
 				e.Effects = DragDropEffects.None;
 			}
 		}
 
-		private void NoteThumbnailList_Drop(object sender, DragEventArgs e) {
+		private void ModsList_Drop(object sender, DragEventArgs e) {
 			if (e.Data.GetDataPresent("dataFormat")) {
 				//ModEntry name = e.Data.GetData("dataFormat") as ModEntry;
 				IList<ModEntry> list = e.Data.GetData("dataFormat") as IList<ModEntry>;
 				ListViewItem listViewItem = FindAnchestor<ListViewItem>((DependencyObject)e.OriginalSource);
 
 				if (listViewItem != null) {
-					ModEntry nameToReplace = NoteThumbnailList.ItemContainerGenerator.ItemFromContainer(listViewItem) as ModEntry;
-					int index = NoteThumbnailList.Items.IndexOf(nameToReplace);
+					ModEntry nameToReplace = ModsList.ItemContainerGenerator.ItemFromContainer(listViewItem) as ModEntry;
+					int index = ModsList.Items.IndexOf(nameToReplace);
 
 					if (index >= 0) {
 
-							// thumbnailListData.Remove(name);
+							// _modsList.Remove(name);
 							foreach (var item in list) {
-								if (thumbnailListData.IndexOf(item) < index) --index;
-								thumbnailListData.Remove(item);
+								if (_modsList.IndexOf(item) < index) --index;
+								_modsList.Remove(item);
 							}
 
-							// thumbnailListData.Insert(index, name);
+							// _modsList.Insert(index, name);
 							foreach (var item in list) {
-								thumbnailListData.Insert(index, item);
+								_modsList.Insert(index, item);
 								++index;
 							}
-							NoteThumbnailList.ItemsSource = thumbnailListData;
+							ModsList.ItemsSource = _modsList;
 					}
 				} else {
-					// thumbnailListData.Remove(name);
-					// thumbnailListData.Add(name);
+					// _modsList.Remove(name);
+					// _modsList.Add(name);
 					foreach (var item in list) {
-						thumbnailListData.Remove(item);
+						_modsList.Remove(item);
 					}
 					foreach (var item in list) {
-						thumbnailListData.Add(item);
+						_modsList.Add(item);
 					}
-					NoteThumbnailList.ItemsSource = thumbnailListData;
+					ModsList.ItemsSource = _modsList;
 				}
 			}
 		}
@@ -357,14 +357,14 @@ namespace Overstrike {
 			VisualBrush brush = new VisualBrush(listViewItem);
 			_adorner = new DragAdorner((UIElement)listViewItem, listViewItem.RenderSize, brush);
 			_adorner.Opacity = 0.5;
-			_layer = AdornerLayer.GetAdornerLayer(NoteThumbnailList as Visual);
+			_layer = AdornerLayer.GetAdornerLayer(ModsList as Visual);
 			_layer.Add(_adorner);
 		}
 
-		private void NoteThumbnailList_DragLeave(object sender, DragEventArgs e) {
-			if (e.OriginalSource == NoteThumbnailList) {
-				System.Windows.Point p = e.GetPosition(NoteThumbnailList);
-				Rect r = VisualTreeHelper.GetContentBounds(NoteThumbnailList);
+		private void ModsList_DragLeave(object sender, DragEventArgs e) {
+			if (e.OriginalSource == ModsList) {
+				System.Windows.Point p = e.GetPosition(ModsList);
+				Rect r = VisualTreeHelper.GetContentBounds(ModsList);
 				if (!r.Contains(p)) {
 					this._dragIsOutOfScope = true;
 					e.Handled = true;
@@ -372,13 +372,13 @@ namespace Overstrike {
 			}
 		}
 
-		private void NoteThumbnailList_DragOver(object sender, DragEventArgs e) {
+		private void ModsList_DragOver(object sender, DragEventArgs e) {
 			if (_adorner != null) {
-				//_adorner.OffsetLeft = e.GetPosition(NoteThumbnailList).X - position.X;
-				//_adorner.OffsetTop = e.GetPosition(NoteThumbnailList).Y - position.Y;
+				//_adorner.OffsetLeft = e.GetPosition(ModsList).X - position.X;
+				//_adorner.OffsetTop = e.GetPosition(ModsList).Y - position.Y;
 
-				_adorner.OffsetLeft = e.GetPosition(Gradient).X - position.X;
-				_adorner.OffsetTop = e.GetPosition(Gradient).Y - position.Y;
+				_adorner.OffsetLeft = e.GetPosition(Gradient).X - _dragCurrentPosition.X;
+				_adorner.OffsetTop = e.GetPosition(Gradient).Y - _dragCurrentPosition.Y;
 			}
 		}
 
@@ -397,26 +397,7 @@ namespace Overstrike {
 
 		#endregion SheetList Drag and Drop
 
-		private void NoteThumbnailList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-			if (NoteThumbnailList.SelectedItems.Count > 0) {
-
-			}
-			if (e.AddedItems.Count > 0) {
-				///SuitSelected((ModEntry)e.AddedItems[0]);
-			} else {
-				///SuitDeselected();
-			}
-		}
-
-		private void RefreshThumbnail(ModEntry selectedThumb) {
-
-
-			var i = thumbnailListData.IndexOf(selectedThumb);
-			thumbnailListData.RemoveAt(i);
-			thumbnailListData.Insert(i, selectedThumb);
-
-			NoteThumbnailList.SelectedItem = selectedThumb;
-		}
+		private void ModsList_SelectionChanged(object sender, SelectionChangedEventArgs e) {}
 
 		private void OnModsOrderChanged() {
 			SaveProfile();
@@ -439,7 +420,7 @@ namespace Overstrike {
 
 		private void ApplyModsStateToProfile() {
 			var mods = new List<ModEntry>();
-			foreach (var mod in thumbnailListData) {
+			foreach (var mod in _modsList) {
 				mods.Add(new ModEntry(mod.Path, mod.Install));
 			}
 			_selectedProfile.Mods = mods;
@@ -541,6 +522,11 @@ namespace Overstrike {
 
 			w.Close();
 			w.Dispose();
+		}
+
+		private void RefreshButton_Click(object sender, RoutedEventArgs e) {
+			_mods = ((App)App.Current).ReloadMods();
+			MakeModsItems();
 		}
 	}
 }

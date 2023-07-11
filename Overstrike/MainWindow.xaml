@@ -60,14 +60,14 @@
 							</Grid.ColumnDefinitions>
 							<TextBox Grid.Column="0" Text="Filter..." HorizontalAlignment="Left" Width="250" />
 							<Button Grid.Column="1" Content="Add mods" VerticalAlignment="Top" Height="22" Margin="0,0,5,0" />
-							<Button Grid.Column="2" Content="Refresh" VerticalAlignment="Top" Height="22" />
+							<Button Grid.Column="2" x:Name="RefreshButton" Content="Refresh" VerticalAlignment="Top" Height="22" Click="RefreshButton_Click" />
 						</Grid>
 
 						<local:ListViewEx Grid.Row="1" Margin="4,6,4,0" BorderThickness="1" Padding="0,0,1,0"
-										  VirtualizingStackPanel.VirtualizationMode="Recycling" x:Name="NoteThumbnailList"
+										  x:Name="ModsList" VirtualizingStackPanel.VirtualizationMode="Recycling"
 										  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible"
 										  SelectionMode="Extended" 
-										  SelectionChanged="NoteThumbnailList_SelectionChanged" MouseLeftButtonDown="NoteThumbnailList_MouseLeftButtonDown" MouseMove="NoteThumbnailList_MouseMove" DragEnter="NoteThumbnailList_DragEnter" Drop="NoteThumbnailList_Drop" AllowDrop="True">
+										  SelectionChanged="ModsList_SelectionChanged" MouseLeftButtonDown="ModsList_MouseLeftButtonDown" MouseMove="ModsList_MouseMove" DragEnter="ModsList_DragEnter" Drop="ModsList_Drop" AllowDrop="True">
 							<ListView.Resources>
 								<DataTemplate DataType="{x:Type local:ModEntry}">
 									<Grid Height="26">
