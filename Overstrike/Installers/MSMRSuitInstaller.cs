@@ -7,9 +7,11 @@ using Newtonsoft.Json.Linq;
 
 namespace Overstrike.Installers {
 	internal class MSMRSuitInstaller: SuitInstallerBase {
-		public MSMRSuitInstaller(TOC toc, ModEntry mod, string gamePath) : base(toc, mod, gamePath) {} // TODO: setting to install or ignore name.txt
+		public MSMRSuitInstaller(TOC toc, string gamePath) : base(toc, gamePath) {} // TODO: setting to install or ignore name.txt
 
-		public override void Install() {
+		public override void Install(ModEntry mod, int index) {
+			_mod = mod;
+
 			var suitsPath = Path.Combine(_gamePath, "asset_archive", "Suits");
 
 			using (ZipArchive zip = ReadModFile()) {

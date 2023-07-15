@@ -1,5 +1,4 @@
 ﻿using DAT1;
-using DAT1.Files;
 using DAT1.Sections.TOC;
 using System;
 using System.Collections.Generic;
@@ -12,13 +11,13 @@ namespace Overstrike.Installers {
 		protected ModEntry _mod;
 		protected string _gamePath;
 
-		public InstallerBase(TOC toc, ModEntry mod, string gamePath) {
+		public InstallerBase(TOC toc, string gamePath) {
 			_toc = toc;
-			_mod = mod;
+			_mod = null;
 			_gamePath = gamePath;
 		}
 
-		public abstract void Install();
+		public abstract void Install(ModEntry mod, int index);
 
 		#region .zip
 

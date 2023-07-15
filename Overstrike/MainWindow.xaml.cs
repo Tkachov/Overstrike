@@ -472,60 +472,22 @@ namespace Overstrike {
 		}
 
 		private void InstallMod(ModEntry mod, TOC toc, int index) {
-			// TODO: express this as installer classes to extend easily
-			if (mod.Type == ModEntry.ModType.SMPC || mod.Type == ModEntry.ModType.MMPC) {
-				InstallSMPCMod(mod, toc, index);
-			} else if (mod.Type == ModEntry.ModType.SUIT_MSMR) {
-				var installer = new MSMRSuitInstaller(toc, mod, _selectedProfile.GamePath);
-				installer.Install();
-			}
+			var installer = GetInstaller(mod, toc);
+			installer.Install(mod, index);
 		}
 
-		private void InstallSMPCMod(ModEntry mod, TOC toc, int index) {
-			var modsPath = Path.Combine(_selectedProfile.GamePath, "asset_archive", "mods");
-			var modPath = Path.Combine(modsPath, "mod" + index);
+		private InstallerBase GetInstaller(ModEntry mod, TOC toc) {
+			switch (mod.Type) {
+				case ModEntry.ModType.SMPC:
+				case ModEntry.ModType.MMPC:
+					return new SMPCModInstaller(toc, _selectedProfile.GamePath);
 
-			var newArchiveIndex = toc.AddNewArchive("mods\\mod" + index, TOC.ArchiveAddingImpl.SMPCTOOL); // TODO: switch to DEFAULT, it must be working fine
+				case ModEntry.ModType.SUIT_MSMR:
+					return new MSMRSuitInstaller(toc, _selectedProfile.GamePath);
 
-			var f = File.OpenWrite(modPath);
-			var w = new BinaryWriter(f);
-
-			var cwd = Directory.GetCurrentDirectory();
-			var zipPath = Path.Combine(cwd, "Mods Library", mod.Path);
-			using (ZipArchive zip = ZipFile.Open(zipPath, ZipArchiveMode.Read)) {
-				foreach (ZipArchiveEntry entry in zip.Entries) {
-					if (entry.FullName.StartsWith("ModFiles/", StringComparison.OrdinalIgnoreCase)) {
-						string[] parts = entry.FullName.Substring(9).Split("_");
-						if (parts.Length == 2) {
-							int archiveIndex = int.Parse(parts[0]);
-							ulong assetId = ulong.Parse(parts[1], NumberStyles.HexNumber);
-
-							long archiveOffset = w.BaseStream.Position;
-							using (var stream = entry.Open()) {
-								stream.CopyTo(w.BaseStream);
-							}
-							long fileSize = w.BaseStream.Position - archiveOffset;
-
-							AssetEntry[] assetEntries = toc.FindAssetEntriesById(assetId);
-							foreach (var assetEntry in assetEntries) {
-								if (assetEntry.archive == archiveIndex) {									
-									toc.UpdateAssetEntry(new AssetEntry() {
-										index = assetEntry.index,
-										id = assetEntry.id,
-										archive = newArchiveIndex,
-										offset = (uint)archiveOffset,
-										size = (uint)fileSize
-									});
-									break;
-								}
-							}
-						}
-					}
-				}
+				default:
+					return null;
 			}
-
-			w.Close();
-			w.Dispose();
 		}
 
 		private void RefreshButton_Click(object sender, RoutedEventArgs e) {

@@ -5,7 +5,7 @@ using System.IO.Compression;
 
 namespace Overstrike.Installers {
 	internal abstract class SuitInstallerBase: InstallerBase {
-		protected SuitInstallerBase(TOC toc, ModEntry mod, string gamePath) : base(toc, mod, gamePath) {}
+		protected SuitInstallerBase(TOC toc, string gamePath) : base(toc, gamePath) {}
 
 		#region .suit
 
