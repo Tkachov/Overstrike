@@ -444,8 +444,30 @@ namespace Overstrike {
 			SaveProfile();
 		}
 
+		private bool _propagatingInstallChanged = false;
+
 		private void OnModPropertyChanged(object? sender, PropertyChangedEventArgs e) {
-			OnModInstallChanged();
+			if (true) { // TODO: make a setting
+				if (!_propagatingInstallChanged) {
+					_propagatingInstallChanged = true;
+
+					ModEntry changedMod = (ModEntry)sender;
+					if (changedMod != null) {
+						var items = ModsList.SelectedItems;
+						if (items.Contains(changedMod)) {
+							foreach (ModEntry item in items) {
+								item.Install = changedMod.Install;
+							}
+						}
+					}
+
+					_propagatingInstallChanged = false;
+				}
+			}
+
+			if (!_propagatingInstallChanged) { // TODO: if OnModInstallChanged() doesn't save profile instantly and just runs a timer, it can be done without this check
+				OnModInstallChanged();
+			}
 		}
 
 		private void SaveProfile() {

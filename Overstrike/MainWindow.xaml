@@ -16,7 +16,7 @@
 	</Window.Resources>
 	<Border BorderThickness="0,1,0,0" BorderBrush="#EEE">
 		<Grid Background="#FFF">
-			<Grid x:Name="Overlay" Panel.ZIndex="1000" Visibility="Visible">
+			<Grid x:Name="Overlay" Panel.ZIndex="1000" Visibility="Collapsed">
 				<Grid.Background>
 					<SolidColorBrush Color="Black" Opacity=".75"/>
 				</Grid.Background>
@@ -108,7 +108,7 @@
 								</DataTemplate>
 							</ListView.Resources>
 						</local:ListViewEx>
-
+						
 						<Button x:Name="InstallModsButton" Margin="4,6,4,4" Grid.Row="2" Content="Install mods" VerticalAlignment="Top"  HorizontalAlignment="Right" Width="150" Height="22" Click="InstallModsButton_Click" />
 					</Grid>
 				</TabItem>
