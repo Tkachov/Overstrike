@@ -11,6 +11,7 @@ using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Reflection;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -39,6 +40,9 @@ namespace Overstrike {
 		private bool _dragIsOutOfScope = false;
 		private Point _dragCurrentPosition;
 
+		private Thread _tickThread;
+		private List<Thread> _taskThreads = new List<Thread>();
+
 		public MainWindow(AppSettings settings, List<Profile> profiles, List<ModEntry> mods) {
 			InitializeComponent();
 
@@ -48,6 +52,7 @@ namespace Overstrike {
 
 			MakeProfileItems();
 			FirstSwitchToProfile();
+			StartTickThread();
 		}
 
 		private void SaveSettings() {
@@ -217,6 +222,41 @@ namespace Overstrike {
 			// last resort: do default profile loading
 			FirstSwitchToProfile();
 		}
+
+		#region Tick
+
+		private void StartTickThread() {
+			_tickThread = new Thread(TickThread);
+			_tickThread.Start();
+		}
+
+		private void TickThread() {
+			try {
+				while (true) {
+					Thread.Sleep(16);
+					Tick();
+				}
+			} catch (Exception ex) { }
+		}
+
+		private void Tick() {
+			List<Thread> threadsToRemove = new List<Thread>();
+			foreach (var thread in _taskThreads) {
+				if (!thread.IsAlive) {
+					threadsToRemove.Add(thread);
+				}
+			}
+			foreach (Thread thread in threadsToRemove) {
+				_taskThreads.Remove(thread);
+			}
+
+			bool hasTasks = _taskThreads.Count > 0;
+			Dispatcher.Invoke(() => {
+				Overlay.Visibility = (hasTasks ? Visibility.Visible : Visibility.Collapsed);
+			});
+		}
+
+		#endregion
 
 		#region SheetList Drag and Drop
 
@@ -431,23 +471,50 @@ namespace Overstrike {
 				availableMods.Add(mod.Path, mod);
 			}
 
-			// TODO: show progressbar or something
-			// TODO: run in a separate thread
+			List<ModEntry> modsToInstall = new List<ModEntry>();
+			foreach (var mod in _selectedProfile.Mods) {
+				if (!mod.Install) continue;
+				if (!availableMods.ContainsKey(mod.Path)) continue; // TODO: should not happen?
+				modsToInstall.Add(availableMods[mod.Path]);
+			}
+
+			StartInstallModsThread(modsToInstall, _selectedProfile.GamePath);
+		}
+
+		private void StartInstallModsThread(List<ModEntry> modsToInstall, string gamePath) {
+			Thread thread = new Thread(() => InstallMods(modsToInstall, gamePath));
+			_taskThreads.Add(thread);
+			thread.Start();
+		}
+
+		private void InstallMods(List<ModEntry> modsToInstall, string gamePath) {
+			var operationsCount = modsToInstall.Count;
+			Dispatcher.Invoke(() => {
+				OverlayHeaderLabel.Text = "Installing mods (0/" + operationsCount + " done)...";
+				OverlayOperationLabel.Text = "Loading 'toc.BAK'...";
+			});
+
 			PrepareToInstallMods();
 
-			var tocPath = Path.Combine(_selectedProfile.GamePath, "asset_archive", "toc");
+			var tocPath = Path.Combine(gamePath, "asset_archive", "toc");
 			var toc = new TOC();
 			toc.Load(tocPath);
 
 			var index = 0;
-			foreach (var mod in _selectedProfile.Mods) {
-				if (!mod.Install) continue;
-				if (!availableMods.ContainsKey(mod.Path)) continue; // TODO: should not happen?
-				InstallMod(availableMods[mod.Path], toc, index++);
+			foreach (var mod in modsToInstall) {
+				Dispatcher.Invoke(() => {
+					OverlayHeaderLabel.Text = "Installing mods (" + index + "/" + operationsCount + " done)...";
+					OverlayOperationLabel.Text = "Installing '" + mod.Name + "'...";
+				});
+
+				InstallMod(mod, toc, index++);
 			}
 
+			Dispatcher.Invoke(() => {
+				OverlayHeaderLabel.Text = "Installing mods (" + index + "/" + operationsCount + " done)...";
+				OverlayOperationLabel.Text = "Saving 'toc'...";
+			});
 			toc.Save(tocPath);
-			// TODO: hide progressbar / show "done" message
 		}
 
 		private void PrepareToInstallMods() {

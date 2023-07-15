@@ -16,6 +16,17 @@
 	</Window.Resources>
 	<Border BorderThickness="0,1,0,0" BorderBrush="#EEE">
 		<Grid Background="#FFF">
+			<Grid x:Name="Overlay" Panel.ZIndex="1000" Visibility="Visible">
+				<Grid.Background>
+					<SolidColorBrush Color="Black" Opacity=".75"/>
+				</Grid.Background>
+
+				<Grid HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="80" Background="#FFF">
+					<TextBlock x:Name="OverlayHeaderLabel" Text="Installing..." HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Margin="25,15,0,0" />
+					<TextBlock x:Name="OverlayOperationLabel" Text="1/1) Patching TOC..." HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="14" Margin="25,45,0,0" />
+				</Grid>
+			</Grid>
+			
 			<!--  HorizontalAlignment="Stretch"-->
 			<Grid x:Name="Gradient" VerticalAlignment="Top" Height="80">
 				<Image x:Name="GradientImage" Stretch="Fill" />
@@ -90,9 +101,9 @@
 
 										<CheckBox IsChecked="{Binding Install}" HorizontalAlignment="Left" Margin="20,6,0,0"  VerticalAlignment="Top" />
 
-										<Image Source="{Binding Badge}" HorizontalAlignment="Left" Margin="40,7,0,0" Width="30" Height="13" Stretch="Fill" VerticalAlignment="Top"  />
+										<Image Source="{Binding Badge}" HorizontalAlignment="Left" Margin="40,7,0,0" Width="30" Height="13" Stretch="Fill" VerticalAlignment="Top" />
 
-										<Label Content="{Binding Name}" HorizontalAlignment="Left" Margin="70,0,0,0" VerticalAlignment="Top"  />
+										<TextBlock Text="{Binding Name}" HorizontalAlignment="Left" Margin="75,5,0,0" VerticalAlignment="Top" />
 									</Grid>
 								</DataTemplate>
 							</ListView.Resources>
