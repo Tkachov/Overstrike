@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Overstrike"
         mc:Ignorable="d"
-        Title="Overstrike" Height="550" Width="600" MinWidth="300">
+        Title="Overstrike" Height="550" Width="600" MinWidth="320">
 	<Window.Resources>
 		<ItemsPanelTemplate x:Key="ThumbnailListTemplate">
 			<WrapPanel Orientation="Horizontal" />
@@ -81,7 +81,7 @@
 								<ColumnDefinition Width="75" />
 							</Grid.ColumnDefinitions>
 							<Grid Grid.Column="0">
-								<TextBox HorizontalAlignment="Left" Width="250" x:Name="FilterTextBox" Padding="1" TextChanged="FilterTextBox_TextChanged" />
+								<TextBox HorizontalAlignment="Left" Width="234" x:Name="FilterTextBox" Padding="1" TextChanged="FilterTextBox_TextChanged" />
 								<TextBlock IsHitTestVisible="False" Text="Filter..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="DarkGray">
 									<TextBlock.Style>
 										<Style TargetType="{x:Type TextBlock}">
@@ -96,7 +96,7 @@
 								</TextBlock>
 							</Grid>
 
-							<Button Grid.Column="1" Content="Add mods" VerticalAlignment="Top" Height="22" Margin="0,0,5,0" />
+							<Button Grid.Column="1" x:Name="AddMods" Content="Add mods" VerticalAlignment="Top" Height="22" Margin="0,0,5,0" Click="AddMods_Click" />
 							<Button Grid.Column="2" x:Name="RefreshButton" Content="Refresh" VerticalAlignment="Top" Height="22" Click="RefreshButton_Click" />
 						</Grid>
 
@@ -122,7 +122,7 @@
 
 						<TextBlock x:Name="StatusMessage" Opacity="0" Text="Done! 10 mods installed." HorizontalAlignment="Left" Margin="6,9,0,0" Grid.Row="2" Foreground="#AAA" VerticalAlignment="Top" Height="22" />
 
-						<Button x:Name="InstallModsButton" Margin="4,6,4,4" Grid.Row="2" Content="Install mods" VerticalAlignment="Top"  HorizontalAlignment="Right" Width="150" Height="22" Click="InstallModsButton_Click">
+						<Button x:Name="InstallModsButton" Margin="4,6,4,4" Grid.Row="2" Content="Install mods" VerticalAlignment="Top"  HorizontalAlignment="Right" Width="120" Height="22" Click="InstallModsButton_Click">
 							<Button.ContextMenu>
 								<ContextMenu>
 									<MenuItem Header="Uninstall all mods" Click="UninstallMods" />

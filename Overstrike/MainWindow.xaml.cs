@@ -1,4 +1,5 @@
 ﻿using DAT1;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using Overstrike.Installers;
 using System;
 using System.Collections.Generic;
@@ -643,6 +644,67 @@ namespace Overstrike {
 				} else if (_selectedProfile.Game == Profile.GAME_MM) {
 					Process.Start(Path.Combine(path, "MilesMorales.exe"), path);
 				}
+			} catch {}
+		}
+
+		private void AddMods_Click(object sender, RoutedEventArgs e) {
+			CommonOpenFileDialog dialog = new CommonOpenFileDialog();
+			dialog.Title = "Select mods to add...";
+			dialog.Multiselect = true;
+			dialog.RestoreDirectory = true;
+
+			dialog.Filters.Add(new CommonFileDialogFilter("All supported files", "*.smpcmod;*.mmpcmod;*.suit;*.zip;*.rar;*.7z") { ShowExtensions = true });
+			dialog.Filters.Add(new CommonFileDialogFilter("All supported mod files", "*.smpcmod;*.mmpcmod;*.suit") { ShowExtensions = true });
+			dialog.Filters.Add(new CommonFileDialogFilter("Archives", "*.zip;*.rar;*.7z") { ShowExtensions = true });
+			dialog.Filters.Add(new CommonFileDialogFilter("All files", "*") { ShowExtensions = true });
+
+			if (dialog.ShowDialog() != CommonFileDialogResult.Ok) {
+				return;
+			}
+
+			foreach (var filename in dialog.FileNames) {
+				AddMod(filename);
+			}
+
+			Dictionary<string, bool> previousMods = new Dictionary<string, bool>();
+			foreach (var mod in _mods) {
+				previousMods[mod.Path] = true;
+			}
+
+			// reload mods
+			_mods = ((App)App.Current).ReloadMods();
+			MakeModsItems();
+
+			var newModsCount = 0;
+			foreach (var mod in _mods) {
+				if (!previousMods.ContainsKey(mod.Path))
+					++newModsCount;
+			}
+
+			ShowStatusMessage("Done! " + newModsCount + " mods added.");
+		}
+
+		private void AddMod(string filename) {
+			bool renameInsteadOverwriting = true; // TODO: make a setting
+
+			try {
+				var basename = Path.GetFileName(filename);
+				var cwd = Directory.GetCurrentDirectory();
+				var path = Path.Combine(cwd, "Mods Library", basename);
+
+				if (renameInsteadOverwriting) {
+					var index = 1;
+					var name = Path.GetFileNameWithoutExtension(basename);
+					var ext = Path.GetExtension(basename);
+					while (File.Exists(path)) {
+						path = Path.Combine(cwd, "Mods Library", name + " (" + index + ")" + ext);
+						++index;
+
+						if (index > 1000) break;
+					}
+				}
+
+				File.Copy(filename, path, true);
 			} catch {}
 		}
 	}
