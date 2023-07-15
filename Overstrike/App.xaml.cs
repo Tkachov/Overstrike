@@ -115,7 +115,7 @@ namespace Overstrike {
 			var cwd = Directory.GetCurrentDirectory();
 			var path = System.IO.Path.Combine(cwd, "Mods Library");
 
-			DetectSMPCMods(path);
+			DetectSMPCMods(path); // TODO: express that as detector classes to extend this easily
 			DetectSuitMods(path);
 			// TODO: detect zip/rar/7z archives & find those in there
 		}

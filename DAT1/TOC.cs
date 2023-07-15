@@ -220,6 +220,7 @@ namespace DAT1
 			{
 				p.f.Seek(Asset.offset, SeekOrigin.Begin);
 				p.f.Read(bytes, 0, bytes.Length);
+				p.f.Close();
 				return bytes;
 			}
 
@@ -376,13 +377,15 @@ namespace DAT1
 
 		public enum ArchiveAddingImpl {
 			DEFAULT,
-			SMPCTOOL
+			SMPCTOOL,
+			SUITTOOL
 		}
 
 		public uint AddNewArchive(string filename, ArchiveAddingImpl impl) {
 			switch (impl) {
 				case ArchiveAddingImpl.DEFAULT: return AddNewArchive_Default(filename);
 				case ArchiveAddingImpl.SMPCTOOL: return AddNewArchive_SMPCTool(filename);
+				case ArchiveAddingImpl.SUITTOOL: return AddNewArchive_SuitTool(filename);
 				default: return 0;
 			}
 		}
@@ -421,6 +424,24 @@ namespace DAT1
 			Dat1.ArchivesSection.Entries.Add(new ArchiveFileEntry() {
 				InstallBucket = 0,
 				Chunkmap = 0,
+				Filename = bytes
+			});
+
+			return (uint)index;
+		}
+
+		private uint AddNewArchive_SuitTool(string filename) {
+			int index = Dat1.ArchivesSection.Entries.Count;
+
+			byte[] bytes = new byte[64];
+			for (int i = 0; i < 64; ++i) bytes[i] = 0;
+			byte[] fn = Encoding.ASCII.GetBytes(filename);
+			fn.CopyTo(bytes, 0);
+			bytes[fn.Length] = 0;
+
+			Dat1.ArchivesSection.Entries.Add(new ArchiveFileEntry() {
+				InstallBucket = 0,
+				Chunkmap = (uint)(10000 + index),
 				Filename = bytes
 			});
 

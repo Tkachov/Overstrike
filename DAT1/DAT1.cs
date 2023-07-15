@@ -32,6 +32,7 @@ namespace DAT1
         public AssetIdsSection AssetIdsSection => (AssetIdsSection)sections[ASSET_IDS_SECTION_TAG];
 		public SizeEntriesSection SizesSection => (SizeEntriesSection)sections[SIZE_ENTRIES_SECTION_TAG];
 		public OffsetsSection OffsetsSection => (OffsetsSection)sections[OFFSETS_SECTION_TAG];
+		public SpansSection SpansSection => (SpansSection)sections[SpansSection.TAG];
 
 		protected DAT1()
 		{
@@ -90,7 +91,7 @@ namespace DAT1
 				case ASSET_IDS_SECTION_TAG: return new AssetIdsSection(r, size);
 				case 0x6D921D7B: return new KeyAssetsSection(r, size);
 				case OFFSETS_SECTION_TAG: return new OffsetsSection(r, size);
-				case 0xEDE8ADA9: return new SpansSection(r, size);
+				case SpansSection.TAG: return new SpansSection(r, size);
 
 				// config
 				case ConfigTypeSection.TAG: return new ConfigTypeSection(this, r, size);
@@ -156,13 +157,18 @@ namespace DAT1
 			foreach (var tag in sectionsSortedByOffset) {
 				bytes[tag] = sections[tag].Save();
 			}
-			
+
 			// recalculate sections offsets
 			var offset = 16 + 12 * sectionsCount + strings.Length;
+			long zeroesToWrite = 0;
+			if (offset % 4 != 0) {
+				zeroesToWrite = (4 - (offset % 4));
+				offset += zeroesToWrite;
+			}
 
-			Dictionary<uint, uint> offsets = new Dictionary<uint, uint>();			
+			Dictionary<uint, uint> offsets = new Dictionary<uint, uint>();
 			foreach (var tag in sectionsSortedByOffset) {
-				offsets[tag] = (uint)offset;				
+				offsets[tag] = (uint)offset;
 				offset += bytes[tag].Length;
 				if (offset % 16 != 0)
 					offset += 16 - (offset % 16);
@@ -182,6 +188,10 @@ namespace DAT1
 			w.Write(strings);
 
 			offset = 16 + 12 * sectionsCount + strings.Length;
+			for (var z = 0; z < zeroesToWrite; ++z)
+				w.Write((byte)0);
+			offset += zeroesToWrite;
+			
 			foreach (var tag in sectionsSortedByOffset) {
 				w.Write(bytes[tag]);
 				offset += bytes[tag].Length;

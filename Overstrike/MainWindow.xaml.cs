@@ -1,6 +1,7 @@
 ﻿using DAT1;
 using DAT1.Files;
 using Newtonsoft.Json.Linq;
+using Overstrike.Installers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -464,12 +465,19 @@ namespace Overstrike {
 				Directory.CreateDirectory(modsPath);
 			}
 
-			// TODO: suits
+			var suitsPath = Path.Combine(_selectedProfile.GamePath, "asset_archive", "Suits");
+			if (!Directory.Exists(suitsPath)) {
+				Directory.CreateDirectory(suitsPath);
+			}
 		}
 
 		private void InstallMod(ModEntry mod, TOC toc, int index) {
+			// TODO: express this as installer classes to extend easily
 			if (mod.Type == ModEntry.ModType.SMPC || mod.Type == ModEntry.ModType.MMPC) {
 				InstallSMPCMod(mod, toc, index);
+			} else if (mod.Type == ModEntry.ModType.SUIT_MSMR) {
+				var installer = new MSMRSuitInstaller(toc, mod, _selectedProfile.GamePath);
+				installer.Install();
 			}
 		}
 

@@ -5,7 +5,9 @@ namespace DAT1.Sections.TOC
 {
     public class SpansSection : Section
     {
-        public class Span
+		public const uint TAG = 0xEDE8ADA9;
+
+		public class Span
         {
             public uint AssetIndex, Count;
         }
