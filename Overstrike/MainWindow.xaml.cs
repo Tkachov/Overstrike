@@ -1,16 +1,11 @@
 ﻿using DAT1;
-using DAT1.Files;
-using Newtonsoft.Json.Linq;
 using Overstrike.Installers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
-using System.IO.Compression;
-using System.Reflection;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -503,40 +498,48 @@ namespace Overstrike {
 			StartInstallModsThread(modsToInstall, _selectedProfile.GamePath);
 		}
 
-		private void StartInstallModsThread(List<ModEntry> modsToInstall, string gamePath) {
-			Thread thread = new Thread(() => InstallMods(modsToInstall, gamePath));
+		private void StartInstallModsThread(List<ModEntry> modsToInstall, string gamePath, bool uninstalling = false) {
+			Thread thread = new Thread(() => InstallMods(modsToInstall, gamePath, uninstalling));
 			_taskThreads.Add(thread);
 			thread.Start();
 		}
 
-		private void InstallMods(List<ModEntry> modsToInstall, string gamePath) {
+		private void InstallMods(List<ModEntry> modsToInstall, string gamePath, bool uninstalling) {
 			var operationsCount = modsToInstall.Count;
 			Dispatcher.Invoke(() => {
-				OverlayHeaderLabel.Text = "Installing mods (0/" + operationsCount + " done)...";
+				if (uninstalling)
+					OverlayHeaderLabel.Text = "Uninstalling mods...";
+				else
+					OverlayHeaderLabel.Text = "Installing mods (0/" + operationsCount + " done)...";
 				OverlayOperationLabel.Text = "Loading 'toc.BAK'...";
 			});
 
 			PrepareToInstallMods();
 
-			var tocPath = Path.Combine(gamePath, "asset_archive", "toc");
-			var toc = new TOC();
-			toc.Load(tocPath);
+			if (modsToInstall.Count > 0) {
+				var tocPath = Path.Combine(gamePath, "asset_archive", "toc");
+				var toc = new TOC();
+				toc.Load(tocPath);
 
-			var index = 0;
-			foreach (var mod in modsToInstall) {
+				var index = 0;
+				foreach (var mod in modsToInstall) {
+					Dispatcher.Invoke(() => {
+						OverlayHeaderLabel.Text = "Installing mods (" + index + "/" + operationsCount + " done)...";
+						OverlayOperationLabel.Text = "Installing '" + mod.Name + "'...";
+					});
+
+					InstallMod(mod, toc, index++);
+				}
+
 				Dispatcher.Invoke(() => {
-					OverlayHeaderLabel.Text = "Installing mods (" + index + "/" + operationsCount + " done)...";
-					OverlayOperationLabel.Text = "Installing '" + mod.Name + "'...";
+					if (uninstalling)
+						OverlayHeaderLabel.Text = "Uninstalling mods...";
+					else
+						OverlayHeaderLabel.Text = "Installing mods (" + index + "/" + operationsCount + " done)...";
+					OverlayOperationLabel.Text = "Saving 'toc'...";
 				});
-
-				InstallMod(mod, toc, index++);
+				toc.Save(tocPath);
 			}
-
-			Dispatcher.Invoke(() => {
-				OverlayHeaderLabel.Text = "Installing mods (" + index + "/" + operationsCount + " done)...";
-				OverlayOperationLabel.Text = "Saving 'toc'...";
-			});
-			toc.Save(tocPath);
 		}
 
 		private void PrepareToInstallMods() {
@@ -607,6 +610,22 @@ namespace Overstrike {
 					return true;
 				};
 			}
+		}
+
+		private void UninstallMods(object sender, RoutedEventArgs e) {
+			List<ModEntry> modsToInstall = new List<ModEntry>();
+			StartInstallModsThread(modsToInstall, _selectedProfile.GamePath, true);
+		}
+
+		private void LaunchGame(object sender, RoutedEventArgs e) {
+			try {
+				var path = _selectedProfile.GamePath;
+				if (_selectedProfile.Game == Profile.GAME_MSMR) {
+					Process.Start(Path.Combine(path, "Spider-Man.exe"), path);
+				} else if (_selectedProfile.Game == Profile.GAME_MM) {
+					Process.Start(Path.Combine(path, "MilesMorales.exe"), path);
+				}
+			} catch {}
 		}
 	}
 }
