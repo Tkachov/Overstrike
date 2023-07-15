@@ -488,6 +488,9 @@ namespace Overstrike {
 				case ModEntry.ModType.SUIT_MM:
 					return new MMSuit1Installer(toc, _selectedProfile.GamePath);
 
+				case ModEntry.ModType.SUIT_MM_V2:
+					return new MMSuit2Installer(toc, _selectedProfile.GamePath);
+
 				default:
 					return null;
 			}
