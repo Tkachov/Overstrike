@@ -505,41 +505,59 @@ namespace Overstrike {
 		}
 
 		private void InstallMods(List<ModEntry> modsToInstall, string gamePath, bool uninstalling) {
-			var operationsCount = modsToInstall.Count;
-			Dispatcher.Invoke(() => {
-				if (uninstalling)
-					OverlayHeaderLabel.Text = "Uninstalling mods...";
-				else
-					OverlayHeaderLabel.Text = "Installing mods (0/" + operationsCount + " done)...";
-				OverlayOperationLabel.Text = "Loading 'toc.BAK'...";
-			});
-
-			PrepareToInstallMods();
-
-			if (modsToInstall.Count > 0) {
-				var tocPath = Path.Combine(gamePath, "asset_archive", "toc");
-				var toc = new TOC();
-				toc.Load(tocPath);
-
-				var index = 0;
-				foreach (var mod in modsToInstall) {
-					Dispatcher.Invoke(() => {
-						OverlayHeaderLabel.Text = "Installing mods (" + index + "/" + operationsCount + " done)...";
-						OverlayOperationLabel.Text = "Installing '" + mod.Name + "'...";
-					});
-
-					InstallMod(mod, toc, index++);
-				}
-
+			try {
+				var operationsCount = modsToInstall.Count;
 				Dispatcher.Invoke(() => {
 					if (uninstalling)
 						OverlayHeaderLabel.Text = "Uninstalling mods...";
 					else
-						OverlayHeaderLabel.Text = "Installing mods (" + index + "/" + operationsCount + " done)...";
-					OverlayOperationLabel.Text = "Saving 'toc'...";
+						OverlayHeaderLabel.Text = "Installing mods (0/" + operationsCount + " done)...";
+					OverlayOperationLabel.Text = "Loading 'toc.BAK'...";
 				});
-				toc.Save(tocPath);
+
+				PrepareToInstallMods();
+
+				if (modsToInstall.Count > 0) {
+					var tocPath = Path.Combine(gamePath, "asset_archive", "toc");
+					var toc = new TOC();
+					toc.Load(tocPath);
+
+					var index = 0;
+					foreach (var mod in modsToInstall) {
+						Dispatcher.Invoke(() => {
+							OverlayHeaderLabel.Text = "Installing mods (" + index + "/" + operationsCount + " done)...";
+							OverlayOperationLabel.Text = "Installing '" + mod.Name + "'...";
+						});
+
+						InstallMod(mod, toc, index++);
+					}
+
+					Dispatcher.Invoke(() => {
+						if (uninstalling)
+							OverlayHeaderLabel.Text = "Uninstalling mods...";
+						else
+							OverlayHeaderLabel.Text = "Installing mods (" + index + "/" + operationsCount + " done)...";
+						OverlayOperationLabel.Text = "Saving 'toc'...";
+					});
+					toc.Save(tocPath);
+				}
+
+				Dispatcher.Invoke(() => {
+					if (uninstalling)
+						ShowStatusMessage("Done! Mods uninstalled.");
+					else
+						ShowStatusMessage("Done! " + operationsCount + " mods installed.");
+				});
+			} catch (Exception) {
+				Dispatcher.Invoke(() => {					
+					ShowStatusMessage("Error occurred.");
+				});
 			}
+		}
+
+		private void ShowStatusMessage(string text) {
+			StatusMessage.Text = text;
+			BeginStoryboard((System.Windows.Media.Animation.Storyboard)this.FindResource("ShowStatusMessage"));
 		}
 
 		private void PrepareToInstallMods() {
