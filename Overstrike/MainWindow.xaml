@@ -114,7 +114,7 @@
 
 										<Image Source="{Binding Badge}" HorizontalAlignment="Left" Margin="40,7,0,0" Width="30" Height="13" Stretch="Fill" VerticalAlignment="Top" />
 
-										<TextBlock Text="{Binding Name}" HorizontalAlignment="Left" Margin="75,5,0,0" VerticalAlignment="Top" />
+										<TextBlock Text="{Binding Name}" ToolTip="{Binding ToolTip}" HorizontalAlignment="Left" Margin="75,5,0,0" VerticalAlignment="Top" />
 									</Grid>
 								</DataTemplate>
 							</ListView.Resources>

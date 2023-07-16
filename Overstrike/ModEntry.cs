@@ -29,6 +29,27 @@ namespace Overstrike {
 		// run-time
 		public string Path { get; set; }
 		public ModType Type { get; set; }
+		public string ToolTip {
+			get {
+				string result = Path;
+
+				var depth = 0;
+				var index = result.IndexOf("||");
+				while (index != -1) {
+					string left = result.Substring(0, index);
+					string right = result.Substring(index + 2);
+					string middle = "\n ";
+					for (var i=0; i<depth; ++i)
+						middle += "   ";
+					middle += "↳ ";
+					result = left + middle + right;
+					index = result.IndexOf("||");
+					++depth;
+				}
+
+				return result;
+			}
+		}
 
 		// UI
 		public int Order { get; set; }

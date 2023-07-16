@@ -24,7 +24,46 @@ namespace Overstrike.Installers {
 		protected ZipArchive ReadModFile() {
 			var cwd = Directory.GetCurrentDirectory();
 			var zipPath = Path.Combine(cwd, "Mods Library", _mod.Path);
-			return ZipFile.Open(zipPath, ZipArchiveMode.Read);
+			return new ZipArchive(GetFile(zipPath));
+		}
+
+		private Stream GetFile(string path) {
+			var index = path.IndexOf("||");
+			if (index != -1) {
+				string basefile = path.Substring(0, index);
+				string rest = path.Substring(index + 2);
+				using (ZipArchive zip = ZipFile.Open(basefile, ZipArchiveMode.Read)) {
+					return GetFile(zip, rest);
+				}
+			}
+
+			return File.OpenRead(path);
+		}
+
+		private Stream GetFile(ZipArchive zip, string path) {
+			var fullpath = path;
+			var index = path.IndexOf("||");
+			if (index != -1) {
+				fullpath = path.Substring(0, index);
+			}
+
+			foreach (ZipArchiveEntry entry in zip.Entries) {
+				if (entry.FullName.Equals(fullpath, StringComparison.OrdinalIgnoreCase)) {
+					if (index == -1) {
+						var s = entry.Open();
+						var ms = new MemoryStream();
+						s.CopyTo(ms);
+						ms.Seek(0, SeekOrigin.Begin);
+						return ms;
+					} else {
+						using (ZipArchive zip2 = new ZipArchive(entry.Open())) {
+							return GetFile(zip2, path.Substring(index + 2));
+						}
+					}
+				}
+			}
+
+			return null;
 		}
 
 		protected ZipArchiveEntry GetEntryByName(ZipArchive zip, string name) {
