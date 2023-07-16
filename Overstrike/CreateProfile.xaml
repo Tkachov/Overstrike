@@ -5,10 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Overstrike"
         mc:Ignorable="d"
-        Title="Create new profile" Height="150" Width="700" ResizeMode="NoResize">
+        Title="Create new profile" Height="150" Width="700" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
 	<Border BorderThickness="0,1,0,0" BorderBrush="#EEE">
 		<Grid>
-			<TextBox x:Name="NameTextBox" Height="22" Margin="7,7,7,0" Text="Profile Name" VerticalAlignment="Top" TextChanged="NameTextBox_TextChanged" />
+			<Grid Height="22" Margin="7,7,7,0" VerticalAlignment="Top">
+				<TextBox x:Name="NameTextBox" Text="" VerticalAlignment="Top" Height="22" Padding="1" TextChanged="NameTextBox_TextChanged" />
+				<TextBlock IsHitTestVisible="False" Text="Profile Name" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="DarkGray">
+					<TextBlock.Style>
+						<Style TargetType="{x:Type TextBlock}">
+							<Setter Property="Visibility" Value="Collapsed"/>
+							<Style.Triggers>
+								<DataTrigger Binding="{Binding Text, ElementName=NameTextBox}" Value="">
+									<Setter Property="Visibility" Value="Visible"/>
+								</DataTrigger>
+							</Style.Triggers>
+						</Style>
+					</TextBlock.Style>
+				</TextBlock>
+			</Grid>
 
 			<Grid DockPanel.Dock="Top" Height="22" Margin="7,35,7,0" VerticalAlignment="Top" Grid.Row="0">
 				<Grid.ColumnDefinitions>

@@ -30,6 +30,8 @@ namespace Overstrike {
 			if (Profiles.Count > 0) {
 				var window = new MainWindow(Settings, Profiles, Mods);
 				window.Show();
+			} else {
+				Shutdown();
 			}
 		}
 

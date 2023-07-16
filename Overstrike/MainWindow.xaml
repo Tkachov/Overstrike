@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Overstrike"
         mc:Ignorable="d"
-        Title="Overstrike" Height="550" Width="600" MinWidth="320">
+        Title="Overstrike" Height="550" Width="600" MinWidth="320" WindowStartupLocation="CenterScreen">
 	<Window.Resources>
 		<ItemsPanelTemplate x:Key="ThumbnailListTemplate">
 			<WrapPanel Orientation="Horizontal" />

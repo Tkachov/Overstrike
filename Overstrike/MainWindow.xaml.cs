@@ -183,6 +183,7 @@ namespace Overstrike {
 
 				var p = window.GetProfile();
 				if (p != null) {
+					p.Save();
 					SwitchToNewProfile(p);
 				} else {
 					UpdateSelectedProfileItem();

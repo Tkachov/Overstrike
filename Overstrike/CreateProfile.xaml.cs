@@ -40,26 +40,39 @@ namespace Overstrike {
 			dialog.IsFolderPicker = true;
 			dialog.RestoreDirectory = true;
 
-			if (dialog.ShowDialog() != CommonFileDialogResult.Ok) {
+			var result = dialog.ShowDialog();
+			this.Activate();
+
+			if (result != CommonFileDialogResult.Ok) {
 				return;
 			}
 
 			GamePath = dialog.FileName;
-			DetectedGame = DetectGame();
+			DetectedGame = DetectGame(GamePath);
+
+			if (DetectedGame == null && GamePath.EndsWith("toc", StringComparison.OrdinalIgnoreCase)) {
+				GamePath = GamePath.Substring(0, GamePath.Length - 3);
+				DetectedGame = DetectGame(GamePath);
+			}
+
+			if (DetectedGame == null && GamePath.EndsWith("asset_archive", StringComparison.OrdinalIgnoreCase)) {
+				GamePath = GamePath.Substring(0, GamePath.Length - 13);
+				DetectedGame = DetectGame(GamePath);
+			}
 
 			PathTextBox.Text = GamePath;			
 			UpdateErrorAndButton();
 		}
 
-		private string DetectGame() {
+		internal static string DetectGame(string gamePath) {
 			try {
-				if (!Directory.Exists(GamePath)) return null;
+				if (!Directory.Exists(gamePath)) return null;
 
-				if (!Directory.Exists(Path.Combine(GamePath, "asset_archive"))) return null;
-				if (!File.Exists(Path.Combine(GamePath, "asset_archive", "toc"))) return null;
+				if (!Directory.Exists(Path.Combine(gamePath, "asset_archive"))) return null;
+				if (!File.Exists(Path.Combine(gamePath, "asset_archive", "toc"))) return null;
 
-				if (File.Exists(Path.Combine(GamePath, "Spider-Man.exe"))) return Profile.GAME_MSMR;
-				else if (File.Exists(Path.Combine(GamePath, "MilesMorales.exe"))) return Profile.GAME_MM;
+				if (File.Exists(Path.Combine(gamePath, "Spider-Man.exe"))) return Profile.GAME_MSMR;
+				else if (File.Exists(Path.Combine(gamePath, "MilesMorales.exe"))) return Profile.GAME_MM;
 			} catch (Exception) {}
 
 			return null;
@@ -104,17 +117,12 @@ namespace Overstrike {
 		}
 
 		private void CreateProfileButton_Click(object sender, RoutedEventArgs e) {
-			var p = new Profile(ProfileName, DetectedGame, GamePath);
-			p.Save();
-
 			Close();
 		}
 
 		internal Profile GetProfile() {
 			if (CreateProfileButton.IsEnabled) {
-				try {
-					return new Profile(Path.Combine("Profiles/", ProfileName + ".json"));
-				} catch (Exception) {}
+				return new Profile(ProfileName, DetectedGame, GamePath);
 			}
 
 			return null;

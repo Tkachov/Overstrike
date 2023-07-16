@@ -5,46 +5,64 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Overstrike"
         mc:Ignorable="d"
-        Title="Overstrike" Height="550" Width="800" MinWidth="300">
+        Title="Overstrike" Height="422" MinHeight="422" MaxHeight="422" Width="600" MinWidth="600" MaxWidth="600" WindowStartupLocation="CenterScreen">
 
 	<Border BorderThickness="0,1,0,0" BorderBrush="#EEE">
 		<Grid Background="#FFF">
 			<TextBlock Text="Welcome!" FontWeight="Bold" VerticalAlignment="Top" Margin="10,10,10,0" />
 			<TextBlock Text="Looks like this is your first time here." VerticalAlignment="Top" Margin="10,34,10,0" />
+			<TextBlock Text="To start, you need to create a profile." VerticalAlignment="Top" Margin="10,58,10,0" />
+			<TextBlock Text="Profile is a small text file that stores information about your mods." VerticalAlignment="Top" Margin="10,82,10,0" />
+			<TextBlock Text="You can create multiple profiles for the same game and switch between them at any time." VerticalAlignment="Top" Margin="10,99,10,0" />
 
 			<Grid x:Name="InstallationsFound" Visibility="Hidden">
 				<TextBlock Text="The app have found these installations. Please choose which do you want to add:" VerticalAlignment="Top" Margin="10,58,10,0" />
 
 				<TextBlock Text="Or, you can add the game manually:" VerticalAlignment="Top" Margin="10,208,10,0" />
-				<Button Content="Add game" Margin="10,230,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" />
+				<Button Content="Add game" Margin="10,230,10,0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="120" />
 			</Grid>
 
 			<Grid x:Name="NoInstallationsFound">
-				<TextBlock Text="The app have not found games in usual places. Please, add the game manually:" VerticalAlignment="Top" Margin="10,58,10,0" />
-				<Button Content="Add game" Margin="10,80,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Click="Button_Click" />
+				<Grid Height="214" Margin="7,136,7,0" VerticalAlignment="Top">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="28" />
+						<RowDefinition Height="152" />
+						<RowDefinition Height="34" />
+					</Grid.RowDefinitions>
+
+					<Border BorderThickness="1,1,1,0" Grid.Row="0" Background="#F6F6F6" BorderBrush="#AAA">
+						<Grid>
+							<CheckBox x:Name="CreateAllProfilesCheckbox" IsChecked="True" HorizontalAlignment="Left" Margin="10,6,0,0" VerticalAlignment="Top" Checked="CreateAllProfilesCheckbox_Changed" Unchecked="CreateAllProfilesCheckbox_Changed" />
+							<TextBlock Text="Profile name" Foreground="#666" HorizontalAlignment="Left" Margin="40,5,0,0" VerticalAlignment="Top" />
+							<TextBlock Text="Game path" Foreground="#666" HorizontalAlignment="Left" Margin="180,5,0,0" VerticalAlignment="Top" />
+						</Grid>
+					</Border>
+
+					<local:ListViewEx Grid.Row="1" BorderThickness="1,0,1,1" BorderBrush="#AAA" Padding="0,0,1,0"
+										  x:Name="ProfilesList" VirtualizingStackPanel.VirtualizationMode="Recycling"
+										  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible"
+										  SelectionMode="Single" Height="150" VerticalAlignment="Top">
+						<ListView.Resources>
+							<DataTemplate DataType="{x:Type local:FirstLaunchProfile}">
+								<Grid Height="26">
+									<CheckBox IsChecked="{Binding Create}" HorizontalAlignment="Left" Margin="4,6,0,0"  VerticalAlignment="Top" />
+									<TextBlock Text="{Binding Name}" HorizontalAlignment="Left" Margin="34,5,0,0" MaxWidth="130" VerticalAlignment="Top" />
+									<TextBlock Text="{Binding GamePath}" ToolTip="{Binding GamePath}" HorizontalAlignment="Left" Margin="174,5,0,0" VerticalAlignment="Top" />
+								</Grid>
+							</DataTemplate>
+						</ListView.Resources>
+					</local:ListViewEx>
+
+					<Grid Grid.Row="2">
+						<TextBlock x:Name="Hint" Text="No supported games were found in usual places. Please, add the game manually:" VerticalAlignment="Top" Margin="3,8,3,0" />
+						<Button Content="Add game" Margin="3,6,0,0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="120" Click="AddGameButton_Click" />
+					</Grid>
+				</Grid>
 			</Grid>
 
-			<Grid x:Name="SuitInfo" Visibility="Collapsed">
-				<Image x:Name="BigIcon" HorizontalAlignment="Left" Margin="7,331,0,0" VerticalAlignment="Top" Stretch="Fill" Width="298" Height="118" />
-
-				<Label Content="Profile:" HorizontalAlignment="Left" Margin="5,87,0,0" VerticalAlignment="Top" Width="55"/>
-				<ComboBox x:Name="SuitLoadoutComboBox" Margin="60,89,5,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="180">
-					<!-- SelectionChanged="SuitLoadoutComboBox_SelectionChanged" -->
-					<ComboBox.ItemTemplate>
-						<DataTemplate>
-							<TextBlock Text="{Binding Name}"  />
-						</DataTemplate>
-					</ComboBox.ItemTemplate>
-				</ComboBox>
-				<Label x:Name="ProfileGamePath" Content="C:/Path/To/MSMR" Margin="260,87,5,0" VerticalAlignment="Top" />
-			</Grid>
-
-			<Grid x:Name="Modified" VerticalAlignment="Bottom" Margin="5,0,5,5">
-				<Label Content="There are unsaved changes!" HorizontalAlignment="Left" Margin="0,0,0,3" VerticalAlignment="Bottom"/>
-
-				<Button Content="Undo" HorizontalAlignment="Right" Margin="0,0,75,5" VerticalAlignment="Bottom" Width="60" />
-				<Button Content="Save" HorizontalAlignment="Right" Margin="0,0,2,5" VerticalAlignment="Bottom" Width="60" />
-				<!-- Click="SaveChangesButtonClicked" -->
+			<Grid VerticalAlignment="Bottom" Margin="5,0,5,5">
+				<!-- <Label Content="There are unsaved changes!" HorizontalAlignment="Left" Margin="0,0,0,3" VerticalAlignment="Bottom"/> -->
+				<Button x:Name="CreateProfilesButton" Content="Create profiles" IsEnabled="False" HorizontalAlignment="Right" Margin="0,0,2,5" VerticalAlignment="Bottom" Width="120" Click="CreateProfilesButton_Click" />
 			</Grid>
 		</Grid>
 	</Border>
