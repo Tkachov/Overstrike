@@ -1,8 +1,8 @@
-﻿using System;
+﻿using SharpCompress.Archives;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.IO.Compression;
 
 namespace Overstrike.Detectors {
 	internal class ModsDetection {
@@ -12,10 +12,8 @@ namespace Overstrike.Detectors {
 			_detectors = new List<DetectorBase>() {
 				new SMPCModDetector(),
 				new SuitModDetector(),
-				new ZipDetector(this)
+				new ArchiveDetector(this)
 			};
-
-			// TODO: support 7z/rar
 		}
 
 		public void Detect(string path, List<ModEntry> mods) {
@@ -32,7 +30,7 @@ namespace Overstrike.Detectors {
 			}
 		}
 
-		internal void Detect(ZipArchive zip, string path, List<ModEntry> mods) {
+		internal void Detect(IArchive archive, string path, List<ModEntry> mods) {
 			Dictionary<string, DetectorBase> detectors = new Dictionary<string, DetectorBase>();
 			foreach (var detector in _detectors) {
 				string[] extensions = detector.GetExtensions();
@@ -41,12 +39,20 @@ namespace Overstrike.Detectors {
 				}
 			}
 
-			foreach (ZipArchiveEntry entry in zip.Entries) {
+			foreach (var entry in archive.Entries) {
+				if (entry.IsDirectory) continue;
+
 				foreach (var extension in detectors.Keys) {
-					if (entry.Name.EndsWith("." + extension, StringComparison.OrdinalIgnoreCase)) {
-						var file = entry.Open();
-						var internalPath = path + "||" + entry.FullName;
+					if (entry.Key.EndsWith("." + extension, StringComparison.OrdinalIgnoreCase)) {
+						var file = new MemoryStream();
+						using (var entryStream = entry.OpenEntryStream()) {
+							entryStream.CopyTo(file);
+						}
+						file.Seek(0, SeekOrigin.Begin);
+
+						var internalPath = path + "||" + entry.Key;
 						detectors[extension].Detect(file, internalPath, mods);
+						break;
 					}
 				}
 			}

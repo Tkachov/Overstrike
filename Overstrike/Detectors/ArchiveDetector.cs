@@ -1,24 +1,24 @@
-﻿using System.IO.Compression;
-using System.IO;
+﻿using System.IO;
 using System;
 using System.Collections.Generic;
+using SharpCompress.Archives;
 
 namespace Overstrike.Detectors {
-	internal class ZipDetector: DetectorBase {
+	internal class ArchiveDetector: DetectorBase {
 		private ModsDetection _detection;
 
-		public ZipDetector(ModsDetection detection) : base() {
+		public ArchiveDetector(ModsDetection detection) : base() {
 			_detection = detection;
 		}
 
 		public override string[] GetExtensions() {
-			return new string[] {"zip"};
+			return new string[] {"7z", "rar", "zip"};
 		}
 
 		public override void Detect(Stream file, string path, List<ModEntry> mods) {
 			try {
-				using (ZipArchive zip = new ZipArchive(file)) {
-					_detection.Detect(zip, path, mods);
+				using (var archive = ArchiveFactory.Open(file)) {
+					_detection.Detect(archive, path, mods);
 				}
 			} catch (Exception) { }
 		}

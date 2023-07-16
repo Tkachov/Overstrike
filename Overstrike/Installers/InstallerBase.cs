@@ -1,5 +1,6 @@
 ﻿using DAT1;
 using DAT1.Sections.TOC;
+using SharpCompress.Archives;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,8 +24,8 @@ namespace Overstrike.Installers {
 
 		protected ZipArchive ReadModFile() {
 			var cwd = Directory.GetCurrentDirectory();
-			var zipPath = Path.Combine(cwd, "Mods Library", _mod.Path);
-			return new ZipArchive(GetFile(zipPath));
+			var fullPath = Path.Combine(cwd, "Mods Library", _mod.Path);
+			return new ZipArchive(GetFile(fullPath));
 		}
 
 		private Stream GetFile(string path) {
@@ -32,32 +33,36 @@ namespace Overstrike.Installers {
 			if (index != -1) {
 				string basefile = path.Substring(0, index);
 				string rest = path.Substring(index + 2);
-				using (ZipArchive zip = ZipFile.Open(basefile, ZipArchiveMode.Read)) {
-					return GetFile(zip, rest);
+
+				using (var archive = ArchiveFactory.Open(File.OpenRead(basefile))) {
+					return GetFile(archive, rest);
 				}
 			}
 
 			return File.OpenRead(path);
 		}
 
-		private Stream GetFile(ZipArchive zip, string path) {
+		private Stream GetFile(IArchive archive, string path) {
 			var fullpath = path;
 			var index = path.IndexOf("||");
 			if (index != -1) {
 				fullpath = path.Substring(0, index);
 			}
 
-			foreach (ZipArchiveEntry entry in zip.Entries) {
-				if (entry.FullName.Equals(fullpath, StringComparison.OrdinalIgnoreCase)) {
+			foreach (var entry in archive.Entries) {
+				if (entry.IsDirectory) continue;
+				if (entry.Key.Equals(fullpath, StringComparison.OrdinalIgnoreCase)) {
+					var file = new MemoryStream();
+					using (var entryStream = entry.OpenEntryStream()) {
+						entryStream.CopyTo(file);
+					}
+					file.Seek(0, SeekOrigin.Begin);
+
 					if (index == -1) {
-						var s = entry.Open();
-						var ms = new MemoryStream();
-						s.CopyTo(ms);
-						ms.Seek(0, SeekOrigin.Begin);
-						return ms;
+						return file;
 					} else {
-						using (ZipArchive zip2 = new ZipArchive(entry.Open())) {
-							return GetFile(zip2, path.Substring(index + 2));
+						using (var archive2 = ArchiveFactory.Open(file)) {
+							return GetFile(archive2, path.Substring(index + 2));
 						}
 					}
 				}
