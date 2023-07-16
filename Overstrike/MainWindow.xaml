@@ -11,6 +11,29 @@
 			<WrapPanel Orientation="Horizontal" />
 		</ItemsPanelTemplate>
 		<Style TargetType="{x:Type ListViewItem}" x:Key="NotemanagerContainerStyle"></Style>
+		
+		<Style TargetType="{x:Type Button}" x:Key="IconButton">
+			<Setter Property="SnapsToDevicePixels" Value="true" />
+			<Setter Property="OverridesDefaultStyle" Value="true" />
+			<Setter Property="Background" Value="Transparent" />
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type Button}">
+						<Border Background="{TemplateBinding Background}">
+							<ContentPresenter x:Name="MyContentPresenter" Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" />
+						</Border>
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsMouseOver" Value="True">
+								<Setter Property="Background" Value="#EEE" />
+							</Trigger>
+							<Trigger Property="IsPressed" Value="True">
+								<Setter Property="Background" Value="#CCC" />
+							</Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
 
 		<Storyboard x:Key="ShowStatusMessage">
 			<DoubleAnimation Storyboard.TargetName="StatusMessage" Storyboard.TargetProperty="Opacity" From="0" To="1" BeginTime="0:0:0" Duration="0:0:0.4">
@@ -77,8 +100,8 @@
 						<Grid DockPanel.Dock="Top" Height="22" Margin="4,6,4,0" VerticalAlignment="Top" Grid.Row="0">
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition />
-								<ColumnDefinition Width="80" />
-								<ColumnDefinition Width="75" />
+								<ColumnDefinition Width="24" />
+								<ColumnDefinition Width="22" />
 							</Grid.ColumnDefinitions>
 							<Grid Grid.Column="0">
 								<TextBox HorizontalAlignment="Left" Width="234" x:Name="FilterTextBox" Padding="1" TextChanged="FilterTextBox_TextChanged" />
@@ -96,8 +119,18 @@
 								</TextBlock>
 							</Grid>
 
-							<Button Grid.Column="1" x:Name="AddMods" Content="Add mods" VerticalAlignment="Top" Height="22" Margin="0,0,5,0" Click="AddMods_Click" />
-							<Button Grid.Column="2" x:Name="RefreshButton" Content="Refresh" VerticalAlignment="Top" Height="22" Click="RefreshButton_Click" />
+							<Button Grid.Column="1" x:Name="AddMods" VerticalAlignment="Top" Height="22" Margin="0,0,2,0" Click="AddMods_Click">
+								<Button.Resources>
+									<Style TargetType="{x:Type Button}" BasedOn="{StaticResource IconButton}" />
+								</Button.Resources>
+								<Image x:Name="AddModsIcon" Grid.Column="1" Width="16" Height="16" HorizontalAlignment="Left" Stretch="UniformToFill" VerticalAlignment="Top" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+							</Button>
+							<Button Grid.Column="2" x:Name="RefreshButton" VerticalAlignment="Top" Height="22" Click="RefreshButton_Click">
+								<Button.Resources>
+									<Style TargetType="{x:Type Button}" BasedOn="{StaticResource IconButton}" />
+								</Button.Resources>
+								<Image x:Name="RefreshIcon" Grid.Column="1" Width="16" Height="16" HorizontalAlignment="Left" Stretch="UniformToFill" VerticalAlignment="Top" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+							</Button>
 						</Grid>
 
 						<local:ListViewEx Grid.Row="1" Margin="4,6,4,0" BorderThickness="1" Padding="0,0,1,0"

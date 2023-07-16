@@ -46,6 +46,9 @@ namespace Overstrike {
 			_profiles = profiles;
 			_mods = mods;
 
+			AddModsIcon.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.add_icon);
+			RefreshIcon.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.reload_icon);
+
 			MakeProfileItems();
 			FirstSwitchToProfile();
 			StartTickThread();
