@@ -6,6 +6,12 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Properties\Resources\icon.ico</ApplicationIcon>
+
+    <Authors>Tkachov</Authors>
+
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
+
+    <FileVersion>1.0.1.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

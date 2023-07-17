@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
@@ -176,30 +178,66 @@ namespace Overstrike {
 				}
 			}
 
-			try {
-				if (Directory.Exists("ModManager\\SMPCMods\\") || Directory.Exists("ModManager\\MMPCMods\\")) {
-					MessageBoxResult result = MessageBox.Show("SMPCTool installation found.\nDo you want to copy mods from there?", "SMPCTool migration", MessageBoxButton.YesNo);
-					if (result == MessageBoxResult.Yes) {
-						var path = "";
-						if (Directory.Exists("ModManager\\SMPCMods\\")) path = "ModManager\\SMPCMods\\";
-						else path = "ModManager\\MMPCMods\\";
-
-						string[] files = Directory.GetFiles(path, "*.smpcmod", SearchOption.AllDirectories);
-						foreach (var file in files) {
-							File.Copy(file, Path.Combine("Mods Library/", Path.GetFileName(file)), true);
-						}
-
-						files = Directory.GetFiles(path, "*.mmpcmod", SearchOption.AllDirectories);
-						foreach (var file in files) {
-							File.Copy(file, Path.Combine("Mods Library/", Path.GetFileName(file)), true);
-						}
-
-						((App)App.Current).ReloadMods();
-					}
+			if (Directory.Exists("ModManager\\SMPCMods\\") || Directory.Exists("ModManager\\MMPCMods\\")) {
+				MessageBoxResult result = MessageBox.Show("SMPCTool installation found.\nDo you want to copy mods from there?", "SMPCTool migration", MessageBoxButton.YesNo);
+				if (result == MessageBoxResult.Yes) {
+					CopyMods();
+					CopyModsOrder();
 				}
-			} catch {}
+			}
 
 			Close();
+		}
+
+		private void CopyMods() {
+			try {
+				var path = "";
+				if (Directory.Exists("ModManager\\SMPCMods\\")) path = "ModManager\\SMPCMods\\";
+				else path = "ModManager\\MMPCMods\\";
+
+				string[] files = Directory.GetFiles(path, "*.smpcmod", SearchOption.AllDirectories);
+				foreach (var file in files) {
+					File.Copy(file, Path.Combine("Mods Library/", Path.GetFileName(file)), true);
+				}
+
+				files = Directory.GetFiles(path, "*.mmpcmod", SearchOption.AllDirectories);
+				foreach (var file in files) {
+					File.Copy(file, Path.Combine("Mods Library/", Path.GetFileName(file)), true);
+				}
+
+				((App)App.Current).ReloadMods();
+			} catch {}
+		}
+
+		private void CopyModsOrder() {
+			try {
+				List<(string, bool)> modsOrder = new();
+				foreach (var line in File.ReadAllLines("ModManager\\ModManager.txt")) {
+					string[] parts = line.Split(',');
+					if (parts.Length == 2) {
+						modsOrder.Add((parts[0], parts[1] == "1"));
+					}
+				}
+
+				foreach (var profile in _profilesList) {
+					if (!profile.Create) continue;
+
+					try {
+						var path = Path.Combine(Directory.GetCurrentDirectory(), "Profiles/", profile.Name + ".json");
+						JObject json = JObject.Parse(File.ReadAllText(path));
+						var mods = (JArray)json["mods"];
+
+						foreach (var mod in modsOrder) {
+							mods.Add(new JArray {
+								mod.Item1,
+								mod.Item2
+							});
+						}
+
+						File.WriteAllText(path, json.ToString());
+					} catch {}
+				}
+			} catch {}
 		}
 	}
 
