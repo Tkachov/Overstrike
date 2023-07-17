@@ -137,7 +137,7 @@
 										  x:Name="ModsList" VirtualizingStackPanel.VirtualizationMode="Recycling"
 										  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible"
 										  SelectionMode="Extended" 
-										  SelectionChanged="ModsList_SelectionChanged" MouseLeftButtonDown="ModsList_MouseLeftButtonDown" MouseMove="ModsList_MouseMove" DragEnter="ModsList_DragEnter" Drop="ModsList_Drop" AllowDrop="True">
+										  SelectionChanged="ModsList_SelectionChanged" MouseLeftButtonDown="ModsList_MouseLeftButtonDown" MouseMove="ModsList_MouseMove" DragEnter="ModsList_DragEnter" Drop="ModsList_Drop" AllowDrop="True" KeyUp="ModsList_KeyUp">
 							<ListView.Resources>
 								<DataTemplate DataType="{x:Type local:ModEntry}">
 									<Grid Height="26">

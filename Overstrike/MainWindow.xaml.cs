@@ -612,6 +612,10 @@ namespace Overstrike {
 		}
 
 		private void RefreshButton_Click(object sender, RoutedEventArgs e) {
+			RefreshMods();
+		}
+
+		private void RefreshMods() {
 			_mods = ((App)App.Current).ReloadMods();
 			MakeModsItems();
 		}
@@ -710,6 +714,42 @@ namespace Overstrike {
 
 				File.Copy(filename, path, true);
 			} catch {}
+		}
+
+		private void ModsList_KeyUp(object sender, KeyEventArgs e) {
+			if (e.Key == Key.Delete) {
+				var cwd = Directory.GetCurrentDirectory();
+				List<string> filesToDelete = new List<string>();
+				foreach (ModEntry mod in ModsList.SelectedItems) {
+					var path = mod.Path;
+					var index = path.IndexOf("||");
+					if (index != -1) {
+						path = path.Substring(0, index);
+					}
+
+					path = Path.Combine(cwd, "Mods Library", path);
+
+					if (!filesToDelete.Contains(path)) {
+						filesToDelete.Add(path);
+					}
+				}
+
+				if (filesToDelete.Count > 0) {
+					string message = "Delete " + filesToDelete.Count + " files from 'Mods Library' folder?";
+					if (filesToDelete.Count == 1) {
+						message = "Delete '" + Path.GetFileName(filesToDelete[0]) + "' from 'Mods Library' folder?";
+					}
+
+					MessageBoxResult result = MessageBox.Show(message, "Warning", MessageBoxButton.YesNo);
+					if (result == MessageBoxResult.Yes) {
+						foreach (var file in filesToDelete) {
+							try { File.Delete(file); } catch {}
+						}
+					}
+
+					RefreshMods();
+				}
+			}
 		}
 	}
 }
