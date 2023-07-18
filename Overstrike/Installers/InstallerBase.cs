@@ -110,6 +110,23 @@ namespace Overstrike.Installers {
 			return _toc.AddNewArchive(filename, mode);
 		}
 
+		protected byte? GetSpan(int assetIndex) {
+			return GetSpan(assetIndex, _toc);
+		}
+
+		protected byte? GetSpan(int assetIndex, TOC toc) {
+			byte span = 0;
+			foreach (var entry in toc.Dat1.SpansSection.Entries) {
+				if (entry.AssetIndex <= assetIndex && assetIndex < entry.AssetIndex + entry.Count) {
+					return span;
+				}
+
+				++span;
+			}
+
+			return null;
+		}
+
 		protected void SortAssets() {
 			var ids = _toc.Dat1.AssetIdsSection.Ids;
 			var sizes = _toc.Dat1.SizesSection.Entries;

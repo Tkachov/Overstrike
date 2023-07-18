@@ -523,9 +523,12 @@ namespace Overstrike {
 				PrepareToInstallMods();
 
 				if (modsToInstall.Count > 0) {
-					var tocPath = Path.Combine(gamePath, "asset_archive", "toc");
+					var tocPath = Path.Combine(gamePath, "asset_archive", "toc");					
 					var toc = new TOC();
 					toc.Load(tocPath);
+
+					var unchangedToc = new TOC(); // a special copy for .smpcmod installer to lookup indexes in
+					unchangedToc.Load(tocPath);
 
 					var index = 0;
 					foreach (var mod in modsToInstall) {
@@ -534,7 +537,7 @@ namespace Overstrike {
 							OverlayOperationLabel.Text = "Installing '" + mod.Name + "'...";
 						});
 
-						InstallMod(mod, toc, index++);
+						InstallMod(mod, toc, unchangedToc, index++);
 					}
 
 					Dispatcher.Invoke(() => {
@@ -586,16 +589,16 @@ namespace Overstrike {
 			}
 		}
 
-		private void InstallMod(ModEntry mod, TOC toc, int index) {
-			var installer = GetInstaller(mod, toc);
+		private void InstallMod(ModEntry mod, TOC toc, TOC unchangedToc, int index) {
+			var installer = GetInstaller(mod, toc, unchangedToc);
 			installer.Install(mod, index);
 		}
 
-		private InstallerBase GetInstaller(ModEntry mod, TOC toc) {
+		private InstallerBase GetInstaller(ModEntry mod, TOC toc, TOC unchangedToc) {
 			switch (mod.Type) {
 				case ModEntry.ModType.SMPC:
 				case ModEntry.ModType.MMPC:
-					return new SMPCModInstaller(toc, _selectedProfile.GamePath);
+					return new SMPCModInstaller(toc, unchangedToc, _selectedProfile.GamePath);
 
 				case ModEntry.ModType.SUIT_MSMR:
 					return new MSMRSuitInstaller(toc, _selectedProfile.GamePath);

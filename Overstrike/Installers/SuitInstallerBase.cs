@@ -63,19 +63,6 @@ namespace Overstrike.Installers {
 			});
 		}
 
-		protected byte? GetSpan(int assetIndex) {
-			byte span = 0;
-			foreach (var entry in _toc.Dat1.SpansSection.Entries) {
-				if (entry.AssetIndex <= assetIndex && assetIndex < entry.AssetIndex + entry.Count) {
-					return span;
-				}
-
-				++span;
-			}
-
-			return null;
-		}
-
 		protected void WriteArchive(string archivePath, uint archiveIndex, ulong assetId, byte span, byte[] bytes) {
 			File.WriteAllBytes(archivePath, bytes);
 			AddOrUpdateAssetEntry(assetId, span, archiveIndex, /*offset=*/0, (uint)bytes.Length);

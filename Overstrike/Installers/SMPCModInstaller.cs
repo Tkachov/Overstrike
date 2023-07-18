@@ -3,10 +3,16 @@ using System.IO.Compression;
 using System.IO;
 using System;
 using System.Globalization;
+using SharpCompress.Common;
+using System.Xml.Linq;
 
 namespace Overstrike.Installers {
 	internal class SMPCModInstaller: InstallerBase {
-		public SMPCModInstaller(TOC toc, string gamePath) : base(toc, gamePath) {}
+		private TOC _unchangedToc;
+
+		public SMPCModInstaller(TOC toc, TOC unchangedToc, string gamePath) : base(toc, gamePath) {
+			_unchangedToc = unchangedToc;
+		}
 
 		public override void Install(ModEntry mod, int index) {
 			_mod = mod;
@@ -16,19 +22,17 @@ namespace Overstrike.Installers {
 
 			var newArchiveIndex = _toc.AddNewArchive("mods\\mod" + index, TOC.ArchiveAddingImpl.SMPCTOOL); // TODO: switch to DEFAULT, it must be working fine
 
-			var f = File.OpenWrite(modPath);
-			var w = new BinaryWriter(f);
-
-			using (ZipArchive zip = ReadModFile()) {
-				foreach (ZipArchiveEntry entry in zip.Entries) {
-					if (entry.FullName.StartsWith("ModFiles/", StringComparison.OrdinalIgnoreCase)) {
-						ReplaceAsset(w, newArchiveIndex, entry);
+			using (var f = new FileStream(modPath, FileMode.Truncate, FileAccess.Write, FileShare.None)) {
+				using (var w = new BinaryWriter(f)) {
+					using (ZipArchive zip = ReadModFile()) {
+						foreach (ZipArchiveEntry entry in zip.Entries) {
+							if (entry.FullName.StartsWith("ModFiles/", StringComparison.OrdinalIgnoreCase)) {
+								ReplaceAsset(w, newArchiveIndex, entry);
+							}
+						}
 					}
 				}
 			}
-
-			w.Close();
-			w.Dispose();
 		}
 
 		private void ReplaceAsset(BinaryWriter modArchiveFile, uint modArchiveIndex, ZipArchiveEntry asset) {
@@ -44,18 +48,33 @@ namespace Overstrike.Installers {
 			}
 			long fileSize = modArchiveFile.BaseStream.Position - archiveOffset;
 
-			AssetEntry[] assetEntries = _toc.FindAssetEntriesById(assetId);
-			foreach (var assetEntry in assetEntries) {
-				if (assetEntry.archive == archiveIndex) {
-					_toc.UpdateAssetEntry(new AssetEntry() {
-						index = assetEntry.index,
-						id = assetEntry.id,
-						archive = modArchiveIndex,
-						offset = (uint)archiveOffset,
-						size = (uint)fileSize
-					});
+			AssetEntry originalEntry = null;
+			AssetEntry[] originalAssetEntries = _unchangedToc.FindAssetEntriesById(assetId);
+			foreach (var assetEntry in originalAssetEntries) {
+				if (assetEntry.archive == archiveIndex) { // TODO: fix this to go through ORIGINAL UNCHANGED TOC
+					originalEntry = assetEntry;
 					break;
 				}
+			}
+
+			if (originalEntry != null) {
+				var spanIndex = GetSpan(originalEntry.index, _unchangedToc);
+
+				// now find the asset in modified toc that has the same id and is in the same span (could be in different archive already)
+				var span = _toc.Dat1.SpansSection.Entries[(int)spanIndex];
+				AssetEntry[] assetEntries = _toc.FindAssetEntriesById(assetId);
+				foreach (var entry in assetEntries) {
+					if (span.AssetIndex <= entry.index && entry.index < span.AssetIndex + span.Count) {
+						_toc.UpdateAssetEntry(new AssetEntry() {
+							index = entry.index,
+							id = entry.id,
+							archive = modArchiveIndex,
+							offset = (uint)archiveOffset,
+							size = (uint)fileSize
+						});
+						break;
+					}
+				}						
 			}
 		}		
 	}
