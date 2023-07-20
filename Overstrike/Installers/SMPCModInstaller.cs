@@ -22,7 +22,7 @@ namespace Overstrike.Installers {
 
 			var newArchiveIndex = _toc.AddNewArchive("mods\\mod" + index, TOC.ArchiveAddingImpl.SMPCTOOL); // TODO: switch to DEFAULT, it must be working fine
 
-			using (var f = new FileStream(modPath, FileMode.Truncate, FileAccess.Write, FileShare.None)) {
+			using (var f = new FileStream(modPath, FileMode.Create, FileAccess.Write, FileShare.None)) {
 				using (var w = new BinaryWriter(f)) {
 					using (ZipArchive zip = ReadModFile()) {
 						foreach (ZipArchiveEntry entry in zip.Entries) {
