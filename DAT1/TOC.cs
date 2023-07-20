@@ -112,14 +112,13 @@ namespace DAT1
 				compressed = ms.ToArray();
 			}
 
-			var f = System.IO.File.OpenWrite(filename);
-			var w = new BinaryWriter(f);
-			w.Write((uint)TOC_MAGIC);
-			w.Write((uint)uncompressed.Length);
-			w.Write(compressed);
-
-			w.Close();
-			w.Dispose();
+			using (var f = new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.None)) {
+				using (var w = new BinaryWriter(f)) {
+					w.Write((uint)TOC_MAGIC);
+					w.Write((uint)uncompressed.Length);
+					w.Write(compressed);
+				}
+			}
 
 			return true;
 		}

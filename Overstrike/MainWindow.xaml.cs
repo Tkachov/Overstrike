@@ -557,7 +557,7 @@ namespace Overstrike {
 						ShowStatusMessage("Done! " + operationsCount + " mods installed.");
 				});
 			} catch (Exception) {
-				Dispatcher.Invoke(() => {					
+				Dispatcher.Invoke(() => {
 					ShowStatusMessage("Error occurred.");
 				});
 			}

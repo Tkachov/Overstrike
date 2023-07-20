@@ -32,13 +32,13 @@ namespace Overstrike.Installers {
 			var suitArchiveIndex = GetArchiveIndex("Suits\\" + id);
 			var assets = GetEntryByFullName(zip, id + "/" + id);
 
-			var f = File.OpenWrite(suitArchivePath);
-			var w = new BinaryWriter(f);
-			using (var stream = assets.Open()) {
-				stream.CopyTo(w.BaseStream);
+			using (var f = new FileStream(suitArchivePath, FileMode.Create, FileAccess.Write, FileShare.None)) {
+				using (var w = new BinaryWriter(f)) {
+					using (var stream = assets.Open()) {
+						stream.CopyTo(w.BaseStream);
+					}
+				}
 			}
-			w.Close();
-			w.Dispose();
 
 			var infoTxt = GetEntryByName(zip, "info.txt");
 			using (var stream = infoTxt.Open()) {
