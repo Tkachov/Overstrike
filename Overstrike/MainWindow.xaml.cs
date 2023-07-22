@@ -160,11 +160,11 @@ namespace Overstrike {
 
 		private bool IsModCompatible(ModEntry.ModType type) {
 			if (_selectedProfile.Game == Profile.GAME_MSMR) {
-				return (type == ModEntry.ModType.SMPC || type == ModEntry.ModType.SUIT_MSMR);
+				return (type == ModEntry.ModType.SMPC || type == ModEntry.ModType.SUIT_MSMR || type == ModEntry.ModType.STAGE_MSMR);
 			}
 
 			if (_selectedProfile.Game == Profile.GAME_MM) {
-				return (type == ModEntry.ModType.MMPC || type == ModEntry.ModType.SUIT_MM || type == ModEntry.ModType.SUIT_MM_V2);
+				return (type == ModEntry.ModType.MMPC || type == ModEntry.ModType.SUIT_MM || type == ModEntry.ModType.SUIT_MM_V2 || type == ModEntry.ModType.STAGE_MM);
 			}
 
 			return false;
@@ -609,6 +609,10 @@ namespace Overstrike {
 				case ModEntry.ModType.SUIT_MM_V2:
 					return new MMSuit2Installer(toc, _selectedProfile.GamePath);
 
+				case ModEntry.ModType.STAGE_MSMR:
+				case ModEntry.ModType.STAGE_MM:
+					return new StageInstaller(toc, _selectedProfile.GamePath);
+
 				default:
 					return null;
 			}
@@ -664,8 +668,8 @@ namespace Overstrike {
 			dialog.Multiselect = true;
 			dialog.RestoreDirectory = true;
 
-			dialog.Filters.Add(new CommonFileDialogFilter("All supported files", "*.smpcmod;*.mmpcmod;*.suit;*.zip;*.rar;*.7z") { ShowExtensions = true });
-			dialog.Filters.Add(new CommonFileDialogFilter("All supported mod files", "*.smpcmod;*.mmpcmod;*.suit") { ShowExtensions = true });
+			dialog.Filters.Add(new CommonFileDialogFilter("All supported files", "*.smpcmod;*.mmpcmod;*.suit;*.stage;*.zip;*.rar;*.7z") { ShowExtensions = true });
+			dialog.Filters.Add(new CommonFileDialogFilter("All supported mod files", "*.smpcmod;*.mmpcmod;*.suit;*.stage") { ShowExtensions = true });
 			dialog.Filters.Add(new CommonFileDialogFilter("Archives", "*.zip;*.rar;*.7z") { ShowExtensions = true });
 			dialog.Filters.Add(new CommonFileDialogFilter("All files", "*") { ShowExtensions = true });
 

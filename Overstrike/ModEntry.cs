@@ -11,6 +11,8 @@ namespace Overstrike {
 			SUIT_MSMR,
 			SUIT_MM,
 			SUIT_MM_V2,
+			STAGE_MSMR,
+			STAGE_MM,
 
 			UNKNOWN
 		}
@@ -94,6 +96,10 @@ namespace Overstrike {
 				case ModType.SUIT_MM_V2:
 					return badge_suit;
 
+				case ModType.STAGE_MSMR:
+				case ModType.STAGE_MM:
+					return badge_stage;
+
 				default:
 					return null;
 			}
@@ -102,6 +108,7 @@ namespace Overstrike {
 		private static BitmapImage badge_smpc = null;
 		private static BitmapImage badge_mmpc = null;
 		private static BitmapImage badge_suit = null;
+		private static BitmapImage badge_stage = null;
 
 		private static void LoadBadges() {
 			if (badge_smpc == null)
@@ -112,6 +119,9 @@ namespace Overstrike {
 
 			if (badge_suit == null)
 				badge_suit = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.badge_suit);
+
+			if (badge_stage == null)
+				badge_stage = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.badge_stage);
 		}
 	}
 }

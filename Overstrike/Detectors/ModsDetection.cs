@@ -12,6 +12,7 @@ namespace Overstrike.Detectors {
 			_detectors = new List<DetectorBase>() {
 				new SMPCModDetector(),
 				new SuitModDetector(),
+				new StageModDetector(),
 				new ArchiveDetector(this)
 			};
 		}

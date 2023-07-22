@@ -63,6 +63,16 @@ namespace Overstrike.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] add_icon {
+            get {
+                object obj = ResourceManager.GetObject("add_icon", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] badge_mmpc {
             get {
                 object obj = ResourceManager.GetObject("badge_mmpc", resourceCulture);
@@ -76,6 +86,16 @@ namespace Overstrike.Properties {
         internal static byte[] badge_smpc {
             get {
                 object obj = ResourceManager.GetObject("badge_smpc", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static byte[] badge_stage {
+            get {
+                object obj = ResourceManager.GetObject("badge_stage", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -156,16 +176,6 @@ namespace Overstrike.Properties {
         internal static byte[] reload_icon {
             get {
                 object obj = ResourceManager.GetObject("reload_icon", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] add_icon {
-            get {
-                object obj = ResourceManager.GetObject("add_icon", resourceCulture);
                 return ((byte[])(obj));
             }
         }
