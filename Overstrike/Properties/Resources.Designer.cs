@@ -91,7 +91,7 @@ namespace Overstrike.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         internal static byte[] badge_stage {
             get {
@@ -166,6 +166,36 @@ namespace Overstrike.Properties {
         internal static byte[] banner_msmr_logo2 {
             get {
                 object obj = ResourceManager.GetObject("banner_msmr_logo2", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static byte[] banner_rcra_back {
+            get {
+                object obj = ResourceManager.GetObject("banner_rcra_back", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static byte[] banner_rcra_logo {
+            get {
+                object obj = ResourceManager.GetObject("banner_rcra_logo", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static byte[] banner_rcra_logo2 {
+            get {
+                object obj = ResourceManager.GetObject("banner_rcra_logo2", resourceCulture);
                 return ((byte[])(obj));
             }
         }

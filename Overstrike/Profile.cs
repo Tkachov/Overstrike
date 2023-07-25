@@ -11,7 +11,8 @@ using System.IO;
 namespace Overstrike {
 	public class Profile {
         public const string GAME_MSMR = "MSMR";
-		public const string GAME_MM = "MM";
+        public const string GAME_MM = "MM";
+        public const string GAME_RCRA = "RCRA";
 
 		// meta
 		public string FullPath;

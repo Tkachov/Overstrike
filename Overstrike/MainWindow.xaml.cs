@@ -90,14 +90,24 @@ namespace Overstrike {
 
 		private void SetupBanner() {
 			// TODO: cache those images once and just set references instead of reloading them all the time
-			if (_selectedProfile.Game == "MSMR") {
-				GradientImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_msmr_back);
-				LogoImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_msmr_logo);
-				LogoImage2.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_msmr_logo2);
-			} else {
-				GradientImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_mm_back);
-				LogoImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_mm_logo);
-				LogoImage2.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_mm_logo2);
+			switch (_selectedProfile.Game) {
+				case Profile.GAME_MSMR:
+					GradientImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_msmr_back);
+					LogoImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_msmr_logo);
+					LogoImage2.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_msmr_logo2);
+				break;
+
+				case Profile.GAME_MM:
+					GradientImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_mm_back);
+					LogoImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_mm_logo);
+					LogoImage2.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_mm_logo2);
+				break;
+
+				case Profile.GAME_RCRA:
+					GradientImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_rcra_back);
+					LogoImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_rcra_logo);
+					LogoImage2.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_rcra_logo2);
+				break;
 			}
 		}
 
@@ -170,6 +180,10 @@ namespace Overstrike {
 
 			if (_selectedProfile.Game == Profile.GAME_MM) {
 				return (type == ModEntry.ModType.MMPC || type == ModEntry.ModType.SUIT_MM || type == ModEntry.ModType.SUIT_MM_V2 || type == ModEntry.ModType.STAGE_MM);
+			}
+
+			if (_selectedProfile.Game == Profile.GAME_RCRA) {
+				return (type == ModEntry.ModType.STAGE_RCRA);
 			}
 
 			return false;
@@ -616,6 +630,7 @@ namespace Overstrike {
 
 				case ModEntry.ModType.STAGE_MSMR:
 				case ModEntry.ModType.STAGE_MM:
+				case ModEntry.ModType.STAGE_RCRA:
 					return new StageInstaller(toc, _selectedProfile.GamePath);
 
 				default:
@@ -655,7 +670,7 @@ namespace Overstrike {
 			List<ModEntry> modsToInstall = new List<ModEntry>();
 			StartInstallModsThread(modsToInstall, _selectedProfile.GamePath, true);
 		}
-
+		
 		private void LaunchGame(object sender, RoutedEventArgs e) {
 			try {
 				var path = _selectedProfile.GamePath;
@@ -663,6 +678,8 @@ namespace Overstrike {
 					Process.Start(Path.Combine(path, "Spider-Man.exe"), path);
 				} else if (_selectedProfile.Game == Profile.GAME_MM) {
 					Process.Start(Path.Combine(path, "MilesMorales.exe"), path);
+				} else if (_selectedProfile.Game == Profile.GAME_RCRA) {
+					Process.Start(Path.Combine(path, "RatchetClank.exe"), path); // TODO: RCRA support
 				}
 			} catch {}
 		}

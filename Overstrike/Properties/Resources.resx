@@ -154,4 +154,13 @@
   <data name="badge_stage" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\badge_stage.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="banner_rcra_back" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\banner_rcra_back.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="banner_rcra_logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\banner_rcra_logo.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="banner_rcra_logo2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\banner_rcra_logo2.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

@@ -63,6 +63,7 @@ namespace Overstrike.Detectors {
 					if (g != null && g.Trim() != "") {
 						if (g == Profile.GAME_MSMR) type = ModEntry.ModType.STAGE_MSMR;
 						else if (g == Profile.GAME_MM) type = ModEntry.ModType.STAGE_MM;
+						else if (g == Profile.GAME_RCRA) type = ModEntry.ModType.STAGE_RCRA;
 					}
 				}
 

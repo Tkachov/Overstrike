@@ -77,6 +77,7 @@ namespace Overstrike {
 
 				if (File.Exists(Path.Combine(gamePath, "Spider-Man.exe"))) return Profile.GAME_MSMR;
 				else if (File.Exists(Path.Combine(gamePath, "MilesMorales.exe"))) return Profile.GAME_MM;
+				else if (File.Exists(Path.Combine(gamePath, "RatchetClank.exe"))) return Profile.GAME_RCRA; // TODO: RCRA support
 			} catch (Exception) {}
 
 			return null;
@@ -115,6 +116,7 @@ namespace Overstrike {
 			switch (name) {
 				case Profile.GAME_MSMR: return "Marvel's Spider-Man Remastered";
 				case Profile.GAME_MM: return "Marvel's Spider-Man: Miles Morales";
+				case Profile.GAME_RCRA: return "Ratchet & Clank: Rift Apart";
 			}
 
 			return "?";
