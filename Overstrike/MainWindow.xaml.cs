@@ -679,7 +679,7 @@ namespace Overstrike {
 				} else if (_selectedProfile.Game == Profile.GAME_MM) {
 					Process.Start(Path.Combine(path, "MilesMorales.exe"), path);
 				} else if (_selectedProfile.Game == Profile.GAME_RCRA) {
-					Process.Start(Path.Combine(path, "RatchetClank.exe"), path); // TODO: RCRA support
+					Process.Start(Path.Combine(path, "RiftApart.exe"), path);
 				}
 			} catch {}
 		}

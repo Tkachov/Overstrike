@@ -44,6 +44,12 @@ namespace Overstrike {
 			TryDetectGameAllDisks("MM (EGS)", ":\\Program Files (x86)\\Epic Games\\MarvelsMilesMorales");
 			TryDetectGameAllDisks("MM (EGS)", ":\\Program Files\\Epic Games\\MarvelsMilesMorales");
 
+			TryDetectGameAllDisks("RCRA (Steam)", ":\\Program Files (x86)\\Steam\\steamapps\\common\\Ratchet & Clank - Rift Apart");
+			TryDetectGameAllDisks("RCRA (Steam)", ":\\Program Files\\Steam\\steamapps\\common\\Ratchet & Clank - Rift Apart");
+			TryDetectGameAllDisks("RCRA (Steam)", ":\\SteamLibrary\\steamapps\\common\\Ratchet & Clank - Rift Apart");
+			TryDetectGameAllDisks("RCRA (EGS)", ":\\Program Files (x86)\\Epic Games\\Ratchet & Clank - Rift Apart");
+			TryDetectGameAllDisks("RCRA (EGS)", ":\\Program Files\\Epic Games\\Ratchet & Clank - Rift Apart");
+
 			if (_profilesList.Count > 0) {
 				Hint.Text = _profilesList.Count + " supported game" + (_profilesList.Count > 1 ? "s" : "") + " found in usual places. Add more manually, if you want:";
 			}

@@ -17,9 +17,13 @@ namespace Overstrike.Installers {
 			_mod = mod;
 
 			var modsPath = Path.Combine(_gamePath, "asset_archive", "mods");
-			var modPath = Path.Combine(modsPath, "mod" + index);
+			if (mod.Type == ModEntry.ModType.STAGE_RCRA)
+				modsPath = Path.Combine(_gamePath, "d", "mods");
 
-			var newArchiveIndex = _toc.AddNewArchive("mods\\mod" + index, TOC.ArchiveAddingImpl.DEFAULT);
+			var modPath = Path.Combine(modsPath, "mod" + index);
+			var relativeModPath = "mods\\mod" + index;
+
+			var newArchiveIndex = _toc.AddNewArchive(relativeModPath, TOC.ArchiveAddingImpl.DEFAULT);
 
 			using (var f = new FileStream(modPath, FileMode.Create, FileAccess.Write, FileShare.None)) {
 				using (var w = new BinaryWriter(f)) {

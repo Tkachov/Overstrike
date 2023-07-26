@@ -72,12 +72,13 @@ namespace Overstrike {
 			try {
 				if (!Directory.Exists(gamePath)) return null;
 
+				if (File.Exists(Path.Combine(gamePath, "toc")) && File.Exists(Path.Combine(gamePath, "RiftApart.exe"))) return Profile.GAME_RCRA;
+
 				if (!Directory.Exists(Path.Combine(gamePath, "asset_archive"))) return null;
 				if (!File.Exists(Path.Combine(gamePath, "asset_archive", "toc"))) return null;
 
 				if (File.Exists(Path.Combine(gamePath, "Spider-Man.exe"))) return Profile.GAME_MSMR;
 				else if (File.Exists(Path.Combine(gamePath, "MilesMorales.exe"))) return Profile.GAME_MM;
-				else if (File.Exists(Path.Combine(gamePath, "RatchetClank.exe"))) return Profile.GAME_RCRA; // TODO: RCRA support
 			} catch (Exception) {}
 
 			return null;
