@@ -92,21 +92,11 @@ namespace DAT1 {
 
 		public abstract uint AddNewArchive(string filename, ArchiveAddingImpl impl = ArchiveAddingImpl.DEFAULT);
 
-		protected struct ArchivePair {
-			public FileStream f;
-			public bool compressed;
-		}
+		protected abstract FileStream OpenArchive(uint index);
 
-		protected abstract ArchivePair OpenArchive(uint index);
-
-		protected virtual ArchivePair OpenArchive(string fn) {
+		protected virtual FileStream OpenArchive(string fn) {
 			string full = Path.Combine(AssetArchivePath, fn);
-			FileStream fs = File.OpenRead(full);
-
-			ArchivePair p;
-			p.f = fs;
-			p.compressed = DSAR.IsCompressed(fs);
-			return p;
+			return File.OpenRead(full);
 		}
 	}
 
@@ -210,11 +200,10 @@ namespace DAT1 {
 			if (Asset == null)
 				return null;
 
-			ArchivePair p = OpenArchive(Asset.archive);
-			return DSAR.ExtractAsset(p.f, p.compressed, (int)Asset.offset, (int)Asset.size);
+			return DSAR.ExtractAsset(OpenArchive(Asset.archive), (int)Asset.offset, (int)Asset.size);
         }
 
-		protected override ArchivePair OpenArchive(uint index) { 
+		protected override FileStream OpenArchive(uint index) { 
 			return OpenArchive(ArchivesSection.Entries[(int)index].GetFilename());
 		}
 

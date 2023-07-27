@@ -26,11 +26,10 @@ namespace DAT1 {
 			//public uint unk4;
 		}
 
-        public static byte[] ExtractAsset(FileStream archive, bool isCompressed, int offset, int size) {
-
+        public static byte[] ExtractAsset(FileStream archive, int offset, int size) {
             byte[] bytes = new byte[size];
 
-            if (!isCompressed) {
+            if (!IsCompressed(archive)) {
 				archive.Seek(offset, SeekOrigin.Begin);
 				archive.Read(bytes, 0, bytes.Length);
 				archive.Close();

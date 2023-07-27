@@ -113,8 +113,7 @@ namespace DAT1 {
 			if (Asset == null)
 				return null;
 
-			ArchivePair p = OpenArchive(Asset.archive);
-			byte[] b = DSAR.ExtractAsset(p.f, p.compressed, (int)Asset.offset, (int)Asset.size);
+			byte[] b = DSAR.ExtractAsset(OpenArchive(Asset.archive), (int)Asset.offset, (int)Asset.size);
 
 			if (Asset.header == null) {
 				return b;
@@ -127,7 +126,7 @@ namespace DAT1 {
 			return bytes;
 		}
 
-		protected override ArchivePair OpenArchive(uint index) {
+		protected override FileStream OpenArchive(uint index) {
 			return OpenArchive(ArchivesSection.Entries[(int)index].GetFilename());
 		}
 
