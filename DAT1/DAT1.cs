@@ -4,30 +4,17 @@
 // A copy of the that license should come with this program (LICENSE.txt). If not, see <http://www.gnu.org/licenses/>.
 
 using DAT1.Sections;
-using DAT1.Sections.Config;
-using DAT1.Sections.Localization;
-using DAT1.Sections.Texture;
-using DAT1.Sections.TOC;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace DAT1
-{
-	public enum FormatVersion {		
-		MSMR,
-		RCRA
-	}
+namespace DAT1 {
 
-	public class DAT1
-	{
-		FormatVersion _version;
-
+	public class DAT1 {
 		// header
 		uint magic, unk1, size, sectionsCount;
-		List<uint> sectionsTags = new List<uint>();
-		List<uint> sectionsSortedByOffset = new List<uint>();
+		List<uint> sectionsTags = new();
+		List<uint> sectionsSortedByOffset = new();
 
 		long stringsStartOffset;
 		byte[] strings;
@@ -49,13 +36,13 @@ namespace DAT1
 			return null;
 		}
 
-		protected DAT1(FormatVersion version)
-		{
-			_version = version;
+		protected DAT1() {}
+
+		public DAT1(BinaryReader r) {
+			Init(r);
 		}
 
-		protected void Init(BinaryReader r)
-		{
+		protected void Init(BinaryReader r) {
 			long dat1_start = r.BaseStream.Position;
 
 			magic = r.ReadUInt32();
@@ -64,8 +51,8 @@ namespace DAT1
 			sectionsCount = r.ReadUInt32();
 
 			// read sections table
-			Dictionary<uint, uint> offsets = new Dictionary<uint, uint>();
-			Dictionary<uint, uint> sizes = new Dictionary<uint, uint>();
+			Dictionary<uint, uint> offsets = new();
+			Dictionary<uint, uint> sizes = new();
 			uint minOffset = size;
 			for (uint i=0; i<sectionsCount; ++i) {
 				var tag = r.ReadUInt32();
@@ -92,53 +79,6 @@ namespace DAT1
 				_rawSections[tag] = r.ReadBytes((int)sizes[tag]);
 			}
 		}
-
-		public DAT1(BinaryReader r, FormatVersion version)
-		{
-			_version = version;
-			Init(r);
-		}
-
-		/*
-		public uint AddNewArchive(string filename) {
-			ArchivesMapSection_I20 section = (ArchivesMapSection_I20)Sections[ARCHIVES_SECTION_TAG];
-			uint new_index = 0;
-			foreach (var a in section.Entries) {
-				if (a.InstallBucket != 0)
-					break;
-				++new_index;
-			}
-
-			int min(int a, int b) => a < b ? a : b;
-
-			byte[] bytes = Encoding.ASCII.GetBytes(filename);
-			byte[] byteFilename = new byte[64];
-			System.Buffer.BlockCopy(bytes, 0, byteFilename, 0, min(bytes.Length, 64));
-
-			section.Entries.Insert((int)new_index, new ArchivesMapSection_I20.ArchiveFileEntry() { InstallBucket = 0, Chunkmap = 10000 + new_index, Filename = byteFilename });
-			return new_index;
-		}
-		*/
-
-		/*
-		public Dictionary<UInt64, int> FindAssetsIndexes(HashSet<UInt64> assetsIds) {
-			Dictionary<UInt64, int> result = new Dictionary<ulong, int>();
-			AssetIdsSection section = (AssetIdsSection)Sections[ASSET_IDS_SECTION_TAG];
-
-			int i = 0;
-			while (i < section.Ids.Count && assetsIds.Count > 0) {
-				var id = section.Ids[i];
-				if (assetsIds.Contains(id)) {
-					result[id] = i;
-					assetsIds.Remove(id);
-				}
-
-				++i;
-			}
-
-			return result;
-		}
-		*/
 
 		public virtual byte[] Save() {
 			var s = new MemoryStream();
@@ -200,14 +140,14 @@ namespace DAT1
 			return s.ToArray();
 		}
 
-        public string GetStringByOffset(uint offset)
-        {
+		#region strings block
+
+		public string GetStringByOffset(uint offset) {
 			if (offset < stringsStartOffset) return null;
 			if (offset >= stringsStartOffset + strings.Length) return null;
 
 			int i;
-			for (i = (int)(offset - stringsStartOffset); i < strings.Length; ++i)
-			{
+			for (i = (int)(offset - stringsStartOffset); i < strings.Length; ++i) {
 				if (strings[i] == 0) break;
 			}
 
@@ -273,5 +213,7 @@ namespace DAT1
 			MakeStringsMaps();
 			return offsetByString.ContainsKey(s);
 		}
-    }
+
+		#endregion
+	}
 }

@@ -75,7 +75,7 @@ namespace Overstrike.Installers {
 		private void WriteBase1(string suitsPath, string id) {
 			const ulong SYSTEM_PROGRESSION_CONFIG_AID = 0x9C9C72A303FCFA30; // configs/system/system_progression.config
 
-			var config = new Config(GetAssetReader(SYSTEM_PROGRESSION_CONFIG_AID), FormatVersion.MSMR);
+			var config = new Config(GetAssetReader(SYSTEM_PROGRESSION_CONFIG_AID));
 
 			// references
 			var rewardRef = "configs\\inventory\\inv_reward_loadout_" + id + ".config";
@@ -148,7 +148,7 @@ namespace Overstrike.Installers {
 		private void WriteBase2(string suitsPath, string id) {
 			const ulong MASTERITEMLOADOUTLIST_CONFIG_AID = 0x9550E5741C2C7114; // configs/masteritemloadoutlist/masteritemloadoutlist.config
 
-			var config = new Config(GetAssetReader(MASTERITEMLOADOUTLIST_CONFIG_AID), FormatVersion.MSMR);
+			var config = new Config(GetAssetReader(MASTERITEMLOADOUTLIST_CONFIG_AID));
 
 			// references
 			var configRef = "configs\\masteritemloadoutlist\\itemloadout_spiderman_" + id + ".config";

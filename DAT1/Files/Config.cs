@@ -16,7 +16,7 @@ namespace DAT1.Files {
         uint magic, dat1_size;
         byte[] unk;
 
-        public Config(BinaryReader r, FormatVersion version): base(version)
+        public Config(BinaryReader r): base()
         {
             magic = r.ReadUInt32();
             dat1_size = r.ReadUInt32();

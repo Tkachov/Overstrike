@@ -17,7 +17,7 @@ namespace DAT1.Files {
 
         byte[] raw;
 
-        public Texture(BinaryReader r, FormatVersion version) : base(version) {
+        public Texture(BinaryReader r) : base() {
             magic = r.ReadUInt32();
             dat1_size = r.ReadUInt32();
             unk = r.ReadBytes(28);

@@ -44,7 +44,7 @@ namespace DAT1 {
 				f.Close();
 				f.Dispose();
 
-				Dat1 = new DAT1(new BinaryReader(new MemoryStream(bytes)), FormatVersion.RCRA);
+				Dat1 = new DAT1(new BinaryReader(new MemoryStream(bytes)));
 				AssetArchivePath = Path.GetDirectoryName(filename);
 				return true;
 			} catch (Exception e) {
