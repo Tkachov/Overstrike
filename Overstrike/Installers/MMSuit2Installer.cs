@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
 namespace Overstrike.Installers {
 	internal class MMSuit2Installer: SuitInstallerBase {
-		public MMSuit2Installer(TOC toc, string gamePath) : base(toc, gamePath) {} // TODO: setting to install or ignore name.txt
+		public MMSuit2Installer(TOC_I20 toc, string gamePath) : base(toc, gamePath) {} // TODO: setting to install or ignore name.txt
 
 		public override void Install(ModEntry mod, int index) {
 			_mod = mod;

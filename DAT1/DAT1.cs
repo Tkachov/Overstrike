@@ -32,22 +32,22 @@ namespace DAT1
 		long stringsStartOffset;
 		byte[] strings;
 
-		protected Dictionary<uint, Section> sections = new Dictionary<uint, Section>();
+		private Dictionary<uint, byte[]> _rawSections = new();
+		public Dictionary<uint, Section> Sections = new();
 
+		public T Section<T>(uint tag) where T: Section, new() {
+			if (Sections.ContainsKey(tag)) {
+				return (T)Sections[tag];
+			}
 
-		private const uint ASSET_IDS_SECTION_TAG = 0x506D7B8A;
-		private const uint ARCHIVES_SECTION_TAG = 0x398ABFF0;
-        private const uint SIZE_ENTRIES_SECTION_TAG = 0x65BCF461;
-		private const uint OFFSETS_SECTION_TAG = 0xDCD720B5;
+			if (_rawSections.ContainsKey(tag)) {
+				Sections[tag] = new T();
+				Sections[tag].Load(_rawSections[tag], this);
+				return (T)Sections[tag];
+			}
 
-        public ArchivesMapSection ArchivesSection => (ArchivesMapSection)sections[ARCHIVES_SECTION_TAG];
-		public ArchivesMapSection2 ArchivesSection2 => (ArchivesMapSection2)sections[ARCHIVES_SECTION_TAG];
-		public AssetIdsSection AssetIdsSection => (AssetIdsSection)sections[ASSET_IDS_SECTION_TAG];
-		public SizeEntriesSection SizesSection => (SizeEntriesSection)sections[SIZE_ENTRIES_SECTION_TAG];
-		public SizeEntriesSection2 SizesSection2 => (SizeEntriesSection2)sections[SIZE_ENTRIES_SECTION_TAG];
-		public OffsetsSection OffsetsSection => (OffsetsSection)sections[OFFSETS_SECTION_TAG];
-		public SpansSection SpansSection => (SpansSection)sections[SpansSection.TAG];
-		public AssetHeadersSection AssetHeadersSection => (AssetHeadersSection)sections[AssetHeadersSection.TAG];
+			return null;
+		}
 
 		protected DAT1(FormatVersion version)
 		{
@@ -89,7 +89,7 @@ namespace DAT1
 			// read sections
 			foreach (uint tag in sectionsTags) {
 				r.BaseStream.Position = offsets[tag] + dat1_start;
-				sections[tag] = ReadSection(tag, r, sizes[tag]);
+				_rawSections[tag] = r.ReadBytes((int)sizes[tag]);
 			}
 		}
 
@@ -99,38 +99,9 @@ namespace DAT1
 			Init(r);
 		}
 
-        private Section ReadSection(uint tag, BinaryReader r, uint size) {
-			switch (tag) {
-				// toc
-				case SIZE_ENTRIES_SECTION_TAG: return (_version == FormatVersion.MSMR ? new SizeEntriesSection(r, size) : new SizeEntriesSection2(r, size));
-				case ARCHIVES_SECTION_TAG: return (_version == FormatVersion.MSMR ? new ArchivesMapSection(r, size) : new ArchivesMapSection2(r, size));
-				case ASSET_IDS_SECTION_TAG: return new AssetIdsSection(r, size);
-				case 0x6D921D7B: return new KeyAssetsSection(r, size);
-				case OFFSETS_SECTION_TAG: return new OffsetsSection(r, size);
-				case SpansSection.TAG: return new SpansSection(r, size);
-				case AssetHeadersSection.TAG: return new AssetHeadersSection(r, size);
-
-				// config
-				case ConfigTypeSection.TAG: return new ConfigTypeSection(this, r, size);
-				case ConfigBuiltSection.TAG: return new ConfigBuiltSection(this, r, size);
-				case ConfigReferencesSection.TAG: return new ConfigReferencesSection(r, size);
-
-				// localization
-				case EntriesCountSection.TAG: return new EntriesCountSection(r, size);
-				case KeysDataSection.TAG: return new KeysDataSection(r, size);
-				case KeysOffsetsSection.TAG: return new KeysOffsetsSection(r, size);
-				case ValuesDataSection.TAG: return new ValuesDataSection(r, size);
-				case ValuesOffsetsSection.TAG: return new ValuesOffsetsSection(r, size);
-
-				// texture
-				case TextureHeaderSection.TAG: return new TextureHeaderSection(r, size);
-			}
-
-			return new UnknownSection(r.ReadBytes((int)size));
-		}
-
+		/*
 		public uint AddNewArchive(string filename) {
-			ArchivesMapSection section = (ArchivesMapSection)sections[ARCHIVES_SECTION_TAG];
+			ArchivesMapSection_I20 section = (ArchivesMapSection_I20)Sections[ARCHIVES_SECTION_TAG];
 			uint new_index = 0;
 			foreach (var a in section.Entries) {
 				if (a.InstallBucket != 0)
@@ -144,13 +115,15 @@ namespace DAT1
 			byte[] byteFilename = new byte[64];
 			System.Buffer.BlockCopy(bytes, 0, byteFilename, 0, min(bytes.Length, 64));
 
-			section.Entries.Insert((int)new_index, new ArchivesMapSection.ArchiveFileEntry() { InstallBucket = 0, Chunkmap = 10000 + new_index, Filename = byteFilename });
+			section.Entries.Insert((int)new_index, new ArchivesMapSection_I20.ArchiveFileEntry() { InstallBucket = 0, Chunkmap = 10000 + new_index, Filename = byteFilename });
 			return new_index;
 		}
+		*/
 
+		/*
 		public Dictionary<UInt64, int> FindAssetsIndexes(HashSet<UInt64> assetsIds) {
 			Dictionary<UInt64, int> result = new Dictionary<ulong, int>();
-			AssetIdsSection section = (AssetIdsSection)sections[ASSET_IDS_SECTION_TAG];
+			AssetIdsSection section = (AssetIdsSection)Sections[ASSET_IDS_SECTION_TAG];
 
 			int i = 0;
 			while (i < section.Ids.Count && assetsIds.Count > 0) {
@@ -165,6 +138,7 @@ namespace DAT1
 
 			return result;
 		}
+		*/
 
 		public virtual byte[] Save() {
 			var s = new MemoryStream();
@@ -172,7 +146,10 @@ namespace DAT1
 
 			Dictionary<uint, byte[]> bytes = new Dictionary<uint, byte[]>();
 			foreach (var tag in sectionsSortedByOffset) {
-				bytes[tag] = sections[tag].Save();
+				if (Sections.ContainsKey(tag))
+					bytes[tag] = Sections[tag].Save();
+				else
+					bytes[tag] = _rawSections[tag];
 			}
 
 			// recalculate sections offsets

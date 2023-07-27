@@ -9,7 +9,7 @@ using System.Diagnostics;
 using System.IO;
 
 namespace DAT1.Files {
-	public class Config : DAT1
+	public class Config: DAT1
     {
         public const uint MAGIC = 0x21A56F68;
 
@@ -27,9 +27,9 @@ namespace DAT1.Files {
             Init(r);
         }
 
-        public ConfigTypeSection TypeSection => (ConfigTypeSection)sections[ConfigTypeSection.TAG];
-        public ConfigBuiltSection ContentSection => (ConfigBuiltSection)sections[ConfigBuiltSection.TAG];
-        public ConfigReferencesSection ReferencesSection => (ConfigReferencesSection)sections[ConfigReferencesSection.TAG];
+        public ConfigTypeSection TypeSection => Section<ConfigTypeSection>(ConfigTypeSection.TAG);
+		public ConfigBuiltSection ContentSection => Section<ConfigBuiltSection>(ConfigBuiltSection.TAG);
+		public ConfigReferencesSection ReferencesSection => Section<ConfigReferencesSection>(ConfigReferencesSection.TAG);
 
 		public override byte[] Save() {
 			var s = new MemoryStream();

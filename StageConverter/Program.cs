@@ -32,7 +32,7 @@ void Work() {
 		return;
 	}
 
-	DAT1.TOC toc = new();
+	DAT1.TOC_I20 toc = new();
 	if (!toc.Load(tocPath)) {
 		Console.WriteLine($"Error: failed to read 'toc'!");
 		Console.WriteLine($"Verify game files to get clean one. Remove 'toc.BAK', if you have one.");
@@ -112,7 +112,7 @@ void Work() {
 	Console.WriteLine("Done!");
 }
 
-Asset? ReadAsset(ZipArchiveEntry asset, TOC toc) {
+Asset? ReadAsset(ZipArchiveEntry asset, TOC_I20 toc) {
 	string[] parts = asset.Name.Split("_");
 	if (parts.Length != 2) return null;
 
@@ -146,7 +146,7 @@ Asset? ReadAsset(ZipArchiveEntry asset, TOC toc) {
 	};
 }
 
-byte? GetSpan(int assetIndex, TOC toc) {
+byte? GetSpan(int assetIndex, TOC_I20 toc) {
 	byte span = 0;
 	foreach (var entry in toc.Dat1.SpansSection.Entries) {
 		if (entry.AssetIndex <= assetIndex && assetIndex < entry.AssetIndex + entry.Count) {

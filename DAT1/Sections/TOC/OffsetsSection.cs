@@ -3,41 +3,31 @@
 // For more details, terms and conditions, see GNU General Public License.
 // A copy of the that license should come with this program (LICENSE.txt). If not, see <http://www.gnu.org/licenses/>.
 
+using DAT1.Sections.Generic;
 using System.Collections.Generic;
 using System.IO;
 
-namespace DAT1.Sections.TOC
-{
-    public class OffsetsSection : Section
-    {
-        public class OffsetEntry
-        {
-            public uint ArchiveIndex, Offset;
-        }
+namespace DAT1.Sections.TOC {
+	public class OffsetsSection: ArraySection<OffsetsSection.OffsetEntry> {
+		public class OffsetEntry {
+			public uint ArchiveIndex, Offset;
+		}
 
-        public List<OffsetEntry> Entries = new List<OffsetEntry>();
+		public const uint TAG = 0xDCD720B5;
 
-        public OffsetsSection(BinaryReader r, uint size)
-        {
-            uint count = size / 8;
-            for (uint i = 0; i < count; ++i)
-            {
-                var a = r.ReadUInt32();
-                var b = r.ReadUInt32();
-                Entries.Add(new OffsetEntry() { ArchiveIndex = a, Offset = b });
-            }
-        }
+		public List<OffsetEntry> Entries => Values;
 
-        override public byte[] Save()
-        {
-            var s = new MemoryStream();
-            var w = new BinaryWriter(s);
-            foreach (var e in Entries)
-            {
-                w.Write(e.ArchiveIndex);
-                w.Write(e.Offset);
-            }
-            return s.ToArray();
-        }
-    }
+		protected override uint GetValueByteSize() { return 8; }
+
+		protected override OffsetEntry Read(BinaryReader r) {
+			var a = r.ReadUInt32();
+			var b = r.ReadUInt32();
+			return new OffsetEntry() { ArchiveIndex = a, Offset = b };
+		}
+
+		protected override void Write(BinaryWriter w, OffsetEntry v) {
+			w.Write(v.ArchiveIndex);
+			w.Write(v.Offset);
+		}
+	}
 }

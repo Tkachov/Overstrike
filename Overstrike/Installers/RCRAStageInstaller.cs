@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 
 namespace Overstrike.Installers {
 	internal class RCRAStageInstaller: RCRAInstallerBase {
-		public RCRAStageInstaller(TOC2 toc, string gamePath) : base(toc, gamePath) {}
+		public RCRAStageInstaller(TOC_I29 toc, string gamePath) : base(toc, gamePath) {}
 
 		public override void Install(ModEntry mod, int index) {
 			_mod = mod;

@@ -29,9 +29,9 @@ namespace DAT1.Files {
             raw = r.ReadBytes((int)(r.BaseStream.Length - r.BaseStream.Position));
         }
 
-        public TextureHeaderSection HeaderSection => (TextureHeaderSection)sections[TextureHeaderSection.TAG];
+        public TextureHeaderSection HeaderSection => Section<TextureHeaderSection>(TextureHeaderSection.TAG);
 
-        public byte[] GetDDS()
+		public byte[] GetDDS()
         {
 			uint width = HeaderSection.hd_width;
 			uint height = HeaderSection.hd_height;

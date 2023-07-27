@@ -24,11 +24,11 @@ namespace DAT1.Files {
 			Init(r);
 		}
 
-		public EntriesCountSection EntriesCountSection => (EntriesCountSection)sections[EntriesCountSection.TAG];
-		public KeysDataSection KeysDataSection => (KeysDataSection)sections[KeysDataSection.TAG];
-		public KeysOffsetsSection KeysOffsetsSection => (KeysOffsetsSection)sections[KeysOffsetsSection.TAG];
-		public ValuesDataSection ValuesDataSection => (ValuesDataSection)sections[ValuesDataSection.TAG];
-		public ValuesOffsetsSection ValuesOffsetsSection => (ValuesOffsetsSection)sections[ValuesOffsetsSection.TAG];
+		public EntriesCountSection EntriesCountSection => Section<EntriesCountSection>(EntriesCountSection.TAG);
+		public KeysDataSection KeysDataSection => Section<KeysDataSection>(KeysDataSection.TAG);
+		public KeysOffsetsSection KeysOffsetsSection => Section<KeysOffsetsSection>(KeysOffsetsSection.TAG);
+		public ValuesDataSection ValuesDataSection => Section<ValuesDataSection>(ValuesDataSection.TAG);
+		public ValuesOffsetsSection ValuesOffsetsSection => Section<ValuesOffsetsSection>(ValuesOffsetsSection.TAG);
 
 		public string GetValue(string key) {
 			int key_offset = KeysDataSection.GetOffsetByKey(key);

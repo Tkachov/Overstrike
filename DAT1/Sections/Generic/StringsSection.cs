@@ -3,22 +3,28 @@
 // For more details, terms and conditions, see GNU General Public License.
 // A copy of the that license should come with this program (LICENSE.txt). If not, see <http://www.gnu.org/licenses/>.
 
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DAT1.Sections.Generic {
 	public class StringsSection: Section {
-		public List<string> Strings = new List<string>();
+		public List<string> Strings = new();
 		protected Dictionary<string, uint> offsetByKey = new Dictionary<string, uint>();
 		protected Dictionary<uint, string> keyByOffset = new Dictionary<uint, string>();
 
-		public StringsSection(BinaryReader r, uint size) {
-			byte[] data = r.ReadBytes((int)size);
-
+		override public void Load(byte[] data, DAT1 container) {
+			var size = data.Length;
 			int start_offset = 0;
+
+			Strings.Clear();
+			offsetByKey.Clear();
+			keyByOffset.Clear();
+
 			for (int i = 0; i < size; ++i) {
-				if (i == size-1 || data[i] == 0) {
+				if (i == size - 1 || data[i] == 0) {
 					string s = Encoding.UTF8.GetString(data, start_offset, i - start_offset);
 					offsetByKey[s] = (uint)start_offset;
 					keyByOffset[(uint)start_offset] = s;

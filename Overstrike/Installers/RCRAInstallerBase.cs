@@ -5,17 +5,15 @@
 
 using DAT1;
 using DAT1.Sections.TOC;
-using SharpCompress.Archives;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Compression;
 
 namespace Overstrike.Installers {
 	internal abstract class RCRAInstallerBase: InstallerBase {
-		protected TOC2 _toc;
+		protected TOC_I29 _toc;
 
-		public RCRAInstallerBase(TOC2 toc, string gamePath) : base(gamePath) {
+		public RCRAInstallerBase(TOC_I29 toc, string gamePath) : base(gamePath) {
 			_toc = toc;
 		}
 
@@ -28,7 +26,7 @@ namespace Overstrike.Installers {
 
 		protected uint GetArchiveIndex(string filename) {
 			uint index = 0;
-			foreach (var entry in _toc.Dat1.ArchivesSection.Entries) {
+			foreach (var entry in _toc.ArchivesSection.Entries) {
 				if (entry.GetFilename() == filename) {
 					return index;
 				}
@@ -43,9 +41,9 @@ namespace Overstrike.Installers {
 			return GetSpan(assetIndex, _toc);
 		}
 
-		protected byte? GetSpan(int assetIndex, TOC2 toc) {
+		protected byte? GetSpan(int assetIndex, TOC_I29 toc) {
 			byte span = 0;
-			foreach (var entry in toc.Dat1.SpansSection.Entries) {
+			foreach (var entry in toc.SpansSection.Entries) {
 				if (entry.AssetIndex <= assetIndex && assetIndex < entry.AssetIndex + entry.Count) {
 					return span;
 				}
@@ -57,7 +55,7 @@ namespace Overstrike.Installers {
 		}
 
 		protected void AddOrUpdateAssetEntry(ulong assetId, byte span, uint archiveIndex, uint offset, uint size, byte[] header) {
-			AssetEntry2[] assetEntries = _toc.FindAssetEntriesById(assetId);
+			AssetEntryBase[] assetEntries = _toc.FindAssetEntriesById(assetId);
 
 			int assetIndex = -1;
 			foreach (var assetEntry in assetEntries) {
@@ -86,7 +84,7 @@ namespace Overstrike.Installers {
 				throw new NotImplementedException();
 			}
 
-			_toc.UpdateAssetEntry(new AssetEntry2() {
+			_toc.UpdateAssetEntry(new DAT1.TOC_I29.AssetEntry2() {
 				index = assetIndex,
 				id = assetId,
 				archive = archiveIndex,
@@ -97,14 +95,14 @@ namespace Overstrike.Installers {
 		}
 
 		protected void SortAssets() {
-			var ids = _toc.Dat1.AssetIdsSection.Ids;
-			var sizes = _toc.Dat1.SizesSection2.Entries;
+			var ids = _toc.AssetIdsSection.Ids;
+			var sizes = _toc.SizesSection.Entries;
 
-			foreach (var span in _toc.Dat1.SpansSection.Entries) {
+			foreach (var span in _toc.SpansSection.Entries) {
 				var start = span.AssetIndex;
 				var end = span.AssetIndex + span.Count;
 
-				var assets = new List<(ulong Id, SizeEntriesSection2.SizeEntry Size)>();
+				var assets = new List<(ulong Id, SizeEntriesSection_I29.SizeEntry Size)>();
 				for (int i = (int)start; i < end; ++i) {
 					assets.Add((ids[i], sizes[i]));
 				}

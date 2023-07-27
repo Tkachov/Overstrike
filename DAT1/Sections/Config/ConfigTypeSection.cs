@@ -3,15 +3,10 @@
 // For more details, terms and conditions, see GNU General Public License.
 // A copy of the that license should come with this program (LICENSE.txt). If not, see <http://www.gnu.org/licenses/>.
 
-using System.IO;
 using DAT1.Sections.Generic;
 
-namespace DAT1.Sections.Config
-{
-    public class ConfigTypeSection: SerializedSection
-    {
+namespace DAT1.Sections.Config {
+	public class ConfigTypeSection: SerializedSection {
         public const uint TAG = 0x4A128222; // Config Type
-
-        public ConfigTypeSection(DAT1 dat1, BinaryReader r, uint size) : base(dat1, r, size) { }
     }
 }

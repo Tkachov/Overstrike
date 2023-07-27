@@ -11,9 +11,9 @@ using System.Globalization;
 
 namespace Overstrike.Installers {
 	internal class SMPCModInstaller: MSMRInstallerBase {
-		private TOC _unchangedToc;
+		private TOC_I20 _unchangedToc;
 
-		public SMPCModInstaller(TOC toc, TOC unchangedToc, string gamePath) : base(toc, gamePath) {
+		public SMPCModInstaller(TOC_I20 toc, TOC_I20 unchangedToc, string gamePath) : base(toc, gamePath) {
 			_unchangedToc = unchangedToc;
 		}
 
@@ -23,7 +23,7 @@ namespace Overstrike.Installers {
 			var modsPath = Path.Combine(_gamePath, "asset_archive", "mods");
 			var modPath = Path.Combine(modsPath, "mod" + index);
 
-			var newArchiveIndex = _toc.AddNewArchive("mods\\mod" + index, TOC.ArchiveAddingImpl.SMPCTOOL); // TODO: switch to DEFAULT, it must be working fine
+			var newArchiveIndex = _toc.AddNewArchive("mods\\mod" + index, TOC_I20.ArchiveAddingImpl.SMPCTOOL); // TODO: switch to DEFAULT, it must be working fine
 
 			using (var f = new FileStream(modPath, FileMode.Create, FileAccess.Write, FileShare.None)) {
 				using (var w = new BinaryWriter(f)) {
@@ -51,8 +51,8 @@ namespace Overstrike.Installers {
 			}
 			long fileSize = modArchiveFile.BaseStream.Position - archiveOffset;
 
-			AssetEntry originalEntry = null;
-			AssetEntry[] originalAssetEntries = _unchangedToc.FindAssetEntriesById(assetId);
+			AssetEntryBase originalEntry = null;
+			AssetEntryBase[] originalAssetEntries = _unchangedToc.FindAssetEntriesById(assetId);
 			foreach (var assetEntry in originalAssetEntries) {
 				if (assetEntry.archive == archiveIndex) { // TODO: fix this to go through ORIGINAL UNCHANGED TOC
 					originalEntry = assetEntry;
@@ -64,11 +64,11 @@ namespace Overstrike.Installers {
 				var spanIndex = GetSpan(originalEntry.index, _unchangedToc);
 
 				// now find the asset in modified toc that has the same id and is in the same span (could be in different archive already)
-				var span = _toc.Dat1.SpansSection.Entries[(int)spanIndex];
-				AssetEntry[] assetEntries = _toc.FindAssetEntriesById(assetId);
+				var span = _toc.SpansSection.Entries[(int)spanIndex];
+				AssetEntryBase[] assetEntries = _toc.FindAssetEntriesById(assetId);
 				foreach (var entry in assetEntries) {
 					if (span.AssetIndex <= entry.index && entry.index < span.AssetIndex + span.Count) {
-						_toc.UpdateAssetEntry(new AssetEntry() {
+						_toc.UpdateAssetEntry(new DAT1.TOC_I20.AssetEntry() {
 							index = entry.index,
 							id = entry.id,
 							archive = modArchiveIndex,

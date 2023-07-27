@@ -3,47 +3,30 @@
 // For more details, terms and conditions, see GNU General Public License.
 // A copy of the that license should come with this program (LICENSE.txt). If not, see <http://www.gnu.org/licenses/>.
 
-using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace DAT1.Sections.Generic {
-	public abstract class ArraySection<T>: Section {
-		public List<T> Values = new();
+	public abstract class SingleValueSection<T>: Section {
+		public T? Value;
 
-		protected abstract uint GetValueByteSize();
 		protected abstract T Read(BinaryReader r);
 		protected abstract void Write(BinaryWriter w, T v);
 
 		public override void Load(byte[] bytes, DAT1 container) {
 			using var r = new BinaryReader(new MemoryStream(bytes));
-			var size = bytes.Length;
-			var count = size / GetValueByteSize();
-			Values.Clear();
-			for (var i = 0; i < count; ++i) {
-				Values.Add(Read(r));
-			}
+			Value = Read(r);
 		}
 
 		override public byte[] Save() {
 			var s = new MemoryStream();
 			var w = new BinaryWriter(s);
-			foreach (var e in Values) {
-				Write(w, e);
-			}
+			Write(w, Value);
 			return s.ToArray();
 		}
 	}
 
-	public class UInt32ArraySection: ArraySection<uint> {
-		protected override uint GetValueByteSize() { return 4; }
+	public class SingleUInt32Section: SingleValueSection<uint> {
 		protected override uint Read(BinaryReader r) { return r.ReadUInt32(); }
 		protected override void Write(BinaryWriter w, uint v) { w.Write(v); }
-	}
-
-	public class UInt64ArraySection: ArraySection<ulong> {
-		protected override uint GetValueByteSize() { return 8; }
-		protected override ulong Read(BinaryReader r) { return r.ReadUInt64(); }
-		protected override void Write(BinaryWriter w, ulong v) { w.Write(v); }
 	}
 }

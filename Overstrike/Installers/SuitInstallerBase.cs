@@ -10,7 +10,7 @@ using System.IO.Compression;
 
 namespace Overstrike.Installers {
 	internal abstract class SuitInstallerBase: MSMRInstallerBase {
-		protected SuitInstallerBase(TOC toc, string gamePath) : base(toc, gamePath) {}
+		protected SuitInstallerBase(TOC_I20 toc, string gamePath) : base(toc, gamePath) {}
 
 		#region .suit
 
@@ -31,7 +31,7 @@ namespace Overstrike.Installers {
 		#endregion
 		#region toc
 
-		protected uint GetArchiveIndex(string filename) => GetArchiveIndex(filename, TOC.ArchiveAddingImpl.SUITTOOL);
+		protected uint GetArchiveIndex(string filename) => GetArchiveIndex(filename, TOC_I20.ArchiveAddingImpl.SUITTOOL);
 
 		protected void WriteArchive(string archivePath, uint archiveIndex, ulong assetId, byte span, byte[] bytes) {
 			File.WriteAllBytes(archivePath, bytes);

@@ -3,12 +3,10 @@
 // For more details, terms and conditions, see GNU General Public License.
 // A copy of the that license should come with this program (LICENSE.txt). If not, see <http://www.gnu.org/licenses/>.
 
-using System;
 using System.IO;
 
 namespace DAT1.Sections.Texture {
-	public class TextureHeaderSection : Section
-    {
+	public class TextureHeaderSection: Section {
         public const uint TAG = 0x4EDE3593;
 
         public uint sd_len, hd_len;
@@ -17,12 +15,14 @@ namespace DAT1.Sections.Texture {
         public ushort array_size;
         public byte stex_format, planes;
         public ushort fmt;
-        public UInt64 unk;
+        public ulong unk;
         public byte sd_mipmaps, unk2, hd_mipmaps, unk3;
         public byte[] unk4;
 
-        public TextureHeaderSection(BinaryReader r, uint size)
-        {
+		public override void Load(byte[] bytes, DAT1 container) {
+			using var r = new BinaryReader(new MemoryStream(bytes));
+			var size = bytes.Length;
+
             sd_len = r.ReadUInt32();
             hd_len = r.ReadUInt32();
             hd_width = r.ReadUInt16();
@@ -38,23 +38,11 @@ namespace DAT1.Sections.Texture {
             unk2 = r.ReadByte();
             hd_mipmaps = r.ReadByte();
             unk3 = r.ReadByte();
-            unk4 = r.ReadBytes((int)(size - 34));
-
-            /*
-self.sd_len, self.hd_len = struct.unpack("<II", data[:8])
-    self.hd_width, self.hd_height = struct.unpack("<HH", data[8:12])
-    self.sd_width, self.sd_height = struct.unpack("<HH", data[12:16])
-    self.array_size, self.stex_format, self.planes = struct.unpack("<HBB", data[16:20])
-    self.fmt, self.unk = struct.unpack("<HQ", data[20:30])
-    self.sd_mipmaps, self.unk2, self.hd_mipmaps, self.unk3 = struct.unpack("<BBBB", data[30:34])
-    self.unk4 = data[34:]
-             */
+            unk4 = r.ReadBytes(size - 34);
         }
 
-        override public byte[] Save()
-            {
+        override public byte[] Save() {
             return null; // TODO
-            }
         }
-
+    }
 }

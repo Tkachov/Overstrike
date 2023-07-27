@@ -33,15 +33,15 @@ namespace Overstrike.MetaInstallers {
 			}
 		}
 
-		private TOC _toc;
-		private TOC _unchangedToc;
+		private TOC_I20 _toc;
+		private TOC_I20 _unchangedToc;
 
 		public override void Start() {
 			var tocPath = Path.Combine(_gamePath, "asset_archive", "toc");
-			_toc = new TOC();
+			_toc = new TOC_I20();
 			_toc.Load(tocPath);
 
-			_unchangedToc = new TOC(); // a special copy for .smpcmod installer to lookup indexes in
+			_unchangedToc = new TOC_I20(); // a special copy for .smpcmod installer to lookup indexes in
 			_unchangedToc.Load(tocPath);
 		}
 
@@ -50,7 +50,7 @@ namespace Overstrike.MetaInstallers {
 			installer.Install(mod, index);
 		}
 
-		private InstallerBase GetInstaller(ModEntry mod, TOC toc, TOC unchangedToc) {
+		private InstallerBase GetInstaller(ModEntry mod, TOC_I20 toc, TOC_I20 unchangedToc) {
 			switch (mod.Type) {
 				case ModEntry.ModType.SMPC:
 				case ModEntry.ModType.MMPC:

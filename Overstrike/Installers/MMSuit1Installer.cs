@@ -12,7 +12,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Overstrike.Installers {
 	internal class MMSuit1Installer: SuitInstallerBase {
-		public MMSuit1Installer(TOC toc, string gamePath) : base(toc, gamePath) {} // TODO: setting to install or ignore name.txt
+		public MMSuit1Installer(TOC_I20 toc, string gamePath) : base(toc, gamePath) {} // TODO: setting to install or ignore name.txt
 
 		public override void Install(ModEntry mod, int index) {
 			_mod = mod;

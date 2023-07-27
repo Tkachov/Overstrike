@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 
 namespace Overstrike.Installers {
 	internal class StageInstaller: MSMRInstallerBase {
-		public StageInstaller(TOC toc, string gamePath) : base(toc, gamePath) {}
+		public StageInstaller(TOC_I20 toc, string gamePath) : base(toc, gamePath) {}
 
 		public override void Install(ModEntry mod, int index) {
 			_mod = mod;
@@ -23,7 +23,7 @@ namespace Overstrike.Installers {
 			var modPath = Path.Combine(modsPath, "mod" + index);
 			var relativeModPath = "mods\\mod" + index;
 
-			var newArchiveIndex = _toc.AddNewArchive(relativeModPath, TOC.ArchiveAddingImpl.DEFAULT);
+			var newArchiveIndex = _toc.AddNewArchive(relativeModPath, TOC_I20.ArchiveAddingImpl.DEFAULT);
 
 			using (var f = new FileStream(modPath, FileMode.Create, FileAccess.Write, FileShare.None)) {
 				using (var w = new BinaryWriter(f)) {

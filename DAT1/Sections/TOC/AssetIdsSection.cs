@@ -3,31 +3,13 @@
 // For more details, terms and conditions, see GNU General Public License.
 // A copy of the that license should come with this program (LICENSE.txt). If not, see <http://www.gnu.org/licenses/>.
 
+using DAT1.Sections.Generic;
 using System.Collections.Generic;
-using System.IO;
 
 namespace DAT1.Sections.TOC {
-	public class AssetIdsSection : Section
-    {
-        public List<ulong> Ids = new List<ulong>();
+	public class AssetIdsSection: UInt64ArraySection {
+		public const uint TAG = 0x506D7B8A;
 
-        public AssetIdsSection(BinaryReader r, uint size)
-        {
-            uint count = size / 8;
-            for (uint i = 0; i < count; ++i)
-            {
-                Ids.Add(r.ReadUInt64());
-            }
-        }
-        override public byte[] Save()
-        {
-            var s = new MemoryStream();
-            var w = new BinaryWriter(s);
-            foreach (var e in Ids)
-            {
-                w.Write(e);
-            }
-            return s.ToArray();
-        }
+		public List<ulong> Ids => Values;
     }
 }

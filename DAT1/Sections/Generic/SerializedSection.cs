@@ -31,25 +31,30 @@ namespace DAT1.Sections.Generic {
 
         public JObject Root;
         public List<JObject> Extras;
-        private DAT1 Dat1;
+        private DAT1? Dat1;
 
         private long deserialization_started_from;
 
-        public SerializedSection(DAT1 dat1, BinaryReader r, uint size)
-        {
-            Dat1 = dat1;
-            long start = r.BaseStream.Position;
-
-            Root = Deserialize(r);
+        public SerializedSection() {
+            Root = new JObject();
             Extras = new List<JObject>();
-
-            while (r.BaseStream.Position - start < size)
-            {
-                Extras.Add(Deserialize(r));
-            }
         }
 
-        private JObject Deserialize(BinaryReader r)
+        override public void Load(byte[] bytes, DAT1 container) {
+			Dat1 = container;
+
+			using var r = new BinaryReader(new MemoryStream(bytes));
+			var size = bytes.Length;
+
+			Root = Deserialize(r);
+			Extras = new List<JObject>();
+
+			while (r.BaseStream.Position < size) {
+				Extras.Add(Deserialize(r));
+			}
+		}
+
+		private JObject Deserialize(BinaryReader r)
         {
             deserialization_started_from = r.BaseStream.Position;
             return DeserializeObject(r);

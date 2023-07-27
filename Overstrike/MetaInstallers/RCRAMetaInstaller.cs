@@ -28,11 +28,11 @@ namespace Overstrike.MetaInstallers {
 			}
 		}
 
-		private TOC2 _toc;
+		private TOC_I29 _toc;
 
 		public override void Start() {
 			var tocPath = Path.Combine(_gamePath, "toc");
-			_toc = new TOC2();
+			_toc = new TOC_I29();
 			_toc.Load(tocPath);
 		}
 
@@ -41,7 +41,7 @@ namespace Overstrike.MetaInstallers {
 			installer.Install(mod, index);
 		}
 
-		private InstallerBase GetInstaller(ModEntry mod, TOC2 toc) {
+		private InstallerBase GetInstaller(ModEntry mod, TOC_I29 toc) {
 			switch (mod.Type) {
 				case ModEntry.ModType.STAGE_RCRA:
 					return new RCRAStageInstaller(toc, _gamePath);

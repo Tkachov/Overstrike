@@ -3,43 +3,31 @@
 // For more details, terms and conditions, see GNU General Public License.
 // A copy of the that license should come with this program (LICENSE.txt). If not, see <http://www.gnu.org/licenses/>.
 
+using DAT1.Sections.Generic;
 using System.Collections.Generic;
 using System.IO;
 
-namespace DAT1.Sections.TOC
-{
-    public class SpansSection : Section
-    {
+namespace DAT1.Sections.TOC {
+	public class SpansSection: ArraySection<SpansSection.Span> {
+		public class Span {
+			public uint AssetIndex, Count;
+		}
+
 		public const uint TAG = 0xEDE8ADA9;
 
-		public class Span
-        {
-            public uint AssetIndex, Count;
-        }
+		public List<Span> Entries => Values;
 
-        public List<Span> Entries = new List<Span>();
+		protected override uint GetValueByteSize() { return 8; }
 
-        public SpansSection(BinaryReader r, uint size)
-        {
-            uint count = size / 8;
-            for (uint i = 0; i < count; ++i)
-            {
-                var a = r.ReadUInt32();
-                var b = r.ReadUInt32();
-                Entries.Add(new Span() { AssetIndex = a, Count = b });
-            }
-        }
+		protected override Span Read(BinaryReader r) {
+			var a = r.ReadUInt32();
+			var b = r.ReadUInt32();
+			return new Span() { AssetIndex = a, Count = b };
+		}
 
-        override public byte[] Save()
-        {
-            var s = new MemoryStream();
-            var w = new BinaryWriter(s);
-            foreach (var e in Entries)
-            {
-                w.Write(e.AssetIndex);
-                w.Write(e.Count);
-            }
-            return s.ToArray();
-        }
-    }
+		protected override void Write(BinaryWriter w, Span v) {
+			w.Write(v.AssetIndex);
+			w.Write(v.Count);
+		}
+	}
 }
