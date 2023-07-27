@@ -10,7 +10,7 @@ using System;
 using System.Globalization;
 
 namespace Overstrike.Installers {
-	internal class SMPCModInstaller: InstallerBase {
+	internal class SMPCModInstaller: MSMRInstallerBase {
 		private TOC _unchangedToc;
 
 		public SMPCModInstaller(TOC toc, TOC unchangedToc, string gamePath) : base(toc, gamePath) {

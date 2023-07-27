@@ -10,20 +10,17 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace Overstrike.Installers {
-	internal class StageInstaller: MSMRInstallerBase {
-		public StageInstaller(TOC toc, string gamePath) : base(toc, gamePath) {}
+	internal class RCRAStageInstaller: RCRAInstallerBase {
+		public RCRAStageInstaller(TOC2 toc, string gamePath) : base(toc, gamePath) {}
 
 		public override void Install(ModEntry mod, int index) {
 			_mod = mod;
 
-			var modsPath = Path.Combine(_gamePath, "asset_archive", "mods");
-			if (mod.Type == ModEntry.ModType.STAGE_RCRA)
-				modsPath = Path.Combine(_gamePath, "d", "mods");
-
+			var modsPath = Path.Combine(_gamePath, "d", "mods");
 			var modPath = Path.Combine(modsPath, "mod" + index);
-			var relativeModPath = "mods\\mod" + index;
+			var relativeModPath = "d\\mods\\mod" + index;
 
-			var newArchiveIndex = _toc.AddNewArchive(relativeModPath, TOC.ArchiveAddingImpl.DEFAULT);
+			var newArchiveIndex = _toc.AddNewArchive(relativeModPath);
 
 			using (var f = new FileStream(modPath, FileMode.Create, FileAccess.Write, FileShare.None)) {
 				using (var w = new BinaryWriter(f)) {
@@ -45,12 +42,14 @@ namespace Overstrike.Installers {
 			ulong assetId;
 			if (IsAssetFile(entry.FullName, out span, out assetId)) {
 				long archiveOffset = archiveWriter.BaseStream.Position;
+				byte[] header = new byte[36];
 				using (var stream = entry.Open()) {
+					stream.Read(header, 0, 36);
 					stream.CopyTo(archiveWriter.BaseStream);
 				}
 				long fileSize = archiveWriter.BaseStream.Position - archiveOffset;
 
-				AddOrUpdateAssetEntry(assetId, span, archiveIndexToWriteInto, (uint)archiveOffset, (uint)fileSize);
+				AddOrUpdateAssetEntry(assetId, span, archiveIndexToWriteInto, (uint)archiveOffset, (uint)fileSize, header);
 			}
 		}
 

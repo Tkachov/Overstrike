@@ -6,6 +6,7 @@
 using DAT1;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Overstrike.Installers;
+using Overstrike.MetaInstallers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -519,16 +520,16 @@ namespace Overstrike {
 				modsToInstall.Add(availableMods[mod.Path]);
 			}
 
-			StartInstallModsThread(modsToInstall, _selectedProfile.GamePath);
+			StartInstallModsThread(modsToInstall, _selectedProfile.Game, _selectedProfile.GamePath);
 		}
 
-		private void StartInstallModsThread(List<ModEntry> modsToInstall, string gamePath, bool uninstalling = false) {
-			Thread thread = new Thread(() => InstallMods(modsToInstall, gamePath, uninstalling));
+		private void StartInstallModsThread(List<ModEntry> modsToInstall, string game, string gamePath, bool uninstalling = false) {
+			Thread thread = new Thread(() => InstallMods(modsToInstall, game, gamePath, uninstalling));
 			_taskThreads.Add(thread);
 			thread.Start();
 		}
 
-		private void InstallMods(List<ModEntry> modsToInstall, string gamePath, bool uninstalling) {
+		private void InstallMods(List<ModEntry> modsToInstall, string game, string gamePath, bool uninstalling) {
 			try {
 				var operationsCount = modsToInstall.Count;
 				Dispatcher.Invoke(() => {
@@ -539,15 +540,11 @@ namespace Overstrike {
 					OverlayOperationLabel.Text = "Loading 'toc.BAK'...";
 				});
 
-				PrepareToInstallMods();
+				var installer = GetMetaInstaller(game, gamePath);
+				installer.Prepare();
 
 				if (modsToInstall.Count > 0) {
-					var tocPath = Path.Combine(gamePath, "asset_archive", "toc");					
-					var toc = new TOC();
-					toc.Load(tocPath);
-
-					var unchangedToc = new TOC(); // a special copy for .smpcmod installer to lookup indexes in
-					unchangedToc.Load(tocPath);
+					installer.Start();
 
 					var index = 0;
 					foreach (var mod in modsToInstall) {
@@ -556,7 +553,7 @@ namespace Overstrike {
 							OverlayOperationLabel.Text = "Installing '" + mod.Name + "'...";
 						});
 
-						InstallMod(mod, toc, unchangedToc, index++);
+						installer.Install(mod, index++);
 					}
 
 					Dispatcher.Invoke(() => {
@@ -566,7 +563,8 @@ namespace Overstrike {
 							OverlayHeaderLabel.Text = "Installing mods (" + index + "/" + operationsCount + " done)...";
 						OverlayOperationLabel.Text = "Saving 'toc'...";
 					});
-					toc.Save(tocPath);
+
+					installer.Finish();
 				}
 
 				Dispatcher.Invoke(() => {
@@ -582,60 +580,23 @@ namespace Overstrike {
 			}
 		}
 
-		private void ShowStatusMessage(string text) {
-			StatusMessage.Text = text;
-			BeginStoryboard((System.Windows.Media.Animation.Storyboard)this.FindResource("ShowStatusMessage"));
-		}
+		private MetaInstallerBase GetMetaInstaller(string game, string gamePath) {
+			switch (game) {
+				case Profile.GAME_MSMR:
+				case Profile.GAME_MM:
+					return new MSMRMetaInstaller(gamePath);
 
-		private void PrepareToInstallMods() {
-			var tocPath = Path.Combine(_selectedProfile.GamePath, "asset_archive", "toc");
-			var tocBakPath = Path.Combine(_selectedProfile.GamePath, "asset_archive", "toc.BAK");
-
-			if (!File.Exists(tocBakPath)) {
-				File.Copy(tocPath, tocBakPath);
-			} else {
-				File.Copy(tocBakPath, tocPath, true);
-			}
-
-			var modsPath = Path.Combine(_selectedProfile.GamePath, "asset_archive", "mods");
-			if (!Directory.Exists(modsPath)) {
-				Directory.CreateDirectory(modsPath);
-			}
-
-			var suitsPath = Path.Combine(_selectedProfile.GamePath, "asset_archive", "Suits");
-			if (!Directory.Exists(suitsPath)) {
-				Directory.CreateDirectory(suitsPath);
-			}
-		}
-
-		private void InstallMod(ModEntry mod, TOC toc, TOC unchangedToc, int index) {
-			var installer = GetInstaller(mod, toc, unchangedToc);
-			installer.Install(mod, index);
-		}
-
-		private InstallerBase GetInstaller(ModEntry mod, TOC toc, TOC unchangedToc) {
-			switch (mod.Type) {
-				case ModEntry.ModType.SMPC:
-				case ModEntry.ModType.MMPC:
-					return new SMPCModInstaller(toc, unchangedToc, _selectedProfile.GamePath);
-
-				case ModEntry.ModType.SUIT_MSMR:
-					return new MSMRSuitInstaller(toc, _selectedProfile.GamePath);
-
-				case ModEntry.ModType.SUIT_MM:
-					return new MMSuit1Installer(toc, _selectedProfile.GamePath);
-
-				case ModEntry.ModType.SUIT_MM_V2:
-					return new MMSuit2Installer(toc, _selectedProfile.GamePath);
-
-				case ModEntry.ModType.STAGE_MSMR:
-				case ModEntry.ModType.STAGE_MM:
-				case ModEntry.ModType.STAGE_RCRA:
-					return new StageInstaller(toc, _selectedProfile.GamePath);
+				case Profile.GAME_RCRA:
+					return new RCRAMetaInstaller(gamePath);
 
 				default:
 					return null;
 			}
+		}
+
+		private void ShowStatusMessage(string text) {
+			StatusMessage.Text = text;
+			BeginStoryboard((System.Windows.Media.Animation.Storyboard)this.FindResource("ShowStatusMessage"));
 		}
 
 		private void RefreshButton_Click(object sender, RoutedEventArgs e) {
@@ -668,7 +629,7 @@ namespace Overstrike {
 
 		private void UninstallMods(object sender, RoutedEventArgs e) {
 			List<ModEntry> modsToInstall = new List<ModEntry>();
-			StartInstallModsThread(modsToInstall, _selectedProfile.GamePath, true);
+			StartInstallModsThread(modsToInstall, _selectedProfile.Game, _selectedProfile.GamePath, true);
 		}
 		
 		private void LaunchGame(object sender, RoutedEventArgs e) {

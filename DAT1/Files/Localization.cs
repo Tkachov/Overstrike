@@ -14,7 +14,7 @@ namespace DAT1.Files {
 		uint magic, dat1_size;
 		byte[] unk;
 
-		public Localization(BinaryReader r): base() {
+		public Localization(BinaryReader r, FormatVersion version) : base(version) {
 			magic = r.ReadUInt32();
 			dat1_size = r.ReadUInt32();
 			unk = r.ReadBytes(28);

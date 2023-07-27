@@ -15,8 +15,15 @@ using System.Text;
 
 namespace DAT1
 {
-    public class DAT1
+	public enum FormatVersion {		
+		MSMR,
+		RCRA
+	}
+
+	public class DAT1
 	{
+		FormatVersion _version;
+
 		// header
 		uint magic, unk1, size, sectionsCount;
 		List<uint> sectionsTags = new List<uint>();
@@ -34,14 +41,17 @@ namespace DAT1
 		private const uint OFFSETS_SECTION_TAG = 0xDCD720B5;
 
         public ArchivesMapSection ArchivesSection => (ArchivesMapSection)sections[ARCHIVES_SECTION_TAG];
-        public AssetIdsSection AssetIdsSection => (AssetIdsSection)sections[ASSET_IDS_SECTION_TAG];
+		public ArchivesMapSection2 ArchivesSection2 => (ArchivesMapSection2)sections[ARCHIVES_SECTION_TAG];
+		public AssetIdsSection AssetIdsSection => (AssetIdsSection)sections[ASSET_IDS_SECTION_TAG];
 		public SizeEntriesSection SizesSection => (SizeEntriesSection)sections[SIZE_ENTRIES_SECTION_TAG];
+		public SizeEntriesSection2 SizesSection2 => (SizeEntriesSection2)sections[SIZE_ENTRIES_SECTION_TAG];
 		public OffsetsSection OffsetsSection => (OffsetsSection)sections[OFFSETS_SECTION_TAG];
 		public SpansSection SpansSection => (SpansSection)sections[SpansSection.TAG];
+		public AssetHeadersSection AssetHeadersSection => (AssetHeadersSection)sections[AssetHeadersSection.TAG];
 
-		protected DAT1()
+		protected DAT1(FormatVersion version)
 		{
-
+			_version = version;
 		}
 
 		protected void Init(BinaryReader r)
@@ -83,20 +93,22 @@ namespace DAT1
 			}
 		}
 
-		public DAT1(BinaryReader r)
+		public DAT1(BinaryReader r, FormatVersion version)
 		{
+			_version = version;
 			Init(r);
 		}
 
         private Section ReadSection(uint tag, BinaryReader r, uint size) {
 			switch (tag) {
 				// toc
-				case SIZE_ENTRIES_SECTION_TAG: return new SizeEntriesSection(r, size);
-				case ARCHIVES_SECTION_TAG: return new ArchivesMapSection(r, size);
+				case SIZE_ENTRIES_SECTION_TAG: return (_version == FormatVersion.MSMR ? new SizeEntriesSection(r, size) : new SizeEntriesSection2(r, size));
+				case ARCHIVES_SECTION_TAG: return (_version == FormatVersion.MSMR ? new ArchivesMapSection(r, size) : new ArchivesMapSection2(r, size));
 				case ASSET_IDS_SECTION_TAG: return new AssetIdsSection(r, size);
 				case 0x6D921D7B: return new KeyAssetsSection(r, size);
 				case OFFSETS_SECTION_TAG: return new OffsetsSection(r, size);
 				case SpansSection.TAG: return new SpansSection(r, size);
+				case AssetHeadersSection.TAG: return new AssetHeadersSection(r, size);
 
 				// config
 				case ConfigTypeSection.TAG: return new ConfigTypeSection(this, r, size);

@@ -11,22 +11,26 @@ using System.Text;
 using static DAT1.Sections.TOC.ArchivesMapSection;
 
 namespace DAT1 {
-	public class AssetEntry
+	// RCRA implementation
+	// TODO: make a common interface instead of copy-pasting class entirely
+
+	public class AssetEntry2
 	{
 		public int index;
 		public UInt64 id;
 		public uint archive;
 		public uint offset;
 		public uint size;
+		public byte[] header;
     }
 
-	public class TOC
+	public class TOC2
 	{
 		public DAT1 Dat1 = null;
 		private string AssetArchivePath = null;
 		public bool IsLoaded => Dat1 != null;
 
-		private const uint TOC_MAGIC = 0x77AF12AF;
+		private const uint TOC_MAGIC = 0x34E89035;
 
 		public bool Load(string filename) {
 			try {
@@ -40,54 +44,13 @@ namespace DAT1 {
 				uint uncompressedLength = r.ReadUInt32();
 
 				int length = (int)(f.Length - 8);
-				byte[] bytes = ZlibStream.UncompressBuffer(r.ReadBytes(length));
+				byte[] bytes = r.ReadBytes(length);
 				r.Close();
 				r.Dispose();
 				f.Close();
 				f.Dispose();
 
-				//
-				if (false)
-				{
-					byte[] compressed;// = ZlibStream.CompressBuffer(bytes);
-
-					using (var ms = new MemoryStream())
-					{
-						Stream compressor =
-							new ZlibStream(ms, CompressionMode.Compress, CompressionLevel.None);
-
-						using (compressor)
-						{
-							compressor.Write(bytes, 0, bytes.Length);
-							compressor.Flush();
-						}
-						compressed = ms.ToArray();
-					}
-
-					var f2 = System.IO.File.OpenWrite(filename + ".rec");
-					var w = new BinaryWriter(f2);
-					w.Write(compressed);
-					w.Close();
-					w.Dispose();
-					f2.Close();
-					f2.Dispose();
-
-					byte[] uncompressed = ZlibStream.UncompressBuffer(compressed);
-					var f3 = System.IO.File.OpenRead(filename + ".rec");
-					var r2 = new BinaryReader(f3);
-					byte[] uncompressed2 = ZlibStream.UncompressBuffer(r2.ReadBytes((int)f3.Length));
-					r2.Close();
-					r2.Dispose();
-					f3.Close();
-					f3.Dispose();
-
-					if (uncompressedLength != bytes.Length)
-					{
-						return false;
-					}
-				}
-
-				Dat1 = new DAT1(new BinaryReader(new MemoryStream(bytes)), FormatVersion.MSMR);
+				Dat1 = new DAT1(new BinaryReader(new MemoryStream(bytes)), FormatVersion.RCRA);
 				AssetArchivePath = Path.GetDirectoryName(filename);
 				return true;
 			} catch (Exception e) {
@@ -100,40 +63,26 @@ namespace DAT1 {
 				return false;
 
 			byte[] uncompressed = Dat1.Save();
-			/// byte[] compressed = ZlibStream.CompressBuffer(uncompressed);
-			
-			byte[] compressed;
-
-			using (var ms = new MemoryStream()) {
-				Stream compressor =
-					new ZlibStream(ms, CompressionMode.Compress, CompressionLevel.BestCompression); // Default); // None);
-
-				using (compressor) {
-					compressor.Write(uncompressed, 0, uncompressed.Length);
-					compressor.Flush();
-				}
-				compressed = ms.ToArray();
-			}
 
 			using (var f = new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.None)) {
 				using (var w = new BinaryWriter(f)) {
 					w.Write((uint)TOC_MAGIC);
 					w.Write((uint)uncompressed.Length);
-					w.Write(compressed);
+					w.Write(uncompressed);
 				}
 			}
 
 			return true;
 		}
 
-		public AssetEntry[] FindAssetEntriesByPath(string assetPath, bool stopOnFirst = false)
+		public AssetEntry2[] FindAssetEntriesByPath(string assetPath, bool stopOnFirst = false)
 		{
 			return FindAssetEntriesById(CRC64.Hash(assetPath), stopOnFirst);
 		}
 
-        public AssetEntry[] FindAssetEntriesById(UInt64 assetId, bool stopOnFirst = false)
+        public AssetEntry2[] FindAssetEntriesById(UInt64 assetId, bool stopOnFirst = false)
         {
-			List<AssetEntry> results = new List<AssetEntry>();
+			List<AssetEntry2> results = new List<AssetEntry2>();
 
 			if (IsLoaded) {
 				var ids = Dat1.AssetIdsSection.Ids;
@@ -148,45 +97,50 @@ namespace DAT1 {
             return results.ToArray();
         }
 
-        public AssetEntry FindAssetEntryByPath(string assetPath)
+        public AssetEntry2 FindAssetEntryByPath(string assetPath)
         {
             return FindAssetEntriesByPath(assetPath, true)[0];
         }
 
-        public AssetEntry FindAssetEntryById(UInt64 assetId)
+        public AssetEntry2 FindAssetEntryById(UInt64 assetId)
         {
             return FindAssetEntriesById(assetId, true)[0];
         }
 
-        public AssetEntry GetAssetEntryByIndex(int index)
+        public AssetEntry2 GetAssetEntryByIndex(int index)
 		{
 			try {
-				AssetEntry result = new AssetEntry();
+				AssetEntry2 result = new AssetEntry2();
 				result.index = index;
 				result.id = Dat1.AssetIdsSection.Ids[index];
-				result.archive = Dat1.OffsetsSection.Entries[index].ArchiveIndex;
-                result.offset = Dat1.OffsetsSection.Entries[index].Offset;
-				result.size = Dat1.SizesSection.Entries[index].Value;
-                return result;
+				result.archive = Dat1.SizesSection2.Entries[index].ArchiveIndex;
+                result.offset = Dat1.SizesSection2.Entries[index].Offset;
+				result.size = Dat1.SizesSection2.Entries[index].Size;
+
+				var header_offset = Dat1.SizesSection2.Entries[index].HeaderOffset;
+				if (header_offset != -1) {
+					var header_index = header_offset / 36;
+					result.header = Dat1.AssetHeadersSection.Headers[header_index];
+				} else {
+					result.header = null;
+				}
+
+				return result;
             } catch (Exception) {}
-            /*
-			try:
-			aid = self.get_assets_section().ids[index]
-			off = self.get_offsets_section().entries[index]
-			size = self.get_sizes_section().entries[index]
-			return AssetEntry(index, aid, off.archive_index, off.offset, size.value)
-		except:
-			return None
-			*/
+
             return null;
 		}
 
-		public void UpdateAssetEntry(AssetEntry entry) {
+		public void UpdateAssetEntry(AssetEntry2 entry) {
 			int index = entry.index;
 			Dat1.AssetIdsSection.Ids[index] = entry.id;
-			Dat1.OffsetsSection.Entries[index].ArchiveIndex = entry.archive;
-			Dat1.OffsetsSection.Entries[index].Offset = entry.offset;
-			Dat1.SizesSection.Entries[index].Value = entry.size;
+			Dat1.SizesSection2.Entries[index].ArchiveIndex = entry.archive;
+			Dat1.SizesSection2.Entries[index].Offset = entry.offset;
+			Dat1.SizesSection2.Entries[index].Size = entry.size;
+			if (entry.header != null) {
+				var header_index = Dat1.SizesSection2.Entries[index].HeaderOffset / 36;
+				Dat1.AssetHeadersSection.Headers[header_index] = entry.header;
+			}
 		}
 
 		public byte[] ExtractAsset(int index)
@@ -206,7 +160,7 @@ namespace DAT1 {
             //public uint unk4;
         }
 
-        public byte[] ExtractAsset(AssetEntry Asset)
+        public byte[] ExtractAsset(AssetEntry2 Asset)
 		{
 			if (!IsLoaded)
 				return null;
@@ -216,17 +170,25 @@ namespace DAT1 {
 
 			ArchivePair p = GetArchive(Asset.archive);
 
-            byte[] bytes = new byte[Asset.size];
+			int archived_size = (int)Asset.size;
+			int real_size = archived_size;
+			if (Asset.header != null) {
+				real_size += 36;
+			}
+
+            byte[] bytes = new byte[real_size];
+
+			if (Asset.header != null) {
+				Asset.header.CopyTo(bytes, 0);
+			}
 
             if (!p.compressed)
 			{
 				p.f.Seek(Asset.offset, SeekOrigin.Begin);
-				p.f.Read(bytes, 0, bytes.Length);
+				p.f.Read(bytes, real_size - archived_size, archived_size);
 				p.f.Close();
 				return bytes;
 			}
-
-			
 
             var r = new BinaryReader(p.f);
 			p.f.Seek(12, SeekOrigin.Begin);
@@ -254,7 +216,7 @@ namespace DAT1 {
 			uint asset_offset = Asset.offset;
 			uint asset_end = asset_offset + Asset.size;
 
-			uint bytes_ptr = 0;
+			int bytes_ptr = real_size - archived_size;
 
 			// TODO: binary search starting block index and ending block index
 			// (because this code anyways assumes blocks are sorted by real_offset asc)
@@ -362,7 +324,7 @@ namespace DAT1 {
 
 		ArchivePair GetArchive(uint index)
 		{
-            ArchiveFileEntry a = Dat1.ArchivesSection.Entries[(int)index];			
+            Sections.TOC.ArchivesMapSection2.ArchiveFileEntry a = Dat1.ArchivesSection2.Entries[(int)index];
             string fn = a.GetFilename();
 			string full = Path.Combine(AssetArchivePath, fn);
 			FileStream fs = System.IO.File.OpenRead(full);
@@ -377,74 +339,26 @@ namespace DAT1 {
 			return p;
         }
 
-		public enum ArchiveAddingImpl {
-			DEFAULT,
-			SMPCTOOL,
-			SUITTOOL
-		}
-
-		public uint AddNewArchive(string filename, ArchiveAddingImpl impl) {
-			switch (impl) {
-				case ArchiveAddingImpl.DEFAULT: return AddNewArchive_Default(filename);
-				case ArchiveAddingImpl.SMPCTOOL: return AddNewArchive_SMPCTool(filename);
-				case ArchiveAddingImpl.SUITTOOL: return AddNewArchive_SuitTool(filename);
-				default: return 0;
-			}
+		public uint AddNewArchive(string filename) {
+			return AddNewArchive_Default(filename);
 		}
 
 		private uint AddNewArchive_Default(string filename) {
-			int index = 0;
-			foreach (var entry in Dat1.ArchivesSection.Entries) {
-				if (entry.InstallBucket != 0) break;
-				++index;
-			}
+			int index = Dat1.ArchivesSection2.Entries.Count;
 
-			byte[] bytes = new byte[64];
-			for (int i = 0; i < 64; ++i) bytes[i] = 0;
+			byte[] bytes = new byte[40];
+			for (int i = 0; i < 40; ++i) bytes[i] = 0;
 			byte[] fn = Encoding.ASCII.GetBytes(filename);
 			fn.CopyTo(bytes, 0);
 			bytes[fn.Length] = 0;
-
-			Dat1.ArchivesSection.Entries.Insert(index, new ArchiveFileEntry() {
-				InstallBucket = 0,
-				Chunkmap = (uint)(10000 + index),
-				Filename = bytes
-			});
-
-			return (uint)index;
-		}
-
-		private uint AddNewArchive_SMPCTool(string filename) {
-			int index = Dat1.ArchivesSection.Entries.Count;
-
-			byte[] bytes = new byte[64];
-			for (int i = 0; i < 64; ++i) bytes[i] = 0;
-			byte[] fn = Encoding.ASCII.GetBytes(filename);
-			fn.CopyTo(bytes, 0);
-			bytes[fn.Length] = 0;
-
-			Dat1.ArchivesSection.Entries.Add(new ArchiveFileEntry() {
-				InstallBucket = 0,
-				Chunkmap = 0,
-				Filename = bytes
-			});
-
-			return (uint)index;
-		}
-
-		private uint AddNewArchive_SuitTool(string filename) {
-			int index = Dat1.ArchivesSection.Entries.Count;
-
-			byte[] bytes = new byte[64];
-			for (int i = 0; i < 64; ++i) bytes[i] = 0;
-			byte[] fn = Encoding.ASCII.GetBytes(filename);
-			fn.CopyTo(bytes, 0);
-			bytes[fn.Length] = 0;
-
-			Dat1.ArchivesSection.Entries.Add(new ArchiveFileEntry() {
-				InstallBucket = 0,
-				Chunkmap = (uint)(10000 + index),
-				Filename = bytes
+			
+			Dat1.ArchivesSection2.Entries.Add(new Sections.TOC.ArchivesMapSection2.ArchiveFileEntry() {
+				Filename = bytes,
+				A = 2678794514496,
+				B = 2678794514496,
+				C = 3844228203,
+				D = 32763,
+				E = 0
 			});
 
 			return (uint)index;

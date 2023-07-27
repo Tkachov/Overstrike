@@ -9,7 +9,7 @@ using System.IO;
 using System.IO.Compression;
 
 namespace Overstrike.Installers {
-	internal abstract class SuitInstallerBase: InstallerBase {
+	internal abstract class SuitInstallerBase: MSMRInstallerBase {
 		protected SuitInstallerBase(TOC toc, string gamePath) : base(toc, gamePath) {}
 
 		#region .suit
