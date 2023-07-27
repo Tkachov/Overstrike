@@ -21,7 +21,7 @@ namespace Overstrike {
 			CreateSubdirectories();
 			ReadSettings();
 			LoadProfiles();
-			DetectMods();
+			DetectMods(); // TODO: launch a separate thread that waits a sec and shows a window with progress bar / current filename if detection still goes
 
 			ShutdownMode = ShutdownMode.OnExplicitShutdown;
 			if (Profiles.Count == 0) {

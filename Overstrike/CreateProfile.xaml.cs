@@ -4,6 +4,7 @@
 // A copy of the that license should come with this program (LICENSE.txt). If not, see <http://www.gnu.org/licenses/>.
 
 using Microsoft.WindowsAPICodePack.Dialogs;
+using Overstrike.Games;
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -52,36 +53,20 @@ namespace Overstrike {
 			}
 
 			GamePath = dialog.FileName;
-			DetectedGame = DetectGame(GamePath);
+			DetectedGame = GameBase.DetectGameInstallation(GamePath);
 
 			if (DetectedGame == null && GamePath.EndsWith("toc", StringComparison.OrdinalIgnoreCase)) {
 				GamePath = GamePath.Substring(0, GamePath.Length - 3);
-				DetectedGame = DetectGame(GamePath);
+				DetectedGame = GameBase.DetectGameInstallation(GamePath);
 			}
 
 			if (DetectedGame == null && GamePath.EndsWith("asset_archive", StringComparison.OrdinalIgnoreCase)) {
 				GamePath = GamePath.Substring(0, GamePath.Length - 13);
-				DetectedGame = DetectGame(GamePath);
+				DetectedGame = GameBase.DetectGameInstallation(GamePath);
 			}
 
-			PathTextBox.Text = GamePath;			
+			PathTextBox.Text = GamePath;
 			UpdateErrorAndButton();
-		}
-
-		internal static string DetectGame(string gamePath) {
-			try {
-				if (!Directory.Exists(gamePath)) return null;
-
-				if (File.Exists(Path.Combine(gamePath, "toc")) && File.Exists(Path.Combine(gamePath, "RiftApart.exe"))) return Profile.GAME_RCRA;
-
-				if (!Directory.Exists(Path.Combine(gamePath, "asset_archive"))) return null;
-				if (!File.Exists(Path.Combine(gamePath, "asset_archive", "toc"))) return null;
-
-				if (File.Exists(Path.Combine(gamePath, "Spider-Man.exe"))) return Profile.GAME_MSMR;
-				else if (File.Exists(Path.Combine(gamePath, "MilesMorales.exe"))) return Profile.GAME_MM;
-			} catch (Exception) {}
-
-			return null;
 		}
 
 		private void UpdateErrorAndButton() {
@@ -95,7 +80,7 @@ namespace Overstrike {
 				} else {
 					pathOk = true;
 
-					message = "Detected game: " + UserFriendlyName(DetectedGame);
+					message = "Detected game: " + GameBase.GetGame(DetectedGame).UserFriendlyName;
 				}
 			}
 
@@ -111,16 +96,6 @@ namespace Overstrike {
 
 			ErrorMessage.Content = message;
 			CreateProfileButton.IsEnabled = profileOk && pathOk;
-		}
-
-		private string UserFriendlyName(string name) {
-			switch (name) {
-				case Profile.GAME_MSMR: return "Marvel's Spider-Man Remastered";
-				case Profile.GAME_MM: return "Marvel's Spider-Man: Miles Morales";
-				case Profile.GAME_RCRA: return "Ratchet & Clank: Rift Apart";
-			}
-
-			return "?";
 		}
 
 		private void CreateProfileButton_Click(object sender, RoutedEventArgs e) {

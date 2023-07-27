@@ -5,6 +5,7 @@
 
 using DAT1;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using Overstrike.Games;
 using Overstrike.Installers;
 using Overstrike.MetaInstallers;
 using System;
@@ -27,6 +28,8 @@ namespace Overstrike {
 		private List<Profile> _profiles;
 		private List<ModEntry> _mods;
 		private Profile _selectedProfile;
+
+		private GameBase _selectedGame => GameBase.GetGame(_selectedProfile.Game);
 
 		private class ProfileItem {
 			public string Text { get; set; }
@@ -91,20 +94,21 @@ namespace Overstrike {
 
 		private void SetupBanner() {
 			// TODO: cache those images once and just set references instead of reloading them all the time
+			// TODO: make that a virtual method in GameBase
 			switch (_selectedProfile.Game) {
-				case Profile.GAME_MSMR:
+				case GameMSMR.ID:
 					GradientImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_msmr_back);
 					LogoImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_msmr_logo);
 					LogoImage2.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_msmr_logo2);
 				break;
 
-				case Profile.GAME_MM:
+				case GameMM.ID:
 					GradientImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_mm_back);
 					LogoImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_mm_logo);
 					LogoImage2.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_mm_logo2);
 				break;
 
-				case Profile.GAME_RCRA:
+				case GameRCRA.ID:
 					GradientImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_rcra_back);
 					LogoImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_rcra_logo);
 					LogoImage2.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_rcra_logo2);
@@ -144,7 +148,7 @@ namespace Overstrike {
 
 			Dictionary<string, ModEntry> availableMods = new Dictionary<string, ModEntry>();
 			foreach (var mod in _mods) {
-				if (!IsModCompatible(mod.Type)) continue;
+				if (!_selectedGame.IsCompatible(mod)) continue;
 				availableMods[mod.Path] = mod;
 			}
 
@@ -172,22 +176,6 @@ namespace Overstrike {
 			ModsList.ItemsSource = new CompositeCollection {
 				new CollectionContainer() { Collection = _modsList }
 			};
-		}
-
-		private bool IsModCompatible(ModEntry.ModType type) {
-			if (_selectedProfile.Game == Profile.GAME_MSMR) {
-				return (type == ModEntry.ModType.SMPC || type == ModEntry.ModType.SUIT_MSMR || type == ModEntry.ModType.STAGE_MSMR);
-			}
-
-			if (_selectedProfile.Game == Profile.GAME_MM) {
-				return (type == ModEntry.ModType.MMPC || type == ModEntry.ModType.SUIT_MM || type == ModEntry.ModType.SUIT_MM_V2 || type == ModEntry.ModType.STAGE_MM);
-			}
-
-			if (_selectedProfile.Game == Profile.GAME_RCRA) {
-				return (type == ModEntry.ModType.STAGE_RCRA);
-			}
-
-			return false;
 		}
 
 		private void ProfileComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e) {
@@ -581,17 +569,7 @@ namespace Overstrike {
 		}
 
 		private MetaInstallerBase GetMetaInstaller(string game, string gamePath) {
-			switch (game) {
-				case Profile.GAME_MSMR:
-				case Profile.GAME_MM:
-					return new MSMRMetaInstaller(gamePath);
-
-				case Profile.GAME_RCRA:
-					return new RCRAMetaInstaller(gamePath);
-
-				default:
-					return null;
-			}
+			return _selectedGame.GetMetaInstaller(gamePath);
 		}
 
 		private void ShowStatusMessage(string text) {
@@ -635,13 +613,7 @@ namespace Overstrike {
 		private void LaunchGame(object sender, RoutedEventArgs e) {
 			try {
 				var path = _selectedProfile.GamePath;
-				if (_selectedProfile.Game == Profile.GAME_MSMR) {
-					Process.Start(Path.Combine(path, "Spider-Man.exe"), path);
-				} else if (_selectedProfile.Game == Profile.GAME_MM) {
-					Process.Start(Path.Combine(path, "MilesMorales.exe"), path);
-				} else if (_selectedProfile.Game == Profile.GAME_RCRA) {
-					Process.Start(Path.Combine(path, "RiftApart.exe"), path);
-				}
+				Process.Start(_selectedGame.GetExecutablePath(path), path);
 			} catch {}
 		}
 

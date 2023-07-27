@@ -8,6 +8,7 @@ using System.IO;
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
+using Overstrike.Games;
 
 namespace Overstrike.Detectors {
 	internal class StageModDetector: DetectorBase {
@@ -61,9 +62,9 @@ namespace Overstrike.Detectors {
 
 					string g = (string)info["game"];
 					if (g != null && g.Trim() != "") {
-						if (g == Profile.GAME_MSMR) type = ModEntry.ModType.STAGE_MSMR;
-						else if (g == Profile.GAME_MM) type = ModEntry.ModType.STAGE_MM;
-						else if (g == Profile.GAME_RCRA) type = ModEntry.ModType.STAGE_RCRA;
+						if (g == GameMSMR.ID) type = ModEntry.ModType.STAGE_MSMR;
+						else if (g == GameMM.ID) type = ModEntry.ModType.STAGE_MM;
+						else if (g == GameRCRA.ID) type = ModEntry.ModType.STAGE_RCRA;
 					}
 				}
 
