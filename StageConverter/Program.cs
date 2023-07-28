@@ -126,10 +126,10 @@ Asset? ReadAsset(ZipArchiveEntry asset, TOC_I20 toc) {
 	ms.Seek(0, SeekOrigin.Begin);
 
 	byte? span = null;
-	AssetEntry[] originalAssetEntries = toc.FindAssetEntriesById(assetId);
-	foreach (var assetEntry in originalAssetEntries) {
-		if (assetEntry.archive == archiveIndex) {
-			span = GetSpan(assetEntry.index, toc);
+	int[] assetIndexes = toc.FindAssetIndexesById(assetId);
+	foreach (var assetIndex in assetIndexes) {
+		if (toc.GetArchiveIndexByAssetIndex(assetIndex) == archiveIndex) {
+			span = toc.GetSpanIndexByAssetIndex(assetIndex);
 			break;
 		}
 	}
@@ -144,19 +144,6 @@ Asset? ReadAsset(ZipArchiveEntry asset, TOC_I20 toc) {
 		Id = assetId,
 		Data = ms.ToArray()
 	};
-}
-
-byte? GetSpan(int assetIndex, TOC_I20 toc) {
-	byte span = 0;
-	foreach (var entry in toc.Dat1.SpansSection.Entries) {
-		if (entry.AssetIndex <= assetIndex && assetIndex < entry.AssetIndex + entry.Count) {
-			return span;
-		}
-
-		++span;
-	}
-
-	return null;
 }
 
 ModInfo? ReadInfo(ZipArchiveEntry entry) {
