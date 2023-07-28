@@ -3,17 +3,15 @@
 // For more details, terms and conditions, see GNU General Public License.
 // A copy of the that license should come with this program (LICENSE.txt). If not, see <http://www.gnu.org/licenses/>.
 
-using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DAT1.Sections.Generic {
 	public class StringsSection: Section {
 		public List<string> Strings = new();
-		protected Dictionary<string, uint> offsetByKey = new Dictionary<string, uint>();
-		protected Dictionary<uint, string> keyByOffset = new Dictionary<uint, string>();
+		protected Dictionary<string, uint> offsetByKey = new();
+		protected Dictionary<uint, string> keyByOffset = new();
 
 		override public void Load(byte[] data, DAT1 container) {
 			var size = data.Length;

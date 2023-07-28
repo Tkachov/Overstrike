@@ -8,31 +8,26 @@ using System.Diagnostics;
 using System.IO;
 
 namespace DAT1.Files {
-	public class Texture : DAT1
-    {
+	public class Texture: DAT1 {
         public const uint MAGIC = 0x5C4580B9;
 
         uint magic, dat1_size;
         byte[] unk;
-
         byte[] raw;
 
-        public Texture(BinaryReader r) : base() {
+        public Texture(BinaryReader r): base() {
             magic = r.ReadUInt32();
             dat1_size = r.ReadUInt32();
             unk = r.ReadBytes(28);
-
             Debug.Assert(magic == MAGIC, "Texture(): bad magic");
 
             Init(r);
-
             raw = r.ReadBytes((int)(r.BaseStream.Length - r.BaseStream.Position));
         }
 
         public TextureHeaderSection HeaderSection => Section<TextureHeaderSection>(TextureHeaderSection.TAG);
 
-		public byte[] GetDDS()
-        {
+		public byte[] GetDDS() {
 			uint width = HeaderSection.hd_width;
 			uint height = HeaderSection.hd_height;
 

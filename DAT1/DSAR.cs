@@ -41,9 +41,9 @@ namespace DAT1 {
             uint blocks_header_end = r.ReadUInt32();
 
 			archive.Seek(32, SeekOrigin.Begin);
-			List<BlockHeader> blocks = new List<BlockHeader>();
+			List<BlockHeader> blocks = new();
 			while (archive.Position < blocks_header_end) {
-				BlockHeader header = new BlockHeader();
+				BlockHeader header = new();
 				header.realOffset = r.ReadUInt32();
 				r.ReadUInt32();
 				header.compOffset = r.ReadUInt32();
@@ -79,7 +79,7 @@ namespace DAT1 {
 					uint block_start = Math.Max(block.realOffset, asset_offset) - block.realOffset;
 					uint block_end = Math.Min(asset_end, real_end) - block.realOffset;
 
-					for (int i=(int)block_start; i<block_end; ++i)
+					for (int i = (int)block_start; i < block_end; ++i)
 						bytes[bytes_ptr++] = decompressed[i];
 				}
 
@@ -101,17 +101,17 @@ namespace DAT1 {
 				byte a = comp_data[comp_i++];
 				byte b = 0;
 				
-				if ((a&240) == 240)
+				if ((a & 240) == 240)
 					b = comp_data[comp_i++];
 
 				int direct = (a >> 4) + b;
-				while (direct >= 270 && (direct-15) % 255 == 0) {
+				while (direct >= 270 && (direct - 15) % 255 == 0) {
 					byte v = comp_data[comp_i++];
 					direct += v;
 					if (v == 0) break;
 				}
 
-				for (int i=0; i<direct; ++i) {
+				for (int i = 0; i < direct; ++i) {
 					if (real_i + i >= real_size || comp_i + i >= comp_size) break;
 					real_data[real_i + i] = comp_data[comp_i + i];
 				}
@@ -129,17 +129,17 @@ namespace DAT1 {
 				int reverse_offset = a + (b << 8);
 				if (reverse == 19) {
 					reverse += comp_data[comp_i++];
-					while (reverse >= 274 && (reverse-19) % 255 == 0) {
+					while (reverse >= 274 && (reverse - 19) % 255 == 0) {
 						byte v = comp_data[comp_i++];
 						reverse += v;
 						if (v == 0) break;
 					}
 				}
 
-				for ( int i=0; i<reverse; ++i) {
+				for (int i = 0; i < reverse; ++i) {
 					try {
 						real_data[real_i + i] = real_data[real_i - reverse_offset + i];
-					} catch ( Exception e ) { }
+					} catch (Exception) {}
 					
 				}
                 real_i += reverse;

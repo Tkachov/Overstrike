@@ -241,24 +241,21 @@ namespace DAT1 {
 
 		public override bool Load(string filename) {
 			try {
-				var f = File.OpenRead(filename);
-				var r = new BinaryReader(f);
+				using var f = File.OpenRead(filename);
+				using var r = new BinaryReader(f);
+
 				uint magic = r.ReadUInt32();
 				if (magic != MAGIC) {
 					return false;
 				}
 
 				uint uncompressedLength = r.ReadUInt32();
-
 				int length = (int)(f.Length - 8);
 				byte[] bytes = ZlibStream.UncompressBuffer(r.ReadBytes(length));
-				r.Close();
-				r.Dispose();
-				f.Close();
-				f.Dispose();
 
 				Dat1 = new DAT1(new BinaryReader(new MemoryStream(bytes)));
 				AssetArchivePath = Path.GetDirectoryName(filename);
+
 				return true;
 			} catch (Exception) {
 				return false;
@@ -266,18 +263,13 @@ namespace DAT1 {
 		}
 
 		public override bool Save(string filename) {
-			if (!IsLoaded)
-				return false;
+			if (!IsLoaded) return false;
 
 			byte[] uncompressed = Dat1.Save();
-			/// byte[] compressed = ZlibStream.CompressBuffer(uncompressed);
-			
-			byte[] compressed;
+			byte[] compressed; /// = ZlibStream.CompressBuffer(uncompressed);
 
 			using (var ms = new MemoryStream()) {
-				Stream compressor =
-					new ZlibStream(ms, CompressionMode.Compress, CompressionLevel.BestCompression); // Default); // None);
-
+				Stream compressor = new ZlibStream(ms, CompressionMode.Compress, CompressionLevel.BestCompression); // Default); // None);
 				using (compressor) {
 					compressor.Write(uncompressed, 0, uncompressed.Length);
 					compressor.Flush();
@@ -285,13 +277,11 @@ namespace DAT1 {
 				compressed = ms.ToArray();
 			}
 
-			using (var f = new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.None)) {
-				using (var w = new BinaryWriter(f)) {
-					w.Write((uint)MAGIC);
-					w.Write((uint)uncompressed.Length);
-					w.Write(compressed);
-				}
-			}
+			using var f = new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.None);
+			using var w = new BinaryWriter(f);
+			w.Write(MAGIC);
+			w.Write((uint)uncompressed.Length);
+			w.Write(compressed);
 
 			return true;
 		}
@@ -467,43 +457,36 @@ namespace DAT1 {
 
 		public override bool Load(string filename) {
 			try {
-				var f = File.OpenRead(filename);
-				var r = new BinaryReader(f);
+				using var f = File.OpenRead(filename);
+				using var r = new BinaryReader(f);
+
 				uint magic = r.ReadUInt32();
 				if (magic != MAGIC) {
 					return false;
 				}
 
 				uint uncompressedLength = r.ReadUInt32();
-
 				int length = (int)(f.Length - 8);
 				byte[] bytes = r.ReadBytes(length);
-				r.Close();
-				r.Dispose();
-				f.Close();
-				f.Dispose();
 
 				Dat1 = new DAT1(new BinaryReader(new MemoryStream(bytes)));
 				AssetArchivePath = Path.GetDirectoryName(filename);
+
 				return true;
-			} catch (Exception e) {
+			} catch (Exception) {
 				return false;
 			}
 		}
 
 		public override bool Save(string filename) {
-			if (!IsLoaded)
-				return false;
+			if (!IsLoaded) return false;
 
-			byte[] uncompressed = Dat1.Save();
-
-			using (var f = new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.None)) {
-				using (var w = new BinaryWriter(f)) {
-					w.Write((uint)MAGIC);
-					w.Write((uint)uncompressed.Length);
-					w.Write(uncompressed);
-				}
-			}
+			byte[] bytes = Dat1.Save();
+			using var f = new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.None);
+			using var w = new BinaryWriter(f);
+			w.Write(MAGIC);
+			w.Write((uint)bytes.Length);
+			w.Write(bytes);
 
 			return true;
 		}
