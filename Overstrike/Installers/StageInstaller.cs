@@ -10,26 +10,20 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace Overstrike.Installers {
-	internal class StageInstaller: MSMRInstallerBase {
-		public StageInstaller(TOC_I20 toc, string gamePath) : base(toc, gamePath) {}
+	internal abstract class StageInstallerHelper {
+		protected abstract uint CreateArchive(string filename);
+		protected abstract ZipArchive ReadStageFile();
+		protected abstract void ProcessAsset(byte span, ulong assetId, ZipArchiveEntry entry, uint archiveIndexToWriteInto, BinaryWriter archiveWriter);
+		protected abstract void SortAssets();
 
-		public override void Install(ModEntry mod, int index) {
-			_mod = mod;
-
-			var modsPath = Path.Combine(_gamePath, "asset_archive", "mods");
-			if (mod.Type == ModEntry.ModType.STAGE_RCRA)
-				modsPath = Path.Combine(_gamePath, "d", "mods");
-
-			var modPath = Path.Combine(modsPath, "mod" + index);
-			var relativeModPath = "mods\\mod" + index;
-
-			var newArchiveIndex = _toc.AddNewArchive(relativeModPath, TOC_I20.ArchiveAddingImpl.DEFAULT);
+		public void Work(string modPath, string relativeModPath) {
+			var newArchiveIndex = CreateArchive(relativeModPath);
 
 			using (var f = new FileStream(modPath, FileMode.Create, FileAccess.Write, FileShare.None)) {
 				using (var w = new BinaryWriter(f)) {
-					using (ZipArchive zip = ReadModFile()) {
+					using (ZipArchive zip = ReadStageFile()) {
 						foreach (ZipArchiveEntry entry in zip.Entries) {
-							HandleFileEntry(entry, newArchiveIndex, w);
+							HandleArchiveEntry(entry, newArchiveIndex, w);
 						}
 					}
 				}
@@ -38,23 +32,17 @@ namespace Overstrike.Installers {
 			SortAssets();
 		}
 
-		private void HandleFileEntry(ZipArchiveEntry entry, uint archiveIndexToWriteInto, BinaryWriter archiveWriter) {
+		protected virtual void HandleArchiveEntry(ZipArchiveEntry entry, uint archiveIndexToWriteInto, BinaryWriter archiveWriter) {
 			if (entry.Name == "" && entry.FullName.EndsWith("/")) return; // directory
 
 			byte span;
 			ulong assetId;
 			if (IsAssetFile(entry.FullName, out span, out assetId)) {
-				long archiveOffset = archiveWriter.BaseStream.Position;
-				using (var stream = entry.Open()) {
-					stream.CopyTo(archiveWriter.BaseStream);
-				}
-				long fileSize = archiveWriter.BaseStream.Position - archiveOffset;
-
-				AddOrUpdateAssetEntry(assetId, span, archiveIndexToWriteInto, (uint)archiveOffset, (uint)fileSize);
+				ProcessAsset(span, assetId, entry, archiveIndexToWriteInto, archiveWriter);
 			}
 		}
 
-		private bool IsAssetFile(string path, out byte span, out ulong assetId) {
+		protected static bool IsAssetFile(string path, out byte span, out ulong assetId) {
 			span = 0;
 			assetId = 0;
 
@@ -87,6 +75,68 @@ namespace Overstrike.Installers {
 			}
 
 			return true;
+		}
+	}
+
+	internal class StageInstaller_I20: InstallerBase_I20 {
+		public StageInstaller_I20(TOC_I20 toc, string gamePath): base(toc, gamePath) {}
+
+		public override void Install(ModEntry mod, int index) {
+			_mod = mod;
+
+			var modsPath = Path.Combine(_gamePath, "asset_archive", "mods");
+			var modPath = Path.Combine(modsPath, "mod" + index);
+			var relativeModPath = "mods\\mod" + index;
+
+			new Helper(this).Work(modPath, relativeModPath);
+		}
+
+		class Helper: StageInstallerHelper {
+			private StageInstaller_I20 _outer;
+			public Helper(StageInstaller_I20 outer) {
+				_outer = outer;
+			}
+
+			protected override uint CreateArchive(string filename) => _outer._toc.AddNewArchive(filename, TOCBase.ArchiveAddingImpl.DEFAULT);
+
+			protected override ZipArchive ReadStageFile() => _outer.ReadModFile();
+
+			protected override void ProcessAsset(byte span, ulong assetId, ZipArchiveEntry entry, uint archiveIndexToWriteInto, BinaryWriter archiveWriter) {
+				_outer.OverwriteAsset(span, assetId, archiveIndexToWriteInto, archiveWriter, entry.Open());
+			}
+
+			protected override void SortAssets() => _outer._toc.SortAssets();
+		}
+	}
+
+	internal class StageInstaller_I29: InstallerBase_I29 {
+		public StageInstaller_I29(TOC_I29 toc, string gamePath): base(toc, gamePath) {}
+
+		public override void Install(ModEntry mod, int index) {
+			_mod = mod;
+
+			var modsPath = Path.Combine(_gamePath, "d", "mods");
+			var modPath = Path.Combine(modsPath, "mod" + index);
+			var relativeModPath = "d\\mods\\mod" + index;
+
+			new Helper(this).Work(modPath, relativeModPath);
+		}
+
+		class Helper: StageInstallerHelper {
+			private StageInstaller_I29 _outer;
+			public Helper(StageInstaller_I29 outer) {
+				_outer = outer;
+			}
+
+			protected override uint CreateArchive(string filename) => _outer._toc.AddNewArchive(filename, TOCBase.ArchiveAddingImpl.DEFAULT);
+
+			protected override ZipArchive ReadStageFile() => _outer.ReadModFile();
+
+			protected override void ProcessAsset(byte span, ulong assetId, ZipArchiveEntry entry, uint archiveIndexToWriteInto, BinaryWriter archiveWriter) {
+				_outer.OverwriteAsset(span, assetId, archiveIndexToWriteInto, archiveWriter, entry.Open(), true);
+			}
+
+			protected override void SortAssets() => _outer._toc.SortAssets();
 		}
 	}
 }

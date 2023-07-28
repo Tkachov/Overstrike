@@ -44,7 +44,7 @@ namespace Overstrike.MetaInstallers {
 		private InstallerBase GetInstaller(ModEntry mod, TOC_I29 toc) {
 			switch (mod.Type) {
 				case ModEntry.ModType.STAGE_RCRA:
-					return new RCRAStageInstaller(toc, _gamePath);
+					return new StageInstaller_I29(toc, _gamePath);
 
 				default:
 					return null;

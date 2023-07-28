@@ -29,7 +29,7 @@ namespace Overstrike.Installers {
 				// WriteLanguageEn(suitsPath, id); // TODO: support name.txt
 			}
 
-			SortAssets();
+			_toc.SortAssets();
 		}
 
 		private void WriteAssetsFile(ZipArchive zip, string suitsPath, string id) {
@@ -64,7 +64,7 @@ namespace Overstrike.Installers {
 					ulong assetId = r.ReadUInt64();
 					byte span = r.ReadByte();
 
-					AddOrUpdateAssetEntry(assetId, span, suitArchiveIndex, offset, size);
+					AddOrUpdateAssetEntry(span, assetId, suitArchiveIndex, offset, size);
 				}
 			}
 		}
@@ -104,14 +104,14 @@ namespace Overstrike.Installers {
 			uint offset = 0;
 			foreach (var asset in assets) {
 				w.Write(asset.bytes);
-				AddOrUpdateAssetEntry(asset.assetId, /*span*/0, archiveIndex, offset, (uint)asset.bytes.Length);
+				AddOrUpdateAssetEntry(0, asset.assetId, archiveIndex, offset, (uint)asset.bytes.Length);
 				offset += (uint)asset.bytes.Length;
 			}
 		}
 
 		private AssetToWrite ModBase1(string id) {
 			const ulong SYSTEM_PROGRESSION_CONFIG_AID = 0x9C9C72A303FCFA30; // configs/system/system_progression.config
-			var config = new Config(GetAssetReader(SYSTEM_PROGRESSION_CONFIG_AID));
+			var config = new Config(_toc.GetAssetReader(SYSTEM_PROGRESSION_CONFIG_AID));
 
 			// references
 			var rewardRef = "configs\\inventory\\inv_reward_loadout_" + id + ".config";
@@ -169,7 +169,7 @@ namespace Overstrike.Installers {
 		private AssetToWrite ModBase2(string id) {
 			const ulong MASTERITEMLOADOUTLIST_CONFIG_AID = 0x9550E5741C2C7114; // configs/masteritemloadoutlist/masteritemloadoutlist.config
 
-			var config = new Config(GetAssetReader(MASTERITEMLOADOUTLIST_CONFIG_AID));
+			var config = new Config(_toc.GetAssetReader(MASTERITEMLOADOUTLIST_CONFIG_AID));
 
 			// references
 			var configRef = "configs\\masteritemloadoutlist\\itemloadout_spiderman_" + id + ".config";
@@ -203,7 +203,7 @@ namespace Overstrike.Installers {
 		private AssetToWrite ModBase3(string id) {
 			const ulong VANITYMASTERLIST_CONFIG_AID = 0x9CEADD22304ADD84; // configs/vanitymasterlist/vanitymasterlist.config
 
-			var config = new Config(GetAssetReader(VANITYMASTERLIST_CONFIG_AID));
+			var config = new Config(_toc.GetAssetReader(VANITYMASTERLIST_CONFIG_AID));
 			ModVanityConfig(config, id);
 
 			return new AssetToWrite {
@@ -215,7 +215,7 @@ namespace Overstrike.Installers {
 		private AssetToWrite ModBase4(string id) {
 			const ulong VANITYMASTERLISTLAUNCH_CONFIG_AID = 0x939887A999564798; // configs/vanitymasterlist/vanitymasterlistlaunch.config
 
-			var config = new Config(GetAssetReader(VANITYMASTERLISTLAUNCH_CONFIG_AID));
+			var config = new Config(_toc.GetAssetReader(VANITYMASTERLISTLAUNCH_CONFIG_AID));
 			ModVanityConfig(config, id);
 
 			return new AssetToWrite {
@@ -249,7 +249,7 @@ namespace Overstrike.Installers {
 		private AssetToWrite ModBase5(string id) {
 			const ulong CHARACTERLIST_CONFIG_AID = 0xB596B20DFC3C2820; // configs/hero/hero_characterlistconfig.config
 
-			var config = new Config(GetAssetReader(CHARACTERLIST_CONFIG_AID));
+			var config = new Config(_toc.GetAssetReader(CHARACTERLIST_CONFIG_AID));
 
 			// references
 			var defaultLoadoutRef = "configs\\masteritemloadoutlist\\itemloadout_spiderman_" + id + ".config";
@@ -312,7 +312,7 @@ namespace Overstrike.Installers {
 			}
 
 			const ulong LOCALIZATION_AID = 0xBE55D94F171BF8DE; // localization/localization_all.localization
-			byte[] asset = GetAssetBytes(LOCALIZATION_AID);
+			byte[] asset = _toc.GetAssetBytes(LOCALIZATION_AID);
 			WriteArchive(suitsPath, "languages\\base_en", LOCALIZATION_AID, 8, asset);
 		}
 	}

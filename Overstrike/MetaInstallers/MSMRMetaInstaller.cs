@@ -67,7 +67,7 @@ namespace Overstrike.MetaInstallers {
 
 				case ModEntry.ModType.STAGE_MSMR:
 				case ModEntry.ModType.STAGE_MM:
-					return new StageInstaller(toc, _gamePath);
+					return new StageInstaller_I20(toc, _gamePath);
 
 				default:
 					return null;

@@ -9,7 +9,7 @@ using System.IO;
 using System.IO.Compression;
 
 namespace Overstrike.Installers {
-	internal abstract class SuitInstallerBase: MSMRInstallerBase {
+	internal abstract class SuitInstallerBase: InstallerBase_I20 {
 		protected SuitInstallerBase(TOC_I20 toc, string gamePath) : base(toc, gamePath) {}
 
 		#region .suit
@@ -31,11 +31,11 @@ namespace Overstrike.Installers {
 		#endregion
 		#region toc
 
-		protected uint GetArchiveIndex(string filename) => GetArchiveIndex(filename, TOC_I20.ArchiveAddingImpl.SUITTOOL);
+		protected uint GetArchiveIndex(string filename) => _toc.FindOrAddArchive(filename, TOCBase.ArchiveAddingImpl.SUITTOOL);
 
 		protected void WriteArchive(string archivePath, uint archiveIndex, ulong assetId, byte span, byte[] bytes) {
 			File.WriteAllBytes(archivePath, bytes);
-			AddOrUpdateAssetEntry(assetId, span, archiveIndex, /*offset=*/0, (uint)bytes.Length);
+			AddOrUpdateAssetEntry(span, assetId, archiveIndex, /*offset=*/0, (uint)bytes.Length);
 		}
 
 		protected void WriteArchive(string suitsPath, string archiveName, ulong assetId, byte[] bytes) {
@@ -51,7 +51,7 @@ namespace Overstrike.Installers {
 		#endregion
 		#region .config
 
-		protected void AddConfigReference(Config config, string path) {
+		protected void AddConfigReference(Config config, string path) { // TODO: make it a method of Config
 			ulong aid = CRC64.Hash(path);
 			foreach (var entry in config.ReferencesSection.Entries) {
 				if (entry.AssetId == aid) {

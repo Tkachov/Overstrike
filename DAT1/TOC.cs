@@ -11,12 +11,6 @@ using System.IO;
 using System.Text;
 
 namespace DAT1 {
-	public class AssetEntryBase {
-		public int index;
-		public ulong id;
-		public uint archive;
-	}
-
 	/*
 		i16 SO
 		i20 MSMR
@@ -37,18 +31,34 @@ namespace DAT1 {
 		public abstract bool Load(string filename);
 		public abstract bool Save(string filename);
 
-		public virtual AssetEntryBase[] FindAssetEntriesByPath(string assetPath, bool stopOnFirst = false) {
-			return FindAssetEntriesById(CRC64.Hash(assetPath), stopOnFirst);
+		#region assets
+
+		#region find asset indexes
+
+		public virtual int FindAssetIndex(byte span, ulong assetId) {
+			var spanEntry = SpansSection.Entries[span];
+			var begin = spanEntry.AssetIndex;
+			var end = begin + spanEntry.Count;
+			for (int index = (int)begin; index < end; ++index) {
+				if (AssetIdsSection.Ids[index] == assetId)
+					return index;
+			}
+
+			return -1;
 		}
 
-		public virtual AssetEntryBase[] FindAssetEntriesById(ulong assetId, bool stopOnFirst = false) {
-			List<AssetEntryBase> results = new();
+		public virtual int[] FindAssetIndexesByPath(string assetPath, bool stopOnFirst = false) {
+			return FindAssetIndexesById(CRC64.Hash(assetPath), stopOnFirst);
+		}
+
+		public virtual int[] FindAssetIndexesById(ulong assetId, bool stopOnFirst = false) {
+			List<int> results = new();
 
 			if (IsLoaded) {
 				var ids = AssetIdsSection.Ids;
 				for (int i = 0; i < ids.Count; ++i) { // linear search =\
 					if (ids[i] == assetId) {
-						results.Add(GetAssetEntryByIndex(i));
+						results.Add(i);
 						if (stopOnFirst) break;
 					}
 				}
@@ -57,32 +67,148 @@ namespace DAT1 {
 			return results.ToArray();
 		}
 
-		public virtual AssetEntryBase FindAssetEntryByPath(string assetPath) {
-			return FindAssetEntriesByPath(assetPath, true)[0];
+		public virtual int FindFirstAssetIndexByPath(string assetPath) {
+			var arr = FindAssetIndexesByPath(assetPath, true);
+			return (arr.Length > 0 ? arr[0] : -1);
 		}
 
-		public virtual AssetEntryBase FindAssetEntryById(ulong assetId) {
-			return FindAssetEntriesById(assetId, true)[0];
+		public virtual int FindFirstAssetIndexById(ulong assetId) {
+			var arr = FindAssetIndexesById(assetId, true);
+			return (arr.Length > 0 ? arr[0] : -1);
 		}
 
-		public abstract AssetEntryBase GetAssetEntryByIndex(int index);
+		#endregion
+		#region get asset info by index
+
+		public virtual ulong? GetAssetIdByAssetIndex(int index) => (0 <= index && index < AssetIdsSection.Ids.Count ? AssetIdsSection.Ids[index] : null);
+
+		public virtual byte? GetSpanIndexByAssetIndex(int assetIndex) {
+			byte span = 0;
+			foreach (var entry in SpansSection.Entries) {
+				if (entry.AssetIndex <= assetIndex && assetIndex < entry.AssetIndex + entry.Count) {
+					return span;
+				}
+
+				++span;
+			}
+
+			return null;
+		}
+
+		public virtual uint? GetArchiveIndexByAssetIndex(int index) => (0 <= index && index < OffsetsSection.Entries.Count ? OffsetsSection.Entries[index].ArchiveIndex : null);
+
+		public virtual uint? GetOffsetInArchiveByAssetIndex(int index) => (0 <= index && index < OffsetsSection.Entries.Count ? OffsetsSection.Entries[index].Offset : null);
+
+		public abstract uint? GetSizeInArchiveByAssetIndex(int index);
+
+		#endregion
+		#region extract asset
 
 		public virtual byte[] ExtractAsset(int index) {
-			return ExtractAsset(GetAssetEntryByIndex(index));
+			if (!IsLoaded) return null;
+
+			var archiveIndex = GetArchiveIndexByAssetIndex(index);
+			var archiveOffset = GetOffsetInArchiveByAssetIndex(index);
+			var size = GetSizeInArchiveByAssetIndex(index);
+			if (archiveIndex == null || archiveOffset == null || size == null) return null;
+
+			var archiveName = GetArchiveFilename((uint)archiveIndex);
+			var archive = OpenArchive(archiveName);
+			return DSAR.ExtractAsset(archive, (int)archiveOffset, (int)size);
 		}
 
-		public abstract byte[] ExtractAsset(AssetEntryBase AssetBase);
+		public byte[] GetAssetBytes(byte span, ulong assetId) => ExtractAsset(FindAssetIndex(span, assetId));
+		public byte[] GetAssetBytes(ulong assetId) => ExtractAsset(FindFirstAssetIndexById(assetId));
+		public byte[] GetAssetBytes(string path) => ExtractAsset(FindFirstAssetIndexByPath(path));
 
-		protected class BlockHeader {
-			public uint realOffset;
-			//public uint unk1;
-			public uint compOffset;
-			//public uint unk2;
-			public uint realSize;
-			public uint compSize;
-			//public uint unk3;
-			//public uint unk4;
+		public BinaryReader GetAssetReader(byte span, ulong assetId) => new(new MemoryStream(GetAssetBytes(span, assetId)));
+		public BinaryReader GetAssetReader(ulong assetId) => new(new MemoryStream(GetAssetBytes(assetId)));
+		public BinaryReader GetAssetReader(string path) => new(new MemoryStream(GetAssetBytes(path)));
+
+		#endregion
+		#region modify assets
+
+		/*
+			Adds a new asset into all required TOC sections and returns index of that asset.
+			Some of the structures will not be filled with valid values!
+			Assets order will be invalid, so SortAssets() call is required!
+		*/
+		public abstract int AddAsset(byte span, ulong assetId);
+
+		public virtual void UpdateAsset(AssetUpdaterBase updater) {
+			updater.Apply(this);
 		}
+
+		public abstract void SortAssets();
+
+		public virtual int FindOrAddAsset(byte span, ulong assetId) {
+			int assetIndex = FindAssetIndex(span, assetId);
+			if (assetIndex == -1) {
+				assetIndex = AddAsset(span, assetId);
+			}
+			return assetIndex;
+		}
+
+		public abstract class AssetUpdaterBase {
+			protected int _index;
+
+			protected bool _updateAssetId = false;
+			protected ulong _assetId;
+
+			protected bool _updateArchiveIndex = false;
+			protected uint _archiveIndex;
+
+			protected bool _updateArchiveOffset = false;
+			protected uint _archiveOffset;
+
+			protected bool _updateSize = false;
+			protected uint _size;
+
+			public AssetUpdaterBase(int index) {
+				_index = index;
+			}
+
+			public AssetUpdaterBase UpdateAssetId(ulong assetId) {
+				_updateAssetId = true;
+				_assetId = assetId;
+				return this;
+			}
+
+			public AssetUpdaterBase UpdateArchiveIndex(uint archiveIndex) {
+				_updateArchiveIndex = true;
+				_archiveIndex = archiveIndex;
+				return this;
+			}
+
+			public AssetUpdaterBase UpdateArchiveOffset(uint offset) {
+				_updateArchiveOffset = true;
+				_archiveOffset = offset;
+				return this;
+			}
+
+			public AssetUpdaterBase UpdateSize(uint size) {
+				_updateSize = true;
+				_size = size;
+				return this;
+			}
+
+			public abstract void Apply(TOCBase toc);
+		}
+
+		#endregion
+		
+		#endregion
+		#region archives
+
+		protected abstract uint GetArchivesCount();
+		protected abstract string GetArchiveFilename(uint index);
+
+		protected virtual FileStream OpenArchive(string fn) {
+			string full = Path.Combine(AssetArchivePath, fn);
+			return File.OpenRead(full);
+		}
+
+		#region modify archives
 
 		public enum ArchiveAddingImpl {
 			DEFAULT,
@@ -92,12 +218,19 @@ namespace DAT1 {
 
 		public abstract uint AddNewArchive(string filename, ArchiveAddingImpl impl = ArchiveAddingImpl.DEFAULT);
 
-		protected abstract FileStream OpenArchive(uint index);
+		public uint FindOrAddArchive(string filename, ArchiveAddingImpl mode) {
+			for (uint index = 0; index < GetArchivesCount(); ++index) {
+				if (GetArchiveFilename(index) == filename) {
+					return index;
+				}
+			}
 
-		protected virtual FileStream OpenArchive(string fn) {
-			string full = Path.Combine(AssetArchivePath, fn);
-			return File.OpenRead(full);
+			return AddNewArchive(filename, mode);
 		}
+
+		#endregion
+		
+		#endregion
 	}
 
 	public class TOC_I20: TOCBase {
@@ -105,11 +238,6 @@ namespace DAT1 {
 
 		public SizeEntriesSection_I16 SizesSection => Dat1.Section<SizeEntriesSection_I16>(SizeEntriesSection_I16.TAG);
 		public ArchivesMapSection_I20 ArchivesSection => Dat1.Section<ArchivesMapSection_I20>(ArchivesMapSection_I20.TAG);
-
-		public class AssetEntry: AssetEntryBase {
-			public uint offset;
-			public uint size;
-		}
 
 		public override bool Load(string filename) {
 			try {
@@ -168,44 +296,95 @@ namespace DAT1 {
 			return true;
 		}
 
-        public override AssetEntryBase GetAssetEntryByIndex(int index) {
-			try {
-				AssetEntry result = new() {
-					index = index,
-					id = AssetIdsSection.Ids[index],
-					archive = OffsetsSection.Entries[index].ArchiveIndex,
-					offset = OffsetsSection.Entries[index].Offset,
-					size = SizesSection.Entries[index].Value
+		#region assets
+
+		#region get asset info by index
+
+		public override uint? GetSizeInArchiveByAssetIndex(int index) => (0 <= index && index < SizesSection.Entries.Count ? SizesSection.Entries[index].Value : null);
+
+		#endregion
+		#region modify assets
+
+		public override int AddAsset(byte span, ulong assetId) {
+			var spansSection = SpansSection;
+			var spanEntry = spansSection.Entries[span];
+			var assetIndex = (int)(spanEntry.AssetIndex + spanEntry.Count); // TODO: insert into right place
+
+			++spanEntry.Count;
+			for (int i = span + 1; i < spansSection.Entries.Count; ++i) {
+				++spansSection.Entries[i].AssetIndex;
+			}
+
+			AssetIdsSection.Ids.Insert(assetIndex, assetId);
+			SizesSection.Entries.Insert(assetIndex, new SizeEntriesSection_I16.SizeEntry() { Always1 = 1, Index = (uint)assetIndex, Value = 0 });
+			OffsetsSection.Entries.Insert(assetIndex, new OffsetsSection.OffsetEntry() { ArchiveIndex = 0, Offset = 0 });
+
+			return assetIndex;
+		}
+
+		public class AssetUpdater: AssetUpdaterBase {
+			public AssetUpdater(int index) : base(index) { }
+
+			public override void Apply(TOCBase toc) {
+				if (_updateAssetId)
+					toc.AssetIdsSection.Ids[_index] = _assetId;
+
+				if (_updateArchiveIndex)
+					toc.OffsetsSection.Entries[_index].ArchiveIndex = _archiveIndex;
+
+				if (_updateArchiveOffset)
+					toc.OffsetsSection.Entries[_index].Offset = _archiveOffset;
+
+				TOC_I20? toc_i20 = toc as TOC_I20;
+				if (toc_i20 != null) {
+					if (_updateSize)
+						toc_i20.SizesSection.Entries[_index].Value = _size;
+				}
+			}
+		}
+
+		public override void SortAssets() {
+			var ids = AssetIdsSection.Ids;
+			var sizes = SizesSection.Entries;
+			var offsets = OffsetsSection.Entries;
+
+			foreach (var span in SpansSection.Entries) {
+				var start = span.AssetIndex;
+				var end = span.AssetIndex + span.Count;
+
+				var assets = new List<(ulong Id, SizeEntriesSection_I16.SizeEntry Size, OffsetsSection.OffsetEntry Offset)>();
+				for (int i = (int)start; i < end; ++i) {
+					assets.Add((ids[i], sizes[i], offsets[i]));
+				}
+
+				var compare = (ulong a, ulong b) => {
+					if (a == b) return 0;
+					return (a < b ? -1 : 1);
 				};
-				return result;
-            } catch (Exception) {}
+				assets.Sort((x, y) => compare(x.Id, y.Id));
 
-            return null;
+				for (int i = (int)start; i < end; ++i) {
+					int j = (int)(i - start);
+					ids[i] = assets[j].Id;
+					sizes[i] = assets[j].Size;
+					offsets[i] = assets[j].Offset;
+				}
+			}
+
+			for (var i = 0; i < ids.Count; ++i) {
+				sizes[i].Index = (uint)i;
+			}
 		}
 
-		public void UpdateAssetEntry(AssetEntry entry) {
-			int index = entry.index;
-			AssetIdsSection.Ids[index] = entry.id;
-			OffsetsSection.Entries[index].ArchiveIndex = entry.archive;
-			OffsetsSection.Entries[index].Offset = entry.offset;
-			SizesSection.Entries[index].Value = entry.size;
-		}
+		#endregion
 
-        public override byte[] ExtractAsset(AssetEntryBase AssetBase)
-		{
-			if (!IsLoaded)
-				return null;
+		#endregion
+		#region archives
 
-			AssetEntry Asset = (AssetEntry)AssetBase;
-			if (Asset == null)
-				return null;
+		protected override uint GetArchivesCount() => (uint)ArchivesSection.Entries.Count;
+		protected override string GetArchiveFilename(uint index) => ArchivesSection.Entries[(int)index].GetFilename();
 
-			return DSAR.ExtractAsset(OpenArchive(Asset.archive), (int)Asset.offset, (int)Asset.size);
-        }
-
-		protected override FileStream OpenArchive(uint index) { 
-			return OpenArchive(ArchivesSection.Entries[(int)index].GetFilename());
-		}
+		#region modify archives
 
 		public override uint AddNewArchive(string filename, ArchiveAddingImpl impl = ArchiveAddingImpl.DEFAULT) {
 			switch (impl) {
@@ -273,5 +452,209 @@ namespace DAT1 {
 
 			return (uint)index;
 		}
+
+		#endregion
+
+		#endregion
+	}
+
+	public class TOC_I29: TOCBase {
+		private const uint MAGIC = 0x34E89035;
+
+		public AssetHeadersSection AssetHeadersSection => Dat1.Section<AssetHeadersSection>(AssetHeadersSection.TAG);
+		public SizeEntriesSection_I29 SizesSection => Dat1.Section<SizeEntriesSection_I29>(SizeEntriesSection_I29.TAG);
+		public ArchivesMapSection_I29 ArchivesSection => Dat1.Section<ArchivesMapSection_I29>(ArchivesMapSection_I29.TAG);
+
+		public override bool Load(string filename) {
+			try {
+				var f = File.OpenRead(filename);
+				var r = new BinaryReader(f);
+				uint magic = r.ReadUInt32();
+				if (magic != MAGIC) {
+					return false;
+				}
+
+				uint uncompressedLength = r.ReadUInt32();
+
+				int length = (int)(f.Length - 8);
+				byte[] bytes = r.ReadBytes(length);
+				r.Close();
+				r.Dispose();
+				f.Close();
+				f.Dispose();
+
+				Dat1 = new DAT1(new BinaryReader(new MemoryStream(bytes)));
+				AssetArchivePath = Path.GetDirectoryName(filename);
+				return true;
+			} catch (Exception e) {
+				return false;
+			}
+		}
+
+		public override bool Save(string filename) {
+			if (!IsLoaded)
+				return false;
+
+			byte[] uncompressed = Dat1.Save();
+
+			using (var f = new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.None)) {
+				using (var w = new BinaryWriter(f)) {
+					w.Write((uint)MAGIC);
+					w.Write((uint)uncompressed.Length);
+					w.Write(uncompressed);
+				}
+			}
+
+			return true;
+		}
+
+		#region assets
+
+		#region get asset info by index
+
+		public override uint? GetSizeInArchiveByAssetIndex(int index) => (0 <= index && index < SizesSection.Entries.Count ? SizesSection.Entries[index].Size : null);
+
+		public virtual int? GetHeaderOffsetByAssetIndex(int index) => (0 <= index && index < SizesSection.Entries.Count ? SizesSection.Entries[index].HeaderOffset : null);
+
+		public virtual byte[] GetHeaderByAssetIndex(int index) {
+			var header_offset = GetHeaderOffsetByAssetIndex(index);
+			if (header_offset == null) return null;
+			if (header_offset == -1) return null;
+			return AssetHeadersSection.Headers[(int)header_offset / 36];
+		}
+
+		#endregion
+		#region extract asset
+
+		public override byte[] ExtractAsset(int index) {
+			byte[] body = base.ExtractAsset(index);
+			if (body == null) return null;
+
+			var header = GetHeaderByAssetIndex(index);
+			if (header == null) {
+				return body;
+			}
+
+			int real_size = body.Length + header.Length;
+			byte[] bytes = new byte[real_size];
+			header.CopyTo(bytes, 0);
+			body.CopyTo(bytes, header.Length);
+			return bytes;
+		}
+
+		#endregion
+		#region modify assets
+
+		public override int AddAsset(byte span, ulong assetId) {
+			throw new NotImplementedException();
+		}
+
+		public class AssetUpdater: AssetUpdaterBase {
+			protected bool _updateHeader;
+			protected byte[]? _header;
+
+			public AssetUpdater(int index) : base(index) { }
+
+			public AssetUpdater UpdateHeader(byte[]? header) {
+				_updateHeader = true;
+				_header = header;
+				return this;
+			}
+
+			public override void Apply(TOCBase toc) {
+				if (_updateAssetId)
+					toc.AssetIdsSection.Ids[_index] = _assetId;
+
+				TOC_I29? toc_i29 = toc as TOC_I29;
+				if (toc_i29 != null) {
+					if (_updateArchiveIndex)
+						toc_i29.SizesSection.Entries[_index].ArchiveIndex = _archiveIndex;
+
+					if (_updateArchiveOffset)
+						toc_i29.SizesSection.Entries[_index].Offset = _archiveOffset;
+
+					if (_updateSize)
+						toc_i29.SizesSection.Entries[_index].Size = _size;
+
+					if (_updateHeader) {
+						if (_header == null) {
+							toc_i29.SizesSection.Entries[_index].HeaderOffset = -1;
+						} else {
+							var header_offset = toc_i29.SizesSection.Entries[_index].HeaderOffset;
+							if (header_offset == -1) {
+								var header_index = toc_i29.AssetHeadersSection.Headers.Count;
+								toc_i29.AssetHeadersSection.Headers.Add(_header);
+								toc_i29.SizesSection.Entries[_index].HeaderOffset = header_index * 36;
+							} else {
+								var header_index = header_offset / 36;
+								toc_i29.AssetHeadersSection.Headers[header_index] = _header;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		public override void SortAssets() {
+			var ids = AssetIdsSection.Ids;
+			var sizes = SizesSection.Entries;
+
+			foreach (var span in SpansSection.Entries) {
+				var start = span.AssetIndex;
+				var end = span.AssetIndex + span.Count;
+
+				var assets = new List<(ulong Id, SizeEntriesSection_I29.SizeEntry Size)>();
+				for (int i = (int)start; i < end; ++i) {
+					assets.Add((ids[i], sizes[i]));
+				}
+
+				var compare = (ulong a, ulong b) => {
+					if (a == b) return 0;
+					return (a < b ? -1 : 1);
+				};
+				assets.Sort((x, y) => compare(x.Id, y.Id));
+
+				for (int i = (int)start; i < end; ++i) {
+					int j = (int)(i - start);
+					ids[i] = assets[j].Id;
+					sizes[i] = assets[j].Size;
+				}
+			}
+		}
+
+		#endregion
+
+		#endregion
+		#region archives
+
+		protected override uint GetArchivesCount() => (uint)ArchivesSection.Entries.Count;
+		protected override string GetArchiveFilename(uint index) => ArchivesSection.Entries[(int)index].GetFilename();
+
+		#region modify archives
+
+		public override uint AddNewArchive(string filename, ArchiveAddingImpl ignored = ArchiveAddingImpl.DEFAULT) {
+			int index = ArchivesSection.Entries.Count;
+
+			byte[] bytes = new byte[40];
+			for (int i = 0; i < 40; ++i) bytes[i] = 0;
+			byte[] fn = Encoding.ASCII.GetBytes(filename);
+			fn.CopyTo(bytes, 0);
+			bytes[fn.Length] = 0;
+
+			ArchivesSection.Entries.Add(new ArchivesMapSection_I29.ArchiveFileEntry() {
+				Filename = bytes,
+				A = 2678794514496,
+				B = 2678794514496,
+				C = 3844228203,
+				D = 32763,
+				E = 0
+			});
+
+			return (uint)index;
+		}
+
+		#endregion
+
+		#endregion
 	}
 }
