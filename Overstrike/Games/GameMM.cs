@@ -29,7 +29,7 @@ namespace Overstrike.Games {
 		}
 
 		public override MetaInstallerBase GetMetaInstaller(string gamePath) {
-			return new MSMRMetaInstaller(gamePath);
+			return new MetaInstaller_I20(gamePath);
 		}
 	}
 }

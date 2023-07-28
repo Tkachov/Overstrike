@@ -10,7 +10,7 @@ using System.IO.Compression;
 
 namespace Overstrike.Installers {
 	internal abstract class SuitInstallerBase: InstallerBase_I20 {
-		protected SuitInstallerBase(TOC_I20 toc, string gamePath) : base(toc, gamePath) {}
+		protected SuitInstallerBase(TOC_I20 toc, string gamePath): base(toc, gamePath) {}
 
 		#region .suit
 

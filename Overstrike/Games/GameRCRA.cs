@@ -26,7 +26,7 @@ namespace Overstrike.Games {
 		}
 
 		public override MetaInstallerBase GetMetaInstaller(string gamePath) {
-			return new RCRAMetaInstaller(gamePath);
+			return new MetaInstaller_I29(gamePath);
 		}
 	}
 }

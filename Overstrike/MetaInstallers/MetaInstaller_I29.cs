@@ -8,9 +8,8 @@ using System.IO;
 using Overstrike.Installers;
 
 namespace Overstrike.MetaInstallers {
-	internal class RCRAMetaInstaller: MetaInstallerBase {
-		public RCRAMetaInstaller(string gamePath) : base(gamePath) {
-		}
+	internal class MetaInstaller_I29: MetaInstallerBase {
+		public MetaInstaller_I29(string gamePath): base(gamePath) {}
 
 		public override void Prepare() {
 			var tocPath = Path.Combine(_gamePath, "toc");
@@ -37,14 +36,14 @@ namespace Overstrike.MetaInstallers {
 		}
 
 		public override void Install(ModEntry mod, int index) {
-			var installer = GetInstaller(mod, _toc);
+			var installer = GetInstaller(mod);
 			installer.Install(mod, index);
 		}
 
-		private InstallerBase GetInstaller(ModEntry mod, TOC_I29 toc) {
+		private InstallerBase GetInstaller(ModEntry mod) {
 			switch (mod.Type) {
 				case ModEntry.ModType.STAGE_RCRA:
-					return new StageInstaller_I29(toc, _gamePath);
+					return new StageInstaller_I29(_toc, _gamePath);
 
 				default:
 					return null;

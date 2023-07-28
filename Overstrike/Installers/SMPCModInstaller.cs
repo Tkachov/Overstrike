@@ -13,7 +13,7 @@ namespace Overstrike.Installers {
 	internal class SMPCModInstaller: InstallerBase_I20 {
 		private TOC_I20 _unchangedToc;
 
-		public SMPCModInstaller(TOC_I20 toc, TOC_I20 unchangedToc, string gamePath) : base(toc, gamePath) {
+		public SMPCModInstaller(TOC_I20 toc, TOC_I20 unchangedToc, string gamePath): base(toc, gamePath) {
 			_unchangedToc = unchangedToc;
 		}
 

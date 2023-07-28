@@ -31,6 +31,7 @@ namespace Overstrike {
 		private void DetectGameInstallations() {
 			TryDetectGameAssetArchiveDirFile();
 
+			// TODO: move these lines into Game* classes
 			TryDetectGameAllDisks("MSMR (Steam)", ":\\Program Files (x86)\\Steam\\steamapps\\common\\Marvel's Spider-Man Remastered");
 			TryDetectGameAllDisks("MSMR (Steam)", ":\\Program Files\\Steam\\steamapps\\common\\Marvel's Spider-Man Remastered");
 			TryDetectGameAllDisks("MSMR (Steam)", ":\\SteamLibrary\\steamapps\\common\\Marvel's Spider-Man Remastered");

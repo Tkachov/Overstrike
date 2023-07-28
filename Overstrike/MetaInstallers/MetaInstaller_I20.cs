@@ -8,9 +8,8 @@ using System.IO;
 using Overstrike.Installers;
 
 namespace Overstrike.MetaInstallers {
-	internal class MSMRMetaInstaller: MetaInstallerBase {
-		public MSMRMetaInstaller(string gamePath) : base(gamePath) {
-		}
+	internal class MetaInstaller_I20: MetaInstallerBase {
+		public MetaInstaller_I20(string gamePath): base(gamePath) {}
 
 		public override void Prepare() {
 			var tocPath = Path.Combine(_gamePath, "asset_archive", "toc");
@@ -46,28 +45,28 @@ namespace Overstrike.MetaInstallers {
 		}
 
 		public override void Install(ModEntry mod, int index) {
-			var installer = GetInstaller(mod, _toc, _unchangedToc);
+			var installer = GetInstaller(mod);
 			installer.Install(mod, index);
 		}
 
-		private InstallerBase GetInstaller(ModEntry mod, TOC_I20 toc, TOC_I20 unchangedToc) {
+		private InstallerBase GetInstaller(ModEntry mod) {
 			switch (mod.Type) {
 				case ModEntry.ModType.SMPC:
 				case ModEntry.ModType.MMPC:
-					return new SMPCModInstaller(toc, unchangedToc, _gamePath);
+					return new SMPCModInstaller(_toc, _unchangedToc, _gamePath);
 
 				case ModEntry.ModType.SUIT_MSMR:
-					return new MSMRSuitInstaller(toc, _gamePath);
+					return new MSMRSuitInstaller(_toc, _gamePath);
 
 				case ModEntry.ModType.SUIT_MM:
-					return new MMSuit1Installer(toc, _gamePath);
+					return new MMSuit1Installer(_toc, _gamePath);
 
 				case ModEntry.ModType.SUIT_MM_V2:
-					return new MMSuit2Installer(toc, _gamePath);
+					return new MMSuit2Installer(_toc, _gamePath);
 
 				case ModEntry.ModType.STAGE_MSMR:
 				case ModEntry.ModType.STAGE_MM:
-					return new StageInstaller_I20(toc, _gamePath);
+					return new StageInstaller_I20(_toc, _gamePath);
 
 				default:
 					return null;
