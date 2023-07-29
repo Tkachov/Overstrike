@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StageConverter", "StageConv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArchiveExtractor", "ArchiveExtractor\ArchiveExtractor.csproj", "{16CA2F18-D0F0-4BC1-B729-FC103A3E6DE8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WemExtractor", "WemExtractor\WemExtractor.csproj", "{1EEC6064-B977-4419-8C90-AFE276B8F1BB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{16CA2F18-D0F0-4BC1-B729-FC103A3E6DE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{16CA2F18-D0F0-4BC1-B729-FC103A3E6DE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{16CA2F18-D0F0-4BC1-B729-FC103A3E6DE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1EEC6064-B977-4419-8C90-AFE276B8F1BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EEC6064-B977-4419-8C90-AFE276B8F1BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EEC6064-B977-4419-8C90-AFE276B8F1BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EEC6064-B977-4419-8C90-AFE276B8F1BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
