@@ -25,7 +25,6 @@ namespace DAT1 {
 		public bool IsLoaded => Dat1 != null;
 
 		public AssetIdsSection AssetIdsSection => Dat1.Section<AssetIdsSection>(AssetIdsSection.TAG);
-		public OffsetsSection OffsetsSection => Dat1.Section<OffsetsSection>(OffsetsSection.TAG);
 		public SpansSection SpansSection => Dat1.Section<SpansSection>(SpansSection.TAG);
 
 		public abstract bool Load(string filename);
@@ -95,10 +94,8 @@ namespace DAT1 {
 			return null;
 		}
 
-		public virtual uint? GetArchiveIndexByAssetIndex(int index) => (0 <= index && index < OffsetsSection.Entries.Count ? OffsetsSection.Entries[index].ArchiveIndex : null);
-
-		public virtual uint? GetOffsetInArchiveByAssetIndex(int index) => (0 <= index && index < OffsetsSection.Entries.Count ? OffsetsSection.Entries[index].Offset : null);
-
+		public abstract uint? GetArchiveIndexByAssetIndex(int index);
+		public abstract uint? GetOffsetInArchiveByAssetIndex(int index);
 		public abstract uint? GetSizeInArchiveByAssetIndex(int index);
 
 		#endregion
@@ -200,8 +197,8 @@ namespace DAT1 {
 		#endregion
 		#region archives
 
-		protected abstract uint GetArchivesCount();
-		protected abstract string GetArchiveFilename(uint index);
+		public abstract uint GetArchivesCount();
+		public abstract string GetArchiveFilename(uint index);
 
 		protected virtual FileStream OpenArchive(string fn) {
 			string full = Path.Combine(AssetArchivePath, fn);
@@ -236,6 +233,7 @@ namespace DAT1 {
 	public class TOC_I20: TOCBase {
 		private const uint MAGIC = 0x77AF12AF;
 
+		public OffsetsSection OffsetsSection => Dat1.Section<OffsetsSection>(OffsetsSection.TAG);
 		public SizeEntriesSection_I16 SizesSection => Dat1.Section<SizeEntriesSection_I16>(SizeEntriesSection_I16.TAG);
 		public ArchivesMapSection_I20 ArchivesSection => Dat1.Section<ArchivesMapSection_I20>(ArchivesMapSection_I20.TAG);
 
@@ -290,6 +288,8 @@ namespace DAT1 {
 
 		#region get asset info by index
 
+		public override uint? GetArchiveIndexByAssetIndex(int index) => (0 <= index && index < OffsetsSection.Entries.Count ? OffsetsSection.Entries[index].ArchiveIndex : null);
+		public override uint? GetOffsetInArchiveByAssetIndex(int index) => (0 <= index && index < OffsetsSection.Entries.Count ? OffsetsSection.Entries[index].Offset : null);
 		public override uint? GetSizeInArchiveByAssetIndex(int index) => (0 <= index && index < SizesSection.Entries.Count ? SizesSection.Entries[index].Value : null);
 
 		#endregion
@@ -319,14 +319,14 @@ namespace DAT1 {
 				if (_updateAssetId)
 					toc.AssetIdsSection.Ids[_index] = _assetId;
 
-				if (_updateArchiveIndex)
-					toc.OffsetsSection.Entries[_index].ArchiveIndex = _archiveIndex;
-
-				if (_updateArchiveOffset)
-					toc.OffsetsSection.Entries[_index].Offset = _archiveOffset;
-
 				TOC_I20? toc_i20 = toc as TOC_I20;
 				if (toc_i20 != null) {
+					if (_updateArchiveIndex)
+						toc_i20.OffsetsSection.Entries[_index].ArchiveIndex = _archiveIndex;
+
+					if (_updateArchiveOffset)
+						toc_i20.OffsetsSection.Entries[_index].Offset = _archiveOffset;
+
 					if (_updateSize)
 						toc_i20.SizesSection.Entries[_index].Value = _size;
 				}
@@ -371,8 +371,8 @@ namespace DAT1 {
 		#endregion
 		#region archives
 
-		protected override uint GetArchivesCount() => (uint)ArchivesSection.Entries.Count;
-		protected override string GetArchiveFilename(uint index) => ArchivesSection.Entries[(int)index].GetFilename();
+		public override uint GetArchivesCount() => (uint)ArchivesSection.Entries.Count;
+		public override string GetArchiveFilename(uint index) => ArchivesSection.Entries[(int)index].GetFilename();
 
 		#region modify archives
 
@@ -495,6 +495,8 @@ namespace DAT1 {
 
 		#region get asset info by index
 
+		public override uint? GetArchiveIndexByAssetIndex(int index) => (0 <= index && index < SizesSection.Entries.Count ? SizesSection.Entries[index].ArchiveIndex : null);
+		public override uint? GetOffsetInArchiveByAssetIndex(int index) => (0 <= index && index < SizesSection.Entries.Count ? SizesSection.Entries[index].Offset : null);
 		public override uint? GetSizeInArchiveByAssetIndex(int index) => (0 <= index && index < SizesSection.Entries.Count ? SizesSection.Entries[index].Size : null);
 
 		public virtual int? GetHeaderOffsetByAssetIndex(int index) => (0 <= index && index < SizesSection.Entries.Count ? SizesSection.Entries[index].HeaderOffset : null);
@@ -610,8 +612,8 @@ namespace DAT1 {
 		#endregion
 		#region archives
 
-		protected override uint GetArchivesCount() => (uint)ArchivesSection.Entries.Count;
-		protected override string GetArchiveFilename(uint index) => ArchivesSection.Entries[(int)index].GetFilename();
+		public override uint GetArchivesCount() => (uint)ArchivesSection.Entries.Count;
+		public override string GetArchiveFilename(uint index) => ArchivesSection.Entries[(int)index].GetFilename();
 
 		#region modify archives
 
