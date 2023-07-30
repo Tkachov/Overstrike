@@ -27,7 +27,7 @@ void Work() {
 		tocPath = Path.Combine(assetArchiveDir, "toc");
 	}
 	if (!File.Exists(tocPath)) {
-		Path.Combine(gameDir, "toc.BAK");
+		tocPath = Path.Combine(gameDir, "toc.BAK");
 	}
 	if (!File.Exists(tocPath)) {
 		tocPath = Path.Combine(gameDir, "toc");
@@ -92,6 +92,8 @@ void Work() {
 	Console.WriteLine($"Extracting {archiveAssetIndexes.Count} assets...");
 	Console.WriteLine();
 
+	StreamWriter headerlessTxt = null;
+
 	var n = 1;
 	var padWidth = $"{archiveAssetIndexes.Count}".Length + 1;
 	var success = 0;
@@ -119,6 +121,25 @@ void Work() {
 		var line = $"{paddedN}: {displayName}".PadRight(70);
 		try {
 			File.WriteAllBytes(filename, toc.ExtractAsset(index));
+
+			if (spanIndex % 8 == 0) {
+				if (toc is TOC_I29) {
+					var hasHeader = (((TOC_I29)toc).SizesSection.Values[index].HeaderOffset != -1);
+					if (!hasHeader) {
+						if (headerlessTxt == null) {
+							headerlessTxt = new StreamWriter(File.OpenWrite(Path.Combine(extractedArchiveDir, "headerless.txt")));
+							
+						}
+
+						var fn = $"{spanIndex}/{assetId:X016}";
+						if (knownHashes.ContainsKey((ulong)assetId)) {
+							fn = $"{spanIndex}/" + knownHashes[(ulong)assetId];
+						}
+						headerlessTxt.WriteLine(fn);
+					}
+				}
+			}
+
 			Console.WriteLine($"{line} -- OK");
 			++success;
 		} catch {
@@ -126,6 +147,10 @@ void Work() {
 			// TODO: provide some explanation here (catch common errors and display interpretation; or write exceptions to some file like `errors.log`)
 		}
 		++n;
+	}
+
+	if (headerlessTxt != null) {
+		headerlessTxt.Close();
 	}
 
 	Console.WriteLine();
