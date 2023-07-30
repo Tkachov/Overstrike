@@ -8,10 +8,13 @@ using System.IO.Compression;
 using System.IO;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 
 namespace Overstrike.Installers {
 	internal abstract class StageInstallerHelper {
 		protected abstract uint CreateArchive(string filename);
+		protected virtual void PrepWork(ZipArchive zip) {}
 		protected abstract ZipArchive ReadStageFile();
 		protected abstract void ProcessAsset(byte span, ulong assetId, ZipArchiveEntry entry, uint archiveIndexToWriteInto, BinaryWriter archiveWriter);
 		protected abstract void SortAssets();
@@ -22,6 +25,7 @@ namespace Overstrike.Installers {
 			using (var f = new FileStream(modPath, FileMode.Create, FileAccess.Write, FileShare.None)) {
 				using (var w = new BinaryWriter(f)) {
 					using (ZipArchive zip = ReadStageFile()) {
+						PrepWork(zip);
 						foreach (ZipArchiveEntry entry in zip.Entries) {
 							HandleArchiveEntry(entry, newArchiveIndex, w);
 						}
@@ -110,6 +114,8 @@ namespace Overstrike.Installers {
 	}
 
 	internal class StageInstaller_I29: InstallerBase_I29 {
+		private HashSet<string> _headerlessAssets = new();
+
 		public StageInstaller_I29(TOC_I29 toc, string gamePath): base(toc, gamePath) {}
 
 		public override void Install(ModEntry mod, int index) {
@@ -130,10 +136,46 @@ namespace Overstrike.Installers {
 
 			protected override uint CreateArchive(string filename) => _outer._toc.AddNewArchive(filename, TOCBase.ArchiveAddingImpl.DEFAULT);
 
+			protected override void PrepWork(ZipArchive zip) {
+				_outer._headerlessAssets.Clear();
+
+				var entry = _outer.GetEntryByFullName(zip, "info.json");
+				JObject info = null;
+				
+				if (entry != null) {
+					using (var stream = entry.Open()) {
+						using (StreamReader reader = new StreamReader(stream)) {
+							var str = reader.ReadToEnd();
+							info = JObject.Parse(str);
+						}
+					}
+				}
+
+				if (info != null) {
+					JArray headerless = (JArray)info["headerless"];
+					if (headerless != null) {
+						foreach (string assetLocation in headerless) {
+							var slashIndex = assetLocation.IndexOf('/');
+							if (slashIndex == -1) continue;
+
+							var path = assetLocation.Substring(slashIndex + 1);
+							var assetId = CRC64.Hash(path);
+							_outer._headerlessAssets.Add(assetLocation.Substring(0, slashIndex + 1) + $"{assetId:X016}");
+						}
+					}
+				}
+			}
+
 			protected override ZipArchive ReadStageFile() => _outer.ReadModFile();
 
 			protected override void ProcessAsset(byte span, ulong assetId, ZipArchiveEntry entry, uint archiveIndexToWriteInto, BinaryWriter archiveWriter) {
-				_outer.OverwriteAsset(span, assetId, archiveIndexToWriteInto, archiveWriter, entry.Open(), true);
+				var hasHeader = (span % 8) == 0;
+				var location = $"{span}/{assetId:X016}";
+				if (_outer._headerlessAssets.Contains(location)) {
+					hasHeader = false;
+				}
+
+				_outer.OverwriteAsset(span, assetId, archiveIndexToWriteInto, archiveWriter, entry.Open(), hasHeader);
 			}
 
 			protected override void SortAssets() => _outer._toc.SortAssets();
