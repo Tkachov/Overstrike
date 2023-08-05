@@ -45,7 +45,25 @@ namespace Overstrike.MetaInstallers {
 			_toc = new TOC_I29();
 			_toc.Load(tocPath);
 
-			ErrorLogger.WriteInfo(" OK!\n\n");
+			ErrorLogger.WriteInfo(" OK!\n");
+			LogTocSanityCheck();
+			ErrorLogger.WriteInfo("\n");
+		}
+
+		private void LogTocSanityCheck() {
+			ErrorLogger.WriteInfo($"[i] {_toc.ArchivesSection.Values.Count} archives\n");
+
+			bool hasMods = false;
+			foreach (var archive in _toc.ArchivesSection.Values) {
+				var fn = archive.GetFilename();
+				if (fn.Contains("mods", System.StringComparison.InvariantCultureIgnoreCase)) {
+					hasMods = true;
+					break;
+				}
+			}
+			if (hasMods) {
+				ErrorLogger.WriteInfo($"[!] might be modified\n");
+			}
 		}
 
 		public override void Install(ModEntry mod, int index) {
