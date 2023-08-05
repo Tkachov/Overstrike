@@ -741,5 +741,12 @@ namespace Overstrike {
 				}
 			}
 		}
+
+		private void ProfileGamePath_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
+			try {
+				var path = _selectedProfile.GamePath;
+				Process.Start("explorer.exe", path);
+			} catch {}
+		}
 	}
 }

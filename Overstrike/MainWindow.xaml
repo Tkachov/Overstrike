@@ -79,7 +79,7 @@
 						</DataTemplate>
 					</ComboBox.ItemTemplate>
 				</ComboBox>
-				<Label x:Name="ProfileGamePath" Content="C:/Path/To/MSMR" Margin="260,87,5,0" VerticalAlignment="Top" />
+				<Label x:Name="ProfileGamePath" Content="C:/Path/To/MSMR" Margin="260,87,5,0" VerticalAlignment="Top" MouseDoubleClick="ProfileGamePath_MouseDoubleClick" />
 			</Grid>
 
 			<TabControl x:Name="tabControl" Margin="-1,125,-1,-1">
