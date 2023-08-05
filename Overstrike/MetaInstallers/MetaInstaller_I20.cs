@@ -6,6 +6,7 @@
 using DAT1;
 using System.IO;
 using Overstrike.Installers;
+using Overstrike.Utils;
 
 namespace Overstrike.MetaInstallers {
 	internal class MetaInstaller_I20: MetaInstallerBase {
@@ -16,32 +17,46 @@ namespace Overstrike.MetaInstallers {
 			var tocBakPath = Path.Combine(_gamePath, "asset_archive", "toc.BAK");
 
 			if (!File.Exists(tocBakPath)) {
+				ErrorLogger.WriteInfo("Creating 'toc.BAK'...");
 				File.Copy(tocPath, tocBakPath);
+				ErrorLogger.WriteInfo(" OK!\n");
 			} else {
+				ErrorLogger.WriteInfo("Overwriting 'toc' with 'toc.BAK'...");
 				File.Copy(tocBakPath, tocPath, true);
+				ErrorLogger.WriteInfo(" OK!\n");
 			}
 
 			var modsPath = Path.Combine(_gamePath, "asset_archive", "mods");
 			if (!Directory.Exists(modsPath)) {
+				ErrorLogger.WriteInfo("Creating 'mods' directory...");
 				Directory.CreateDirectory(modsPath);
+				ErrorLogger.WriteInfo(" OK!\n");
 			}
 
 			var suitsPath = Path.Combine(_gamePath, "asset_archive", "Suits");
 			if (!Directory.Exists(suitsPath)) {
+				ErrorLogger.WriteInfo("Creating 'Suits' directory...");
 				Directory.CreateDirectory(suitsPath);
+				ErrorLogger.WriteInfo(" OK!\n");
 			}
+
+			ErrorLogger.WriteInfo("\n");
 		}
 
 		private TOC_I20 _toc;
 		private TOC_I20 _unchangedToc;
 
 		public override void Start() {
+			ErrorLogger.WriteInfo("Loading 'toc'...");
+
 			var tocPath = Path.Combine(_gamePath, "asset_archive", "toc");
 			_toc = new TOC_I20();
 			_toc.Load(tocPath);
 
 			_unchangedToc = new TOC_I20(); // a special copy for .smpcmod installer to lookup indexes in
 			_unchangedToc.Load(tocPath);
+
+			ErrorLogger.WriteInfo(" OK!\n\n");
 		}
 
 		public override void Install(ModEntry mod, int index) {

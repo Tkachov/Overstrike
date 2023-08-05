@@ -8,12 +8,14 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using Overstrike.Games;
 using Overstrike.Installers;
 using Overstrike.MetaInstallers;
+using Overstrike.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -519,6 +521,20 @@ namespace Overstrike {
 
 		private void InstallMods(List<ModEntry> modsToInstall, string game, string gamePath, bool uninstalling) {
 			try {
+				ErrorLogger.StartSession();
+				ErrorLogger.WriteInfo($"Overstrike {Assembly.GetExecutingAssembly().GetName().Version}\n");
+				ErrorLogger.WriteInfo(uninstalling ? $"Uninstalling mods at {DateTime.Now}\n" : $"Installing {modsToInstall.Count} mods at {DateTime.Now}\n");
+				ErrorLogger.WriteInfo($"{game} located at {gamePath}\n");
+				ErrorLogger.WriteInfo("\n");
+
+				if (!uninstalling && modsToInstall.Count > 0) {
+					ErrorLogger.WriteInfo("Mods to be installed:\n");
+					foreach (var mod in modsToInstall) {
+						ErrorLogger.WriteInfo($"- {mod.Name}\n");
+					}
+					ErrorLogger.WriteInfo("\n");
+				}
+
 				var operationsCount = modsToInstall.Count;
 				Dispatcher.Invoke(() => {
 					if (uninstalling)
@@ -536,14 +552,17 @@ namespace Overstrike {
 
 					var index = 0;
 					foreach (var mod in modsToInstall) {
+						ErrorLogger.WriteInfo($"Installing '{mod.Name}'...");
 						Dispatcher.Invoke(() => {
 							OverlayHeaderLabel.Text = "Installing mods (" + index + "/" + operationsCount + " done)...";
 							OverlayOperationLabel.Text = "Installing '" + mod.Name + "'...";
 						});
 
 						installer.Install(mod, index++);
+						ErrorLogger.WriteInfo(" OK!\n");
 					}
 
+					ErrorLogger.WriteInfo($"Saving 'toc'...");
 					Dispatcher.Invoke(() => {
 						if (uninstalling)
 							OverlayHeaderLabel.Text = "Uninstalling mods...";
@@ -553,6 +572,7 @@ namespace Overstrike {
 					});
 
 					installer.Finish();
+					ErrorLogger.WriteInfo(" OK!\n");
 				}
 
 				Dispatcher.Invoke(() => {
@@ -561,11 +581,19 @@ namespace Overstrike {
 					else
 						ShowStatusMessage("Done! " + operationsCount + " mods installed.");
 				});
-			} catch (Exception) {
+				ErrorLogger.WriteInfo("\nDone.\n");
+			} catch (Exception ex) {
 				Dispatcher.Invoke(() => {
 					ShowStatusMessage("Error occurred.");
 				});
+
+				ErrorLogger.WriteError("\n\nError occurred:\n");
+				ErrorLogger.WriteError($"{ex}\n");
+				ErrorLogger.WriteError($"{new StackTrace()}\n");
+				ErrorLogger.WriteError("\n");
 			}
+
+			try { ErrorLogger.EndSession(); } catch {}
 		}
 
 		private MetaInstallerBase GetMetaInstaller(string game, string gamePath) {

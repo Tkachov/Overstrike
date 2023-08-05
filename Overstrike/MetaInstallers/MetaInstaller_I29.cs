@@ -6,6 +6,7 @@
 using DAT1;
 using System.IO;
 using Overstrike.Installers;
+using Overstrike.Utils;
 
 namespace Overstrike.MetaInstallers {
 	internal class MetaInstaller_I29: MetaInstallerBase {
@@ -16,23 +17,35 @@ namespace Overstrike.MetaInstallers {
 			var tocBakPath = Path.Combine(_gamePath, "toc.BAK");
 
 			if (!File.Exists(tocBakPath)) {
+				ErrorLogger.WriteInfo("Creating 'toc.BAK'...");
 				File.Copy(tocPath, tocBakPath);
+				ErrorLogger.WriteInfo(" OK!\n");
 			} else {
+				ErrorLogger.WriteInfo("Overwriting 'toc' with 'toc.BAK'...");
 				File.Copy(tocBakPath, tocPath, true);
+				ErrorLogger.WriteInfo(" OK!\n");
 			}
 
 			var modsPath = Path.Combine(_gamePath, "d", "mods");
 			if (!Directory.Exists(modsPath)) {
+				ErrorLogger.WriteInfo("Creating 'mods' directory...");
 				Directory.CreateDirectory(modsPath);
+				ErrorLogger.WriteInfo(" OK!\n");
 			}
+
+			ErrorLogger.WriteInfo("\n");
 		}
 
 		private TOC_I29 _toc;
 
 		public override void Start() {
+			ErrorLogger.WriteInfo("Loading 'toc'...");
+
 			var tocPath = Path.Combine(_gamePath, "toc");
 			_toc = new TOC_I29();
 			_toc.Load(tocPath);
+
+			ErrorLogger.WriteInfo(" OK!\n\n");
 		}
 
 		public override void Install(ModEntry mod, int index) {
