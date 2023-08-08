@@ -20,11 +20,10 @@ namespace Overstrike.Detectors {
 			return new string[] {"7z", "rar", "zip"};
 		}
 
-		public override void Detect(Stream file, string path, List<ModEntry> mods) {
+		public override void Detect(Stream file, string path, List<ModEntry> mods) {			
 			try {
-				using (var archive = ArchiveFactory.Open(file)) {
-					_detection.Detect(archive, path, mods);
-				}
+				using var archive = ArchiveFactory.Open(file);
+				_detection.Detect(archive, path, mods);
 			} catch (Exception) { }
 		}
 	}

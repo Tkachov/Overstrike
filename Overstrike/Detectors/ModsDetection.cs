@@ -12,6 +12,9 @@ using System.IO;
 namespace Overstrike.Detectors {
 	internal class ModsDetection {
 		private List<DetectorBase> _detectors;
+		private string _currentFile;
+
+		public string CurrentFile { get => _currentFile; }
 
 		public ModsDetection() {
 			_detectors = new List<DetectorBase>() {
@@ -30,7 +33,11 @@ namespace Overstrike.Detectors {
 				foreach (var extension in extensions) {
 					string[] files = Directory.GetFiles(path, "*." + extension, SearchOption.AllDirectories);
 					foreach (var file in files) {
-						detector.Detect(File.OpenRead(file), GetRelativePath(file, path), mods);
+						var relativePath = GetRelativePath(file, path);
+						_currentFile = relativePath;
+
+						using var stream = File.OpenRead(file);
+						detector.Detect(stream, relativePath, mods);
 					}
 				}
 			}
@@ -50,7 +57,7 @@ namespace Overstrike.Detectors {
 
 				foreach (var extension in detectors.Keys) {
 					if (entry.Key.EndsWith("." + extension, StringComparison.OrdinalIgnoreCase)) {
-						var file = new MemoryStream();
+						using var file = new MemoryStream();
 						using (var entryStream = entry.OpenEntryStream()) {
 							entryStream.CopyTo(file);
 						}

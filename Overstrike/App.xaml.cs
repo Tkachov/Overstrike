@@ -7,6 +7,7 @@ using Overstrike.Detectors;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Windows;
 
 namespace Overstrike {
@@ -15,20 +16,24 @@ namespace Overstrike {
 		List<Profile> Profiles = new List<Profile>();
 		List<ModEntry> Mods = new List<ModEntry>();
 
-		private ModsDetection _detection = new ModsDetection();
+		ModsDetection? _detection = null;
 
 		protected override void OnStartup(StartupEventArgs e) {
 			CreateSubdirectories();
 			ReadSettings();
 			LoadProfiles();
-			DetectMods(); // TODO: launch a separate thread that waits a sec and shows a window with progress bar / current filename if detection still goes
-
+			
 			ShutdownMode = ShutdownMode.OnExplicitShutdown;
 			if (Profiles.Count == 0) {
 				var window = new FirstLaunch();
 				window.ShowDialog();
 
 				LoadProfiles();
+			}
+
+			if (!RunDetectionAndShowSplash()) {
+				Shutdown();
+				return;
 			}
 
 			ShutdownMode = ShutdownMode.OnLastWindowClose;
@@ -53,7 +58,7 @@ namespace Overstrike {
 		private bool CreateSubdirectory(string dirname) {
 			try {
 				var cwd = Directory.GetCurrentDirectory();
-				var path = System.IO.Path.Combine(cwd, dirname);
+				var path = Path.Combine(cwd, dirname);
 
 				if (!Directory.Exists(path)) {
 					Directory.CreateDirectory(path);
@@ -68,7 +73,7 @@ namespace Overstrike {
 
 		private void ReadSettings() {
 			var cwd = Directory.GetCurrentDirectory();
-			var path = System.IO.Path.Combine(cwd, "Profiles/Settings.json");
+			var path = Path.Combine(cwd, "Profiles/Settings.json");
 			try {
 				var s = new AppSettings(path);
 				Settings = s;
@@ -77,7 +82,7 @@ namespace Overstrike {
 
 		public void WriteSettings() {
 			var cwd = Directory.GetCurrentDirectory();
-			var path = System.IO.Path.Combine(cwd, "Profiles/Settings.json");
+			var path = Path.Combine(cwd, "Profiles/Settings.json");
 			try {
 				Settings.Save(path);
 			} catch (Exception) {}
@@ -87,7 +92,7 @@ namespace Overstrike {
 			Profiles.Clear();
 
 			var cwd = Directory.GetCurrentDirectory();
-			var path = System.IO.Path.Combine(cwd, "Profiles");
+			var path = Path.Combine(cwd, "Profiles");
 
 			string[] files = Directory.GetFiles(path, "*.json", SearchOption.TopDirectoryOnly);
 			foreach (string file in files) {
@@ -96,7 +101,7 @@ namespace Overstrike {
 		}
 
 		private void LoadProfile(string file) {
-			var basename = System.IO.Path.GetFileName(file);
+			var basename = Path.GetFileName(file);
 			if (basename == "Settings.json") {
 				return;
 			}
@@ -116,13 +121,68 @@ namespace Overstrike {
 
 		private void DetectMods() {
 			var cwd = Directory.GetCurrentDirectory();
-			var path = System.IO.Path.Combine(cwd, "Mods Library");
+			var path = Path.Combine(cwd, "Mods Library");
+
+			_detection = new();
 			_detection.Detect(path, Mods);
+			_detection = null;
 		}
 
 		public List<ModEntry> ReloadMods() {
-			DetectMods();
+			var oldMods = Mods;
+			Mods = new();
+
+			if (!RunDetectionAndShowSplash()) {
+				Mods = oldMods;
+			}
+
 			return Mods;
+		}
+
+		// threads
+
+		private bool RunDetectionAndShowSplash() {
+			Thread detectionThread = new(DetectMods);
+			detectionThread.Start();
+
+			var splashWindow = new ModsDetectionSplash();
+			Thread splashThread = new(() => UpdateDetectionSplash(detectionThread, splashWindow));
+
+			splashThread.Start();
+			if (detectionThread.Join(500)) {
+				return true;
+			}
+
+			if (detectionThread.IsAlive) {
+				splashWindow.ShowDialog();
+
+				if (detectionThread.IsAlive) {
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		private void UpdateDetectionSplash(Thread detectionThread, ModsDetectionSplash window) {
+			if (detectionThread != null) {
+				while (detectionThread.IsAlive) {
+					try {
+						if (_detection != null) {
+							var file = _detection.CurrentFile;
+							Dispatcher.Invoke(() => {
+								window.SetCurrentMod(file);
+							});
+						}
+					} catch {}
+
+					Thread.Sleep(100);
+				}
+			}
+
+			try {
+				Dispatcher.Invoke(window.Close);
+			} catch {}
 		}
 	}
 }
