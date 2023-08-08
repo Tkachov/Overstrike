@@ -3,8 +3,11 @@
 // For more details, terms and conditions, see GNU General Public License.
 // A copy of the that license should come with this program (LICENSE.txt). If not, see <http://www.gnu.org/licenses/>.
 
+using GDeflateWrapper;
+using K4os.Compression.LZ4;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 
 namespace DAT1 {
@@ -22,8 +25,8 @@ namespace DAT1 {
 			//public uint unk2;
 			public uint realSize;
 			public uint compSize;
-			//public uint unk3;
-			//public uint unk4;
+			public byte compressionType;
+			//public byte[7] unk3;
 		}
 
         public static byte[] ExtractAsset(FileStream archive, int offset, int size) {
@@ -50,8 +53,8 @@ namespace DAT1 {
                 r.ReadUInt32();
                 header.realSize = r.ReadUInt32();
                 header.compSize = r.ReadUInt32();
-                r.ReadUInt32();
-                r.ReadUInt32();
+				header.compressionType = r.ReadByte();
+				r.ReadBytes(7);
                 blocks.Add(header);
 			}
 
@@ -75,7 +78,7 @@ namespace DAT1 {
 					archive.Seek(block.compOffset, SeekOrigin.Begin);
 					byte[] compressed = new byte[block.compSize];
 					archive.Read(compressed, 0, compressed.Length);
-					byte[] decompressed = Decompress(compressed, block.realSize);
+					byte[] decompressed = Decompress(block, compressed);
 					uint block_start = Math.Max(block.realOffset, asset_offset) - block.realOffset;
 					uint block_end = Math.Min(asset_end, real_end) - block.realOffset;
 
@@ -90,62 +93,19 @@ namespace DAT1 {
             return bytes;
         }
 
-		public static byte[] Decompress(byte[] comp_data, uint real_size) {
-			int comp_size = comp_data.Length;
-			byte[] real_data = new byte[real_size];
-			int real_i = 0;
-			int comp_i = 0;
+		private static byte[] Decompress(BlockHeader header, byte[] compressedData) {
+			switch (header.compressionType) {
+				case 2: return GDeflate.Decompress(compressedData, header.realSize);
 
-			while (real_i <= real_size && comp_i < comp_size) {
-				// direct
-				byte a = comp_data[comp_i++];
-				byte b = 0;
-				
-				if ((a & 240) == 240)
-					b = comp_data[comp_i++];
+				case 3:
+					var output = new byte[header.realSize];
+					LZ4Codec.Decode(compressedData, 0, compressedData.Length, output, 0, output.Length);
+					return output;
 
-				int direct = (a >> 4) + b;
-				while (direct >= 270 && (direct - 15) % 255 == 0) {
-					byte v = comp_data[comp_i++];
-					direct += v;
-					if (v == 0) break;
-				}
-
-				for (int i = 0; i < direct; ++i) {
-					if (real_i + i >= real_size || comp_i + i >= comp_size) break;
-					real_data[real_i + i] = comp_data[comp_i + i];
-				}
-				real_i += direct;
-				comp_i += direct;
-
-				int reverse = (a & 15) + 4;
-				if (!(real_i <= real_size && comp_i < comp_size)) break;
-
-                // reverse
-
-				a = comp_data[comp_i++];
-				b = comp_data[comp_i++];
-
-				int reverse_offset = a + (b << 8);
-				if (reverse == 19) {
-					reverse += comp_data[comp_i++];
-					while (reverse >= 274 && (reverse - 19) % 255 == 0) {
-						byte v = comp_data[comp_i++];
-						reverse += v;
-						if (v == 0) break;
-					}
-				}
-
-				for (int i = 0; i < reverse; ++i) {
-					try {
-						real_data[real_i + i] = real_data[real_i - reverse_offset + i];
-					} catch (Exception) {}
-					
-				}
-                real_i += reverse;
-            }
-
-			return real_data;
+				default:
+					Debug.Assert(false, "DSAR.Decompress(): unknown compression type");
+					return new byte[header.realSize];
+			}
 		}
 	}
 }
