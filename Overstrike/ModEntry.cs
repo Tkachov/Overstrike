@@ -3,6 +3,8 @@
 // For more details, terms and conditions, see GNU General Public License.
 // A copy of the that license should come with this program (LICENSE.txt). If not, see <http://www.gnu.org/licenses/>.
 
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System.ComponentModel;
 using System.Windows.Media.Imaging;
 
@@ -10,6 +12,7 @@ namespace Overstrike {
 	public class ModEntry: INotifyPropertyChanged {
 		public event PropertyChangedEventHandler PropertyChanged;
 
+		[JsonConverter(typeof(StringEnumConverter))]
 		public enum ModType {
 			SMPC,
 			MMPC,
