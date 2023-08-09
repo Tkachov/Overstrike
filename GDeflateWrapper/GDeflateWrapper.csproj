@@ -5,11 +5,11 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Platforms>x86</Platforms>
+    <Platforms>x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="native/win-x86/libdeflate.dll" Pack="true" PackagePath="libdeflate.dll">
+    <None Include="native/win-x64/libdeflate.dll" Pack="true" PackagePath="libdeflate.dll">
       <Link>libdeflate.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
