@@ -28,6 +28,23 @@ namespace DAT1.Files {
 		public KeysOffsetsSection KeysOffsetsSection => Section<KeysOffsetsSection>(KeysOffsetsSection.TAG);
 		public ValuesDataSection ValuesDataSection => Section<ValuesDataSection>(ValuesDataSection.TAG);
 		public ValuesOffsetsSection ValuesOffsetsSection => Section<ValuesOffsetsSection>(ValuesOffsetsSection.TAG);
+		public UnknownSection UnknownSection => Section<UnknownSection>(UnknownSection.TAG);
+		public KeyHashesSection KeyHashesSection => Section<KeyHashesSection>(KeyHashesSection.TAG);
+		public SortedKeyHashesSection SortedKeyHashesSection => Section<SortedKeyHashesSection>(SortedKeyHashesSection.TAG);
+		public SortedIndexesSection SortedIndexesSection => Section<SortedIndexesSection>(SortedIndexesSection.TAG);
+
+		public override byte[] Save() {
+			var s = new MemoryStream();
+			var w = new BinaryWriter(s);
+
+			byte[] data = base.Save();
+			w.Write(magic);
+			w.Write((uint)data.Length);
+			w.Write(unk);
+			w.Write(data);
+
+			return s.ToArray();
+		}
 
 		public string GetValue(string key) {
 			int key_offset = KeysDataSection.GetOffsetByKey(key);

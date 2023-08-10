@@ -35,6 +35,12 @@ namespace DAT1.Sections.Generic {
 		}
 	}
 
+	public class UInt16ArraySection: ArraySection<ushort> {
+		protected override uint GetValueByteSize() { return 2; }
+		protected override ushort Read(BinaryReader r) { return r.ReadUInt16(); }
+		protected override void Write(BinaryWriter w, ushort v) { w.Write(v); }
+	}
+
 	public class UInt32ArraySection: ArraySection<uint> {
 		protected override uint GetValueByteSize() { return 4; }
 		protected override uint Read(BinaryReader r) { return r.ReadUInt32(); }

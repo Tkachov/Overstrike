@@ -12,38 +12,31 @@ namespace DAT1.Sections.Generic {
 		public List<string> Strings = new();
 		protected Dictionary<string, uint> offsetByKey = new();
 		protected Dictionary<uint, string> keyByOffset = new();
+		protected uint currentOffset = 0;
 
 		override public void Load(byte[] data, DAT1 container) {
 			var size = data.Length;
-			int start_offset = 0;
 
-			Strings.Clear();
-			offsetByKey.Clear();
-			keyByOffset.Clear();
+			Clear();
 
-			for (int i = 0; i < size; ++i) {
+			for (uint i = 0; i < size; ++i) {
 				if (i == size - 1 || data[i] == 0) {
-					string s = Encoding.UTF8.GetString(data, start_offset, i - start_offset);
-					offsetByKey[s] = (uint)start_offset;
-					keyByOffset[(uint)start_offset] = s;
+					string s = Encoding.UTF8.GetString(data, (int)currentOffset, (int)(i - currentOffset));
+					offsetByKey[s] = (uint)currentOffset;
+					keyByOffset[(uint)currentOffset] = s;
 					Strings.Add(s);
-					start_offset = i + 1;
+					currentOffset = i + 1;
 				}
 			}
 		}
 
 		override public byte[] Save() {
-			return null; // TODO
-
 			var s = new MemoryStream();
 			var w = new BinaryWriter(s);
-			/*
-			foreach (var e in Entries) {
-				w.Write((UInt64)e.AssetId);
-				w.Write((uint)e.AssetPathStringOffset);
-				w.Write((uint)e.ExtensionHash);
+			foreach (var key in Strings) {
+				w.Write(Encoding.UTF8.GetBytes(key));
+				w.Write((byte)0);
 			}
-			*/
 			return s.ToArray();
 		}
 
@@ -58,6 +51,28 @@ namespace DAT1.Sections.Generic {
 				return -1;
 
 			return (int)offsetByKey[key];
+		}
+
+		public void Clear() {
+			Strings.Clear();
+			offsetByKey.Clear();
+			keyByOffset.Clear();
+			currentOffset = 0;
+		}
+
+		public uint Add(string key) {
+			if (offsetByKey.ContainsKey(key)) {
+				return offsetByKey[key];
+			}
+
+			var result = currentOffset;
+			
+			Strings.Add(key);
+			offsetByKey[key] = currentOffset;
+			keyByOffset[currentOffset] = key;
+			currentOffset += (uint)Encoding.UTF8.GetByteCount(key) + 1;
+
+			return result;
 		}
 	}
 }
