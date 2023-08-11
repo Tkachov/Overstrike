@@ -134,6 +134,7 @@ namespace Overstrike {
 					LogoImage2.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_mm_logo2);
 
 					SuitModsSettings.Visibility = Visibility.Visible;
+					MakeSuitLanguageItems();
 				break;
 
 				case GameRCRA.ID:
@@ -147,8 +148,9 @@ namespace Overstrike {
 		}
 
 		private static readonly Dictionary<string, string> USERFRIENDLY_LANGUAGE_NAMES = new() {
-			{"en", "English (UK)"},
+			//{"en", "English"},
 			{"us", "English"},
+			{"uk", "English (UK)"},
 			{"da", "Danish"},
 			{"nl", "Dutch"},
 			{"fi", "Finnish"},
@@ -166,6 +168,7 @@ namespace Overstrike {
 			{"br", "Portuguese"},
 			{"ar", "Arabic"},
 			{"la", "Spanish"},
+			{"zh_s", "Simplified Chinese"},
 			{"zh", "Traditional Chinese"},
 			{"cs", "Czech"},
 			{"hu", "Hungarian"},
@@ -179,6 +182,7 @@ namespace Overstrike {
 
 			Dictionary<string, byte>.KeyCollection gameLanguages = null;
 			if (_selectedProfile.Game == GameMSMR.ID) gameLanguages = MSMRSuitInstaller.LANGUAGES.Keys;
+			else if (_selectedProfile.Game == GameMM.ID) gameLanguages = MMSuit1Installer.LANGUAGES.Keys;
 			if (gameLanguages != null) {
 				foreach (var lang in gameLanguages) {
 					_suitLanguageItems.Add(new LanguageItem() { Name = USERFRIENDLY_LANGUAGE_NAMES[lang], InternalName = lang });

@@ -28,6 +28,20 @@ namespace Overstrike.Installers {
 			return null;
 		}
 
+		protected string ReadName(ZipArchive zip) {
+			var name = "J. Jonah Jameson";
+
+			var nameTxt = GetEntryByName(zip, "name.txt");
+			if (nameTxt != null) {
+				var readName = ReadId(nameTxt);
+				if (readName != null) {
+					name = readName;
+				}
+			}
+
+			return name;
+		}
+
 		#endregion
 		#region toc
 

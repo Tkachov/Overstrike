@@ -14,7 +14,7 @@ using System.Collections.Generic;
 namespace Overstrike.Installers {
 	internal class MSMRSuitInstaller: SuitInstallerBase {
 		public static readonly Dictionary<string, byte> LANGUAGES = new() {
-			{"en", 0},
+			//{"en", 0},
 			{"us", 8},
 			{"da", 24},
 			{"nl", 32},
@@ -71,20 +71,6 @@ namespace Overstrike.Installers {
 			}
 
 			_toc.SortAssets();
-		}
-
-		private string ReadName(ZipArchive zip) {
-			var name = "J. Jonah Jameson";
-			
-			var nameTxt = GetEntryByName(zip, "name.txt");
-			if (nameTxt != null) {
-				var readName = ReadId(nameTxt);
-				if (readName != null) {
-					name = readName;
-				}
-			}
-
-			return name;
 		}
 
 		private void WriteAssetsFile(ZipArchive zip, string suitsPath, string id) {
