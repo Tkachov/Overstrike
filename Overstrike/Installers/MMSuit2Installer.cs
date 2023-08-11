@@ -13,7 +13,14 @@ using System.Collections.Generic;
 
 namespace Overstrike.Installers {
 	internal class MMSuit2Installer: SuitInstallerBase {
-		public MMSuit2Installer(TOC_I20 toc, string gamePath) : base(toc, gamePath) {} // TODO: setting to install or ignore name.txt
+		private string _language;
+
+		public MMSuit2Installer(TOC_I20 toc, string gamePath, string language = "") : base(toc, gamePath) {
+			if (MMSuit1Installer.LANGUAGES.ContainsKey(language))
+				_language = language;
+			else
+				_language = "";
+		}
 
 		public override void Install(ModEntry mod, int index) {
 			_mod = mod;
@@ -23,10 +30,15 @@ namespace Overstrike.Installers {
 			using (ZipArchive zip = ReadModFile()) {
 				var idTxt = GetEntryByName(zip, "id.txt");
 				var id = ReadId(idTxt);
+				var name = ReadName(zip);
+				var writeName = (_language != "");
 
 				WriteAssetsFile(zip, suitsPath, id);
-				WriteBaseFile(suitsPath, id);
-				// WriteLanguageEn(suitsPath, id); // TODO: support name.txt
+				WriteBaseFile(suitsPath, id, writeName);
+
+				if (writeName) {
+					WriteLanguage(suitsPath, id, name);
+				}
 			}
 
 			_toc.SortAssets();
@@ -74,8 +86,8 @@ namespace Overstrike.Installers {
 			public ulong assetId;
 		};
 
-		private void WriteBaseFile(string suitsPath, string id) {
-			var progression = ModBase1(id);
+		private void WriteBaseFile(string suitsPath, string id, bool writeName) {
+			var progression = ModBase1(id, writeName);
 			var loadoutlist = ModBase2(id);
 			var vanitylist = ModBase3(id);
 			var vanitylistlaunch = ModBase4(id);
@@ -109,7 +121,7 @@ namespace Overstrike.Installers {
 			}
 		}
 
-		private AssetToWrite ModBase1(string id) {
+		private AssetToWrite ModBase1(string id, bool writeName) {
 			const ulong SYSTEM_PROGRESSION_CONFIG_AID = 0x9C9C72A303FCFA30; // configs/system/system_progression.config
 			var config = new Config(_toc.GetAssetReader(SYSTEM_PROGRESSION_CONFIG_AID));
 
@@ -125,7 +137,8 @@ namespace Overstrike.Installers {
 
 			// Suits
 			var suit = "SUIT_" + id.ToUpper();
-			AddToSuitsList(config, suit, rewardRef, chestIconRef, equipRef, thumbIconRef);
+			var nameKey = (writeName ? suit : "SUIT_MILES_2020");
+			AddToSuitsList(config, suit, rewardRef, chestIconRef, equipRef, thumbIconRef, nameKey);
 
 			return new AssetToWrite {
 				bytes = config.Save(),
@@ -133,7 +146,7 @@ namespace Overstrike.Installers {
 			};
 		}
 
-		private void AddToSuitsList(Config config, string suit, string rewardRef, string chestIconRef, string equipRef, string thumbIconRef) {
+		private void AddToSuitsList(Config config, string suit, string rewardRef, string chestIconRef, string equipRef, string thumbIconRef, string nameKey) {
 			var rewardNormalized = DAT1.Utils.Normalize(rewardRef);
 			var chestIconNormalized = DAT1.Utils.Normalize(chestIconRef);
 			var equipNormalized = DAT1.Utils.Normalize(equipRef);
@@ -159,8 +172,8 @@ namespace Overstrike.Installers {
 			suitObject["GivesItems"] = itemObject;
 			suitObject["SkillItem"] = equipNormalized;
 			suitObject["PreviewImage"] = chestIconNormalized;
-			suitObject["DisplayName"] = "SUIT_MILES_2020"; // TODO: support name.txt
-			suitObject["Description"] = "SUIT_MILES_2020";
+			suitObject["DisplayName"] = nameKey;
+			suitObject["Description"] = nameKey;
 			suitObject["ThumbnailImage"] = thumbIconNormalized;
 			suitObject["Name"] = suit;
 			suits.Add(suitObject);
@@ -305,15 +318,24 @@ namespace Overstrike.Installers {
 			};
 		}
 
-		private void WriteLanguageEn(string suitsPath, string id) {
+		private void WriteLanguage(string suitsPath, string id, string name) {
 			var languagesPath = Path.Combine(suitsPath, "languages");
 			if (!Directory.Exists(languagesPath)) {
 				Directory.CreateDirectory(languagesPath);
 			}
 
 			const ulong LOCALIZATION_AID = 0xBE55D94F171BF8DE; // localization/localization_all.localization
-			byte[] asset = _toc.GetAssetBytes(LOCALIZATION_AID);
-			WriteArchive(suitsPath, "languages\\base_en", LOCALIZATION_AID, 8, asset);
+			byte span = MMSuit1Installer.LANGUAGES[_language];
+			var l = new Localization(_toc.GetAssetReader(span, LOCALIZATION_AID));
+			var h = new LocalizationHelper(l);
+
+			var idUpper = id.ToUpper();
+			h.Add($"SUIT_{idUpper}", name);
+			h.Add($"SUIT_{idUpper}_SHORT", name);
+			h.Apply(l);
+
+			byte[] moddedBytes = l.Save();
+			WriteArchive(suitsPath, "languages\\base_" + _language, LOCALIZATION_AID, span, moddedBytes);
 		}
 	}
 }

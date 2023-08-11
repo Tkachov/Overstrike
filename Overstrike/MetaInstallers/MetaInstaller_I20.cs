@@ -95,7 +95,7 @@ namespace Overstrike.MetaInstallers {
 					return new MMSuit1Installer(_toc, _gamePath, _profile.Settings_Suit_Language);
 
 				case ModEntry.ModType.SUIT_MM_V2:
-					return new MMSuit2Installer(_toc, _gamePath);
+					return new MMSuit2Installer(_toc, _gamePath, _profile.Settings_Suit_Language);
 
 				case ModEntry.ModType.STAGE_MSMR:
 				case ModEntry.ModType.STAGE_MM:
