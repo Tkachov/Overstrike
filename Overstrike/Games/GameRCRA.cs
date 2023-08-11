@@ -25,8 +25,8 @@ namespace Overstrike.Games {
 			return (mod.Type == ModEntry.ModType.STAGE_RCRA);
 		}
 
-		public override MetaInstallerBase GetMetaInstaller(string gamePath) {
-			return new MetaInstaller_I29(gamePath);
+		public override MetaInstallerBase GetMetaInstaller(string gamePath, AppSettings settings, Profile profile) {
+			return new MetaInstaller_I29(gamePath, settings, profile);
 		}
 	}
 }

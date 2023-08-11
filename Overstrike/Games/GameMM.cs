@@ -28,8 +28,8 @@ namespace Overstrike.Games {
 			return (mod.Type == ModEntry.ModType.MMPC || mod.Type == ModEntry.ModType.SUIT_MM || mod.Type == ModEntry.ModType.SUIT_MM_V2 || mod.Type == ModEntry.ModType.STAGE_MM);
 		}
 
-		public override MetaInstallerBase GetMetaInstaller(string gamePath) {
-			return new MetaInstaller_I20(gamePath);
+		public override MetaInstallerBase GetMetaInstaller(string gamePath, AppSettings settings, Profile profile) {
+			return new MetaInstaller_I20(gamePath, settings, profile);
 		}
 	}
 }

@@ -10,7 +10,7 @@ using Overstrike.Utils;
 
 namespace Overstrike.MetaInstallers {
 	internal class MetaInstaller_I29: MetaInstallerBase {
-		public MetaInstaller_I29(string gamePath): base(gamePath) {}
+		public MetaInstaller_I29(string gamePath, AppSettings settings, Profile profile): base(gamePath, settings, profile) {}
 
 		public override void Prepare() {
 			var tocPath = Path.Combine(_gamePath, "toc");

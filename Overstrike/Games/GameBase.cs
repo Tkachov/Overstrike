@@ -40,6 +40,6 @@ namespace Overstrike.Games {
 
 		public abstract bool IsCompatible(ModEntry mod);
 
-		public abstract MetaInstallerBase GetMetaInstaller(string gamePath);
+		public abstract MetaInstallerBase GetMetaInstaller(string gamePath, AppSettings settings, Profile profile);
 	}
 }

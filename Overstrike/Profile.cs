@@ -21,7 +21,21 @@ namespace Overstrike {
         // mods
         public List<ModEntry> Mods;
 
-        public Profile(string filename) {
+        // settings > suit
+        public string Settings_Suit_Language;
+
+        protected Profile() {
+			Name = null;
+			FullPath = null;            
+            Game = null;
+            GamePath = null;
+
+			Mods = new List<ModEntry>();
+
+			Settings_Suit_Language = "us";
+		}
+
+        public Profile(string filename): this() {
             FullPath = filename;
             Name = Path.GetFileName(filename).Replace(".json", "");
 
@@ -34,7 +48,6 @@ namespace Overstrike {
 			var mods = (JArray)json["mods"];
 			if (mods == null) { throw new Exception("bad profile"); }
 
-            Mods = new List<ModEntry>();
             foreach (var mod in mods) {
 				var path = (string?)mod[0];
 				var install = (bool?)mod[1];
@@ -43,16 +56,23 @@ namespace Overstrike {
 
                 Mods.Add(new ModEntry(path, (bool)install));
 			}
+
+            var settings = (JObject)json["settings"];
+            if (settings != null) {
+                var suit = (JObject)settings["suit"];
+                if (suit != null) {
+					Settings_Suit_Language = (string)suit["language"];
+					if (Settings_Suit_Language == null) { throw new Exception("bad profile"); }
+				}
+            }
 		}
 
-        public Profile(string name, string game, string gamePath) {
+        public Profile(string name, string game, string gamePath): this() {
             Name = name;
             FullPath = Path.Combine(Directory.GetCurrentDirectory(), "Profiles/", Name + ".json");
 
             Game = game;
             GamePath = gamePath;
-
-			Mods = new List<ModEntry>();
 		}
 
         public bool Save() {
@@ -70,6 +90,12 @@ namespace Overstrike {
 					mods.Add(mod_desc);
                 }
                 j["mods"] = mods;
+
+				j["settings"] = new JObject() {
+					["suit"] = new JObject() {
+						["language"] = Settings_Suit_Language
+					}
+				};
 
 				File.WriteAllText(FullPath, j.ToString());
                 return true;

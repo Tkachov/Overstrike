@@ -9,20 +9,25 @@ using System.IO;
 namespace Overstrike {
 	public class AppSettings {
 		public string? CurrentProfile;
+		public bool CacheModsLibrary;
 
 		public AppSettings() {
 			CurrentProfile = null;
+			CacheModsLibrary = true;
 		}
 
 		public AppSettings(string file) {
 			JObject json = JObject.Parse(File.ReadAllText(file));
 
 			CurrentProfile = (string)json["profile"];
+			CacheModsLibrary = (bool)json["cache_mods_library"];
 		}
 
 		public void Save(string file) {
-			JObject j = new JObject();
-			j["profile"] = CurrentProfile;
+			JObject j = new() {
+				["profile"] = CurrentProfile,
+				["cache_mods_library"] = CacheModsLibrary
+			};
 			File.WriteAllText(file, j.ToString());
 		}
 	}

@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
 namespace Overstrike.Installers {
 	internal class MSMRSuitInstaller: SuitInstallerBase {
-		private static readonly Dictionary<string, byte> LANGUAGES = new() {
+		public static readonly Dictionary<string, byte> LANGUAGES = new() {
 			{"en", 0},
 			{"us", 8},
 			{"da", 24},
@@ -41,7 +41,7 @@ namespace Overstrike.Installers {
 
 		private string _language;
 
-		public MSMRSuitInstaller(TOC_I20 toc, string gamePath, string language = "") : base(toc, gamePath) { // TODO: setting to install or ignore name.txt
+		public MSMRSuitInstaller(TOC_I20 toc, string gamePath, string language = "") : base(toc, gamePath) {
 			if (LANGUAGES.ContainsKey(language))
 				_language = language;
 			else

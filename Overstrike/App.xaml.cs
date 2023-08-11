@@ -123,7 +123,7 @@ namespace Overstrike {
 			var cwd = Directory.GetCurrentDirectory();
 			var path = Path.Combine(cwd, "Mods Library");
 
-			_detection = new ModsDetectionCached();
+			_detection = Settings.CacheModsLibrary ? new ModsDetectionCached() : new ModsDetection();
 			_detection.Detect(path, Mods);
 			_detection = null;
 		}

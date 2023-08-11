@@ -10,7 +10,7 @@ using Overstrike.Utils;
 
 namespace Overstrike.MetaInstallers {
 	internal class MetaInstaller_I20: MetaInstallerBase {
-		public MetaInstaller_I20(string gamePath): base(gamePath) {}
+		public MetaInstaller_I20(string gamePath, AppSettings settings, Profile profile) : base(gamePath, settings, profile) {}
 
 		public override void Prepare() {
 			var tocPath = Path.Combine(_gamePath, "asset_archive", "toc");
@@ -89,7 +89,7 @@ namespace Overstrike.MetaInstallers {
 					return new SMPCModInstaller(_toc, _unchangedToc, _gamePath);
 
 				case ModEntry.ModType.SUIT_MSMR:
-					return new MSMRSuitInstaller(_toc, _gamePath, "us"); // TODO: select language through settings
+					return new MSMRSuitInstaller(_toc, _gamePath, _profile.Settings_Suit_Language);
 
 				case ModEntry.ModType.SUIT_MM:
 					return new MMSuit1Installer(_toc, _gamePath);

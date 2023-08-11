@@ -50,6 +50,25 @@ namespace Overstrike {
 		private Thread _tickThread;
 		private List<Thread> _taskThreads = new List<Thread>();
 
+		#region settings data binding
+
+		public bool Settings_CacheModsLibrary {
+			get => _settings.CacheModsLibrary;
+			set {
+				_settings.CacheModsLibrary = value;
+				SaveSettings();
+			}
+		}
+
+		private class LanguageItem {
+			public string Name { get; set; }
+			public string InternalName { get; set; }
+		}
+
+		private ObservableCollection<LanguageItem> _suitLanguageItems = new();
+
+		#endregion
+
 		public MainWindow(AppSettings settings, List<Profile> profiles, List<ModEntry> mods) {
 			InitializeComponent();
 
@@ -63,6 +82,8 @@ namespace Overstrike {
 			MakeProfileItems();
 			FirstSwitchToProfile();
 			StartTickThread();
+
+			DataContext = this;
 		}
 
 		private void SaveSettings() {
@@ -102,20 +123,93 @@ namespace Overstrike {
 					GradientImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_msmr_back);
 					LogoImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_msmr_logo);
 					LogoImage2.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_msmr_logo2);
+
+					SuitModsSettings.Visibility = Visibility.Visible;
+					MakeSuitLanguageItems();
 				break;
 
 				case GameMM.ID:
 					GradientImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_mm_back);
 					LogoImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_mm_logo);
 					LogoImage2.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_mm_logo2);
+
+					SuitModsSettings.Visibility = Visibility.Visible;
 				break;
 
 				case GameRCRA.ID:
 					GradientImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_rcra_back);
 					LogoImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_rcra_logo);
 					LogoImage2.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_rcra_logo2);
+
+					SuitModsSettings.Visibility = Visibility.Collapsed;
 				break;
 			}
+		}
+
+		private static readonly Dictionary<string, string> USERFRIENDLY_LANGUAGE_NAMES = new() {
+			{"en", "English (UK)"},
+			{"us", "English"},
+			{"da", "Danish"},
+			{"nl", "Dutch"},
+			{"fi", "Finnish"},
+			{"fr", "French"},
+			{"de", "German"},
+			{"it", "Italian"},
+			{"jp", "Japanese"},
+			{"ko", "Korean"},
+			{"no", "Norwegian"},
+			{"pl", "Polish"},
+			{"pt", "Brazilian"},
+			{"ru", "Russian"},
+			{"es", "Latin Spanish"},
+			{"sv", "Swedish"},
+			{"br", "Portuguese"},
+			{"ar", "Arabic"},
+			{"la", "Spanish"},
+			{"zh", "Traditional Chinese"},
+			{"cs", "Czech"},
+			{"hu", "Hungarian"},
+			{"el", "Greek"},
+		};
+
+		private bool _reactToSuitLanguageSelectionChange = true;
+
+		private void MakeSuitLanguageItems() {
+			_suitLanguageItems.Clear();
+
+			Dictionary<string, byte>.KeyCollection gameLanguages = null;
+			if (_selectedProfile.Game == GameMSMR.ID) gameLanguages = MSMRSuitInstaller.LANGUAGES.Keys;
+			if (gameLanguages != null) {
+				foreach (var lang in gameLanguages) {
+					_suitLanguageItems.Add(new LanguageItem() { Name = USERFRIENDLY_LANGUAGE_NAMES[lang], InternalName = lang });
+				}
+			}
+			_suitLanguageItems.Add(new LanguageItem() { Name = "<don't install names>", InternalName = "" });
+
+			SettingsSuitLanguageComboBox.ItemsSource = new CompositeCollection {
+				new CollectionContainer() { Collection = _suitLanguageItems }
+			};
+
+			_reactToSuitLanguageSelectionChange = false;
+			LanguageItem selectedItem = null;
+			foreach (var item in _suitLanguageItems) {
+				if (item.InternalName == _selectedProfile.Settings_Suit_Language) {
+					selectedItem = item;
+					break;
+				}
+			}
+			SettingsSuitLanguageComboBox.SelectedItem = selectedItem;
+			_reactToSuitLanguageSelectionChange = true;
+		}
+
+		private void SettingsSuitLanguageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+			if (!_reactToSuitLanguageSelectionChange) return;
+			if (e.AddedItems.Count <= 0) return;
+			Debug.Assert(SettingsSuitLanguageComboBox.SelectedItem != null);
+
+			LanguageItem item = (LanguageItem)e.AddedItems[0];
+			_selectedProfile.Settings_Suit_Language = item.InternalName;
+			SaveProfile();
 		}
 
 		private void UpdateSelectedProfileItem() {
@@ -597,7 +691,7 @@ namespace Overstrike {
 		}
 
 		private MetaInstallerBase GetMetaInstaller(string game, string gamePath) {
-			return _selectedGame.GetMetaInstaller(gamePath);
+			return _selectedGame.GetMetaInstaller(gamePath, _settings, _selectedProfile);
 		}
 
 		private void ShowStatusMessage(string text) {

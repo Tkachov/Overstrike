@@ -6,9 +6,13 @@
 namespace Overstrike.MetaInstallers {
 	internal abstract class MetaInstallerBase {
 		protected string _gamePath;
+		protected AppSettings _settings;
+		protected Profile _profile;
 
-		public MetaInstallerBase(string gamePath) {
+		public MetaInstallerBase(string gamePath, AppSettings settings, Profile profile) {
 			_gamePath = gamePath;
+			_settings = settings;
+			_profile = profile;
 		}
 
 		public abstract void Prepare();
