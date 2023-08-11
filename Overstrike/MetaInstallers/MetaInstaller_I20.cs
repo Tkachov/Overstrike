@@ -89,7 +89,7 @@ namespace Overstrike.MetaInstallers {
 					return new SMPCModInstaller(_toc, _unchangedToc, _gamePath);
 
 				case ModEntry.ModType.SUIT_MSMR:
-					return new MSMRSuitInstaller(_toc, _gamePath);
+					return new MSMRSuitInstaller(_toc, _gamePath, "us"); // TODO: select language through settings
 
 				case ModEntry.ModType.SUIT_MM:
 					return new MMSuit1Installer(_toc, _gamePath);
