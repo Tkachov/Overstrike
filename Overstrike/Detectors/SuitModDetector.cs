@@ -85,7 +85,9 @@ namespace Overstrike.Detectors {
 								// version 1 / MM
 								detectedModType = ModEntry.ModType.SUIT_MM;
 							}
-						} else if (infoTxt.Length % 17 == 2) {
+						}
+						
+						if (infoTxt.Length % 17 == 2) {
 							if (firstByte == 2) {
 								// version 2 / MM
 								detectedModType = ModEntry.ModType.SUIT_MM_V2;
