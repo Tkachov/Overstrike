@@ -43,7 +43,12 @@ namespace DAT1.Files {
 		}
 
 		public void Add(string key, string value, uint unknown = 0) {
-			_values.Add(key, new Entry { Value = value, Unknown = unknown });
+			if (_values.ContainsKey(key)) {
+				_values[key].Value = value;
+				_values[key].Unknown = unknown;
+			} else {
+				_values.Add(key, new Entry { Value = value, Unknown = unknown });
+			}
 		}
 
 		public void Apply(Localization l) {
