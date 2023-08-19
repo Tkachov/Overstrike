@@ -29,7 +29,7 @@ namespace DAT1 {
 			//public byte[7] unk3;
 		}
 
-        public static byte[] ExtractAsset(FileStream archive, int offset, int size) {
+        public static byte[] ExtractAsset(FileStream archive, long offset, long size) {
             byte[] bytes = new byte[size];
 
             if (!IsCompressed(archive)) {

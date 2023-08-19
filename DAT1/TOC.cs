@@ -111,7 +111,7 @@ namespace DAT1 {
 
 			var archiveName = GetArchiveFilename((uint)archiveIndex);
 			var archive = OpenArchive(archiveName);
-			return DSAR.ExtractAsset(archive, (int)archiveOffset, (int)size);
+			return DSAR.ExtractAsset(archive, (long)archiveOffset, (long)size);
 		}
 
 		public byte[] GetAssetBytes(byte span, ulong assetId) => ExtractAsset(FindAssetIndex(span, assetId));
@@ -520,7 +520,7 @@ namespace DAT1 {
 				return body;
 			}
 
-			int real_size = body.Length + header.Length;
+			long real_size = body.Length + header.Length;
 			byte[] bytes = new byte[real_size];
 			header.CopyTo(bytes, 0);
 			body.CopyTo(bytes, header.Length);
