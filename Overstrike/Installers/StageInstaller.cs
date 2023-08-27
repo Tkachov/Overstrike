@@ -10,6 +10,7 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
+using SharpCompress.Common;
 
 namespace Overstrike.Installers {
 	internal abstract class StageInstallerHelper {
@@ -159,8 +160,12 @@ namespace Overstrike.Installers {
 							if (slashIndex == -1) continue;
 
 							var path = assetLocation.Substring(slashIndex + 1);
-							var assetId = CRC64.Hash(path);
-							_outer._headerlessAssets.Add(assetLocation.Substring(0, slashIndex + 1) + $"{assetId:X016}");
+							if (Regex.IsMatch(path, "^[0-9A-Fa-f]{16}$")) {
+								_outer._headerlessAssets.Add(assetLocation);
+							} else {
+								var assetId = CRC64.Hash(path);
+								_outer._headerlessAssets.Add(assetLocation.Substring(0, slashIndex + 1) + $"{assetId:X016}");
+							}
 						}
 					}
 				}

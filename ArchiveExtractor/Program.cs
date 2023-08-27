@@ -128,7 +128,6 @@ void Work() {
 					if (!hasHeader) {
 						if (headerlessTxt == null) {
 							headerlessTxt = new StreamWriter(File.OpenWrite(Path.Combine(extractedArchiveDir, "headerless.txt")));
-							
 						}
 
 						var fn = $"{spanIndex}/{assetId:X016}";
