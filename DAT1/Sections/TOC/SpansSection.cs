@@ -13,7 +13,7 @@ namespace DAT1.Sections.TOC {
 			public uint AssetIndex, Count;
 		}
 
-		public const uint TAG = 0xEDE8ADA9;
+		public const uint TAG = 0xEDE8ADA9; // Archive TOC Header
 
 		public List<Span> Entries => Values;
 

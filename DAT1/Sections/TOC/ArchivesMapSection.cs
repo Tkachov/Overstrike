@@ -24,7 +24,7 @@ namespace DAT1.Sections.TOC {
 			public uint InstallBucket, Chunkmap;
 		}
 
-		public const uint TAG = 0x398ABFF0;
+		public const uint TAG = 0x398ABFF0; // Archive TOC File Metadata
 
 		public List<ArchiveFileEntry> Entries => Values;
 

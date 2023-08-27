@@ -8,7 +8,7 @@ using System.IO;
 
 namespace DAT1.Sections.TOC {
     public class AssetHeadersSection: Section {
-		public const uint TAG = 0x654BDED9;
+		public const uint TAG = 0x654BDED9; // Archive TOC Asset Header Data
 
 		public List<byte[]> Headers = new();
             

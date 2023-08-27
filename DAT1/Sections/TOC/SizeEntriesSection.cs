@@ -13,7 +13,7 @@ namespace DAT1.Sections.TOC {
 			public uint Always1, Value, Index;
 		}
 
-		public const uint TAG = 0x65BCF461;
+		public const uint TAG = 0x65BCF461; // Archive TOC Asset Metadata
 
 		public List<SizeEntry> Entries => Values;
 
@@ -39,7 +39,7 @@ namespace DAT1.Sections.TOC {
 			public int HeaderOffset;
 		}
 
-		public const uint TAG = 0x65BCF461;
+		public const uint TAG = 0x65BCF461; // Archive TOC Asset Metadata
 
 		public List<SizeEntry> Entries => Values;
 

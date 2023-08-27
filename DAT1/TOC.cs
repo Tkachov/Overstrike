@@ -455,6 +455,12 @@ namespace DAT1 {
 		public SizeEntriesSection_I29 SizesSection => Dat1.Section<SizeEntriesSection_I29>(SizeEntriesSection_I29.TAG);
 		public ArchivesMapSection_I29 ArchivesSection => Dat1.Section<ArchivesMapSection_I29>(ArchivesMapSection_I29.TAG);
 
+		/*
+		36A6C8CC = "Archive TOC Texture Asset Ids"
+		62297090 = "Archive TOC Texture Header"
+		C9FB9DDA = "Archive TOC Texture Meta"
+		*/
+
 		public override bool Load(string filename) {
 			try {
 				using var f = File.OpenRead(filename);
