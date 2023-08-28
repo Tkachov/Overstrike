@@ -13,6 +13,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -418,6 +419,38 @@ namespace ModdingTool {
 			DirectoryDetails.Text = hint;
 		}
 
+		private void ShowAssetsFromFolder(string path) {
+			var parts = path.Split('\\');
+			TreeViewItem currentNode = null;
+			var currentItems = Folders.Items;
+
+			var actualPath = "";
+			foreach (var part in parts) {
+				var found = false;
+				foreach (TreeViewItem item in currentItems) {
+					if ((string)(item.Header) == part) {
+						currentNode = item;
+						currentItems = item.Items;
+						found = true;
+						break;
+					}
+				}
+
+				if (found) { actualPath = Path.Combine(actualPath, part); } else break;
+			}
+
+			if (path != "/" && actualPath == "") {
+				ShowAssetsFromFolder("/");
+				return;
+			}
+
+			if (currentNode != null) {
+				currentNode.IsSelected = true;
+				currentNode.BringIntoView();
+			}
+			ShowAssetsFromFolder(actualPath, currentItems.Count);
+		}
+
 		private void ExtractOneAssetDialog(Asset asset) {
 			CommonSaveFileDialog dialog = new CommonSaveFileDialog();
 			dialog.Title = "Extract asset...";
@@ -513,6 +546,78 @@ namespace ModdingTool {
 			else if (CheckItem(File_LoadRecent3, 2)) {}
 			else if (CheckItem(File_LoadRecent4, 3)) {}
 			else if (CheckItem(File_LoadRecent5, 4)) {}
+		}
+
+		private void Search_JumpTo_Click(object sender, RoutedEventArgs e) {
+			var window = new JumpToWindow();
+			window.ShowDialog();
+
+			if (!window.Jumped) return;
+
+			var path = window.Path.Trim();
+			string folderToOpen = null;
+			bool openAssetById = false;
+			byte assetSpanToOpen = 0;
+			ulong assetIdToOpen = 0;
+			bool openAssetByName = false;
+			string assetNameToOpen = null;
+
+			if (Regex.IsMatch(path, "^[0-9]+/[0-9a-fA-F]{16}$")) { // ref
+				var i = path.IndexOf('/');
+				var span = path.Substring(0, i);
+				var assetId = path.Substring(++i);
+
+				try {
+					var spanIndex = byte.Parse(span);
+					var id = ulong.Parse(assetId, NumberStyles.HexNumber);
+					var assetIndex = _toc.FindAssetIndex(spanIndex, id);
+					if (assetIndex != -1) {
+						var asset = _assets[assetIndex];
+
+						folderToOpen = Path.GetDirectoryName(asset.FullPath);
+						openAssetById = true;
+						assetSpanToOpen = spanIndex;
+						assetIdToOpen = id;
+
+						if (folderToOpen == null) {
+							foreach (var dirname in _assetsByPath.Keys) {
+								if (_assetsByPath[dirname].Contains(assetIndex)) {
+									folderToOpen = dirname;
+									break;
+								}
+							}
+						}
+					}
+				} catch {}
+			} else {
+				if (path != "/") path = path.Replace('/', '\\');
+
+				folderToOpen = path;
+				openAssetByName = true;
+				assetNameToOpen = Path.GetFileName(path);
+			}
+
+			if (folderToOpen != null) {
+				ShowAssetsFromFolder(folderToOpen);
+
+				if (openAssetById) {
+					foreach (Asset assetItem in AssetsList.Items) {
+						if (assetItem.Span == assetSpanToOpen && assetItem.Id == assetIdToOpen) {
+							AssetsList.SelectedItem = assetItem;
+							AssetsList.ScrollIntoView(assetItem);
+							break;
+						}
+					}
+				} else if (openAssetByName) {
+					foreach (Asset assetItem in AssetsList.Items) {
+						if (assetItem.Name == assetNameToOpen) {
+							AssetsList.SelectedItem = assetItem;
+							AssetsList.ScrollIntoView(assetItem);
+							break;
+						}
+					}
+				}
+			}
 		}
 
 		private void Mod_CreateFromReplaced_Click(object sender, RoutedEventArgs e) {

@@ -30,6 +30,9 @@
 							<MenuItem x:Name="File_LoadRecent5" Click="File_LoadRecentItem_Click" />
 						</MenuItem>
 					</MenuItem>
+					<MenuItem Header="Search">
+						<MenuItem x:Name="Search_JumpTo" Header="Jump to path or ref..." Click="Search_JumpTo_Click" />
+					</MenuItem>
 					<MenuItem Header="Mod">
 						<MenuItem x:Name="Mod_CreateFromReplaced" Header="Pack replaced as .stage..." Click="Mod_CreateFromReplaced_Click" />
 					</MenuItem>
@@ -75,7 +78,7 @@
 				</Grid>
 				<GridSplitter Background="Transparent" Grid.Column="1" Margin="0" Width="3" VerticalAlignment="Stretch" HorizontalAlignment="Center" />
 				<Grid Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-					<DataGrid x:Name="AssetsList" RowHeaderWidth="0" GridLinesVisibility="None" Background="White" AutoGenerateColumns="false" CanUserAddRows="false" CanUserDeleteRows="false" BorderThickness="0" ContextMenuOpening="AssetsList_ContextMenuOpening">
+					<DataGrid x:Name="AssetsList" RowHeaderWidth="0" GridLinesVisibility="None" Background="White" AutoGenerateColumns="false" CanUserAddRows="false" CanUserDeleteRows="false" BorderThickness="0" ContextMenuOpening="AssetsList_ContextMenuOpening" HorizontalScrollBarVisibility="Hidden">
 						<DataGrid.ContextMenu>
 							<ContextMenu>
 								<MenuItem x:Name="Menu_SelectedItemsCount" Header="0 selected" IsEnabled="false" />
