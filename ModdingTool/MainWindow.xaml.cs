@@ -30,7 +30,7 @@ namespace ModdingTool {
 		private TOCBase? _toc = null;
 		private List<Asset> _assets = new();
 		private Dictionary<string, List<int>> _assetsByPath = new();
-		private ObservableCollection<Asset> _displayedAssetList = new ObservableCollection<Asset>();
+		private ObservableCollection<Asset> _displayedAssetList = new();
 
 		// replaced data
 		private Dictionary<Asset, string> _replacedAssets = new();
@@ -249,7 +249,10 @@ namespace ModdingTool {
 			root.Children["[WEM]"] = new();
 
 			void AddPath(string dir, int assetIndex) {
-				if (dir == null || dir == "") dir = "/";
+				if (dir == null) dir = "";
+				_assets[assetIndex].FullPath = Path.Combine(dir, _assets[assetIndex].Name);
+
+				if (dir == "") dir = "/";
 				var parts = dir.Split("\\");
 				var currentNode = root;
 				foreach (var part in parts) {
@@ -551,6 +554,9 @@ namespace ModdingTool {
 			Menu_SelectedItemsCount.Header = $"{selected} asset{suffix} selected";
 
 			Menu_ReplaceAsset.Visibility = (selected == 1 ? Visibility.Visible : Visibility.Collapsed);
+
+			Menu_CopyPath.Header = "Copy path" + (selected > 1 ? "s" : "");
+			Menu_CopyRef.Header = "Copy ref" + (selected > 1 ? "s" : "");
 		}
 
 		private void Menu_ReplaceAsset_Click(object sender, RoutedEventArgs e) {
@@ -578,6 +584,30 @@ namespace ModdingTool {
 
 			if (selected == 1) ExtractOneAssetDialog((Asset)AssetsList.SelectedItems[0]);
 			else ExtractMultipleAssetsDialog(AssetsList.SelectedItems);
+		}
+
+		private void Menu_CopyPath_Click(object sender, RoutedEventArgs e) {
+			var selected = AssetsList.SelectedItems.Count;
+			if (selected < 1) return;
+
+			var paths = "";
+			foreach (var item in AssetsList.SelectedItems) {
+				var asset = (Asset)item;
+				var path = asset.FullPath ?? asset.RefPath;
+				paths += $"{path}\n";
+			}
+			Clipboard.SetText(paths);
+		}
+
+		private void Menu_CopyRef_Click(object sender, RoutedEventArgs e) {
+			var selected = AssetsList.SelectedItems.Count;
+			if (selected < 1) return;
+
+			var refs = "";
+			foreach (var asset in AssetsList.SelectedItems) {
+				refs += $"{(asset as Asset).RefPath}\n";
+			}
+			Clipboard.SetText(refs);
 		}
 
 		#endregion

@@ -15,5 +15,7 @@ namespace ModdingTool.Structs {
 
 		public string Name { get; set; }
 		public string Archive { get; set; }
+		public string FullPath = null;
+		public string RefPath { get => $"{Span}/{Id:X016}"; }
 	}
 }

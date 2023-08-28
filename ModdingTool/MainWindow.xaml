@@ -76,6 +76,9 @@
 								<Separator/>
 								<MenuItem x:Name="Menu_ExtractAsset" Header="Extract selected..." Click="Menu_ExtractAsset_Click" />
 								<MenuItem x:Name="Menu_ReplaceAsset" Header="Replace selected..." Click="Menu_ReplaceAsset_Click" />
+								<Separator/>
+								<MenuItem x:Name="Menu_CopyPath" Header="Copy path" Click="Menu_CopyPath_Click" />
+								<MenuItem x:Name="Menu_CopyRef" Header="Copy ref" Click="Menu_CopyRef_Click" />
 							</ContextMenu>
 						</DataGrid.ContextMenu>
 						<DataGrid.Columns>
