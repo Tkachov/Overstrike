@@ -31,6 +31,7 @@
 						</MenuItem>
 					</MenuItem>
 					<MenuItem Header="Search">
+						<MenuItem x:Name="Search_Search" Header="Search..." Click="Search_Search_Click" />
 						<MenuItem x:Name="Search_JumpTo" Header="Jump to path or ref..." Click="Search_JumpTo_Click" />
 					</MenuItem>
 					<MenuItem Header="Mod">

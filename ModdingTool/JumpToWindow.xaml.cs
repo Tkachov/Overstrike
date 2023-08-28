@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Input;
 
 namespace ModdingTool;
 
@@ -10,8 +11,8 @@ public partial class JumpToWindow: Window {
 		InitializeComponent();
 	}
 
-	private void PathTextBox_KeyUp(object sender, System.Windows.Input.KeyEventArgs e) {
-		if (e.Key == System.Windows.Input.Key.Enter) {
+	private void PathTextBox_KeyUp(object sender, KeyEventArgs e) {
+		if (e.Key == Key.Enter) {
 			Jump();
 		}
 	}

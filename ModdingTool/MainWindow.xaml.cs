@@ -37,6 +37,9 @@ namespace ModdingTool {
 		// replaced data
 		private Dictionary<Asset, string> _replacedAssets = new();
 
+		// ui
+		private SearchWindow _searchWindow = null;
+
 		public MainWindow() {
 			InitializeComponent();
 
@@ -451,6 +454,72 @@ namespace ModdingTool {
 			ShowAssetsFromFolder(actualPath, currentItems.Count);
 		}
 
+		private void JumpTo(string path) {
+			string folderToOpen = null;
+			bool openAssetById = false;
+			byte assetSpanToOpen = 0;
+			ulong assetIdToOpen = 0;
+			bool openAssetByName = false;
+			string assetNameToOpen = null;
+
+			if (Regex.IsMatch(path, "^[0-9]+/[0-9a-fA-F]{16}$")) { // ref
+				var i = path.IndexOf('/');
+				var span = path.Substring(0, i);
+				var assetId = path.Substring(++i);
+
+				try {
+					var spanIndex = byte.Parse(span);
+					var id = ulong.Parse(assetId, NumberStyles.HexNumber);
+					var assetIndex = _toc.FindAssetIndex(spanIndex, id);
+					if (assetIndex != -1) {
+						var asset = _assets[assetIndex];
+
+						folderToOpen = Path.GetDirectoryName(asset.FullPath);
+						openAssetById = true;
+						assetSpanToOpen = spanIndex;
+						assetIdToOpen = id;
+
+						if (folderToOpen == null) {
+							foreach (var dirname in _assetsByPath.Keys) {
+								if (_assetsByPath[dirname].Contains(assetIndex)) {
+									folderToOpen = dirname;
+									break;
+								}
+							}
+						}
+					}
+				} catch {}
+			} else {
+				if (path != "/") path = path.Replace('/', '\\');
+
+				folderToOpen = path;
+				openAssetByName = true;
+				assetNameToOpen = Path.GetFileName(path);
+			}
+
+			if (folderToOpen != null) {
+				ShowAssetsFromFolder(folderToOpen);
+
+				if (openAssetById) {
+					foreach (Asset assetItem in AssetsList.Items) {
+						if (assetItem.Span == assetSpanToOpen && assetItem.Id == assetIdToOpen) {
+							AssetsList.SelectedItem = assetItem;
+							AssetsList.ScrollIntoView(assetItem);
+							break;
+						}
+					}
+				} else if (openAssetByName) {
+					foreach (Asset assetItem in AssetsList.Items) {
+						if (assetItem.Name == assetNameToOpen) {
+							AssetsList.SelectedItem = assetItem;
+							AssetsList.ScrollIntoView(assetItem);
+							break;
+						}
+					}
+				}
+			}
+		}
+
 		private void ExtractOneAssetDialog(Asset asset) {
 			CommonSaveFileDialog dialog = new CommonSaveFileDialog();
 			dialog.Title = "Extract asset...";
@@ -548,76 +617,24 @@ namespace ModdingTool {
 			else if (CheckItem(File_LoadRecent5, 4)) {}
 		}
 
+		private void Search_Search_Click(object sender, RoutedEventArgs e) {
+			if (_searchWindow == null) {
+				_searchWindow = new SearchWindow(_assets, _assetsByPath); // TODO: JumpTo
+				_searchWindow.Closed += (object? sender, EventArgs e) => {
+					_searchWindow = null;
+				};
+				_searchWindow.Show();
+			} else {
+				_searchWindow.Focus();
+			}
+		}
+
 		private void Search_JumpTo_Click(object sender, RoutedEventArgs e) {
 			var window = new JumpToWindow();
 			window.ShowDialog();
 
 			if (!window.Jumped) return;
-
-			var path = window.Path.Trim();
-			string folderToOpen = null;
-			bool openAssetById = false;
-			byte assetSpanToOpen = 0;
-			ulong assetIdToOpen = 0;
-			bool openAssetByName = false;
-			string assetNameToOpen = null;
-
-			if (Regex.IsMatch(path, "^[0-9]+/[0-9a-fA-F]{16}$")) { // ref
-				var i = path.IndexOf('/');
-				var span = path.Substring(0, i);
-				var assetId = path.Substring(++i);
-
-				try {
-					var spanIndex = byte.Parse(span);
-					var id = ulong.Parse(assetId, NumberStyles.HexNumber);
-					var assetIndex = _toc.FindAssetIndex(spanIndex, id);
-					if (assetIndex != -1) {
-						var asset = _assets[assetIndex];
-
-						folderToOpen = Path.GetDirectoryName(asset.FullPath);
-						openAssetById = true;
-						assetSpanToOpen = spanIndex;
-						assetIdToOpen = id;
-
-						if (folderToOpen == null) {
-							foreach (var dirname in _assetsByPath.Keys) {
-								if (_assetsByPath[dirname].Contains(assetIndex)) {
-									folderToOpen = dirname;
-									break;
-								}
-							}
-						}
-					}
-				} catch {}
-			} else {
-				if (path != "/") path = path.Replace('/', '\\');
-
-				folderToOpen = path;
-				openAssetByName = true;
-				assetNameToOpen = Path.GetFileName(path);
-			}
-
-			if (folderToOpen != null) {
-				ShowAssetsFromFolder(folderToOpen);
-
-				if (openAssetById) {
-					foreach (Asset assetItem in AssetsList.Items) {
-						if (assetItem.Span == assetSpanToOpen && assetItem.Id == assetIdToOpen) {
-							AssetsList.SelectedItem = assetItem;
-							AssetsList.ScrollIntoView(assetItem);
-							break;
-						}
-					}
-				} else if (openAssetByName) {
-					foreach (Asset assetItem in AssetsList.Items) {
-						if (assetItem.Name == assetNameToOpen) {
-							AssetsList.SelectedItem = assetItem;
-							AssetsList.ScrollIntoView(assetItem);
-							break;
-						}
-					}
-				}
-			}
+			JumpTo(window.Path.Trim());
 		}
 
 		private void Mod_CreateFromReplaced_Click(object sender, RoutedEventArgs e) {
