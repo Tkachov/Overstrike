@@ -37,7 +37,7 @@ namespace ModdingTool {
 			public Asset Asset;
 
 			public string OriginalAssetName { get => Asset.Name; }
-			public string OriginalAssetNameToolTip { get => $"ID: {Asset.Id:X016}\nSpan: {Asset.Span}\nArchive: {Asset.Archive}"; }
+			public string OriginalAssetNameToolTip { get => (Asset.FullPath == null ? "" : $"Path: {Asset.FullPath}\n") + $"ID: {Asset.Id:X016}\nSpan: {Asset.Span}\nArchive: {Asset.Archive}"; }
 
 			public string ReplacingFileName { get; set; }
 			public string ReplacingFileNameToolTip { get; set; }

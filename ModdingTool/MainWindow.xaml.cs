@@ -248,9 +248,10 @@ namespace ModdingTool {
 			root.Children["[UNKNOWN]"] = new();
 			root.Children["[WEM]"] = new();
 
-			void AddPath(string dir, int assetIndex) {
+			void AddPath(string dir, int assetIndex, bool makeFullPath = false) {
 				if (dir == null) dir = "";
-				_assets[assetIndex].FullPath = Path.Combine(dir, _assets[assetIndex].Name);
+				if (makeFullPath)
+					_assets[assetIndex].FullPath = Path.Combine(dir, _assets[assetIndex].Name);
 
 				if (dir == "") dir = "/";
 				var parts = dir.Split("\\");
@@ -281,8 +282,7 @@ namespace ModdingTool {
 					var assetPath = DAT1.Utils.Normalize(knownHashes[assetId]);
 					usedHashes[assetId] = assetPath;
 					asset.Name = Path.GetFileName(assetPath);
-					// TODO: full name
-					AddPath(Path.GetDirectoryName(assetPath), i);
+					AddPath(Path.GetDirectoryName(assetPath), i, true);
 				}
 
 				++progress;
