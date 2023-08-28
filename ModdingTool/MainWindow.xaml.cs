@@ -16,6 +16,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace ModdingTool {
 	public partial class MainWindow: Window {
@@ -523,21 +524,44 @@ namespace ModdingTool {
 		#region folders view
 
 		private void Folders_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e) {
+			var path = GetSelectedFolderPath();
+			ShowAssetsFromFolder(path, ((TreeViewItem)Folders.SelectedItem).Items.Count);
+		}
+
+		private void Folders_ContextMenuOpening(object sender, ContextMenuEventArgs e) {
+			var element = (DependencyObject)e.OriginalSource;
+			while (element != null && !(element is TreeViewItem))
+				element = VisualTreeHelper.GetParent(element);
+
+			if (element != null && element is TreeViewItem) {
+				var treeItem = (TreeViewItem)element;
+				treeItem.Focus();
+				treeItem.IsSelected = true;
+			} else {
+				e.Handled = true; // don't show the menu if it wasn't tree item clicked
+			}
+		}
+
+		private void FoldersMenu_CopyPath_Click(object sender, RoutedEventArgs e) {
+			var path = GetSelectedFolderPath();
+			Clipboard.SetText(path);
+		}
+
+		private string GetSelectedFolderPath() {
 			string path = "";
-			var selection = Folders.SelectedItem;			
+			var selection = Folders.SelectedItem;
 			while (selection != null) {
 				string name = (string)((TreeViewItem)selection).Header;
 
 				if (path != "")
-					path = name + "\\" + path; 
+					path = name + "\\" + path;
 				else
 					path = name;
 
 				selection = ((TreeViewItem)selection).Parent;
 				if (selection is TreeView) break;
 			}
-
-			ShowAssetsFromFolder(path, ((TreeViewItem)Folders.SelectedItem).Items.Count);
+			return path;
 		}
 
 		#endregion

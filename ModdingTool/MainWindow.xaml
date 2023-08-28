@@ -65,7 +65,13 @@
 					<ColumnDefinition Width="550*" MinWidth="100" />
 				</Grid.ColumnDefinitions>
 				<Grid Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-					<TreeView x:Name="Folders" BorderBrush="#EEE" BorderThickness="0,0,2,0" Padding="0,4,4,4" SelectedItemChanged="Folders_SelectedItemChanged" />
+					<TreeView x:Name="Folders" BorderBrush="#EEE" BorderThickness="0,0,2,0" Padding="0,4,4,4" SelectedItemChanged="Folders_SelectedItemChanged" ContextMenuOpening="Folders_ContextMenuOpening">
+						<TreeView.ContextMenu>
+							<ContextMenu>
+								<MenuItem x:Name="FoldersMenu_CopyPath" Header="Copy path" Click="FoldersMenu_CopyPath_Click" />
+							</ContextMenu>
+						</TreeView.ContextMenu>
+					</TreeView>
 				</Grid>
 				<GridSplitter Background="Transparent" Grid.Column="1" Margin="0" Width="3" VerticalAlignment="Stretch" HorizontalAlignment="Center" />
 				<Grid Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
