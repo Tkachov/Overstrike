@@ -34,7 +34,7 @@
 			<TextBlock x:Name="ResultsCount" Text="0 results:" Margin="10,47,7,7" VerticalAlignment="Top" />
 
 			<Grid Margin="7,70,7,7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-				<DataGrid x:Name="SearchResults" RowHeaderWidth="0" GridLinesVisibility="None" Background="White" AutoGenerateColumns="false" CanUserSortColumns="true" CanUserAddRows="false" CanUserDeleteRows="false" BorderThickness="1">
+				<DataGrid x:Name="SearchResults" RowHeaderWidth="0" GridLinesVisibility="None" Background="White" AutoGenerateColumns="false" CanUserSortColumns="true" CanUserAddRows="false" CanUserDeleteRows="false" BorderThickness="1" MouseDoubleClick="SearchResults_MouseDoubleClick">
 					<DataGrid.Columns>
 						<DataGridTextColumn Header="File Path" Width="*" Binding="{Binding Path}" IsReadOnly="True" />
 						<DataGridTextColumn Header="Size" Width="80" Binding="{Binding SizeFormatted}" SortMemberPath="Size" IsReadOnly="True" />

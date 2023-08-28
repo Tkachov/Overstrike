@@ -11,6 +11,7 @@ namespace ModdingTool;
 public partial class SearchWindow: Window {
 	private List<Asset> _assets;
 	private Dictionary<string, List<int>> _assetsByPath;
+	private System.Action<string> _callback;
 	private ObservableCollection<SearchResult> _displayedResults = new();
 
 	class SearchResult {
@@ -24,10 +25,11 @@ public partial class SearchWindow: Window {
 		public string RefPath { get => $"{Span}/{Id:X016}"; }
 	}
 
-	public SearchWindow(List<Asset> assets, Dictionary<string, List<int>> assetsByPath) {
+	public SearchWindow(List<Asset> assets, Dictionary<string, List<int>> assetsByPath, System.Action<string> callback) {
 		InitializeComponent();
 		_assets = assets;
 		_assetsByPath = assetsByPath;
+		_callback = callback;
 
 		SearchTextBox.Text = "";
 		Search();
@@ -41,6 +43,13 @@ public partial class SearchWindow: Window {
 
 	private void SearchButton_Click(object sender, RoutedEventArgs e) {
 		Search();
+	}
+
+	private void SearchResults_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
+		if (SearchResults.SelectedItems.Count != 1) return;
+		if (SearchResults.SelectedItem == null) return;
+
+		_callback((SearchResults.SelectedItem as SearchResult).RefPath);
 	}
 
 	private void Search() {

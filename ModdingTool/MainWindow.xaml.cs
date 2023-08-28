@@ -619,7 +619,7 @@ namespace ModdingTool {
 
 		private void Search_Search_Click(object sender, RoutedEventArgs e) {
 			if (_searchWindow == null) {
-				_searchWindow = new SearchWindow(_assets, _assetsByPath); // TODO: JumpTo
+				_searchWindow = new SearchWindow(_assets, _assetsByPath, JumpTo);
 				_searchWindow.Closed += (object? sender, EventArgs e) => {
 					_searchWindow = null;
 				};
