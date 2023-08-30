@@ -73,6 +73,7 @@
 						<TreeView.ContextMenu>
 							<ContextMenu>
 								<MenuItem x:Name="FoldersMenu_ExtractAssets" Header="Extract all..." Click="FoldersMenu_ExtractAssets_Click" />
+								<MenuItem x:Name="FoldersMenu_ExtractAssetsToStage" Header="Extract to stage..." Click="FoldersMenu_ExtractAssetsToStage_Click" />
 								<Separator/>
 								<MenuItem x:Name="FoldersMenu_CopyPath" Header="Copy path" Click="FoldersMenu_CopyPath_Click" />
 							</ContextMenu>

@@ -751,6 +751,11 @@ namespace ModdingTool {
 			thread.Start();
 		}
 
+		private void FoldersMenu_ExtractAssetsToStage_Click(object sender, RoutedEventArgs e) {
+			var window = new StageSelector();
+			window.ShowDialog();
+		}
+
 		private void FoldersMenu_CopyPath_Click(object sender, RoutedEventArgs e) {
 			var path = GetSelectedFolderPath();
 			Clipboard.SetText(path);
