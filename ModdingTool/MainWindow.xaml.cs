@@ -521,7 +521,7 @@ namespace ModdingTool {
 		}
 
 		private void ExtractOneAssetDialog(Asset asset) {
-			CommonSaveFileDialog dialog = new CommonSaveFileDialog();
+			CommonSaveFileDialog dialog = new();
 			dialog.Title = "Extract asset...";
 			dialog.RestoreDirectory = true;
 			dialog.Filters.Add(new CommonFileDialogFilter("All files", "*") { ShowExtensions = true });
@@ -535,13 +535,13 @@ namespace ModdingTool {
 		}
 
 		private void ExtractMultipleAssetsDialog(System.Collections.IList assets) {
-			CommonOpenFileDialog dialog = new CommonOpenFileDialog();
+			CommonOpenFileDialog dialog = new();
 			dialog.Title = "Select directory to extract assets to...";
 			dialog.IsFolderPicker = true;
 			dialog.RestoreDirectory = true;
 
 			var result = dialog.ShowDialog();
-			this.Activate();
+			Activate();
 
 			if (result != CommonFileDialogResult.Ok) {
 				return;
@@ -563,6 +563,66 @@ namespace ModdingTool {
 				var bytes = _toc.GetAssetBytes(asset.Span, asset.Id);
 				File.WriteAllBytes(path, bytes);
 			} catch {} // TODO: notify user of failure somehow
+		}
+
+		private void ExtractFolder(string folder, string path) {
+			Dispatcher.Invoke(() => {
+				OverlayHeaderLabel.Text = "Scanning tree...";
+				OverlayOperationLabel.Text = "-";
+			});
+
+			Dictionary<string, List<int>> matchingPaths = new();
+			var foundAssetsTotal = 0;
+			foreach (var _path in _assetsByPath.Keys) {
+				if (_path.StartsWith(folder)) {
+					var assets = _assetsByPath[_path];
+					matchingPaths.Add(Path.GetRelativePath(folder, _path), assets);
+					foundAssetsTotal += assets.Count;
+
+					Dispatcher.Invoke(() => {
+						OverlayOperationLabel.Text = folder;
+					});
+				}
+			}
+
+			// remember which assets have the same name
+
+			Dispatcher.Invoke(() => {
+				OverlayHeaderLabel.Text = "Scanning tree...";
+				OverlayOperationLabel.Text = "-";
+			});
+
+			Dictionary<ulong, int> countById = new();
+			foreach (var suffix in matchingPaths.Keys) {
+				foreach (var assetIndex in matchingPaths[suffix]) {
+					var asset = _assets[assetIndex];
+					countById.Update(asset.Id, 1, (int mapValue, int updateValue) => { return mapValue + updateValue; });
+				}
+			}
+
+			// extract
+
+			var progress = 0;
+			var progressTotal = foundAssetsTotal;
+			foreach (var suffix in matchingPaths.Keys) {
+				var dirname = Path.Combine(path, suffix);
+				if (!Directory.Exists(dirname)) Directory.CreateDirectory(dirname);
+
+				foreach (var assetIndex in matchingPaths[suffix]) {
+					var asset = _assets[assetIndex];
+					Dispatcher.Invoke(() => {
+						OverlayHeaderLabel.Text = $"Extracting assets ({progress}/{progressTotal} done)...";
+						OverlayOperationLabel.Text = $"'{asset.Name}'";
+					});
+
+					var assetPath = Path.Combine(dirname, asset.Name);
+					if (countById[asset.Id] > 1) {
+						assetPath = Path.Combine(dirname, $"{asset.Name}.{asset.Span}");
+					}
+					ExtractAsset(asset, assetPath);
+					++progress;
+				}
+			}
 		}
 
 		#endregion
@@ -662,6 +722,33 @@ namespace ModdingTool {
 			} else {
 				e.Handled = true; // don't show the menu if it wasn't tree item clicked
 			}
+		}
+
+		private void FoldersMenu_ExtractAssets_Click(object sender, RoutedEventArgs e) {
+			CommonOpenFileDialog dialog = new();
+			dialog.Title = "Select directory to extract assets to...";
+			dialog.IsFolderPicker = true;
+			dialog.RestoreDirectory = true;
+
+			var result = dialog.ShowDialog();
+			Activate();
+
+			if (result != CommonFileDialogResult.Ok) {
+				return;
+			}
+
+			var path = dialog.FileName;
+			if (!Directory.Exists(path)) {
+				return;
+			}
+
+			//
+
+			var folder = GetSelectedFolderPath();
+
+			Thread thread = new(() => ExtractFolder(folder, path));
+			_taskThreads.Add(thread);
+			thread.Start();
 		}
 
 		private void FoldersMenu_CopyPath_Click(object sender, RoutedEventArgs e) {

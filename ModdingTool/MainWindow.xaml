@@ -72,6 +72,8 @@
 					<TreeView x:Name="Folders" BorderBrush="#EEE" BorderThickness="0,0,2,0" Padding="0,4,4,4" SelectedItemChanged="Folders_SelectedItemChanged" ContextMenuOpening="Folders_ContextMenuOpening">
 						<TreeView.ContextMenu>
 							<ContextMenu>
+								<MenuItem x:Name="FoldersMenu_ExtractAssets" Header="Extract all..." Click="FoldersMenu_ExtractAssets_Click" />
+								<Separator/>
 								<MenuItem x:Name="FoldersMenu_CopyPath" Header="Copy path" Click="FoldersMenu_CopyPath_Click" />
 							</ContextMenu>
 						</TreeView.ContextMenu>
