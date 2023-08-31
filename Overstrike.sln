@@ -7,13 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Overstrike", "Overstrike\Ov
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAT1", "DAT1\DAT1.csproj", "{416048B3-03E7-44BF-8719-66EB0474B589}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArchiveExtractor", "ArchiveExtractor\ArchiveExtractor.csproj", "{16CA2F18-D0F0-4BC1-B729-FC103A3E6DE8}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WemExtractor", "WemExtractor\WemExtractor.csproj", "{1EEC6064-B977-4419-8C90-AFE276B8F1BB}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GDeflateWrapper", "GDeflateWrapper\GDeflateWrapper.csproj", "{4E5F752F-4CAE-4F00-9830-7372413EECA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModdingTool", "ModdingTool\ModdingTool.csproj", "{A6272D46-EC50-4484-B740-89A805B2A463}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModdingTool", "ModdingTool\ModdingTool.csproj", "{A6272D46-EC50-4484-B740-89A805B2A463}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,22 +35,6 @@ Global
 		{416048B3-03E7-44BF-8719-66EB0474B589}.Release|Any CPU.Build.0 = Release|x64
 		{416048B3-03E7-44BF-8719-66EB0474B589}.Release|x64.ActiveCfg = Release|x64
 		{416048B3-03E7-44BF-8719-66EB0474B589}.Release|x64.Build.0 = Release|x64
-		{16CA2F18-D0F0-4BC1-B729-FC103A3E6DE8}.Debug|Any CPU.ActiveCfg = Debug|x64
-		{16CA2F18-D0F0-4BC1-B729-FC103A3E6DE8}.Debug|Any CPU.Build.0 = Debug|x64
-		{16CA2F18-D0F0-4BC1-B729-FC103A3E6DE8}.Debug|x64.ActiveCfg = Debug|x64
-		{16CA2F18-D0F0-4BC1-B729-FC103A3E6DE8}.Debug|x64.Build.0 = Debug|x64
-		{16CA2F18-D0F0-4BC1-B729-FC103A3E6DE8}.Release|Any CPU.ActiveCfg = Release|x64
-		{16CA2F18-D0F0-4BC1-B729-FC103A3E6DE8}.Release|Any CPU.Build.0 = Release|x64
-		{16CA2F18-D0F0-4BC1-B729-FC103A3E6DE8}.Release|x64.ActiveCfg = Release|x64
-		{16CA2F18-D0F0-4BC1-B729-FC103A3E6DE8}.Release|x64.Build.0 = Release|x64
-		{1EEC6064-B977-4419-8C90-AFE276B8F1BB}.Debug|Any CPU.ActiveCfg = Debug|x64
-		{1EEC6064-B977-4419-8C90-AFE276B8F1BB}.Debug|Any CPU.Build.0 = Debug|x64
-		{1EEC6064-B977-4419-8C90-AFE276B8F1BB}.Debug|x64.ActiveCfg = Debug|x64
-		{1EEC6064-B977-4419-8C90-AFE276B8F1BB}.Debug|x64.Build.0 = Debug|x64
-		{1EEC6064-B977-4419-8C90-AFE276B8F1BB}.Release|Any CPU.ActiveCfg = Release|x64
-		{1EEC6064-B977-4419-8C90-AFE276B8F1BB}.Release|Any CPU.Build.0 = Release|x64
-		{1EEC6064-B977-4419-8C90-AFE276B8F1BB}.Release|x64.ActiveCfg = Release|x64
-		{1EEC6064-B977-4419-8C90-AFE276B8F1BB}.Release|x64.Build.0 = Release|x64
 		{4E5F752F-4CAE-4F00-9830-7372413EECA6}.Debug|Any CPU.ActiveCfg = Debug|x64
 		{4E5F752F-4CAE-4F00-9830-7372413EECA6}.Debug|Any CPU.Build.0 = Debug|x64
 		{4E5F752F-4CAE-4F00-9830-7372413EECA6}.Debug|x64.ActiveCfg = Debug|x64
