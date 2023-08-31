@@ -88,6 +88,7 @@
 								<MenuItem x:Name="Menu_SelectedItemsCount" Header="0 selected" IsEnabled="false" />
 								<Separator/>
 								<MenuItem x:Name="Menu_ExtractAsset" Header="Extract selected..." Click="Menu_ExtractAsset_Click" />
+								<MenuItem x:Name="Menu_ExtractAssetToStage" Header="Extract to stage..." Click="Menu_ExtractAssetToStage_Click" />
 								<MenuItem x:Name="Menu_ReplaceAsset" Header="Replace selected..." Click="Menu_ReplaceAsset_Click" />
 								<Separator/>
 								<MenuItem x:Name="Menu_CopyPath" Header="Copy path" Click="Menu_CopyPath_Click" />

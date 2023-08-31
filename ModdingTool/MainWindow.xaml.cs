@@ -558,6 +558,32 @@ namespace ModdingTool {
 			}
 		}
 
+		private void ExtractAssetsToStageDialog(System.Collections.IList assets) {
+			var window = new StageSelector();
+			window.ShowDialog();
+
+			if (window.Stage == null) return;
+
+			var cwd = Directory.GetCurrentDirectory();
+			var path = Path.Combine(cwd, "stages");
+			var stagePath = Path.Combine(path, window.Stage);
+			if (!Directory.Exists(stagePath)) Directory.CreateDirectory(stagePath);
+
+			foreach (var item in assets) {
+				var asset = (Asset)item;
+
+				var dirname = Path.Combine(stagePath, $"{asset.Span}");
+				var assetPath = Path.Combine(dirname, $"{asset.Id:X016}");
+				if (asset.FullPath != null) {
+					assetPath = Path.Combine(stagePath, $"{asset.Span}", asset.FullPath);
+					dirname = Path.GetDirectoryName(assetPath);
+				}
+
+				if (!Directory.Exists(dirname)) Directory.CreateDirectory(dirname);
+				ExtractAsset(asset, assetPath);
+			}
+		}
+
 		private void ExtractAsset(Asset asset, string path) {
 			try {
 				var bytes = _toc.GetAssetBytes(asset.Span, asset.Id);
@@ -884,6 +910,13 @@ namespace ModdingTool {
 
 			if (selected == 1) ExtractOneAssetDialog((Asset)AssetsList.SelectedItems[0]);
 			else ExtractMultipleAssetsDialog(AssetsList.SelectedItems);
+		}
+
+		private void Menu_ExtractAssetToStage_Click(object sender, RoutedEventArgs e) {
+			var selected = AssetsList.SelectedItems.Count;
+			if (selected < 1) return;
+
+			ExtractAssetsToStageDialog(AssetsList.SelectedItems);
 		}
 
 		private void Menu_CopyPath_Click(object sender, RoutedEventArgs e) {
