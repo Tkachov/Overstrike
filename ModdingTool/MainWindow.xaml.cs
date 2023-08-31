@@ -775,6 +775,54 @@ namespace ModdingTool {
 			JumpTo(window.Path.Trim());
 		}
 
+		private void Mod_SubmenuOpened(object sender, RoutedEventArgs e) {
+			Mod_ReplaceAssetsFromStage.IsEnabled = StagesExist();
+		}
+
+		private bool StagesExist() {
+			var cwd = Directory.GetCurrentDirectory();
+			var path = Path.Combine(cwd, "stages");
+			if (Directory.Exists(path)) {
+				var dirs = Directory.GetDirectories(path, "*", SearchOption.TopDirectoryOnly);
+				return (dirs.Length > 0);
+			}
+			return false;
+		}
+
+		private void Mod_ReplaceAssetsFromStage_Click(object sender, RoutedEventArgs e) {
+			var window = new StageSelector();
+			window.OnlyExisting = true;
+			window.ShowDialog();
+
+			if (window.Stage == null) return;
+
+			var cwd = Directory.GetCurrentDirectory();
+			var path = Path.Combine(cwd, "stages");
+			var stagePath = Path.Combine(path, window.Stage);
+
+			for (var spanIndex = 0; spanIndex < 256; ++spanIndex) {
+				var spanDir = Path.Combine(stagePath, $"{spanIndex}");
+				if (!Directory.Exists(spanDir)) continue;
+
+				var files = Directory.GetFiles(spanDir, "*", SearchOption.AllDirectories);
+				foreach (var file in files) {
+					var relpath = Path.GetRelativePath(spanDir, file);
+					ulong assetId;
+					if (Regex.IsMatch(relpath, "^[0-9A-Fa-f]{16}$")) {
+						assetId = ulong.Parse(relpath, NumberStyles.HexNumber);
+					} else {
+						assetId = CRC64.Hash(relpath);
+					}
+
+					var assetIndex = _toc.FindAssetIndex((byte)spanIndex, assetId);
+					if (assetIndex == -1) continue;
+
+					var asset = _assets[assetIndex];
+					_replacedAssets.Set(asset, file);
+				}
+			}
+		}
+
 		private void Mod_CreateFromReplaced_Click(object sender, RoutedEventArgs e) {
 			var window = new PackStageWindow(_replacedAssets, _toc);
 			window.ShowDialog();

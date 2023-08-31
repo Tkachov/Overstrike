@@ -15,6 +15,7 @@ public partial class StageSelector: Window {
 	private ObservableCollection<string> _stages = new();
 	private bool _verified = false;
 
+	public bool OnlyExisting = false;
 	public string Stage = null;
 
 	public StageSelector() {
@@ -63,6 +64,13 @@ public partial class StageSelector: Window {
 		WarningMessage.Text = (isValid ? "" : "Stage name isn't valid!");
 		SelectButton.IsEnabled = isValid;
 		SelectButton.Content = (stageExists ? "Select" : "Create");
+
+		if (OnlyExisting && !stageExists) {
+			WarningMessage.Text = "Stage doesn't exist!";
+			SelectButton.IsEnabled = false;
+			SelectButton.Content = "Select";
+			_verified = false;
+		}
 
 		return _verified;
 	}
