@@ -625,6 +625,58 @@ namespace ModdingTool {
 			}
 		}
 
+		private void ExtractFolderToStage(string folder, string stage) {
+			var cwd = Directory.GetCurrentDirectory();
+			var path = Path.Combine(cwd, "stages");
+			var stagePath = Path.Combine(path, stage);
+			if (!Directory.Exists(stagePath)) Directory.CreateDirectory(stagePath);
+
+			Dispatcher.Invoke(() => {
+				OverlayHeaderLabel.Text = "Scanning tree...";
+				OverlayOperationLabel.Text = "-";
+			});
+
+			Dictionary<string, List<int>> matchingPaths = new();
+			var foundAssetsTotal = 0;
+			foreach (var _path in _assetsByPath.Keys) {
+				if (_path.StartsWith(folder)) {
+					var assets = _assetsByPath[_path];
+					matchingPaths.Add(_path, assets);
+					foundAssetsTotal += assets.Count;
+
+					Dispatcher.Invoke(() => {
+						OverlayOperationLabel.Text = folder;
+					});
+				}
+			}
+
+			// extract
+
+			var progress = 0;
+			var progressTotal = foundAssetsTotal;
+			foreach (var suffix in matchingPaths.Keys) {
+				foreach (var assetIndex in matchingPaths[suffix]) {
+					var asset = _assets[assetIndex];
+					Dispatcher.Invoke(() => {
+						OverlayHeaderLabel.Text = $"Extracting assets ({progress}/{progressTotal} done)...";
+						OverlayOperationLabel.Text = $"'{asset.Name}'";
+					});
+
+					var dirname = Path.Combine(stagePath, $"{asset.Span}", suffix);
+					var assetPath = Path.Combine(dirname, asset.Name);
+					if (asset.FullPath == null) {
+						dirname = Path.Combine(stagePath, $"{asset.Span}");
+						assetPath = Path.Combine(dirname, $"{asset.Id:X016}");
+					}
+
+					if (!Directory.Exists(dirname)) Directory.CreateDirectory(dirname);
+
+					ExtractAsset(asset, assetPath);
+					++progress;
+				}
+			}
+		}
+
 		#endregion
 		#region event handlers
 
@@ -754,6 +806,16 @@ namespace ModdingTool {
 		private void FoldersMenu_ExtractAssetsToStage_Click(object sender, RoutedEventArgs e) {
 			var window = new StageSelector();
 			window.ShowDialog();
+
+			if (window.Stage == null) return;
+
+			//
+
+			var folder = GetSelectedFolderPath();
+
+			Thread thread = new(() => ExtractFolderToStage(folder, window.Stage));
+			_taskThreads.Add(thread);
+			thread.Start();
 		}
 
 		private void FoldersMenu_CopyPath_Click(object sender, RoutedEventArgs e) {

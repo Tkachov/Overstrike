@@ -4,6 +4,7 @@
 // A copy of the that license should come with this program (LICENSE.txt). If not, see <http://www.gnu.org/licenses/>.
 
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
@@ -14,14 +15,21 @@ public partial class StageSelector: Window {
 	private ObservableCollection<string> _stages = new();
 	private bool _verified = false;
 
+	public string Stage = null;
+
 	public StageSelector() {
 		InitializeComponent();
 
 		_stages.Clear();
 
-		_stages.Add("abc");
-		_stages.Add("def");
-		_stages.Add("qwerty");
+		var cwd = Directory.GetCurrentDirectory();
+		var path = Path.Combine(cwd, "stages");
+		if (Directory.Exists(path)) {
+			var dirs = Directory.GetDirectories(path, "*", SearchOption.TopDirectoryOnly);
+			foreach (var dir in dirs) {
+				_stages.Add(Path.GetRelativePath(path, dir));
+			}
+		}
 
 		NameComboBox.ItemsSource = _stages;
 		NameComboBox.SelectedIndex = 0;
@@ -62,6 +70,7 @@ public partial class StageSelector: Window {
 	private void Select() {
 		if (!Verify()) return;
 
+		Stage = NameComboBox.Text;
 		Close();
 	}
 }
