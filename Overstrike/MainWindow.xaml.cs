@@ -60,6 +60,14 @@ namespace Overstrike {
 			}
 		}
 
+		public bool Settings_PreferCachedModsLibrary {
+			get => _settings.PreferCachedModsLibrary;
+			set {
+				_settings.PreferCachedModsLibrary = value;
+				SaveSettings();
+			}
+		}
+
 		private class LanguageItem {
 			public string Name { get; set; }
 			public string InternalName { get; set; }
@@ -704,11 +712,11 @@ namespace Overstrike {
 		}
 
 		private void RefreshButton_Click(object sender, RoutedEventArgs e) {
-			RefreshMods();
+			RefreshMods(true);
 		}
 
-		private void RefreshMods() {
-			_mods = ((App)App.Current).ReloadMods();
+		private void RefreshMods(bool forceSync = false) {
+			_mods = ((App)App.Current).ReloadMods(forceSync);
 			MakeModsItems();
 		}
 
@@ -768,7 +776,7 @@ namespace Overstrike {
 			}
 
 			// reload mods
-			_mods = ((App)App.Current).ReloadMods();
+			_mods = ((App)App.Current).ReloadMods(); // TODO: if PreferCachedModsLibrary, add cache entries, so mods appear even without force sync
 			MakeModsItems();
 
 			var newModsCount = 0;
@@ -835,7 +843,7 @@ namespace Overstrike {
 						}
 					}
 
-					RefreshMods();
+					RefreshMods(); // TODO: if PreferCachedModsLibrary, remove cache entries, so mods disappear even without force sync
 				}
 			}
 		}

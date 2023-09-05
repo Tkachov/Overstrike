@@ -3,6 +3,8 @@
 // For more details, terms and conditions, see GNU General Public License.
 // A copy of the that license should come with this program (LICENSE.txt). If not, see <http://www.gnu.org/licenses/>.
 
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using Overstrike.Detectors;
 using System;
 using System.Collections.Generic;
@@ -31,9 +33,18 @@ namespace Overstrike {
 				LoadProfiles();
 			}
 
-			if (!RunDetectionAndShowSplash()) {
-				Shutdown();
-				return;
+			bool syncModsLibrary = true;
+			if (Settings.PreferCachedModsLibrary && ModsDetectionCached.CacheFileExists()) {
+				syncModsLibrary = false;
+			}
+
+			if (syncModsLibrary) {
+				if (!RunDetectionAndShowSplash()) {
+					Shutdown();
+					return;
+				}
+			} else {
+				LoadModsFromCache();
 			}
 
 			ShutdownMode = ShutdownMode.OnLastWindowClose;
@@ -128,12 +139,30 @@ namespace Overstrike {
 			_detection = null;
 		}
 
-		public List<ModEntry> ReloadMods() {
+		private bool LoadModsFromCache() {
+			return ModsDetectionCached.LoadModsFromCache(Mods);
+		}
+
+		public List<ModEntry> ReloadMods(bool forceSync = false) {
 			var oldMods = Mods;
 			Mods = new();
 
-			if (!RunDetectionAndShowSplash()) {
-				Mods = oldMods;
+			bool syncModsLibrary = true;
+			if (Settings.PreferCachedModsLibrary && ModsDetectionCached.CacheFileExists()) {
+				syncModsLibrary = false;
+			}
+			if (forceSync) {
+				syncModsLibrary = true;
+			}
+
+			if (syncModsLibrary) {
+				if (!RunDetectionAndShowSplash()) {
+					Mods = oldMods;
+				}
+			} else {
+				if (!LoadModsFromCache()) {
+					Mods = oldMods;
+				}
 			}
 
 			return Mods;

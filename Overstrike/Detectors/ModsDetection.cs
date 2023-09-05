@@ -123,12 +123,16 @@ namespace Overstrike.Detectors {
 
 		#region cache file
 
-		private string GetCacheFilePath() {
+		internal static string GetCacheFilePath() {
 			var cwd = Directory.GetCurrentDirectory();
 			return Path.Combine(cwd, "Mods Library/Cache.json");
 		}
 
-		private bool CacheFormatsCompatible(string fileFormat, string codeFormat) {
+		internal static bool CacheFileExists() {
+			return File.Exists(GetCacheFilePath());
+		}
+
+		private static bool CacheFormatsCompatible(string fileFormat, string codeFormat) {
 			return (fileFormat == codeFormat);
 		}
 
@@ -180,6 +184,56 @@ namespace Overstrike.Detectors {
 					};
 				}
 			} catch {}
+		}
+
+		internal static bool LoadModsFromCache(List<ModEntry> mods) {
+			try {
+				mods.Clear();
+
+				var json = JObject.Parse(File.ReadAllText(GetCacheFilePath()));
+				var cacheFormat = (string?)json["format"];
+				if (!CacheFormatsCompatible(cacheFormat, CURRENT_CACHE_FORMAT)) return false;
+
+				var cache = (JArray)json["cache"];
+				if (cache == null) return false;
+
+				foreach (var entry in cache) {
+					var entryArray = (JArray)entry;
+					if (entryArray == null || entryArray.Count != 5) continue;
+
+					var filename = (string?)entryArray[0];
+					var fileLength = (long?)entryArray[1];
+					var checksum1 = (uint?)entryArray[2];
+					var checksum2 = (int?)entryArray[3];
+					var produced = (JArray)entryArray[4];
+
+					if (filename == null || fileLength == null || checksum1 == null || checksum2 == null) continue;
+
+					var cwd = Directory.GetCurrentDirectory();
+					if (!File.Exists(Path.Combine(cwd, "Mods Library", filename))) continue;
+
+					var producedMods = new List<ModEntry>();
+					foreach (var mod in produced) {
+						var modArray = (JArray)mod;
+						if (modArray == null || modArray.Count != 3) continue;
+
+						var name = (string?)modArray[0];
+						var path = (string?)modArray[1];
+						var type = (string?)modArray[2];
+
+						if (name == null || path == null || type == null) continue;
+
+						try {
+							var enumType = JsonConvert.DeserializeObject<ModEntry.ModType>("\"" + type + "\"");
+							mods.Add(new ModEntry(name, path, enumType));
+						} catch { }
+					}
+				}
+
+				return true;
+			} catch {
+				return false;
+			}
 		}
 
 		private void SaveCache() {

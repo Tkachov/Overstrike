@@ -10,10 +10,12 @@ namespace Overstrike {
 	public class AppSettings {
 		public string? CurrentProfile;
 		public bool CacheModsLibrary;
+		public bool PreferCachedModsLibrary;
 
 		public AppSettings() {
 			CurrentProfile = null;
 			CacheModsLibrary = true;
+			PreferCachedModsLibrary = false;
 		}
 
 		public AppSettings(string file) {
@@ -21,12 +23,14 @@ namespace Overstrike {
 
 			CurrentProfile = (string)json["profile"];
 			CacheModsLibrary = (bool)json["cache_mods_library"];
+			PreferCachedModsLibrary = (bool)json["prefer_cached_mods_library"];
 		}
 
 		public void Save(string file) {
 			JObject j = new() {
 				["profile"] = CurrentProfile,
-				["cache_mods_library"] = CacheModsLibrary
+				["cache_mods_library"] = CacheModsLibrary,
+				["prefer_cached_mods_library"] = PreferCachedModsLibrary
 			};
 			File.WriteAllText(file, j.ToString());
 		}
