@@ -537,7 +537,23 @@ namespace DAT1 {
 		#region modify assets
 
 		public override int AddAsset(byte span, ulong assetId) {
-			throw new NotImplementedException();
+			var spanEntry = SpansSection.Entries[span];
+			var assetIndex = (int)(spanEntry.AssetIndex + spanEntry.Count); // TODO: insert into right place
+
+			++spanEntry.Count;
+			for (int i = span + 1; i < SpansSection.Entries.Count; ++i) {
+				++SpansSection.Entries[i].AssetIndex;
+			}
+
+			AssetIdsSection.Ids.Insert(assetIndex, assetId);
+			SizesSection.Entries.Insert(assetIndex, new SizeEntriesSection_I29.SizeEntry() {
+				ArchiveIndex = 0,
+				HeaderOffset = -1,
+				Offset = 0,
+				Size = 0
+			});
+
+			return assetIndex;
 		}
 
 		public class AssetUpdater: AssetUpdaterBase {
