@@ -7,7 +7,7 @@ using DAT1.Sections.Generic;
 
 namespace DAT1.Sections.Localization {
 	public class EntriesCountSection: SingleUInt32Section {
-		public const uint TAG = 0xD540A903;
+		public const uint TAG = 0xD540A903; // Localization Header Built
 
 		public uint Count => Value;
 	}

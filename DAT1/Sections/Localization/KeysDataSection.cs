@@ -7,6 +7,6 @@ using DAT1.Sections.Generic;
 
 namespace DAT1.Sections.Localization {
 	public class KeysDataSection: StringsSection {
-		public const uint TAG = 0x4D73CEBD;
+		public const uint TAG = 0x4D73CEBD; // Localization Tags Built
 	}
 }

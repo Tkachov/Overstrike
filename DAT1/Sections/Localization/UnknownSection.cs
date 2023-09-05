@@ -7,6 +7,6 @@ using DAT1.Sections.Generic;
 
 namespace DAT1.Sections.Localization {
 	public class UnknownSection: UInt32ArraySection {
-		public const uint TAG = 0xB0653243;
+		public const uint TAG = 0xB0653243; // Localization Flags Built
 	}
 }

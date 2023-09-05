@@ -11,10 +11,10 @@ namespace DAT1.Sections.Localization {
 	}
 
 	public class SortedKeyHashesSection: UInt32ArraySection {
-		public const uint TAG = 0xC43731B5;
+		public const uint TAG = 0xC43731B5; // Localization SortedHashes Built
 	}
 
 	public class SortedIndexesSection: UInt16ArraySection {
-		public const uint TAG = 0x0CD2CFE9;
+		public const uint TAG = 0x0CD2CFE9; // Localization SortedIndexes Built
 	}
 }
