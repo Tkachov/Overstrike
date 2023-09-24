@@ -709,6 +709,12 @@ namespace ModdingTool {
 			}
 		}
 
+		private void CloseSearchWindow() {
+			if (_searchWindow != null) {
+				_searchWindow.Close();
+			}
+		}
+
 		#endregion
 		#region event handlers
 
@@ -725,6 +731,7 @@ namespace ModdingTool {
 				return;
 			}
 
+			CloseSearchWindow();
 			StartLoadTOCThread(dialog.FileName);
 		}
 
@@ -747,6 +754,7 @@ namespace ModdingTool {
 			bool CheckItem(MenuItem item, int index) {
 				if (sender == item) {
 					if (_recentPaths.Count > index) {
+						CloseSearchWindow();
 						StartLoadTOCThread(_recentPaths[index]);
 					}
 					return true;
@@ -1023,6 +1031,10 @@ namespace ModdingTool {
 		}
 
 		#endregion
+
+		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
+			CloseSearchWindow();
+		}
 
 		#endregion
 	}
