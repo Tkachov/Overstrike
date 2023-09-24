@@ -17,6 +17,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace ModdingTool {
@@ -42,13 +43,18 @@ namespace ModdingTool {
 
 		public MainWindow() {
 			InitializeComponent();
+			CommandBindings.Add(new CommandBinding(AssetsListContextMenu.ExtractAssetCommand, ContextMenu_ExtractAsset));
+			CommandBindings.Add(new CommandBinding(AssetsListContextMenu.ExtractAssetToStageCommand, ContextMenu_ExtractAssetToStage));
+			CommandBindings.Add(new CommandBinding(AssetsListContextMenu.ReplaceAssetCommand, ContextMenu_ReplaceAsset));
+			CommandBindings.Add(new CommandBinding(AssetsListContextMenu.CopyPathCommand, ContextMenu_CopyPath));
+			CommandBindings.Add(new CommandBinding(AssetsListContextMenu.CopyRefCommand, ContextMenu_CopyRef));
 
 			StartTickThread();
 			LoadSettings();
 
 			if (_recentPaths.Count > 0 ) {
 				StartLoadTOCThread(_recentPaths[0]);
-			}			
+			}
 		}
 
 		#region tick
@@ -757,7 +763,7 @@ namespace ModdingTool {
 
 		private void Search_Search_Click(object sender, RoutedEventArgs e) {
 			if (_searchWindow == null) {
-				_searchWindow = new SearchWindow(_assets, _assetsByPath, JumpTo);
+				_searchWindow = new SearchWindow(_assets, _assetsByPath, JumpTo, AssetsListContextMenuClicked);
 				_searchWindow.Closed += (object? sender, EventArgs e) => {
 					_searchWindow = null;
 				};
@@ -919,22 +925,62 @@ namespace ModdingTool {
 
 		private void AssetsList_ContextMenuOpening(object sender, ContextMenuEventArgs e) {
 			var selected = AssetsList.SelectedItems.Count;
-			if (selected == 0) {
-				e.Handled = true;
-				return;
-			}
-
-			var suffix = (selected == 1 ? "" : "s");
-			Menu_SelectedItemsCount.Header = $"{selected} asset{suffix} selected";
-
-			Menu_ReplaceAsset.Visibility = (selected == 1 ? Visibility.Visible : Visibility.Collapsed);
-
-			Menu_CopyPath.Header = "Copy path" + (selected > 1 ? "s" : "");
-			Menu_CopyRef.Header = "Copy ref" + (selected > 1 ? "s" : "");
+			AssetsListContextMenu.HandleContextMenuOpening(sender, e, selected);
 		}
 
-		private void Menu_ReplaceAsset_Click(object sender, RoutedEventArgs e) {
-			var selected = AssetsList.SelectedItems.Count;
+		// command handlers
+
+		private void ContextMenu_ExtractAsset(object sender, ExecutedRoutedEventArgs e) {
+			AssetsListContextMenuClicked("ExtractAsset", AssetsList.SelectedItems);
+		}
+
+		private void ContextMenu_ExtractAssetToStage(object sender, ExecutedRoutedEventArgs e) {
+			AssetsListContextMenuClicked("ExtractAssetToStage", AssetsList.SelectedItems);
+		}
+
+		private void ContextMenu_ReplaceAsset(object sender, ExecutedRoutedEventArgs e) {
+			AssetsListContextMenuClicked("ReplaceAsset", AssetsList.SelectedItems);
+		}
+
+		private void ContextMenu_CopyPath(object sender, ExecutedRoutedEventArgs e) {
+			AssetsListContextMenuClicked("CopyPath", AssetsList.SelectedItems);
+		}
+
+		private void ContextMenu_CopyRef(object sender, ExecutedRoutedEventArgs e) {
+			AssetsListContextMenuClicked("CopyRef", AssetsList.SelectedItems);
+		}
+
+		// common handler (also used by SearchWindow)
+
+		private void AssetsListContextMenuClicked(string item, System.Collections.IList selectedAssets) {
+			switch (item) {
+				case "ExtractAsset": ExtractAssets(selectedAssets); break;
+				case "ExtractAssetToStage": ExtractAssetsToStage(selectedAssets); break;
+				case "ReplaceAsset": ReplaceAsset(selectedAssets); break;
+				case "CopyPath": CopyPath(selectedAssets); break;
+				case "CopyRef": CopyRef(selectedAssets); break;
+			}
+		}
+
+		// actual logic
+
+		private void ExtractAssets(System.Collections.IList assets) {
+			var selected = assets.Count;
+			if (selected < 1) return;
+
+			if (selected == 1) ExtractOneAssetDialog((Asset)assets[0]);
+			else ExtractMultipleAssetsDialog(assets);
+		}
+
+		private void ExtractAssetsToStage(System.Collections.IList assets) {
+			var selected = assets.Count;
+			if (selected < 1) return;
+
+			ExtractAssetsToStageDialog(assets);
+		}
+
+		private void ReplaceAsset(System.Collections.IList assets) {
+			var selected = assets.Count;
 			if (selected != 1) return;
 
 			CommonOpenFileDialog dialog = new CommonOpenFileDialog();
@@ -947,32 +993,17 @@ namespace ModdingTool {
 				return;
 			}
 
-			var asset = (Asset)AssetsList.SelectedItems[0];
+			var asset = (Asset)assets[0];
 			var path = dialog.FileName;
 			_replacedAssets.Set(asset, path);
 		}
 
-		private void Menu_ExtractAsset_Click(object sender, RoutedEventArgs e) {
-			var selected = AssetsList.SelectedItems.Count;
-			if (selected < 1) return;
-
-			if (selected == 1) ExtractOneAssetDialog((Asset)AssetsList.SelectedItems[0]);
-			else ExtractMultipleAssetsDialog(AssetsList.SelectedItems);
-		}
-
-		private void Menu_ExtractAssetToStage_Click(object sender, RoutedEventArgs e) {
-			var selected = AssetsList.SelectedItems.Count;
-			if (selected < 1) return;
-
-			ExtractAssetsToStageDialog(AssetsList.SelectedItems);
-		}
-
-		private void Menu_CopyPath_Click(object sender, RoutedEventArgs e) {
-			var selected = AssetsList.SelectedItems.Count;
+		private static void CopyPath(System.Collections.IList assets) {
+			var selected = assets.Count;
 			if (selected < 1) return;
 
 			var paths = "";
-			foreach (var item in AssetsList.SelectedItems) {
+			foreach (var item in assets) {
 				var asset = (Asset)item;
 				var path = asset.FullPath ?? asset.RefPath;
 				paths += $"{path}\n";
@@ -980,12 +1011,12 @@ namespace ModdingTool {
 			Clipboard.SetText(paths);
 		}
 
-		private void Menu_CopyRef_Click(object sender, RoutedEventArgs e) {
-			var selected = AssetsList.SelectedItems.Count;
+		private static void CopyRef(System.Collections.IList assets) {
+			var selected = assets.Count;
 			if (selected < 1) return;
 
 			var refs = "";
-			foreach (var asset in AssetsList.SelectedItems) {
+			foreach (var asset in assets) {
 				refs += $"{(asset as Asset).RefPath}\n";
 			}
 			Clipboard.SetText(refs);

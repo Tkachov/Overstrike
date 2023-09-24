@@ -83,19 +83,7 @@
 				</Grid>
 				<GridSplitter Background="Transparent" Grid.Column="1" Margin="0" Width="3" VerticalAlignment="Stretch" HorizontalAlignment="Center" />
 				<Grid Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-					<DataGrid x:Name="AssetsList" RowHeaderWidth="0" GridLinesVisibility="None" Background="White" AutoGenerateColumns="false" CanUserAddRows="false" CanUserDeleteRows="false" BorderThickness="0" ContextMenuOpening="AssetsList_ContextMenuOpening" HorizontalScrollBarVisibility="Hidden">
-						<DataGrid.ContextMenu>
-							<ContextMenu>
-								<MenuItem x:Name="Menu_SelectedItemsCount" Header="0 selected" IsEnabled="false" />
-								<Separator/>
-								<MenuItem x:Name="Menu_ExtractAsset" Header="Extract selected..." Click="Menu_ExtractAsset_Click" />
-								<MenuItem x:Name="Menu_ExtractAssetToStage" Header="Extract to stage..." Click="Menu_ExtractAssetToStage_Click" />
-								<MenuItem x:Name="Menu_ReplaceAsset" Header="Replace selected..." Click="Menu_ReplaceAsset_Click" />
-								<Separator/>
-								<MenuItem x:Name="Menu_CopyPath" Header="Copy path" Click="Menu_CopyPath_Click" />
-								<MenuItem x:Name="Menu_CopyRef" Header="Copy ref" Click="Menu_CopyRef_Click" />
-							</ContextMenu>
-						</DataGrid.ContextMenu>
+					<DataGrid x:Name="AssetsList" RowHeaderWidth="0" GridLinesVisibility="None" Background="White" AutoGenerateColumns="false" CanUserAddRows="false" CanUserDeleteRows="false" BorderThickness="0" ContextMenu="{StaticResource AssetsListContextMenu}" ContextMenuOpening="AssetsList_ContextMenuOpening" HorizontalScrollBarVisibility="Hidden">
 						<DataGrid.Columns>
 							<DataGridTextColumn Header="File Name" Width="*" Binding="{Binding Name}" IsReadOnly="True" />
 							<DataGridTextColumn Header="Size" Width="80" Binding="{Binding SizeFormatted}" SortMemberPath="Size" IsReadOnly="True" />
