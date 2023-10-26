@@ -1,0 +1,130 @@
+﻿<Window x:Class="LocalizationTool.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LocalizationTool"
+        mc:Ignorable="d"
+        Title="Localization Tool" Height="450" Width="800">
+    <Window.Resources>
+        <ContextMenu x:Key="LocalizationListContextMenu">
+            <MenuItem Name="RemoveValue" Header="Remove selected value" Click="RemoveEntry" />
+        </ContextMenu>
+    </Window.Resources>
+
+    <Window.InputBindings>
+        <KeyBinding Key="N" Modifiers="Control" Command="{Binding FileNewLocalizationCommand}" />
+        <KeyBinding Key="O" Modifiers="Control" Command="{Binding FileLoadLocalizationCommand}" />
+        <KeyBinding Key="S" Modifiers="Control" Command="{Binding FileSaveLocalizationCommand}" />
+        <KeyBinding Key="S" Modifiers="Control+Shift" Command="{Binding FileSaveAsLocalizationCommand}" />
+        <KeyBinding Key="Z" Modifiers="Control" Command="{Binding FileUndo}" />
+        <KeyBinding Key="Y" Modifiers="Control" Command="{Binding FileRedo}" />
+    </Window.InputBindings>
+
+    <Grid>
+        <DockPanel>
+            <StackPanel DockPanel.Dock="Top">
+                <Grid>
+                    <Menu Padding="0,0,0,0" BorderThickness="0,0,0,2" BorderBrush="#EEE" Background="Transparent">
+                        <Menu.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <DockPanel HorizontalAlignment="Left"/>
+                            </ItemsPanelTemplate>
+                        </Menu.ItemsPanel>
+                        <MenuItem Header="File" SubmenuOpened="File_SubmenuOpened">
+                            <MenuItem x:Name="File_NewLocalization" Header="New file" InputGestureText="Ctrl+N" Command="{Binding FileNewLocalizationCommand}" />
+                            <MenuItem x:Name="File_LoadLocalization" Header="Load 'localization'..." InputGestureText="Ctrl+O" Command="{Binding FileLoadLocalizationCommand}" />
+                            <MenuItem x:Name="File_LoadRecent" Header="Load Recent">
+                                <MenuItem x:Name="File_LoadRecent1" Click="File_LoadRecentItem_Click" />
+                                <MenuItem x:Name="File_LoadRecent2" Click="File_LoadRecentItem_Click" />
+                                <MenuItem x:Name="File_LoadRecent3" Click="File_LoadRecentItem_Click" />
+                                <MenuItem x:Name="File_LoadRecent4" Click="File_LoadRecentItem_Click" />
+                                <MenuItem x:Name="File_LoadRecent5" Click="File_LoadRecentItem_Click" />
+                            </MenuItem>
+                            <MenuItem x:Name="File_Save" Header="Save 'localization'" InputGestureText="Ctrl+S" Command="{Binding FileSaveLocalizationCommand}" Visibility="Collapsed" />
+                            <MenuItem x:Name="File_SaveAs" Header="Save as..." InputGestureText="Ctrl+Shift+S" Command="{Binding FileSaveAsLocalizationCommand}" Visibility="Collapsed" />
+                        </MenuItem>
+                        <MenuItem x:Name="File_Edit" Header="Edit" Visibility="Collapsed">
+                            <MenuItem x:Name="File_Undo" Header="Undo" InputGestureText="Ctrl+Z" Command="{Binding FileUndo}" IsEnabled="False" />
+                            <MenuItem x:Name="File_Redo" Header="Redo" InputGestureText="Ctrl+Y" Command="{Binding FileRedo}" IsEnabled="False" />
+                        </MenuItem>
+                        <MenuItem Header="View">
+                            <MenuItem Header="Show flags" IsCheckable="True" x:Name="ShowFlags" IsChecked="False" Click="ShowFlags_Click" Margin="2,2,0,2" />
+                        </MenuItem>
+                    </Menu>
+                </Grid>
+            </StackPanel>
+            <StatusBar DockPanel.Dock="Bottom" BorderBrush="#EEE" BorderThickness="0,2,0,0" Background="#F9F9F9">
+                <StatusBar.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="180" />
+                            </Grid.ColumnDefinitions>
+                        </Grid>
+                    </ItemsPanelTemplate>
+                </StatusBar.ItemsPanel>
+                <StatusBarItem Grid.Column="0">
+                    <TextBlock x:Name="CurrentItem" Text="Use &quot;File &gt; Load 'localization'...&quot; to load 'localization'" Padding="2,1,2,2" />
+                </StatusBarItem>
+                <Separator Grid.Column="1" Background="#CCC" />
+                <StatusBarItem Grid.Column="2">
+                    <TextBlock x:Name="EntriesCount" Padding="2,1,2,2" Text=""/>
+                </StatusBarItem>
+            </StatusBar>
+
+            <Grid Margin="10,5,10,5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="22"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="22"/>
+                </Grid.RowDefinitions>
+
+                <Grid x:Name="FilterKeyValuesRow" Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="{Binding ActualWidth, ElementName=KeyColumn}"/>
+                        <ColumnDefinition Width="{Binding ActualWidth, ElementName=StringColumn}"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="KeyValuesFilter" Tag="Filter key values" TextChanged="LocalizationList_KeyStringValuesFilter" Grid.Column="0" VerticalAlignment="Top" Template="{StaticResource TextBoxWithPlaceholder}" />
+                    <TextBox x:Name="StringValuesFilter" Tag="Filter string values" TextChanged="LocalizationList_KeyStringValuesFilter" Grid.Column="1" Template="{StaticResource TextBoxWithPlaceholder}" VerticalAlignment="Top" Margin="2,0,-2,0" />
+                </Grid>
+
+                <DataGrid Grid.Row="1"  x:Name="LocalizationList" SelectionChanged="LocalizationList_SelectedCell" RowHeaderWidth="0" GridLinesVisibility="None" Background="White" AutoGenerateColumns="false" CanUserAddRows="False" CanUserDeleteRows="False" BorderThickness="1" ContextMenu="{StaticResource LocalizationListContextMenu}" SelectionMode="Single" Margin="0,5,0,5" CellEditEnding="LocalizationList_CellEditEnding">
+                    <DataGrid.InputBindings>
+                        <KeyBinding Key="Delete" Command="{Binding LocalizationListRemoveEntry}" />
+                    </DataGrid.InputBindings>
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn x:Name="KeyColumn" SortMemberPath="Key" SortDirection="Ascending" Header="Key" Width="*" Binding="{Binding Key}" IsReadOnly="False" />
+                        <DataGridTextColumn x:Name="StringColumn" Header="Value" Width="*" Binding="{Binding Value}" IsReadOnly="False" >
+                            <DataGridTextColumn.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="ToolTip">
+                                        <Setter.Value>
+                                            <TextBlock Text="{Binding ValueWithLineBreaks}" />
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGridTextColumn.CellStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn x:Name="FlagsColumn" Header="Flags" Width="60" Binding="{Binding Flags}" IsReadOnly="False" Visibility="Collapsed" />
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <Grid Grid.Row="2" x:Name="AddNewLocalizationRow" Margin="0,0,50,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*" />
+                        <ColumnDefinition Width="4*" />
+                        <ColumnDefinition Width="0" />
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="AddNewKeyValueInput" Grid.Column="0" Tag="KEY" TextChanged="NewKeyValue_TextChanged" Template="{StaticResource TextBoxWithPlaceholder}" />
+                    <TextBox x:Name="AddNewStringValueInput" Grid.Column="1" Tag="String" TextChanged="NewStringValue_TextChanged" Template="{StaticResource TextBoxWithPlaceholder}" Margin="2,0,-2,0" />
+                    <TextBox x:Name="AddNewFlagsValueInput" Grid.Column="2" Tag="Flags" TextChanged="NewFlagsValue_TextChanged" Template="{StaticResource TextBoxWithPlaceholder}" Margin="4,0,-2,0" Visibility="Collapsed" />
+                </Grid>
+                <Button Grid.Row="2" Width="46" HorizontalAlignment="Right" x:Name="AddNewEntryButton" Margin="4,0,0,0" Background="LightGray" Content="Add" Click="AddNewEntry_Click"/>
+            </Grid>
+        </DockPanel>
+    </Grid>
+</Window>

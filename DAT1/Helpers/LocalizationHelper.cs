@@ -28,6 +28,10 @@ namespace DAT1.Files {
 			}
 		}
 
+        public LocalizationHelper() { }
+
+        public List<string> Keys => _values.Keys.ToList();
+
 		public string GetValue(string key) {
 			if (!_values.ContainsKey(key)) return null;
 			return _values[key].Value;
