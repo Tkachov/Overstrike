@@ -1,0 +1,26 @@
+﻿<Application x:Class="LocalizationTool.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:LocalizationTool"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ControlTemplate x:Key="TextBoxWithPlaceholder" TargetType="TextBox">
+            <Grid>
+                <TextBox x:Name="SearchTextBox" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Text, UpdateSourceTrigger=PropertyChanged}" Tag="{TemplateBinding Tag}" Grid.Column="0" VerticalAlignment="Top" Height="22" Padding="1"/>
+                <TextBlock IsHitTestVisible="False" Text="{TemplateBinding Tag}" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="DarkGray">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text, ElementName=SearchTextBox}" Value="">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Grid>
+        </ControlTemplate>
+
+    </Application.Resources>
+</Application>
