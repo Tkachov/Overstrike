@@ -846,6 +846,8 @@ namespace ModdingTool {
 		#region folders view
 
 		private void Folders_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e) {
+			if (Folders.SelectedItem == null) return;
+
 			var path = GetSelectedFolderPath();
 			ShowAssetsFromFolder(path, ((TreeViewItem)Folders.SelectedItem).Items.Count);
 		}
