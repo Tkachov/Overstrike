@@ -152,6 +152,22 @@ namespace Overstrike {
 
 					SuitModsSettings.Visibility = Visibility.Collapsed;
 				break;
+
+				case GameI30.ID:
+					GradientImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_i30_back);
+					LogoImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_i30_logo);
+					LogoImage2.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_i30_logo2);
+
+					SuitModsSettings.Visibility = Visibility.Collapsed;
+				break;
+
+				case GameI33.ID:
+					GradientImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_i30_back);
+					LogoImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_i33_logo);
+					LogoImage2.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_i30_logo2);
+
+					SuitModsSettings.Visibility = Visibility.Collapsed;
+				break;
 			}
 		}
 

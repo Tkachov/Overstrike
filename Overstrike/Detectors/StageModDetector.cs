@@ -65,6 +65,8 @@ namespace Overstrike.Detectors {
 						if (g == GameMSMR.ID) type = ModEntry.ModType.STAGE_MSMR;
 						else if (g == GameMM.ID) type = ModEntry.ModType.STAGE_MM;
 						else if (g == GameRCRA.ID) type = ModEntry.ModType.STAGE_RCRA;
+						else if (g == GameI30.ID) type = ModEntry.ModType.STAGE_I30;
+						else if (g == GameI33.ID) type = ModEntry.ModType.STAGE_I33;
 					}
 				}
 

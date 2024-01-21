@@ -163,4 +163,16 @@
   <data name="banner_rcra_logo2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\banner_rcra_logo2.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="banner_i30_back" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\banner_i30_back.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="banner_i30_logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\banner_i30_logo.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="banner_i30_logo2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\banner_i30_logo2.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="banner_i33_logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\banner_i33_logo.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

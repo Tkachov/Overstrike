@@ -111,6 +111,46 @@ namespace Overstrike.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static byte[] banner_i30_back {
+            get {
+                object obj = ResourceManager.GetObject("banner_i30_back", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static byte[] banner_i30_logo {
+            get {
+                object obj = ResourceManager.GetObject("banner_i30_logo", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static byte[] banner_i30_logo2 {
+            get {
+                object obj = ResourceManager.GetObject("banner_i30_logo2", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static byte[] banner_i33_logo {
+            get {
+                object obj = ResourceManager.GetObject("banner_i33_logo", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         internal static byte[] banner_mm_back {
@@ -171,7 +211,7 @@ namespace Overstrike.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         internal static byte[] banner_rcra_back {
             get {
@@ -181,7 +221,7 @@ namespace Overstrike.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         internal static byte[] banner_rcra_logo {
             get {
@@ -191,7 +231,7 @@ namespace Overstrike.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         internal static byte[] banner_rcra_logo2 {
             get {

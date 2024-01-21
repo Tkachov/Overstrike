@@ -61,6 +61,8 @@ namespace ModdingTool {
 			_games.Add(new Game() { Name = "Marvel's Spider-Man Remastered", Id = "MSMR" });
 			_games.Add(new Game() { Name = "Marvel's Spider-Man: Miles Morales", Id = "MM" });
 			_games.Add(new Game() { Name = "Ratchet & Clank: Rift Apart", Id = "RCRA" });
+			_games.Add(new Game() { Name = "i30", Id = "i30" });
+			_games.Add(new Game() { Name = "i33", Id = "i33" });
 
 			GameComboBox.ItemsSource = new CompositeCollection {
 				new CollectionContainer() { Collection = _games }

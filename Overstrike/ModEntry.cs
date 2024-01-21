@@ -22,6 +22,8 @@ namespace Overstrike {
 			STAGE_MSMR,
 			STAGE_MM,
 			STAGE_RCRA,
+			STAGE_I30,
+			STAGE_I33,
 
 			UNKNOWN
 		}
@@ -108,6 +110,8 @@ namespace Overstrike {
 				case ModType.STAGE_MSMR:
 				case ModType.STAGE_MM:
 				case ModType.STAGE_RCRA:
+				case ModType.STAGE_I30:
+				case ModType.STAGE_I33:
 					return badge_stage;
 
 				default:
