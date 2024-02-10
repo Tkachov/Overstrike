@@ -7,6 +7,7 @@ using System.IO.Compression;
 using System.IO;
 using System;
 using System.Collections.Generic;
+using Overstrike.Data;
 
 namespace Overstrike.Detectors {
 	internal class SuitModDetector: DetectorBase {

@@ -3,6 +3,7 @@
 // For more details, terms and conditions, see GNU General Public License.
 // A copy of the that license should come with this program (LICENSE.txt). If not, see <http://www.gnu.org/licenses/>.
 
+using Overstrike.Data;
 using System.Collections.Generic;
 using System.IO;
 

@@ -4,6 +4,7 @@
 // A copy of the that license should come with this program (LICENSE.txt). If not, see <http://www.gnu.org/licenses/>.
 
 using Newtonsoft.Json.Linq;
+using Overstrike.Data;
 using Overstrike.Games;
 using System;
 using System.Collections.Generic;

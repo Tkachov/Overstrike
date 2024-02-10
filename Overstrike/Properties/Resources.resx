@@ -175,4 +175,13 @@
   <data name="banner_i33_logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\banner_i33_logo.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="suit_missing" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\suit_missing.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="suit_missing_mm" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\suit_missing_mm.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="suit_missing_mm_big" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\suit_missing_mm_big.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

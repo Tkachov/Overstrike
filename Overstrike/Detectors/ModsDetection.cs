@@ -6,6 +6,7 @@
 using Ionic.Crc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Overstrike.Data;
 using SharpCompress.Archives;
 using SharpCompress.Compressors.Xz;
 using System;

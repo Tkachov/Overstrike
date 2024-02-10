@@ -111,7 +111,7 @@ namespace Overstrike.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         internal static byte[] banner_i30_back {
             get {
@@ -121,7 +121,7 @@ namespace Overstrike.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         internal static byte[] banner_i30_logo {
             get {
@@ -131,7 +131,7 @@ namespace Overstrike.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         internal static byte[] banner_i30_logo2 {
             get {
@@ -141,7 +141,7 @@ namespace Overstrike.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         internal static byte[] banner_i33_logo {
             get {
@@ -246,6 +246,36 @@ namespace Overstrike.Properties {
         internal static byte[] reload_icon {
             get {
                 object obj = ResourceManager.GetObject("reload_icon", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] suit_missing {
+            get {
+                object obj = ResourceManager.GetObject("suit_missing", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] suit_missing_mm {
+            get {
+                object obj = ResourceManager.GetObject("suit_missing_mm", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] suit_missing_mm_big {
+            get {
+                object obj = ResourceManager.GetObject("suit_missing_mm_big", resourceCulture);
                 return ((byte[])(obj));
             }
         }

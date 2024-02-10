@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using Overstrike.Games;
+using Overstrike.Data;
 
 namespace Overstrike.Detectors {
 	internal class StageModDetector: DetectorBase {

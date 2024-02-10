@@ -3,6 +3,8 @@
 // For more details, terms and conditions, see GNU General Public License.
 // A copy of the that license should come with this program (LICENSE.txt). If not, see <http://www.gnu.org/licenses/>.
 
+using Overstrike.Data;
+
 namespace Overstrike.MetaInstallers {
 	internal abstract class MetaInstallerBase {
 		protected string _gamePath;
@@ -19,5 +21,7 @@ namespace Overstrike.MetaInstallers {
 		public abstract void Start();
 		public abstract void Install(ModEntry mod, int index);
 		public abstract void Finish();
+
+		public abstract void Uninstall(); // alternative to Start->(Install N times)->Finish
 	}
 }

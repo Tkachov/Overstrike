@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using SharpCompress.Common;
+using Overstrike.Data;
 
 namespace Overstrike.Installers {
 	internal abstract class StageInstallerHelper {

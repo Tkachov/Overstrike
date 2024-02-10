@@ -7,6 +7,8 @@ using DAT1;
 using System.IO;
 using Overstrike.Installers;
 using Overstrike.Utils;
+using Overstrike.Data;
+using Overstrike.Tabs;
 
 namespace Overstrike.MetaInstallers {
 	internal class MetaInstaller_I20: MetaInstallerBase {
@@ -45,6 +47,7 @@ namespace Overstrike.MetaInstallers {
 
 		private TOC_I20 _toc;
 		private TOC_I20 _unchangedToc;
+		private bool _cachedSuitsConfig;
 
 		public override void Start() {
 			ErrorLogger.WriteInfo("Loading 'toc'...");
@@ -55,6 +58,8 @@ namespace Overstrike.MetaInstallers {
 
 			_unchangedToc = new TOC_I20(); // a special copy for .smpcmod installer to lookup indexes in
 			_unchangedToc.Load(tocPath);
+
+			_cachedSuitsConfig = false;
 
 			ErrorLogger.WriteInfo(" OK!\n");
 			LogTocSanityCheck();
@@ -101,14 +106,49 @@ namespace Overstrike.MetaInstallers {
 				case ModEntry.ModType.STAGE_MM:
 					return new StageInstaller_I20(_toc, _gamePath);
 
+				case ModEntry.ModType.SUITS_MENU:
+					CacheSuitsConfig(); // "mod" of this type is meant to be the very last in the list, so we cache the config state before we apply our changes
+					return new SuitsMenuInstaller(_toc, _gamePath, _profile.Suits);
+
 				default:
 					return null;
 			}
 		}
 
 		public override void Finish() {
+			CacheSuitsConfig(); // if there was no Suits Menu "mod" passed to Install(), we still want to cache the state
+
 			var tocPath = Path.Combine(_gamePath, "asset_archive", "toc");
 			_toc.Save(tocPath);
+		}
+
+		public override void Uninstall() {
+			CacheSuitsConfig(); // cache the state of clean config
+		}
+
+		//
+
+		private void CacheSuitsConfig() {
+			if (_cachedSuitsConfig) return;
+
+			var toc = _toc;
+			if (_toc == null) {
+				ErrorLogger.WriteInfo("Suits config caching: Loading 'toc'...");
+				var tocPath = Path.Combine(_gamePath, "asset_archive", "toc");
+				toc = new TOC_I20();
+				toc.Load(tocPath);
+				ErrorLogger.WriteInfo(" OK!\n");
+			}
+
+			ErrorLogger.WriteInfo("Caching suits config...");
+			var cache = ((App)App.Current).SuitsCache;
+			var loadedConfig = SuitsMenuBase.LoadConfig(toc);
+			if (loadedConfig != null) {
+				cache.SetConfig(SuitsCache.NormalizePath(_gamePath), loadedConfig);
+			}
+			ErrorLogger.WriteInfo(" OK!\n");
+
+			_cachedSuitsConfig = true;
 		}
 	}
 }

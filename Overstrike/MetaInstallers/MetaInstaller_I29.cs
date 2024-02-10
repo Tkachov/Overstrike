@@ -7,6 +7,7 @@ using DAT1;
 using System.IO;
 using Overstrike.Installers;
 using Overstrike.Utils;
+using Overstrike.Data;
 
 namespace Overstrike.MetaInstallers {
 	internal class MetaInstaller_I29: MetaInstallerBase {
@@ -87,5 +88,7 @@ namespace Overstrike.MetaInstallers {
 			var tocPath = Path.Combine(_gamePath, "toc");
 			_toc.Save(tocPath);
 		}
+
+		public override void Uninstall() {}
 	}
 }

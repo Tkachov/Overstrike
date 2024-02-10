@@ -10,6 +10,7 @@ using System;
 using DAT1.Files;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using Overstrike.Data;
 
 namespace Overstrike.Installers {
 	internal class MMSuit2Installer: SuitInstallerBase {

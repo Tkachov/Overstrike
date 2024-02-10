@@ -4,8 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Overstrike"
+		xmlns:tabs="clr-namespace:Overstrike.Tabs"
+		xmlns:data="clr-namespace:Overstrike.Data"
         mc:Ignorable="d"
-        Title="Overstrike" Height="550" Width="600" MinWidth="320" WindowStartupLocation="CenterScreen">
+        Title="Overstrike" Height="681" Width="1020" MinWidth="1020" WindowStartupLocation="CenterScreen">
 	<Window.Resources>
 		<ItemsPanelTemplate x:Key="ThumbnailListTemplate">
 			<WrapPanel Orientation="Horizontal" />
@@ -82,7 +84,7 @@
 				<Label x:Name="ProfileGamePath" Content="C:/Path/To/MSMR" Margin="260,87,5,0" VerticalAlignment="Top" MouseDoubleClick="ProfileGamePath_MouseDoubleClick" />
 			</Grid>
 
-			<TabControl x:Name="tabControl" Margin="-1,125,-1,-1">
+			<TabControl x:Name="MainTabs" Margin="-1,125,-1,-1" SelectionChanged="MainTabs_SelectionChanged">
 				<TabControl.Resources>
 					<Style TargetType="TabPanel">
 						<Setter Property="Margin" Value="50,100,5,10"/>
@@ -139,7 +141,7 @@
 										  SelectionMode="Extended" 
 										  SelectionChanged="ModsList_SelectionChanged" MouseLeftButtonDown="ModsList_MouseLeftButtonDown" MouseMove="ModsList_MouseMove" DragEnter="ModsList_DragEnter" Drop="ModsList_Drop" AllowDrop="True" KeyUp="ModsList_KeyUp">
 							<ListView.Resources>
-								<DataTemplate DataType="{x:Type local:ModEntry}">
+								<DataTemplate DataType="{x:Type data:ModEntry}">
 									<Grid Height="26">
 										<Label Content="{Binding Order}" HorizontalAlignment="Left" Margin="-3,0,0,0" Foreground="#AAA" VerticalAlignment="Top" />
 
@@ -164,6 +166,12 @@
 							</Button.ContextMenu>
 						</Button>
 					</Grid>
+				</TabItem>
+				<TabItem Header="Suits Menu" x:Name="MSMRSuitsMenuTab">
+					<tabs:MSMRSuitsMenu x:Name="MSMRSuitsMenuContent" />
+				</TabItem>
+				<TabItem Header="Suits Menu" x:Name="MMSuitsMenuTab">
+					<tabs:MMSuitsMenu x:Name="MMSuitsMenuContent" />
 				</TabItem>
 				<TabItem Header="Settings">
 					<ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">

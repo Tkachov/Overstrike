@@ -5,9 +5,11 @@
 
 using DAT1;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using Overstrike.Data;
 using Overstrike.Games;
 using Overstrike.Installers;
 using Overstrike.MetaInstallers;
+using Overstrike.Tabs;
 using Overstrike.Utils;
 using System;
 using System.Collections.Generic;
@@ -32,6 +34,7 @@ namespace Overstrike {
 		private Profile _selectedProfile;
 
 		private GameBase _selectedGame => GameBase.GetGame(_selectedProfile.Game);
+		private bool _selectedGameHasSuitsMenu => (_selectedProfile.Game == GameMSMR.ID || _selectedProfile.Game == GameMM.ID);
 
 		private class ProfileItem {
 			public string Text { get; set; }
@@ -40,11 +43,11 @@ namespace Overstrike {
 
 		private ObservableCollection<ProfileItem> _profilesItems = new ObservableCollection<ProfileItem>();
 		private ObservableCollection<ModEntry> _modsList = new ObservableCollection<ModEntry>();
+		private ModEntry _suitsMenuEntry; // has to be the last in list
 
 		private Point _dragStartPosition;
 		private DragAdorner _adorner;
 		private AdornerLayer _layer;
-		private bool _dragIsOutOfScope = false;
 		private Point _dragCurrentPosition;
 
 		private Thread _tickThread;
@@ -77,6 +80,16 @@ namespace Overstrike {
 
 		#endregion
 
+		public bool MSMRSuitsMenuContent_ShowDeleted {
+			get => MSMRSuitsMenuContent.ShowDeleted;
+			set { MSMRSuitsMenuContent.ShowDeleted = value; }
+		}
+
+		public bool MMSuitsMenuContent_ShowDeleted {
+			get => MMSuitsMenuContent.ShowDeleted;
+			set { MMSuitsMenuContent.ShowDeleted = value; }
+		}
+
 		public MainWindow(AppSettings settings, List<Profile> profiles, List<ModEntry> mods) {
 			InitializeComponent();
 
@@ -84,12 +97,15 @@ namespace Overstrike {
 			_profiles = profiles;
 			_mods = mods;
 
-			AddModsIcon.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.add_icon);
-			RefreshIcon.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.reload_icon);
+			AddModsIcon.Source = Imaging.ConvertToBitmapImage(Properties.Resources.add_icon);
+			RefreshIcon.Source = Imaging.ConvertToBitmapImage(Properties.Resources.reload_icon);
 
 			MakeProfileItems();
 			FirstSwitchToProfile();
 			StartTickThread();
+
+			MSMRSuitsMenuContent.Init(AddTaskThread, SetOverlayLabels);
+			MMSuitsMenuContent.Init(AddTaskThread, SetOverlayLabels);
 
 			DataContext = this;
 		}
@@ -120,54 +136,45 @@ namespace Overstrike {
 			SetupBanner();
 			ProfileGamePath.Content = profile.GamePath;
 
+			UpdateSuitMenuTabs();
 			MakeModsItems();
 		}
 
 		private void SetupBanner() {
-			// TODO: cache those images once and just set references instead of reloading them all the time
-			// TODO: make that a virtual method in GameBase
-			switch (_selectedProfile.Game) {
-				case GameMSMR.ID:
-					GradientImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_msmr_back);
-					LogoImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_msmr_logo);
-					LogoImage2.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_msmr_logo2);
+			GradientImage.Source = _selectedGame.BannerBackground;
+			LogoImage.Source = _selectedGame.BannerLogoLeft;
+			LogoImage2.Source = _selectedGame.BannerLogoRight;
 
-					SuitModsSettings.Visibility = Visibility.Visible;
-					MakeSuitLanguageItems();
-				break;
+			if (_selectedGame.HasSuitsSettingsSection) {
+				SuitModsSettings.Visibility = Visibility.Visible;
+				MakeSuitLanguageItems();
+			} else {
+				SuitModsSettings.Visibility = Visibility.Collapsed;
+			}
+		}
 
-				case GameMM.ID:
-					GradientImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_mm_back);
-					LogoImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_mm_logo);
-					LogoImage2.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_mm_logo2);
+		private void UpdateSuitMenuTabs() {
+			MSMRSuitsMenuContent.SetProfile(_selectedProfile);
+			MMSuitsMenuContent.SetProfile(_selectedProfile);
 
-					SuitModsSettings.Visibility = Visibility.Visible;
-					MakeSuitLanguageItems();
-				break;
+			MSMRSuitsMenuTab.Visibility = (_selectedProfile.Game == GameMSMR.ID ? Visibility.Visible : Visibility.Collapsed);
+			MMSuitsMenuTab.Visibility = (_selectedProfile.Game == GameMM.ID ? Visibility.Visible : Visibility.Collapsed);
 
-				case GameRCRA.ID:
-					GradientImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_rcra_back);
-					LogoImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_rcra_logo);
-					LogoImage2.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_rcra_logo2);
+			// if currently open tab is no longer available (while switching between profiles), go to the first one
+			// if it's available, "reopen" (since profile changed)
 
-					SuitModsSettings.Visibility = Visibility.Collapsed;
-				break;
-
-				case GameI30.ID:
-					GradientImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_i30_back);
-					LogoImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_i30_logo);
-					LogoImage2.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_i30_logo2);
-
-					SuitModsSettings.Visibility = Visibility.Collapsed;
-				break;
-
-				case GameI33.ID:
-					GradientImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_i30_back);
-					LogoImage.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_i33_logo);
-					LogoImage2.Source = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_i30_logo2);
-
-					SuitModsSettings.Visibility = Visibility.Collapsed;
-				break;
+			if (MainTabs.SelectedItem == MSMRSuitsMenuTab) {
+				if (MSMRSuitsMenuTab.Visibility != Visibility.Visible) {
+					MainTabs.SelectedIndex = 0;
+				} else {
+					MSMRSuitsMenuContent.Reopen();
+				}
+			} else if (MainTabs.SelectedItem == MMSuitsMenuTab) {
+				if (MMSuitsMenuTab.Visibility != Visibility.Visible) {
+					MainTabs.SelectedIndex = 0;
+				} else {
+					MMSuitsMenuContent.Reopen();
+				}
 			}
 		}
 
@@ -293,6 +300,19 @@ namespace Overstrike {
 				}
 			}
 
+			if (_selectedGameHasSuitsMenu) {
+				var path = ModEntry.SUITS_MENU_PATH;
+				bool suitsMenuInstalled;
+				if (!profileInstalled.TryGetValue(path, out suitsMenuInstalled)) {
+					suitsMenuInstalled = true;
+				}
+
+				var stub = new ModEntry("Suits Menu", path, ModEntry.ModType.SUITS_MENU);
+				_suitsMenuEntry = new ModEntry(stub, suitsMenuInstalled, index);
+				_modsList.Add(_suitsMenuEntry);
+				++index;
+			}
+
 			foreach (var mod in _modsList) {
 				mod.PropertyChanged += OnModPropertyChanged;
 			}
@@ -385,12 +405,27 @@ namespace Overstrike {
 			bool hasTasks = _taskThreads.Count > 0;
 			Dispatcher.Invoke(() => {
 				Overlay.Visibility = (hasTasks ? Visibility.Visible : Visibility.Collapsed);
+
+				if (MainTabs.SelectedItem == MSMRSuitsMenuTab) {
+					MSMRSuitsMenuContent.TickInvoke();
+				} else if (MainTabs.SelectedItem == MMSuitsMenuTab) {
+					MMSuitsMenuContent.TickInvoke();
+				}
 			});
+		}
+
+		private void AddTaskThread(Thread thread) {
+			_taskThreads.Add(thread);
+		}
+
+		private void SetOverlayLabels(string header, string operation) {
+			if (header != null) OverlayHeaderLabel.Text = header;
+			if (operation != null) OverlayOperationLabel.Text = operation;
 		}
 
 		#endregion
 
-		#region SheetList Drag and Drop
+		#region Drag and Drop
 
 		private void ModsList_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
 			_dragStartPosition = e.GetPosition(null);
@@ -408,10 +443,8 @@ namespace Overstrike {
 		}
 
 		private void BeginDrag(MouseEventArgs e) {
-
-			ListView listView = this.ModsList;
-			ListViewItem listViewItem =
-				FindAnchestor<ListViewItem>((DependencyObject)e.OriginalSource);
+			ListView listView = ModsList;
+			ListViewItem listViewItem = Utils.DragDrop.FindAncestor<ListViewItem>((DependencyObject)e.OriginalSource);
 
 			if (listViewItem == null)
 				return;
@@ -419,26 +452,25 @@ namespace Overstrike {
 			// get the data for the ListViewItem
 			ModEntry name = listView.ItemContainerGenerator.ItemFromContainer(listViewItem) as ModEntry;
 
-			//setup the drag adorner.
+			// setup the drag adorner
 			InitialiseAdorner(listViewItem);
 
-			//add handles to update the adorner.
+			// add handles to update the adorner
 			ModsList.PreviewDragOver += ModsList_DragOver;
 			ModsList.DragLeave += ModsList_DragLeave;
 			ModsList.DragEnter += ModsList_DragEnter;
 
-
 			var selitems = ModsList.SelectedItems;
-			List<ModEntry> list = new List<ModEntry>();
+			var list = new List<ModEntry>();
 			foreach (ModEntry entry in selitems) {
 				list.Add(entry);
 			}
 			list.Sort((x, y) => _modsList.IndexOf(x) - _modsList.IndexOf(y));
 
-			DataObject data = new DataObject("dataFormat", list); // name);
-			DragDrop.DoDragDrop(this.ModsList, data, DragDropEffects.Move);
+			DataObject data = new DataObject("dataFormat", list);
+            System.Windows.DragDrop.DoDragDrop(ModsList, data, DragDropEffects.Move);
 
-			//cleanup
+			// cleanup
 			ModsList.PreviewDragOver -= ModsList_DragOver;
 			ModsList.DragLeave -= ModsList_DragLeave;
 			ModsList.DragEnter -= ModsList_DragEnter;
@@ -450,7 +482,7 @@ namespace Overstrike {
 
 			listView.SelectedItem = name;
 
-			List<int> indexes = new List<int>();
+			var indexes = new List<int>();
 			int index = 0;
 			foreach (var item in _modsList) {
 				if (item.Order != index+1) {
@@ -483,7 +515,7 @@ namespace Overstrike {
 			if (e.Data.GetDataPresent("dataFormat")) {
 				//ModEntry name = e.Data.GetData("dataFormat") as ModEntry;
 				IList<ModEntry> list = e.Data.GetData("dataFormat") as IList<ModEntry>;
-				ListViewItem listViewItem = FindAnchestor<ListViewItem>((DependencyObject)e.OriginalSource);
+				ListViewItem listViewItem = Utils.DragDrop.FindAncestor<ListViewItem>((DependencyObject)e.OriginalSource);
 
 				if (listViewItem != null) {
 					ModEntry nameToReplace = ModsList.ItemContainerGenerator.ItemFromContainer(listViewItem) as ModEntry;
@@ -531,7 +563,6 @@ namespace Overstrike {
 				System.Windows.Point p = e.GetPosition(ModsList);
 				Rect r = VisualTreeHelper.GetContentBounds(ModsList);
 				if (!r.Contains(p)) {
-					this._dragIsOutOfScope = true;
 					e.Handled = true;
 				}
 			}
@@ -539,41 +570,43 @@ namespace Overstrike {
 
 		private void ModsList_DragOver(object sender, DragEventArgs e) {
 			if (_adorner != null) {
-				//_adorner.OffsetLeft = e.GetPosition(ModsList).X - position.X;
-				//_adorner.OffsetTop = e.GetPosition(ModsList).Y - position.Y;
-
 				_adorner.OffsetLeft = e.GetPosition(Gradient).X - _dragCurrentPosition.X;
 				_adorner.OffsetTop = e.GetPosition(Gradient).Y - _dragCurrentPosition.Y;
 			}
 		}
 
-		// Helper to search up the VisualTree
-		private static T FindAnchestor<T>(DependencyObject current)
-			where T : DependencyObject {
-			try { 
-				do {
-					if (current is T) {
-						return (T)current;
-					}
-					current = VisualTreeHelper.GetParent(current);
-				}
-				while (current != null);
-			} catch (Exception ex) {
-				// happens when listview is filtered
-			}
-			return null;
-		}
-
-		#endregion SheetList Drag and Drop
+		#endregion Drag and Drop
 
 		private void ModsList_SelectionChanged(object sender, SelectionChangedEventArgs e) {}
 
 		private void OnModsOrderChanged() {
+			FixSuitsMenuItemOrder();
 			SaveProfile();
 		}
 
 		private void OnModInstallChanged() {
 			SaveProfile();
+		}
+
+		private void FixSuitsMenuItemOrder() {
+			if (!_selectedGameHasSuitsMenu) return;
+			if (_suitsMenuEntry == null) return;
+
+			var foundAt = -1;
+			for (var i = 0; i < _modsList.Count; ++i) {
+				var mod = _modsList[i];
+				if (mod == _suitsMenuEntry) {
+					foundAt = i;
+					mod.Order = _modsList.Count;
+					continue;
+				}
+				if (foundAt != -1) {
+					--mod.Order;
+				}
+			}
+			if (foundAt != -1) {
+				_modsList.Move(foundAt, _modsList.Count-1);
+			}
 		}
 
 		private bool _propagatingInstallChanged = false;
@@ -623,6 +656,9 @@ namespace Overstrike {
 			Dictionary<string, ModEntry> availableMods = new Dictionary<string, ModEntry>();
 			foreach (var mod in _mods) {
 				availableMods.Add(mod.Path, mod);
+			}
+			if (_selectedGameHasSuitsMenu && _suitsMenuEntry != null) {
+				availableMods.Add(_suitsMenuEntry.Path, _suitsMenuEntry);
 			}
 
 			List<ModEntry> modsToInstall = new List<ModEntry>();
@@ -697,11 +733,22 @@ namespace Overstrike {
 					ErrorLogger.WriteInfo(" OK!\n");
 				}
 
+				if (uninstalling)
+					installer.Uninstall();
+
 				Dispatcher.Invoke(() => {
 					if (uninstalling)
 						ShowStatusMessage("Done! Mods uninstalled.");
 					else
 						ShowStatusMessage("Done! " + operationsCount + " mods installed.");
+
+					if (_selectedGameHasSuitsMenu) {
+						if (_selectedProfile.Game == GameMSMR.ID) {
+							MSMRSuitsMenuContent.RequestReload();
+						} else {
+							MMSuitsMenuContent.RequestReload();
+						}
+					}
 				});
 				ErrorLogger.WriteInfo("\nDone.\n");
 			} catch (Exception ex) {
@@ -833,6 +880,8 @@ namespace Overstrike {
 				var cwd = Directory.GetCurrentDirectory();
 				List<string> filesToDelete = new List<string>();
 				foreach (ModEntry mod in ModsList.SelectedItems) {
+					if (mod.Type == ModEntry.ModType.SUITS_MENU) continue;
+
 					var path = mod.Path;
 					var index = path.IndexOf("||");
 					if (index != -1) {
@@ -869,6 +918,16 @@ namespace Overstrike {
 				var path = _selectedProfile.GamePath;
 				Process.Start("explorer.exe", path);
 			} catch {}
+		}
+
+		private void MainTabs_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+			if (e.Source == MainTabs) {
+				if (MainTabs.SelectedItem == MSMRSuitsMenuTab) {
+					MSMRSuitsMenuContent.OnOpen();
+				} else if (MainTabs.SelectedItem == MMSuitsMenuTab) {
+					MMSuitsMenuContent.OnOpen();
+				}
+			}
 		}
 	}
 }

@@ -8,6 +8,7 @@ using System.IO.Compression;
 using System.IO;
 using System;
 using System.Globalization;
+using Overstrike.Data;
 
 namespace Overstrike.Installers {
 	internal class SMPCModInstaller: InstallerBase_I20 {

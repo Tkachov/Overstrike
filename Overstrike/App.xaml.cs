@@ -3,8 +3,7 @@
 // For more details, terms and conditions, see GNU General Public License.
 // A copy of the that license should come with this program (LICENSE.txt). If not, see <http://www.gnu.org/licenses/>.
 
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
+using Overstrike.Data;
 using Overstrike.Detectors;
 using System;
 using System.Collections.Generic;
@@ -17,6 +16,7 @@ namespace Overstrike {
 		AppSettings Settings = new AppSettings();
 		List<Profile> Profiles = new List<Profile>();
 		List<ModEntry> Mods = new List<ModEntry>();
+		public SuitsCache SuitsCache = new();
 
 		ModsDetection? _detection = null;
 

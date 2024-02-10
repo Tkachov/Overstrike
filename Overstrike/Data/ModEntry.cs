@@ -8,7 +8,7 @@ using Newtonsoft.Json.Converters;
 using System.ComponentModel;
 using System.Windows.Media.Imaging;
 
-namespace Overstrike {
+namespace Overstrike.Data {
 	public class ModEntry: INotifyPropertyChanged {
 		public event PropertyChangedEventHandler PropertyChanged;
 
@@ -24,9 +24,12 @@ namespace Overstrike {
 			STAGE_RCRA,
 			STAGE_I30,
 			STAGE_I33,
+			SUITS_MENU,
 
 			UNKNOWN
 		}
+
+		public static string SUITS_MENU_PATH = "|Suits Menu|"; // must be impossible, so it doesn't clash with real files
 
 		// stored
 		private bool _install;
@@ -44,6 +47,8 @@ namespace Overstrike {
 		public ModType Type { get; set; }
 		public string ToolTip {
 			get {
+				if (Type == ModType.SUITS_MENU) return null;
+
 				string result = Path;
 
 				var depth = 0;
@@ -52,7 +57,7 @@ namespace Overstrike {
 					string left = result.Substring(0, index);
 					string right = result.Substring(index + 2);
 					string middle = "\n ";
-					for (var i=0; i<depth; ++i)
+					for (var i = 0; i < depth; ++i)
 						middle += "   ";
 					middle += "↳ ";
 					result = left + middle + right;
@@ -113,6 +118,9 @@ namespace Overstrike {
 				case ModType.STAGE_I30:
 				case ModType.STAGE_I33:
 					return badge_stage;
+
+				case ModType.SUITS_MENU:
+					return badge_suit; // TODO: custom badge?
 
 				default:
 					return null;

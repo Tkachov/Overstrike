@@ -8,6 +8,7 @@ using System.IO;
 using System;
 using System.IO.Compression;
 using DAT1;
+using Overstrike.Data;
 
 namespace Overstrike.Installers {
 	internal abstract class InstallerBase {

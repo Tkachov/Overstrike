@@ -6,6 +6,8 @@
 using Overstrike.MetaInstallers;
 using System.IO;
 using System;
+using System.Windows.Media.Imaging;
+using Overstrike.Data;
 
 namespace Overstrike.Games {
 	internal abstract class GameBase {
@@ -40,10 +42,20 @@ namespace Overstrike.Games {
 
 		public abstract string GetExecutablePath(string gamePath);
 
+		public abstract string GetTocPath(string gamePath);
+
 		public abstract bool IsGameInstallation(string gamePath);
 
 		public abstract bool IsCompatible(ModEntry mod);
 
 		public abstract MetaInstallerBase GetMetaInstaller(string gamePath, AppSettings settings, Profile profile);
+
+		//
+
+		public abstract BitmapImage BannerBackground { get; }
+		public abstract BitmapImage BannerLogoLeft { get; }
+		public abstract BitmapImage BannerLogoRight { get; }
+
+		public abstract bool HasSuitsSettingsSection { get; }
 	}
 }
