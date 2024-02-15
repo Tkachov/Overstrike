@@ -31,6 +31,12 @@ jobs:
       - name: Add LICENSE.txt
         run: cp LICENSE.txt ${{ env.PUBLISH_DIR }}
 
+      - name: Add README.txt
+        run: cp Overstrike/README.txt ${{ env.PUBLISH_DIR }}
+
+      - name: Add Quickstart.txt
+        run: cp Overstrike/Quickstart.txt ${{ env.PUBLISH_DIR }}
+
       - name: Generate names by tag
         id: names
         shell: bash

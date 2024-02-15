@@ -1,0 +1,90 @@
+Overstrike -- an open-source mod manager for PC ports of Insomniac Games' games.
+
+# Installation
+
+Overstrike is made for 64-bit version of Windows.
+On Linux, you can try using Proton to run it, but it's not guaranteed to work.
+
+To run, it needs x64 version of .NET 7.0 Desktop Runtime installed:
+https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-7.0.10-windows-x64-installer?cid=getdotnetcore
+
+Overstrike is the same for every supported game, so you only need to download
+it once. Extract it anywhere you'd like and run 'Overstrike.exe'.
+
+# Launching
+
+On first launch, it detects supported games in their usual installation
+locations, and suggests to create a profile for each. You can add more manually,
+and then switch between these profiles on the fly, and have as many profiles
+as you'd like.
+
+If launched from the SMPC Tool folder, Overstrike will suggest to import mods
+from it, keeping their load order.
+
+On every launch, it scans the 'Mods Library/' folder to find all the supported
+mods. It can also detect and work with mods within .7z, .zip or .rar archives.
+
+# Mods
+
+In the Mods tab, you can see all the mods found in your library folder that
+are compatible with the game your profile is for. Mods can be reordered using
+drag'n'drop, and disabled by unticking a checkbox next to them. The list
+supports multiselect with Ctrl and Shift. You can press Delete key to delete
+selected mods from 'Mods Library/'.
+
+To apply currently enabled mods to the game, you need to press "Install mods"
+button. If order was changed, mods were added, removed, enabled or disabled,
+this button needs to be pressed again.
+
+After installation process, it shows a "Mods installed!" message in the left
+bottom corner, meaning you can launch the game and play. However, if the process
+stops abruptly, message would say "Error occurred." and a detailed message would
+be added to the end of 'errors.log' file.
+
+# Suits Menu
+
+This tab only appears for games that support .suit mods.
+It allows you to organize the suits displayed in game's menu the way you'd like.
+
+In order to see modded suits here, press "Install mods" on Mods tab first.
+
+Use drag'n'drop to reorder suits. Delete or modify selected suit via controls
+on the right.
+
+After you press "Save", you need press "Install mods" again to apply your
+changes to the game.
+
+# Settings
+
+- Cache Mods Library contents -- makes scans faster.
+- Skip Mods Library sync if cache present -- doesn't run the scan automatically
+  if there's a cache. You'd need to press Refresh manually to run the scan.
+
+For games that support .suit mods, you can also choose the language here.
+
+# Troubleshooting
+
+If Overstrike fails to install a mod, it leaves the game unmodded and writes
+a detailed report in 'errors.log' file. Latest report is in the end of file.
+
+If the game crashes on launch, it could be because your 'toc' or save files
+are corrupted. You can try the following:
+
+## "toc reset"
+
+1) find 'toc' and 'toc.BAK' in game folder;
+2) delete those files;
+3) verify game files through Steam or EGS, so it downloads you a clean 'toc'.
+
+After you do this, the game should be in unmodded state, and launch without any
+problems. Simply reinstall mods after that.
+
+## Replacing saves
+
+If you install too many .suit mods, you can reach "suits limit", corrupting your
+saves and causing the crash. Limit includes uninstalled suits, and is around
+70-80 suits.
+
+1) disable saves cloud sync in Steam or EGS;
+2) remove your saves;
+3) put some clean saves instead. You can find them on Nexus.
