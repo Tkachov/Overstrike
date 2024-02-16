@@ -10,7 +10,7 @@ This repository also contains the source code of Modding Tool and Localization T
 
 # Usage
 
-For detailed instructions, refer to description on Nexus Mods or README.txt file that comes with Overstrike.
+For detailed instructions, refer to description on Nexus Mods, [Quickstart](https://github.com/Tkachov/Overstrike/wiki/Quickstart) page or README.txt file that comes with Overstrike.
 
 There is an Overstrike page in every supported game section on Nexus, but it's the same app, so you only need to download it once. You can also get it from the [Releases](https://github.com/Tkachov/Overstrike/releases).
 
