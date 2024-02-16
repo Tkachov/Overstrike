@@ -1,6 +1,6 @@
 ---
 name: Suggestion / Feature request
-about: ''
+about: Suggest an idea
 title: ''
 labels: 'type: enhancement, status: new'
 assignees: ''

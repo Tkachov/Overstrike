@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: ''
+about: Help finding problems that need fixing
 title: ''
 labels: 'type: bug, status: new'
 assignees: ''
