@@ -34,6 +34,8 @@ Of course, I'd be glad to accept code changes. If you can fix a bug, or implemen
 
 You can start by looking at the [Issues](https://github.com/Tkachov/Overstrike/issues) page, where you can create a new one if it's a bug or suggestion, or find one you'd like to help with.
 
+See [Building](https://github.com/Tkachov/Overstrike/wiki/Building) page for information on how to build the source code on your machine.
+
 # License
 
 Overstrike uses GPLv3 license.
