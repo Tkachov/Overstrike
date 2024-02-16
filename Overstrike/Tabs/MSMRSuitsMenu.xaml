@@ -74,7 +74,7 @@
 			</Grid.ColumnDefinitions>
 				<ListView BorderThickness="0" Grid.Column="0" Margin="0,-1,0,-1" VirtualizingStackPanel.VirtualizationMode="Recycling" x:Name="_SuitsSlots" Background="#057"
                     ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible"					  
-                    ItemsPanel="{StaticResource ThumbnailListTemplate}" ItemContainerStyle="{StaticResource NotemanagerContainerStyle}" AllowDrop="True" SelectionMode="Single" SelectionChanged="SuitsSlots_SelectionChanged" MouseLeftButtonDown="SuitsSlots_MouseLeftButtonDown" MouseMove="SuitsSlots_MouseMove" DragEnter="SuitsSlots_DragEnter" Drop="SuitsSlots_Drop">
+                    ItemsPanel="{StaticResource ThumbnailListTemplate}" ItemContainerStyle="{StaticResource NotemanagerContainerStyle}" AllowDrop="True" SelectionMode="Single" SelectionChanged="SuitsSlots_SelectionChanged" MouseLeftButtonDown="SuitsSlots_MouseLeftButtonDown" MouseMove="SuitsSlots_MouseMove" DragEnter="SuitsSlots_DragEnter" Drop="SuitsSlots_Drop" KeyUp="SuitsSlots_KeyUp">
 					<ListView.Resources>
 					<DataTemplate DataType="{x:Type local:SuitSlot}">
 						<Border Margin="11,19,11,19">

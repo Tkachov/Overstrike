@@ -11,6 +11,7 @@ namespace Overstrike.Tabs {
 	public partial class MMSuitsMenu: SuitsMenuBase {
 		public MMSuitsMenu() {
 			InitializeComponent();
+			SuitsSlots.ItemContainerGenerator.StatusChanged += SuitsSlots_ItemGeneratorStatusChanged;
 		}
 
 		protected override ListView SuitsSlots { get => _SuitsSlots; }

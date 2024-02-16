@@ -746,12 +746,33 @@ namespace Overstrike.Tabs {
 			ToggleSuitDeleteButton.Content = data.MarkedToDelete ? "Restore" : "Delete";
 		}
 
+		private bool _reactToItemGeneratorStatusChange = false;
+
 		protected void RefreshSelectedSuit(SuitSlot selectedSuit) {
+			// the items update resets arrow keys focus to first element, so we need to reset it back
+			_reactToItemGeneratorStatusChange = true;
+
 			var i = _displayedSuits.IndexOf(selectedSuit);
 			_displayedSuits.RemoveAt(i);
 			_displayedSuits.Insert(i, selectedSuit); // updates appearance (Icon/DisplayOpacity)
 
 			SuitsSlots.SelectedItem = selectedSuit; // causes SuitSelected(), updating things like BigIcon
+		}
+
+		protected void SuitsSlots_ItemGeneratorStatusChanged(object? sender, EventArgs e) {
+			if (!_reactToItemGeneratorStatusChange) return;
+
+			if (SuitsSlots.ItemContainerGenerator.Status == System.Windows.Controls.Primitives.GeneratorStatus.ContainersGenerated) {
+				_reactToItemGeneratorStatusChange = false;
+
+				Dispatcher.BeginInvoke(
+					System.Windows.Threading.DispatcherPriority.Input,
+					new Action(() => {
+						var item = (UIElement)SuitsSlots.ItemContainerGenerator.ContainerFromItem(SuitsSlots.SelectedItem);
+						item?.Focus();
+					})
+				);
+			}
 		}
 
 		protected string GetCurrentlySelectedSuitId() => (SuitsSlots.SelectedItem == null ? null : ((SuitSlot)SuitsSlots.SelectedItem).SuitId);
@@ -772,6 +793,32 @@ namespace Overstrike.Tabs {
 			ResetButton.Content = _wasReset ? "Undo reset" : "Reset";
 		}
 
+		protected void ToggleSelectedSuitDeleted() {
+			Debug.Assert(SuitsSlots.SelectedItem != null);
+
+			var selectedSuit = (SuitSlot)SuitsSlots.SelectedItem;
+
+			_hasChanges = true;
+			SetWasReset(false);
+			selectedSuit.MarkedToDelete = !selectedSuit.MarkedToDelete;
+
+			foreach (var suit in _customizedSuits) {
+				if (suit.SuitId == selectedSuit.SuitId) {
+					suit.MarkedToDelete = selectedSuit.MarkedToDelete;
+					break;
+				}
+			}
+
+			if (_showDeleted) {
+				RefreshSelectedSuit(selectedSuit);
+			} else {
+				var i = _displayedSuits.IndexOf(selectedSuit);
+				_displayedSuits.RemoveAt(i);
+
+				SuitsSlots.SelectedItem = null;
+			}
+		}
+
 		#endregion
 		#region event handlers
 
@@ -780,6 +827,14 @@ namespace Overstrike.Tabs {
 				SuitSelected((SuitSlot)e.AddedItems[0]);
 			} else {
 				SuitDeselected();
+			}
+		}
+
+		protected void SuitsSlots_KeyUp(object sender, KeyEventArgs e) {
+			if (e.Key == Key.Delete) {
+				if (SuitsSlots.SelectedItem != null) {
+					ToggleSelectedSuitDeleted();
+				}
 			}
 		}
 
@@ -852,29 +907,7 @@ namespace Overstrike.Tabs {
 		}
 
 		protected void ToggleSuitDeleteButton_Click(object sender, RoutedEventArgs e) {
-			Debug.Assert(SuitsSlots.SelectedItem != null);
-
-			var selectedSuit = (SuitSlot)SuitsSlots.SelectedItem;
-
-			_hasChanges = true;
-			SetWasReset(false);
-			selectedSuit.MarkedToDelete = !selectedSuit.MarkedToDelete;
-
-			foreach (var suit in _customizedSuits) {
-				if (suit.SuitId == selectedSuit.SuitId) {
-					suit.MarkedToDelete = selectedSuit.MarkedToDelete;
-					break;
-				}
-			}
-
-			if (_showDeleted) {
-				RefreshSelectedSuit(selectedSuit);
-			} else {
-				var i = _displayedSuits.IndexOf(selectedSuit);
-				_displayedSuits.RemoveAt(i);
-
-				SuitsSlots.SelectedItem = null;
-			}
+			ToggleSelectedSuitDeleted();
 		}
 
 		protected void ResetButtonClicked(object sender, RoutedEventArgs e) {
