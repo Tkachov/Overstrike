@@ -150,11 +150,15 @@ namespace Overstrike.Installers {
 				}
 			}
 
+			JArray origUnlockedArray = (root["UnlockForFree"] is JArray ? (JArray)root["UnlockForFree"] : new JArray { root["UnlockForFree"] });
 			JArray newUnlocked = new JArray();
-			foreach (var suit_id in root["UnlockForFree"]) {
+			foreach (var suit_id in origUnlockedArray) {
 				if (availableSuits.Contains((string)suit_id)) {
 					newUnlocked.Add(suit_id);
 				}
+			}
+			if (newUnlocked.Count == 0) {
+				newUnlocked.Add(newSuits[0]["Name"]);
 			}
 			root["UnlockForFree"] = newUnlocked;
 
