@@ -42,10 +42,10 @@ jobs:
             ref="${{ github.ref }}"
             ref=${ref//refs\/tags\//}
 
-            release_name=${ref/LT\/v/Modding Tool (v. }
+            release_name=${ref/MT\/v/Modding Tool (v. }
             echo "release_name=${release_name})" >> $GITHUB_OUTPUT
 
-            archive_name=${ref/LT\/v/ModdingTool_v}
+            archive_name=${ref/MT\/v/ModdingTool_v}
             archive_name=${archive_name// /_}
             echo "archive_name=${archive_name}.zip" >> $GITHUB_OUTPUT
           }
