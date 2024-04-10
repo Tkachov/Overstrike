@@ -14,7 +14,7 @@ namespace DAT1.Sections.Localization {
 		public const uint TAG = 0xC43731B5; // Localization SortedHashes Built
 	}
 
-	public class SortedIndexesSection: UInt16ArraySection {
+	public class SortedIndexesSection: UInt32ArraySection {
 		public const uint TAG = 0x0CD2CFE9; // Localization SortedIndexes Built
 	}
 }

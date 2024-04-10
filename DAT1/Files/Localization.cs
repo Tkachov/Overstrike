@@ -9,7 +9,7 @@ using System.IO;
 
 namespace DAT1.Files {
 	public class Localization: DAT1 {
-		public const uint MAGIC = 0x122BB0AB;
+		public const uint MAGIC = 0x97F26013;
 
 		uint magic, dat1_size;
 		byte[] unk;

@@ -100,9 +100,9 @@ namespace DAT1.Files {
 			l.SortedKeyHashesSection.Values.Clear();
 			l.SortedIndexesSection.Values.Clear();
 
-			List<(uint, ushort)> hashesWithIndexes = new();
-			for (ushort i = 0; i < n; ++i) {
-				hashesWithIndexes.Add((l.KeyHashesSection.Values[i], i));
+			List<(uint, uint)> hashesWithIndexes = new();
+			for (uint i = 0; i < n; ++i) {
+				hashesWithIndexes.Add((l.KeyHashesSection.Values[(int)i], i));
 			}
 			var compare = (uint a, uint b) => {
 				if (a == b) return 0;
