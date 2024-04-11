@@ -43,7 +43,9 @@
                             </MenuItem>
                             <MenuItem x:Name="File_Save" Header="Save 'localization'" InputGestureText="Ctrl+S" Command="{Binding FileSaveLocalizationCommand}" Visibility="Collapsed" />
                             <MenuItem x:Name="File_SaveAs" Header="Save as..." InputGestureText="Ctrl+Shift+S" Command="{Binding FileSaveAsLocalizationCommand}" Visibility="Collapsed" />
-                        </MenuItem>
+							<MenuItem x:Name="File_ExportTxt" Header="Export to .txt" Command="{Binding FileExportTxtCommand}" />
+							<MenuItem x:Name="File_ImportTxt" Header="Import from .txt" Command="{Binding FileImportTxtCommand}" />
+						</MenuItem>
                         <MenuItem x:Name="File_Edit" Header="Edit" Visibility="Collapsed">
                             <MenuItem x:Name="File_Undo" Header="Undo" InputGestureText="Ctrl+Z" Command="{Binding FileUndo}" IsEnabled="False" />
                             <MenuItem x:Name="File_Redo" Header="Redo" InputGestureText="Ctrl+Y" Command="{Binding FileRedo}" IsEnabled="False" />

@@ -27,7 +27,9 @@ namespace LocalizationTool {
         public ICommand FileLoadLocalizationCommand { get; set; } = null;
         public ICommand FileSaveLocalizationCommand { get; set; } = null;
         public ICommand FileSaveAsLocalizationCommand { get; set; } = null;
-        public ICommand FileUndo { get; set; } = null;
+		public ICommand FileExportTxtCommand { get; set; } = null;
+		public ICommand FileImportTxtCommand { get; set; } = null;
+		public ICommand FileUndo { get; set; } = null;
         public ICommand FileRedo { get; set; } = null;
         public ICommand LocalizationListRemoveEntry { get; set; } = null;
 
@@ -98,7 +100,9 @@ namespace LocalizationTool {
             FileLoadLocalizationCommand = new RelayCommand(ExecuteFileLoadLocalization);
             FileSaveLocalizationCommand = new RelayCommand(ExecuteFileSaveLocalization);
             FileSaveAsLocalizationCommand = new RelayCommand(ExecuteFileSaveAsLocalization);
-            FileUndo = new RelayCommand(ExecuteFileUndo);
+			FileExportTxtCommand = new RelayCommand(ExecuteFileExportTxt);
+			FileImportTxtCommand = new RelayCommand(ExecuteFileImportTxt);
+			FileUndo = new RelayCommand(ExecuteFileUndo);
             FileRedo = new RelayCommand(ExecuteFileRedo);
             LocalizationListRemoveEntry = new RelayCommand(ExecuteLocalizationListRemoveEntry);
             DataContext = this; // Set the DataContext to enable data binding.
@@ -478,7 +482,64 @@ namespace LocalizationTool {
             Handle_File_SaveAsDialog();
         }
 
-        private void ExecuteFileUndo(object parameter) {
+        private void ExecuteFileExportTxt(object parameter) {
+            var dialog = new CommonSaveFileDialog {
+                Title = "Export to .txt",
+                RestoreDirectory = true,
+                AlwaysAppendDefaultExtension = true,
+                DefaultExtension = ".txt"
+            };
+            dialog.Filters.Add(new CommonFileDialogFilter("Text file", "txt") { ShowExtensions = true });
+
+            if (dialog.ShowDialog() != CommonFileDialogResult.Ok) {
+                return;
+            }
+
+            var path = dialog.FileName;
+            var dir = Path.GetDirectoryName(path);
+            if (!Directory.Exists(dir)) {
+                Directory.CreateDirectory(dir);
+            }
+            if (Path.GetExtension(path) == "") {
+                path += ".txt";
+            }
+
+            using var file = new StreamWriter(path);
+            foreach (var item in LocalizationList.Items) {
+                var row = item as LocalizationEntry;
+				file.WriteLine(row.Value);
+            }
+        }
+
+		private void ExecuteFileImportTxt(object parameter) {
+			var dialog = new CommonOpenFileDialog {
+				Title = "Import from .txt",
+				Multiselect = false,
+				RestoreDirectory = true
+			};
+			dialog.Filters.Add(new CommonFileDialogFilter("Text file", "txt") { ShowExtensions = true });
+
+			if (dialog.ShowDialog() != CommonFileDialogResult.Ok) {
+				return;
+			}
+
+			var path = dialog.FileName;
+			try {
+                using var file = new StreamReader(path);
+				foreach (var item in LocalizationList.Items) {
+					var row = item as LocalizationEntry;
+                    row.Value = file.ReadLine();
+				}
+            } catch {
+				MessageBox.Show($"failed to read the file", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+			}
+
+			LocalizationList.Items.Refresh();
+			UpdateChangesLabels();
+			UpdateEntriesCount();
+		}
+
+		private void ExecuteFileUndo(object parameter) {
             Action action = _undoRedoManager.Undo();
             if (action != null) {
                 HandleChangeCase(action);
