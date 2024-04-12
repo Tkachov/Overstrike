@@ -6,7 +6,17 @@
 using DAT1.Sections.Generic;
 
 namespace DAT1.Sections.Localization {
-	public class UnknownSection: UInt32ArraySection {
+	public class UnknownSection: UInt8ArraySection {
 		public const uint TAG = 0xB0653243; // Localization Flags Built
+
+		public void Pad(int n = -1) {
+			if (n == -1)
+				n = Values.Count;
+
+			// there should be 4 times more values than there are entries
+			// this is kinda uint32 per entry, but in a sparse manner and the 2nd/3rd/4th bytes are always 0
+			for (var i = Values.Count; i < 4*n; ++i)
+				Values.Add(0);
+		}
 	}
 }
