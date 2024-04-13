@@ -3,7 +3,6 @@
 // For more details, terms and conditions, see GNU General Public License.
 // A copy of the that license should come with this program (LICENSE.txt). If not, see <http://www.gnu.org/licenses/>.
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -26,12 +25,6 @@ namespace DAT1.Files {
 				var value = l.ValuesDataSection.GetStringByOffset(valueOffset);
 
 				_values[key] = new Entry { Value = value, Unknown = l.UnknownSection.Values[i] };
-			}
-
-			for (var i = (int)n; i < 4*n; ++i) {
-				if (l.UnknownSection.Values[i] > 0) {
-					Console.WriteLine($"#{i} = {l.UnknownSection.Values[i]}");
-				}
 			}
 		}
 
