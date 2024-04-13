@@ -103,7 +103,7 @@ namespace Overstrike.Installers {
 				_outer = outer;
 			}
 
-			protected override uint CreateArchive(string filename) => _outer._toc.AddNewArchive(filename, TOCBase.ArchiveAddingImpl.DEFAULT);
+			protected override uint CreateArchive(string filename) => _outer._toc.AddNewArchive(filename, TOCBase.ArchiveAddingImpl.SUITTOOL);
 
 			protected override ZipArchive ReadStageFile() => _outer.ReadModFile();
 

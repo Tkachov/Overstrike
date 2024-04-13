@@ -404,6 +404,14 @@ namespace DAT1 {
 				Filename = bytes
 			});
 
+			// fix all assets entries that referenced archives prior to the one added
+			var offsets = OffsetsSection.Entries;
+			foreach (var offset in offsets) {
+				if (offset.ArchiveIndex >= index) {
+					++offset.ArchiveIndex;
+				}
+			}
+
 			return (uint)index;
 		}
 
