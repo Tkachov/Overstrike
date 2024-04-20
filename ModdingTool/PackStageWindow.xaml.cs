@@ -175,7 +175,10 @@ namespace ModdingTool {
 						var path = assets[asset];
 						var bytes = File.ReadAllBytes(path);
 
-						var assetPath = $"{asset.RefPath}"; // TODO: full path
+						var assetPath = asset.RefPath;
+						if (asset.FullPath != null)
+							assetPath = $"{asset.Span}/" + DAT1.Utils.Normalize(asset.FullPath);
+
 						if (!asset.HasHeader) {
 							headerless.Add(assetPath);
 						}
