@@ -13,6 +13,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
@@ -37,6 +38,7 @@ namespace ModdingTool {
 
 		// replaced data
 		private Dictionary<Asset, string> _replacedAssets = new();
+		private Dictionary<Asset, string> _addedAssets = new();
 
 		// ui
 		private SearchWindow _searchWindow = null;
@@ -790,6 +792,8 @@ namespace ModdingTool {
 		}
 
 		private void Mod_SubmenuOpened(object sender, RoutedEventArgs e) {
+			Mod_ReplacedItemsCount.Header = $"{_replacedAssets.Count} replaced, {_addedAssets.Count} new";
+
 			Mod_ReplaceAssetsFromStage.IsEnabled = StagesExist();
 		}
 
@@ -821,24 +825,54 @@ namespace ModdingTool {
 				var files = Directory.GetFiles(spanDir, "*", SearchOption.AllDirectories);
 				foreach (var file in files) {
 					var relpath = Path.GetRelativePath(spanDir, file);
+					string fullpath = null;
 					ulong assetId;
 					if (Regex.IsMatch(relpath, "^[0-9A-Fa-f]{16}$")) {
 						assetId = ulong.Parse(relpath, NumberStyles.HexNumber);
 					} else {
 						assetId = CRC64.Hash(relpath);
+						fullpath = relpath;
 					}
 
 					var assetIndex = _toc.FindAssetIndex((byte)spanIndex, assetId);
-					if (assetIndex == -1) continue;
+					if (assetIndex != -1) {
+						var asset = _assets[assetIndex];
+						_replacedAssets.Set(asset, file);
+						continue;
+					}
 
-					var asset = _assets[assetIndex];
-					_replacedAssets.Set(asset, file);
+					// record to _addedAssets, updating the record if it's already present
+					Asset newAsset = null;
+
+					foreach (var addedAsset in _addedAssets.Keys) {
+						if (addedAsset.Span == spanIndex && addedAsset.Id == assetId) {
+							newAsset = addedAsset;
+							break;
+						}
+					}
+
+					var adding = (newAsset == null);
+					if (adding) newAsset = new Asset();
+
+					newAsset.Span = (byte)spanIndex;
+					newAsset.Id = assetId;
+					newAsset.Size = 0; // TODO?
+					newAsset.HasHeader = true;
+					newAsset.Name = Path.GetFileName(relpath);
+					newAsset.Archive = "-";
+					newAsset.FullPath = fullpath;
+													
+					if (adding) {
+						_addedAssets.Add(newAsset, file);
+					} else {
+						_addedAssets.Set(newAsset, file);
+					}
 				}
 			}
 		}
 
 		private void Mod_CreateFromReplaced_Click(object sender, RoutedEventArgs e) {
-			var window = new PackStageWindow(_replacedAssets, _toc);
+			var window = new PackStageWindow(_replacedAssets, _addedAssets, _toc);
 			window.ShowDialog();
 		}
 

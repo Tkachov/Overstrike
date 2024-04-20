@@ -21,6 +21,7 @@ namespace ModdingTool {
 	public partial class PackStageWindow: Window {
 		private bool _initializing = true;
 		private Dictionary<Asset, string> _mainWindowReplacedAssets;
+		private Dictionary<Asset, string> _mainWindowAddedAssets;
 
 		private string _modName;
 		private string _author;
@@ -35,21 +36,23 @@ namespace ModdingTool {
 
 		class AssetReplace {
 			public Asset Asset;
+			public bool IsNew = false;
 
-			public string OriginalAssetName { get => Asset.Name; }
+			public string OriginalAssetName { get => (IsNew ? $"new ({Asset.RefPath})" : Asset.Name); }
 			public string OriginalAssetNameToolTip { get => (Asset.FullPath == null ? "" : $"Path: {Asset.FullPath}\n") + $"ID: {Asset.Id:X016}\nSpan: {Asset.Span}\nArchive: {Asset.Archive}"; }
 
 			public string ReplacingFileName { get; set; }
 			public string ReplacingFileNameToolTip { get; set; }
 		}
 
-		public PackStageWindow(Dictionary<Asset, string> replacedAssets, TOCBase toc) {
+		public PackStageWindow(Dictionary<Asset, string> replacedAssets, Dictionary<Asset, string> addedAssets, TOCBase toc) {
 			InitializeComponent();
 			_initializing = false;
 
 			MakeGamesSelector(toc);
 
 			_mainWindowReplacedAssets = replacedAssets;
+			_mainWindowAddedAssets = addedAssets;
 			UpdateAssetsList();
 		}
 
@@ -89,6 +92,16 @@ namespace ModdingTool {
 				});
 			}
 
+			foreach (var asset in _mainWindowAddedAssets.Keys) {
+				var path = _mainWindowAddedAssets[asset];
+				_assets.Add(new AssetReplace {
+					Asset = asset,
+					IsNew = true,
+					ReplacingFileName = Path.GetFileName(path),
+					ReplacingFileNameToolTip = path
+				});
+			}
+
 			AssetsList.ItemsSource = _assets;
 		}
 
@@ -122,7 +135,12 @@ namespace ModdingTool {
 			if (e.Key == Key.Delete) {
 				foreach (var item in AssetsList.SelectedItems) {
 					var assetReplace = (AssetReplace)item;
-					_mainWindowReplacedAssets.Remove(assetReplace.Asset);
+
+					if (assetReplace.IsNew) {
+						_mainWindowAddedAssets.Remove(assetReplace.Asset);
+					} else {
+						_mainWindowReplacedAssets.Remove(assetReplace.Asset);
+					}
 				}
 
 				UpdateAssetsList();
@@ -130,7 +148,7 @@ namespace ModdingTool {
 		}
 
 		private void SaveStageButton_Click(object sender, RoutedEventArgs e) {
-			CommonSaveFileDialog dialog = new CommonSaveFileDialog();
+			var dialog = new CommonSaveFileDialog();
 			dialog.Title = "Save .stage...";
 			dialog.RestoreDirectory = true;
 			dialog.Filters.Add(new CommonFileDialogFilter("Stage", "*.stage") { ShowExtensions = true });
@@ -141,25 +159,35 @@ namespace ModdingTool {
 				return;
 			}
 
+			var tocHasTextureSections = (_gameId != "MSMR" && _gameId != "MM");
+			if (_mainWindowAddedAssets.Count > 0 && tocHasTextureSections) {
+				MessageBox.Show($"Warning: adding new .texture assets is not implemented.\n\nThe game might work incorrectly with these or even crash because of them.", "Warning", MessageBoxButton.OK);
+			}
+
 			var headerless = new JArray();
 			var stageFileName = dialog.FileName;
 			try {
 				using var f = new FileStream(stageFileName, FileMode.Create, FileAccess.Write, FileShare.None);
 				using var zip = new ZipArchive(f, ZipArchiveMode.Create);
 
-				foreach (var asset in _mainWindowReplacedAssets.Keys) {
-					var path = _mainWindowReplacedAssets[asset];
-					var bytes = File.ReadAllBytes(path);
+				void WriteAssets(Dictionary<Asset, string> assets) {
+					foreach (var asset in assets.Keys) {
+						var path = assets[asset];
+						var bytes = File.ReadAllBytes(path);
 
-					var assetPath = $"{asset.Span}/{asset.Id:X016}"; // TODO: full path
-					if (!asset.HasHeader) {
-						headerless.Add(assetPath);
+						var assetPath = $"{asset.RefPath}"; // TODO: full path
+						if (!asset.HasHeader) {
+							headerless.Add(assetPath);
+						}
+
+						var entry = zip.CreateEntry(assetPath);
+						using var ef = entry.Open();
+						ef.Write(bytes, 0, bytes.Length);
 					}
-
-					var entry = zip.CreateEntry(assetPath);
-					using var ef = entry.Open();
-					ef.Write(bytes, 0, bytes.Length);
 				}
+
+				WriteAssets(_mainWindowReplacedAssets);
+				WriteAssets(_mainWindowAddedAssets);
 
 				{					
 					JObject j = new() {
