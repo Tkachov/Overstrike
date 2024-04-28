@@ -41,6 +41,7 @@ namespace ModdingTool {
 
 		// ui
 		private SearchWindow _searchWindow = null;
+		private HashToolWindow _hashToolWindow = null;
 
 		public MainWindow() {
 			InitializeComponent();
@@ -716,6 +717,12 @@ namespace ModdingTool {
 			}
 		}
 
+		private void CloseHashToolWindow() {
+			if (_hashToolWindow != null) {
+				_hashToolWindow.Close();
+			}
+		}
+
 		#endregion
 		#region event handlers
 
@@ -883,6 +890,18 @@ namespace ModdingTool {
 		private void Mod_CreateFromReplaced_Click(object sender, RoutedEventArgs e) {
 			var window = new PackStageWindow(_replacedAssets, _addedAssets, _toc);
 			window.ShowDialog();
+		}
+
+		private void Tools_CalculateHash_Click(object sender, RoutedEventArgs e) {
+			if (_hashToolWindow == null) {
+				_hashToolWindow = new HashToolWindow();
+				_hashToolWindow.Closed += (object? sender, EventArgs e) => {
+					_hashToolWindow = null;
+				};
+				_hashToolWindow.Show();
+			} else {
+				_hashToolWindow.Focus();
+			}
 		}
 
 		#endregion
@@ -1079,6 +1098,7 @@ namespace ModdingTool {
 
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
 			CloseSearchWindow();
+			CloseHashToolWindow();
 		}
 
 		#endregion

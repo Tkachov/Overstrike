@@ -24,4 +24,8 @@
     <ProjectReference Include="..\DAT1\DAT1.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Windows\" />
+  </ItemGroup>
+
 </Project>
