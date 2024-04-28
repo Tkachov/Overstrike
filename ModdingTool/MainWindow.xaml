@@ -35,7 +35,8 @@
 						<MenuItem x:Name="Search_JumpTo" Header="Jump to path or ref..." Click="Search_JumpTo_Click" />
 					</MenuItem>
 					<MenuItem Header="Mod" SubmenuOpened="Mod_SubmenuOpened">
-						<MenuItem Name="Mod_ReplacedItemsCount" Header="0 replaced, 0 new" IsEnabled="false" />
+						<MenuItem x:Name="Mod_ReplacedItemsCount" Header="0 replaced, 0 new" IsEnabled="false" />
+						<MenuItem x:Name="Mod_ClearReplaced" Header="Clear all" Click="Mod_ClearReplaced_Click" />
 						<Separator/>
 						<MenuItem x:Name="Mod_ReplaceAssetsFromStage" Header="Add from stage..." Click="Mod_ReplaceAssetsFromStage_Click" />
 						<MenuItem x:Name="Mod_CreateFromReplaced" Header="Pack as .stage..." Click="Mod_CreateFromReplaced_Click" />

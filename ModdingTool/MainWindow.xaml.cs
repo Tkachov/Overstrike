@@ -793,6 +793,7 @@ namespace ModdingTool {
 		private void Mod_SubmenuOpened(object sender, RoutedEventArgs e) {
 			Mod_ReplacedItemsCount.Header = $"{_replacedAssets.Count} replaced, {_addedAssets.Count} new";
 
+			Mod_ClearReplaced.IsEnabled = (_replacedAssets.Count + _addedAssets.Count > 0);
 			Mod_ReplaceAssetsFromStage.IsEnabled = StagesExist();
 		}
 
@@ -804,6 +805,15 @@ namespace ModdingTool {
 				return (dirs.Length > 0);
 			}
 			return false;
+		}
+
+
+		private void Mod_ClearReplaced_Click(object sender, RoutedEventArgs e) {
+			var result = MessageBox.Show("Are you sure?", "Clear all replaced and added files", MessageBoxButton.YesNo);
+			if (result == MessageBoxResult.Yes) {
+				_replacedAssets.Clear();
+				_addedAssets.Clear();
+			}
 		}
 
 		private void Mod_ReplaceAssetsFromStage_Click(object sender, RoutedEventArgs e) {
