@@ -759,7 +759,11 @@ namespace Overstrike {
 				});
 
 				ErrorLogger.WriteError("\n\nError occurred:\n");
-				ErrorLogger.WriteError($"{ex}\n");
+				
+				var stackTrace = $"{ex}\n";
+				EnrichStackTrace(ref stackTrace, modsToInstall, game, gamePath);
+				ErrorLogger.WriteError(stackTrace);
+
 				ErrorLogger.WriteError($"{new StackTrace()}\n");
 				ErrorLogger.WriteError("\n");
 			}
@@ -790,6 +794,63 @@ namespace Overstrike {
 
 		private void PlayAnimation(string name) {
 			BeginStoryboard((System.Windows.Media.Animation.Storyboard)this.FindResource(name));
+		}
+
+		private void EnrichStackTrace(ref string stackTrace, List<ModEntry> modsToInstall, string game, string gamePath) {
+			try {
+				var i = stackTrace.IndexOf("InstallMods");
+				i = stackTrace.IndexOf(")", i);
+
+				var version = $"{Assembly.GetExecutingAssembly().GetName().Version}";
+				version = version.Replace(".", "");
+
+				var suits = 0;
+				var stages = 0;
+				var menu = 0;
+				foreach (var mod in modsToInstall) {
+					switch (mod.Type) {
+						case ModEntry.ModType.SUIT_MSMR:
+						case ModEntry.ModType.SUIT_MM:
+						case ModEntry.ModType.SUIT_MM_V2:
+							++suits;
+						break;
+
+						case ModEntry.ModType.STAGE_MSMR:
+						case ModEntry.ModType.STAGE_MM:
+						case ModEntry.ModType.STAGE_RCRA:
+						case ModEntry.ModType.STAGE_I30:
+						case ModEntry.ModType.STAGE_I33:
+							++stages;
+						break;
+
+						case ModEntry.ModType.SUITS_MENU:
+							++menu;
+						break;
+					}
+				}
+
+				var extra = $" {version} {GetTocArchivesCount(game, gamePath)} {modsToInstall.Count} {suits} {stages} {menu}";
+				stackTrace = stackTrace.Substring(0, i + 1) + extra + stackTrace.Substring(i + 1);
+			} catch {}
+		}
+
+		private int GetTocArchivesCount(string gameId, string gamePath) {
+			try {
+				var game = GameBase.GetGame(gameId);
+				var tocPath = game.GetTocPath(gamePath);
+
+				if (gameId == GameMSMR.ID || gameId == GameMM.ID) {
+					var toc = new TOC_I20();
+					toc.Load(tocPath);
+					return toc.ArchivesSection.Values.Count;
+				} else {
+					var toc = new TOC_I29();
+					toc.Load(tocPath);
+					return toc.ArchivesSection.Values.Count;
+				}
+			} catch {}
+
+			return 0;
 		}
 
 		private void RefreshButton_Click(object sender, RoutedEventArgs e) {
