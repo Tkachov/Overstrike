@@ -774,18 +774,22 @@ namespace Overstrike {
 		private void ShowStatusMessage(string text) {
 			StatusMessage.Content = text;
 			_statusMessageErrorShown = false;
-			BeginStoryboard((System.Windows.Media.Animation.Storyboard)this.FindResource("ShowStatusMessage"));
+			PlayAnimation("ShowStatusMessage");
 		}
 
 		private void ShowStatusMessageError(string text) {
 			StatusMessage.Content = text;
 			_statusMessageErrorShown = true;
-			BeginStoryboard((System.Windows.Media.Animation.Storyboard)this.FindResource("ShowStatusMessageError"));
+			PlayAnimation("ShowStatusMessageError");
 		}
 
 		private void HideStatusMessageError() {
 			_statusMessageErrorShown = false;
-			BeginStoryboard((System.Windows.Media.Animation.Storyboard)this.FindResource("HideStatusMessageError"));
+			PlayAnimation("HideStatusMessageError");
+		}
+
+		private void PlayAnimation(string name) {
+			BeginStoryboard((System.Windows.Media.Animation.Storyboard)this.FindResource(name));
 		}
 
 		private void RefreshButton_Click(object sender, RoutedEventArgs e) {
