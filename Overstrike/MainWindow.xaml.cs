@@ -470,7 +470,7 @@ namespace Overstrike {
 			list.Sort((x, y) => _modsList.IndexOf(x) - _modsList.IndexOf(y));
 
 			DataObject data = new DataObject("dataFormat", list);
-            System.Windows.DragDrop.DoDragDrop(ModsList, data, DragDropEffects.Move);
+			System.Windows.DragDrop.DoDragDrop(ModsList, data, DragDropEffects.Move);
 
 			// cleanup
 			ModsList.PreviewDragOver -= ModsList_DragOver;

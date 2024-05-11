@@ -17,13 +17,13 @@ using System.Windows.Data;
 
 namespace Overstrike {
 	public partial class FirstLaunch : Window
-    {
+	{
 		public bool CreateAllProfiles = true;
 		private ObservableCollection<FirstLaunchProfile> _profilesList = new ObservableCollection<FirstLaunchProfile>();
 
 		public FirstLaunch()
-        {
-            InitializeComponent();
+		{
+			InitializeComponent();
 
 			DetectGameInstallations();
 			RefreshUI();
@@ -146,11 +146,11 @@ namespace Overstrike {
 			var window = new CreateProfile();
 			window.ShowDialog();
 
-            var p = window.GetProfile();
-            if (p != null) {
+			var p = window.GetProfile();
+			if (p != null) {
 				AddToProfilesList(p);
 				RefreshUI();
-            }
+			}
 		}
 
 		private void AddToProfilesList(Profile p) {

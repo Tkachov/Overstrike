@@ -1,13 +1,13 @@
 ﻿<Window x:Class="Overstrike.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Overstrike"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:local="clr-namespace:Overstrike"
 		xmlns:tabs="clr-namespace:Overstrike.Tabs"
 		xmlns:data="clr-namespace:Overstrike.Data"
-        mc:Ignorable="d"
-        Title="Overstrike" Height="681" Width="1020" MinWidth="1020" WindowStartupLocation="CenterScreen">
+		mc:Ignorable="d"
+		Title="Overstrike" Height="681" Width="1020" MinWidth="1020" WindowStartupLocation="CenterScreen">
 	<Window.Resources>
 		<ItemsPanelTemplate x:Key="ThumbnailListTemplate">
 			<WrapPanel Orientation="Horizontal" />
