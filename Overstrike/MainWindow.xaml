@@ -38,12 +38,30 @@
 		</Style>
 
 		<Storyboard x:Key="ShowStatusMessage">
+			<ColorAnimation Storyboard.TargetName="StatusMessage" Storyboard.TargetProperty="Foreground.Color" Duration="0" To="#AAA" />
 			<DoubleAnimation Storyboard.TargetName="StatusMessage" Storyboard.TargetProperty="Opacity" From="0" To="1" BeginTime="0:0:0" Duration="0:0:0.4">
 				<DoubleAnimation.EasingFunction>
 					<CubicEase />
 				</DoubleAnimation.EasingFunction>
 			</DoubleAnimation>
 			<DoubleAnimation Storyboard.TargetName="StatusMessage" Storyboard.TargetProperty="Opacity" From="1" To="0" BeginTime="0:0:2.5" Duration="0:0:0.4">
+				<DoubleAnimation.EasingFunction>
+					<CubicEase />
+				</DoubleAnimation.EasingFunction>
+			</DoubleAnimation>
+		</Storyboard>
+
+		<Storyboard x:Key="ShowStatusMessageError">
+			<ColorAnimation Storyboard.TargetName="StatusMessage" Storyboard.TargetProperty="Foreground.Color" Duration="0" To="#F04" />
+			<DoubleAnimation Storyboard.TargetName="StatusMessage" Storyboard.TargetProperty="Opacity" From="0" To="1" BeginTime="0:0:0" Duration="0:0:0.4">
+				<DoubleAnimation.EasingFunction>
+					<CubicEase />
+				</DoubleAnimation.EasingFunction>
+			</DoubleAnimation>
+		</Storyboard>
+
+		<Storyboard x:Key="HideStatusMessageError">
+			<DoubleAnimation Storyboard.TargetName="StatusMessage" Storyboard.TargetProperty="Opacity" From="1" To="0" BeginTime="0:0:0" Duration="0:0:0.4">
 				<DoubleAnimation.EasingFunction>
 					<CubicEase />
 				</DoubleAnimation.EasingFunction>
@@ -155,7 +173,7 @@
 							</ListView.Resources>
 						</local:ListViewEx>
 
-						<TextBlock x:Name="StatusMessage" Opacity="0" Text="Done! 10 mods installed." HorizontalAlignment="Left" Margin="6,9,0,0" Grid.Row="2" Foreground="#AAA" VerticalAlignment="Top" Height="22" />
+						<Label x:Name="StatusMessage" Opacity="0" Content="Done! 10 mods installed." HorizontalAlignment="Left" Margin="1,4,0,0" Grid.Row="2" Foreground="#AAA" VerticalAlignment="Top" Height="30" MouseLeftButtonUp="StatusMessage_MouseLeftButtonUp" />
 
 						<Button x:Name="InstallModsButton" Margin="4,6,4,4" Grid.Row="2" Content="Install mods" VerticalAlignment="Top"  HorizontalAlignment="Right" Width="120" Height="22" Click="InstallModsButton_Click">
 							<Button.ContextMenu>

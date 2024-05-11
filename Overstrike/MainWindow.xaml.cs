@@ -50,6 +50,8 @@ namespace Overstrike {
 		private AdornerLayer _layer;
 		private Point _dragCurrentPosition;
 
+		private bool _statusMessageErrorShown = false;
+
 		private Thread _tickThread;
 		private List<Thread> _taskThreads = new List<Thread>();
 
@@ -753,7 +755,7 @@ namespace Overstrike {
 				ErrorLogger.WriteInfo("\nDone.\n");
 			} catch (Exception ex) {
 				Dispatcher.Invoke(() => {
-					ShowStatusMessage("Error occurred.");
+					ShowStatusMessageError("Error occurred. See 'errors.log' for details.");
 				});
 
 				ErrorLogger.WriteError("\n\nError occurred:\n");
@@ -770,8 +772,20 @@ namespace Overstrike {
 		}
 
 		private void ShowStatusMessage(string text) {
-			StatusMessage.Text = text;
+			StatusMessage.Content = text;
+			_statusMessageErrorShown = false;
 			BeginStoryboard((System.Windows.Media.Animation.Storyboard)this.FindResource("ShowStatusMessage"));
+		}
+
+		private void ShowStatusMessageError(string text) {
+			StatusMessage.Content = text;
+			_statusMessageErrorShown = true;
+			BeginStoryboard((System.Windows.Media.Animation.Storyboard)this.FindResource("ShowStatusMessageError"));
+		}
+
+		private void HideStatusMessageError() {
+			_statusMessageErrorShown = false;
+			BeginStoryboard((System.Windows.Media.Animation.Storyboard)this.FindResource("HideStatusMessageError"));
 		}
 
 		private void RefreshButton_Click(object sender, RoutedEventArgs e) {
@@ -928,6 +942,16 @@ namespace Overstrike {
 					MMSuitsMenuContent.OnOpen();
 				}
 			}
+		}
+
+		private void StatusMessage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+			if (!_statusMessageErrorShown) return;
+
+			try {
+				Process.Start("notepad.exe", "errors.log");
+			} catch {}
+			
+			HideStatusMessageError();
 		}
 	}
 }
