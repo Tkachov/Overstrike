@@ -29,19 +29,19 @@ namespace DAT1 {
 			//public byte[7] unk3;
 		}
 
-        public static byte[] ExtractAsset(FileStream archive, long offset, long size) {
-            byte[] bytes = new byte[size];
+		public static byte[] ExtractAsset(FileStream archive, long offset, long size) {
+			byte[] bytes = new byte[size];
 
-            if (!IsCompressed(archive)) {
+			if (!IsCompressed(archive)) {
 				archive.Seek(offset, SeekOrigin.Begin);
 				archive.Read(bytes, 0, bytes.Length);
 				archive.Close();
 				return bytes;
 			}			
 
-            var r = new BinaryReader(archive);
+			var r = new BinaryReader(archive);
 			archive.Seek(12, SeekOrigin.Begin);
-            uint blocks_header_end = r.ReadUInt32();
+			uint blocks_header_end = r.ReadUInt32();
 
 			archive.Seek(32, SeekOrigin.Begin);
 			List<BlockHeader> blocks = new();
@@ -50,12 +50,12 @@ namespace DAT1 {
 				header.realOffset = r.ReadUInt32();
 				r.ReadUInt32();
 				header.compOffset = r.ReadUInt32();
-                r.ReadUInt32();
-                header.realSize = r.ReadUInt32();
-                header.compSize = r.ReadUInt32();
+				r.ReadUInt32();
+				header.realSize = r.ReadUInt32();
+				header.compSize = r.ReadUInt32();
 				header.compressionType = r.ReadByte();
 				r.ReadBytes(7);
-                blocks.Add(header);
+				blocks.Add(header);
 			}
 
 			uint asset_offset = (uint)offset;
@@ -90,8 +90,8 @@ namespace DAT1 {
 			}
 
 			archive.Close();
-            return bytes;
-        }
+			return bytes;
+		}
 
 		private static byte[] Decompress(BlockHeader header, byte[] compressedData) {
 			switch (header.compressionType) {

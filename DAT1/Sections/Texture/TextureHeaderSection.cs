@@ -7,42 +7,42 @@ using System.IO;
 
 namespace DAT1.Sections.Texture {
 	public class TextureHeaderSection: Section {
-        public const uint TAG = 0x4EDE3593;
+		public const uint TAG = 0x4EDE3593;
 
-        public uint sd_len, hd_len;
-        public ushort hd_width, hd_height;
-        public ushort sd_width, sd_height;
-        public ushort array_size;
-        public byte stex_format, planes;
-        public ushort fmt;
-        public ulong unk;
-        public byte sd_mipmaps, unk2, hd_mipmaps, unk3;
-        public byte[] unk4;
+		public uint sd_len, hd_len;
+		public ushort hd_width, hd_height;
+		public ushort sd_width, sd_height;
+		public ushort array_size;
+		public byte stex_format, planes;
+		public ushort fmt;
+		public ulong unk;
+		public byte sd_mipmaps, unk2, hd_mipmaps, unk3;
+		public byte[] unk4;
 
 		public override void Load(byte[] bytes, DAT1 container) {
 			using var r = new BinaryReader(new MemoryStream(bytes));
 			var size = bytes.Length;
 
-            sd_len = r.ReadUInt32();
-            hd_len = r.ReadUInt32();
-            hd_width = r.ReadUInt16();
-            hd_height = r.ReadUInt16();
-            sd_width = r.ReadUInt16();
-            sd_height = r.ReadUInt16();
-            array_size = r.ReadUInt16();
-            stex_format = r.ReadByte();
-            planes = r.ReadByte();
-            fmt = r.ReadUInt16();
-            unk = r.ReadUInt64();
-            sd_mipmaps = r.ReadByte();
-            unk2 = r.ReadByte();
-            hd_mipmaps = r.ReadByte();
-            unk3 = r.ReadByte();
-            unk4 = r.ReadBytes(size - 34);
-        }
+			sd_len = r.ReadUInt32();
+			hd_len = r.ReadUInt32();
+			hd_width = r.ReadUInt16();
+			hd_height = r.ReadUInt16();
+			sd_width = r.ReadUInt16();
+			sd_height = r.ReadUInt16();
+			array_size = r.ReadUInt16();
+			stex_format = r.ReadByte();
+			planes = r.ReadByte();
+			fmt = r.ReadUInt16();
+			unk = r.ReadUInt64();
+			sd_mipmaps = r.ReadByte();
+			unk2 = r.ReadByte();
+			hd_mipmaps = r.ReadByte();
+			unk3 = r.ReadByte();
+			unk4 = r.ReadBytes(size - 34);
+		}
 
-        override public byte[] Save() {
-            return null; // TODO
-        }
-    }
+		override public byte[] Save() {
+			return null; // TODO
+		}
+	}
 }

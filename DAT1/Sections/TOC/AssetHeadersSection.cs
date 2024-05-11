@@ -7,12 +7,12 @@ using System.Collections.Generic;
 using System.IO;
 
 namespace DAT1.Sections.TOC {
-    public class AssetHeadersSection: Section {
+	public class AssetHeadersSection: Section {
 		public const uint TAG = 0x654BDED9; // Archive TOC Asset Header Data
 
 		public List<byte[]> Headers = new();
-            
-        override public void Load(byte[] bytes, DAT1 container) {
+			
+		override public void Load(byte[] bytes, DAT1 container) {
 			using var r = new BinaryReader(new MemoryStream(bytes));
 			int size = bytes.Length;
 			int count = size / 36;
@@ -22,13 +22,13 @@ namespace DAT1.Sections.TOC {
 			}
 		}
 
-        override public byte[] Save() {
-            var s = new MemoryStream();
-            var w = new BinaryWriter(s);
-            foreach (var e in Headers) {
-                w.Write(e);
-            }
-            return s.ToArray();
-        }
-    }
+		override public byte[] Save() {
+			var s = new MemoryStream();
+			var w = new BinaryWriter(s);
+			foreach (var e in Headers) {
+				w.Write(e);
+			}
+			return s.ToArray();
+		}
+	}
 }

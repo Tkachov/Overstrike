@@ -10,8 +10,8 @@ using System.IO;
 namespace DAT1.Files {
 	public abstract class TextureBase: DAT1 {
 		protected uint magic, dat1_size;
-        protected byte[] unk;
-        protected byte[] raw;
+		protected byte[] unk;
+		protected byte[] raw;
 
 		public TextureBase() : base() {}
 
@@ -24,10 +24,10 @@ namespace DAT1.Files {
 			WriteDDSHeader(bw, HeaderSection.sd_width, HeaderSection.sd_height, HeaderSection.sd_mipmaps);
 			bw.Write(raw);
 
-            bw.Flush();
-            result.Flush();
-            return result.ToArray();
-        }
+			bw.Flush();
+			result.Flush();
+			return result.ToArray();
+		}
 
 		public byte[] GetBigDDS(byte[] hd_part) {
 			MemoryStream result = new MemoryStream();
@@ -69,7 +69,7 @@ namespace DAT1.Files {
 			bw.Write((uint)1);
 			bw.Write((uint)0);
 		}
-    }
+	}
 
 	public class Texture_I20: TextureBase {
 		public const uint MAGIC = 0x5C4580B9;

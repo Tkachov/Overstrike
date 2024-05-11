@@ -11,14 +11,6 @@ using System.IO;
 using System.Text;
 
 namespace DAT1 {
-	/*
-		i16 SO
-		i20 MSMR
-		i24 ?
-		i29 RCRA
-		i31 MM
-	*/
-
 	public abstract class TOCBase {
 		public DAT1 Dat1 = null;
 		protected string AssetArchivePath = null;
