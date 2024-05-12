@@ -29,6 +29,24 @@ namespace DAT1 {
 			//public byte[7] unk3;
 		}
 
+		private class BlockHeaderComparer: IComparer<BlockHeader> {
+			public int Compare(BlockHeader x, BlockHeader y) {
+				if (x == null) {
+					if (y == null) {
+						return 0;
+					} else {
+						return -1;
+					}
+				}
+
+				if (y == null) {
+					return 1;
+				}
+
+				return x.realOffset.CompareTo(y.realOffset);
+			}
+		}
+
 		public static byte[] ExtractAsset(FileStream archive, long offset, long size) {
 			byte[] bytes = new byte[size];
 
@@ -63,11 +81,22 @@ namespace DAT1 {
 
 			uint bytes_ptr = 0;
 
-			// TODO: binary search starting block index and ending block index
-			// (because this code anyways assumes blocks are sorted by real_offset asc)
+			// binary search starting and ending blocks' indexes
+			var comparer = new BlockHeaderComparer();
+
+			var fakeBlock = new BlockHeader() { realOffset = asset_offset };
+			int firstIndex = blocks.BinarySearch(fakeBlock, comparer);
+			if (firstIndex < 0) firstIndex = ~firstIndex;
+			if (firstIndex >= blocks.Count || blocks[firstIndex].realOffset > asset_offset) --firstIndex;
+
+			fakeBlock.realOffset = asset_end;
+			int lastIndex = blocks.BinarySearch(fakeBlock, comparer);
+			if (lastIndex < 0) lastIndex = ~lastIndex;
+			if (lastIndex >= blocks.Count || blocks[lastIndex].realOffset == asset_end) --lastIndex;
 
 			bool started_reading = false;
-			foreach (var block in blocks) {
+			for (var blockIndex = firstIndex; blockIndex <= lastIndex; ++blockIndex) {
+				var block = blocks[blockIndex];
 				uint real_end = block.realOffset + block.realSize;
 				bool is_first_block = (block.realOffset <= asset_offset && asset_offset < real_end);
 				bool is_last_block = (block.realOffset < asset_end && asset_end <= real_end);

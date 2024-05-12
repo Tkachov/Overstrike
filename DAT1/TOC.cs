@@ -28,14 +28,10 @@ namespace DAT1 {
 
 		public virtual int FindAssetIndex(byte span, ulong assetId) {
 			var spanEntry = SpansSection.Entries[span];
-			var begin = spanEntry.AssetIndex;
-			var end = begin + spanEntry.Count;
-			for (int index = (int)begin; index < end; ++index) {
-				if (AssetIdsSection.Ids[index] == assetId)
-					return index;
-			}
-
-			return -1;
+			var index = AssetIdsSection.Ids.BinarySearch((int)spanEntry.AssetIndex, (int)spanEntry.Count, assetId, null); // default comparer
+			if (index < 0) return -1;
+			if (AssetIdsSection.Ids[index] != assetId) return -1;
+			return index;
 		}
 
 		public virtual int[] FindAssetIndexesByPath(string assetPath, bool stopOnFirst = false) {
@@ -45,13 +41,11 @@ namespace DAT1 {
 		public virtual int[] FindAssetIndexesById(ulong assetId, bool stopOnFirst = false) {
 			List<int> results = new();
 
-			if (IsLoaded) {
-				var ids = AssetIdsSection.Ids;
-				for (int i = 0; i < ids.Count; ++i) { // linear search =\
-					if (ids[i] == assetId) {
-						results.Add(i);
-						if (stopOnFirst) break;
-					}
+			for (var spanIndex = 0; spanIndex < SpansSection.Entries.Count; ++spanIndex) {
+				var index = FindAssetIndex((byte)spanIndex, assetId);
+				if (index != -1) {
+					results.Add(index);
+					if (stopOnFirst) break;
 				}
 			}
 
