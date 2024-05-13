@@ -139,6 +139,15 @@ namespace Overstrike {
 			_detection = null;
 		}
 
+		private void DetectModsInFiles(List<string> filenames) {
+			var cwd = Directory.GetCurrentDirectory();
+			var path = Path.Combine(cwd, "Mods Library");
+
+			_detection = Settings.CacheModsLibrary ? new ModsDetectionCached() : new ModsDetection();
+			_detection.DetectInFiles(path, filenames, Mods);
+			_detection = null;
+		}
+
 		private bool LoadModsFromCache() {
 			return ModsDetectionCached.LoadModsFromCache(Mods);
 		}
@@ -168,10 +177,33 @@ namespace Overstrike {
 			return Mods;
 		}
 
+		public void ReloadModsOnlyForFiles(List<string> filenames) {
+			var oldMods = Mods;
+			Mods = new();
+
+			// new mods = old ones + detected in given files
+			foreach (var mod in oldMods) {
+				Mods.Add(mod);
+			}
+
+			if (!RunDetectionAndShowSplash(filenames)) {
+				Mods = oldMods;
+			}
+		}
+
 		// threads
 
 		private bool RunDetectionAndShowSplash() {
 			Thread detectionThread = new(DetectMods);
+			return RunDetectionAndShowSplash(detectionThread);
+		}
+
+		private bool RunDetectionAndShowSplash(List<string> filenames) {
+			Thread detectionThread = new(() => DetectModsInFiles(filenames));
+			return RunDetectionAndShowSplash(detectionThread);
+		}
+
+		private bool RunDetectionAndShowSplash(Thread detectionThread) {
 			detectionThread.Start();
 
 			var splashWindow = new ModsDetectionSplash();

@@ -908,8 +908,10 @@ namespace Overstrike {
 				return;
 			}
 
+			List<string> addedFiles = new();
 			foreach (var filename in dialog.FileNames) {
-				AddMod(filename);
+				var libraryPath = AddMod(filename);
+				if (libraryPath != null) { addedFiles.Add(libraryPath); }
 			}
 
 			Dictionary<string, bool> previousMods = new Dictionary<string, bool>();
@@ -917,9 +919,14 @@ namespace Overstrike {
 				previousMods[mod.Path] = true;
 			}
 
+			if (Settings_PreferCachedModsLibrary) {
+				((App)App.Current).ReloadModsOnlyForFiles(addedFiles);
+			}
+
 			// reload mods
-			_mods = ((App)App.Current).ReloadMods(); // TODO: if PreferCachedModsLibrary, add cache entries, so mods appear even without force sync
+			_mods = ((App)App.Current).ReloadMods(); // mods appear even without force sync, because cache entries were added by ReloadModsOnlyForFiles()
 			MakeModsItems();
+			SaveProfile();
 
 			var newModsCount = 0;
 			foreach (var mod in _mods) {
@@ -930,7 +937,7 @@ namespace Overstrike {
 			ShowStatusMessage("Done! " + newModsCount + " mods added.");
 		}
 
-		private void AddMod(string filename) {
+		private string AddMod(string filename) {
 			bool renameInsteadOverwriting = true; // TODO: make a setting
 
 			try {
@@ -951,7 +958,10 @@ namespace Overstrike {
 				}
 
 				File.Copy(filename, path, true);
+				return path;
 			} catch {}
+
+			return null;
 		}
 
 		private void ModsList_KeyUp(object sender, KeyEventArgs e) {

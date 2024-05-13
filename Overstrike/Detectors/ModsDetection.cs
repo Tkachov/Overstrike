@@ -48,6 +48,23 @@ namespace Overstrike.Detectors {
 			}
 		}
 
+		public virtual void DetectInFiles(string basepath, List<string> filenames, List<ModEntry> mods) {
+			foreach (var detector in _detectors) {
+				string[] extensions = detector.GetExtensions();
+				foreach (var extension in extensions) {
+					foreach (var file in filenames) {
+						if (!file.EndsWith(extension, StringComparison.OrdinalIgnoreCase)) { continue; }
+
+						var relativePath = GetRelativePath(file, basepath);
+						_currentFile = relativePath;
+
+						using var stream = File.OpenRead(file);
+						Detect(detector, stream, relativePath, mods);
+					}
+				}
+			}
+		}
+
 		internal virtual void Detect(DetectorBase detector, FileStream stream, string relativePath, List<ModEntry> mods) {
 			detector.Detect(stream, relativePath, mods);
 		}
@@ -100,6 +117,12 @@ namespace Overstrike.Detectors {
 		public override void Detect(string path, List<ModEntry> mods) {
 			LoadCache();
 			base.Detect(path, mods);
+			SaveCache();
+		}
+
+		public override void DetectInFiles(string basepath, List<string> filenames, List<ModEntry> mods) {
+			LoadCache();
+			base.DetectInFiles(basepath, filenames, mods);
 			SaveCache();
 		}
 
