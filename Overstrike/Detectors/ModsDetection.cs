@@ -227,7 +227,7 @@ namespace Overstrike.Detectors {
 						try {
 							var enumType = JsonConvert.DeserializeObject<ModEntry.ModType>("\"" + type + "\"");
 							mods.Add(new ModEntry(name, path, enumType));
-						} catch { }
+						} catch {}
 					}
 				}
 

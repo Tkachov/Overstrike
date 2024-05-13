@@ -957,7 +957,7 @@ namespace Overstrike {
 		private void ModsList_KeyUp(object sender, KeyEventArgs e) {
 			if (e.Key == Key.Delete) {
 				var cwd = Directory.GetCurrentDirectory();
-				List<string> filesToDelete = new List<string>();
+				List<string> filesToDelete = new();
 				foreach (ModEntry mod in ModsList.SelectedItems) {
 					if (mod.Type == ModEntry.ModType.SUITS_MENU) continue;
 
@@ -980,14 +980,18 @@ namespace Overstrike {
 						message = "Delete '" + Path.GetFileName(filesToDelete[0]) + "' from 'Mods Library' folder?";
 					}
 
+					if (filesToDelete.Count != ModsList.SelectedItems.Count) {
+						message += $"\nThat'll delete {ModsList.SelectedItems.Count} selected mods.";
+					}
+
 					MessageBoxResult result = MessageBox.Show(message, "Warning", MessageBoxButton.YesNo);
 					if (result == MessageBoxResult.Yes) {
 						foreach (var file in filesToDelete) {
 							try { File.Delete(file); } catch {}
 						}
-					}
 
-					RefreshMods(); // TODO: if PreferCachedModsLibrary, remove cache entries, so mods disappear even without force sync
+						RefreshMods(); // TODO: if PreferCachedModsLibrary, remove cache entries, so mods disappear even without force sync
+					}
 				}
 			}
 		}
