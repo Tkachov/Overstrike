@@ -177,7 +177,7 @@ namespace Overstrike {
 			return Mods;
 		}
 
-		public void ReloadModsOnlyForFiles(List<string> filenames) {
+		public List<ModEntry> ReloadModsOnlyForFiles(List<string> filenames) {
 			var oldMods = Mods;
 			Mods = new();
 
@@ -189,6 +189,8 @@ namespace Overstrike {
 			if (!RunDetectionAndShowSplash(filenames)) {
 				Mods = oldMods;
 			}
+
+			return Mods;
 		}
 
 		// threads

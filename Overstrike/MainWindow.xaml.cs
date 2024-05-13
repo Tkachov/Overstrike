@@ -919,12 +919,8 @@ namespace Overstrike {
 				previousMods[mod.Path] = true;
 			}
 
-			if (Settings_PreferCachedModsLibrary) {
-				((App)App.Current).ReloadModsOnlyForFiles(addedFiles);
-			}
-
 			// reload mods
-			_mods = ((App)App.Current).ReloadMods(); // mods appear even without force sync, because cache entries were added by ReloadModsOnlyForFiles()
+			_mods = ((App)App.Current).ReloadModsOnlyForFiles(addedFiles);
 			MakeModsItems();
 			SaveProfile();
 
