@@ -957,20 +957,33 @@ namespace Overstrike {
 		private void ModsList_KeyUp(object sender, KeyEventArgs e) {
 			if (e.Key == Key.Delete) {
 				var cwd = Directory.GetCurrentDirectory();
-				List<string> filesToDelete = new();
-				foreach (ModEntry mod in ModsList.SelectedItems) {
-					if (mod.Type == ModEntry.ModType.SUITS_MENU) continue;
 
-					var path = mod.Path;
+				string GetFilePath(string path) {
 					var index = path.IndexOf("||");
 					if (index != -1) {
 						path = path.Substring(0, index);
 					}
 
-					path = Path.Combine(cwd, "Mods Library", path);
+					return Path.Combine(cwd, "Mods Library", path);
+				};
 
+				List<string> filesToDelete = new();
+				foreach (ModEntry mod in ModsList.SelectedItems) {
+					if (mod.Type == ModEntry.ModType.SUITS_MENU) continue;
+
+					var path = GetFilePath(mod.Path);
 					if (!filesToDelete.Contains(path)) {
 						filesToDelete.Add(path);
+					}
+				}
+
+				var deletingModsCount = 0;
+				foreach (ModEntry mod in ModsList.Items) {
+					if (mod.Type == ModEntry.ModType.SUITS_MENU) continue;
+
+					var path = GetFilePath(mod.Path);
+					if (filesToDelete.Contains(path)) {
+						++deletingModsCount;
 					}
 				}
 
@@ -980,8 +993,8 @@ namespace Overstrike {
 						message = "Delete '" + Path.GetFileName(filesToDelete[0]) + "' from 'Mods Library' folder?";
 					}
 
-					if (filesToDelete.Count != ModsList.SelectedItems.Count) {
-						message += $"\nThat'll delete {ModsList.SelectedItems.Count} selected mods.";
+					if (ModsList.SelectedItems.Count < deletingModsCount) {
+						message += $"\nThat'll delete {deletingModsCount} mods (only {ModsList.SelectedItems.Count} of them are selected)!";
 					}
 
 					MessageBoxResult result = MessageBox.Show(message, "Warning", MessageBoxButton.YesNo);
@@ -990,7 +1003,7 @@ namespace Overstrike {
 							try { File.Delete(file); } catch {}
 						}
 
-						RefreshMods(); // TODO: if PreferCachedModsLibrary, remove cache entries, so mods disappear even without force sync
+						RefreshMods(); // if PreferCachedModsLibrary, mods disappear even without force sync, because cache entries for files not present on disk are ignored
 					}
 				}
 			}
