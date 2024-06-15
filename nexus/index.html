@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Overstrike</title>
+	<meta charset="utf-8"/>
+	<link rel="stylesheet" type="text/css" href="../style.css"/>
+</head>
+<body>
+	<div class="container">
+		<p>Downloading <b id="url"></b> to Overstrike...</p>
+		<p>If nothing happens, make sure you have latest Overstrike installed with <span class="code">overstrike://</span> protocol enabled in settings.</p>
+	</div>
+
+	<div class="footer">
+		<a href="http://tkachov.ru/" class="cutout_logo"><img src="../images/tkachov.png" loading="eager"/></a>
+		<a href="https://github.com/Tkachov/Overstrike" class="social GH_button"></a>
+	</div>
+
+	<script type="text/javascript">
+		window.onload = function () {
+			var nexusUrl = window.location.hash.substr(1);
+
+			var e = document.getElementById("url");
+			e.innerHTML = "";
+			e.appendChild(document.createTextNode(nexusUrl));
+
+			setTimeout(function () {
+				window.location = "overstrike://" + nexusUrl;
+			}, 500);
+		};
+	</script>
+</body>
+</html>
