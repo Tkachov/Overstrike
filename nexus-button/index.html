@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Overstrike</title>
+	<meta charset="utf-8"/>
+	<link rel="stylesheet" type="text/css" href="../style.css"/>
+</head>
+<body>
+	<div class="container">
+		<p>Enter your mod's URL here:</p>
+		<input id="url" type="text" placeholder="https://www.nexusmods.com/marvelsspidermanremastered/mods/4199/">
+		<p>and copy the BBCode for your mod description from here:</p>
+		<textarea id="bbcode" readonly></textarea>
+	</div>
+
+	<div class="footer">
+		<a href="http://tkachov.ru/" class="cutout_logo"><img src="../images/tkachov.png" loading="eager"/></a>
+		<a href="https://github.com/Tkachov/Overstrike" class="social GH_button"></a>
+	</div>
+
+	<script type="text/javascript">
+		window.onload = function () {
+			var e = document.getElementById("url");
+			e.oninput = update_bbcode;
+			e.onchange = update_bbcode;
+			update_bbcode();
+		};
+
+		function update_bbcode() {
+			var e = document.getElementById("url");
+			var url = e.value;
+			if (e.value == "") url = e.placeholder;
+
+			e = document.getElementById("bbcode");
+			e.value = "[center][url=https://tkachov.github.io/Overstrike/nexus/#" + url + "][img]https://tkachov.github.io/Overstrike/images/button.png[/img][/url][/center]";
+		}
+	</script>
+	<style>
+		#url {
+			box-sizing: border-box;
+			width: 100%;
+			
+			margin: 0;
+			padding: 4pt;
+			outline: 0;
+
+			font-size: 14pt;
+		}
+
+		#bbcode {
+			box-sizing: border-box;
+			width: 100%;
+			min-height: 40px;
+		}
+	</style>
+</body>
+</html>
