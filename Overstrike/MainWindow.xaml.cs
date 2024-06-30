@@ -1093,7 +1093,7 @@ namespace Overstrike {
 
 			new ModularWizard(mod, this).ShowDialog();
 			SaveProfile();
-			RefreshMods();
+			MakeModsItems();
 		}
 	}
 }
