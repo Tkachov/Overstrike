@@ -56,10 +56,18 @@ namespace Overstrike.Data {
 			foreach (var mod in mods) {
 				var path = (string?)mod[0];
 				var install = (bool?)mod[1];
+				JObject extras = null;
 
 				if (path == null || install == null) continue; // { throw new Exception("bad profile"); }
 
-				Mods.Add(new ModEntry(path, (bool)install));
+				try {
+					var modArr = (JArray)mod;
+					if (modArr.Count > 2) {
+						extras = (JObject?)modArr[2];
+					}
+				} catch {}
+
+				Mods.Add(new ModEntry(path, (bool)install, extras));
 			}
 
 			var settings = (JObject)json["settings"];
@@ -97,6 +105,9 @@ namespace Overstrike.Data {
 						mod.Path,
 						mod.Install
 					};
+					if (mod.Extras != null) {
+						mod_desc.Add(mod.Extras);
+					}
 					mods.Add(mod_desc);
 				}
 				j["mods"] = mods;

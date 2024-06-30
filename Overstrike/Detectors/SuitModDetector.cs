@@ -17,7 +17,7 @@ namespace Overstrike.Detectors {
 			return new string[] {"suit"};
 		}
 
-		public override void Detect(Stream file, string path, List<ModEntry> mods) {
+		public override void Detect(Stream file, string path, List<ModEntry> mods, List<string> warnings) {
 			try {
 				ModEntry.ModType detectedModType = ModEntry.ModType.UNKNOWN;
 

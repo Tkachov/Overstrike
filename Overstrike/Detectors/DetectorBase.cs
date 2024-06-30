@@ -12,7 +12,7 @@ namespace Overstrike.Detectors {
 		public DetectorBase() {}
 
 		public abstract string[] GetExtensions();
-		public abstract void Detect(Stream file, string path, List<ModEntry> mods);
+		public abstract void Detect(Stream file, string path, List<ModEntry> mods, List<string> warnings);
 
 		protected string GetShortPath(string path) {
 			var index = path.LastIndexOf("||");

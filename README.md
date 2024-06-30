@@ -2,7 +2,7 @@
 
 Overstrike is a mod manager for PC ports of Insomniac Games' games.
 
-It supports .smpcmod/.mmpcmod, .suit and .stage mod formats, allows to create multiple profiles per game, automatically detects new mods in its folder (even in archives), and more. It's standalone, unified and user-friendly.
+It supports .smpcmod/.mmpcmod, .suit, .stage and .modular mod formats, allows to create multiple profiles per game, automatically detects new mods in its folder (even in archives), and more. It's standalone, unified and user-friendly.
 
 ![Overstrike main window screenshot](https://github.com/Tkachov/Overstrike/assets/1948111/92229d23-550c-4d76-b2f3-d669c6b76764)
 

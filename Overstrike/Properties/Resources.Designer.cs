@@ -83,6 +83,16 @@ namespace Overstrike.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] badge_modular {
+            get {
+                object obj = ResourceManager.GetObject("badge_modular", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] badge_smpc {
             get {
                 object obj = ResourceManager.GetObject("badge_smpc", resourceCulture);

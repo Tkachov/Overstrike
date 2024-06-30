@@ -26,11 +26,12 @@ namespace Overstrike.Detectors {
 				new SMPCModDetector(),
 				new SuitModDetector(),
 				new StageModDetector(),
+				new ModularModDetector(),
 				new ArchiveDetector(this)
 			};
 		}
 
-		public virtual void Detect(string path, List<ModEntry> mods) {
+		public virtual void Detect(string path, List<ModEntry> mods, List<string> warnings) {
 			mods.Clear();
 			
 			foreach (var detector in _detectors) {
@@ -42,13 +43,13 @@ namespace Overstrike.Detectors {
 						_currentFile = relativePath;
 
 						using var stream = File.OpenRead(file);
-						Detect(detector, stream, relativePath, mods);
+						Detect(detector, stream, relativePath, mods, warnings);
 					}
 				}
 			}
 		}
 
-		public virtual void DetectInFiles(string basepath, List<string> filenames, List<ModEntry> mods) {
+		public virtual void DetectInFiles(string basepath, List<string> filenames, List<ModEntry> mods, List<string> warnings) {
 			foreach (var detector in _detectors) {
 				string[] extensions = detector.GetExtensions();
 				foreach (var extension in extensions) {
@@ -59,17 +60,17 @@ namespace Overstrike.Detectors {
 						_currentFile = relativePath;
 
 						using var stream = File.OpenRead(file);
-						Detect(detector, stream, relativePath, mods);
+						Detect(detector, stream, relativePath, mods, warnings);
 					}
 				}
 			}
 		}
 
-		internal virtual void Detect(DetectorBase detector, FileStream stream, string relativePath, List<ModEntry> mods) {
-			detector.Detect(stream, relativePath, mods);
+		internal virtual void Detect(DetectorBase detector, FileStream stream, string relativePath, List<ModEntry> mods, List<string> warnings) {
+			detector.Detect(stream, relativePath, mods, warnings);
 		}
 
-		internal void Detect(IArchive archive, string path, List<ModEntry> mods) {
+		internal void Detect(IArchive archive, string path, List<ModEntry> mods, List<string> warnings) {
 			Dictionary<string, DetectorBase> detectors = new Dictionary<string, DetectorBase>();
 			foreach (var detector in _detectors) {
 				string[] extensions = detector.GetExtensions();
@@ -90,7 +91,7 @@ namespace Overstrike.Detectors {
 						file.Seek(0, SeekOrigin.Begin);
 
 						var internalPath = path + "||" + entry.Key;
-						detectors[extension].Detect(file, internalPath, mods);
+						detectors[extension].Detect(file, internalPath, mods, warnings);
 						break;
 					}
 				}
@@ -114,22 +115,22 @@ namespace Overstrike.Detectors {
 
 		public ModsDetectionCached(): base() {}
 
-		public override void Detect(string path, List<ModEntry> mods) {
+		public override void Detect(string path, List<ModEntry> mods, List<string> warnings) {
 			LoadCache();
-			base.Detect(path, mods);
+			base.Detect(path, mods, warnings);
 			SaveCache();
 		}
 
-		public override void DetectInFiles(string basepath, List<string> filenames, List<ModEntry> mods) {
+		public override void DetectInFiles(string basepath, List<string> filenames, List<ModEntry> mods, List<string> warnings) {
 			LoadCache();
-			base.DetectInFiles(basepath, filenames, mods);
+			base.DetectInFiles(basepath, filenames, mods, warnings);
 			SaveCache();
 		}
 
-		internal override void Detect(DetectorBase detector, FileStream stream, string relativePath, List<ModEntry> mods) {
+		internal override void Detect(DetectorBase detector, FileStream stream, string relativePath, List<ModEntry> mods, List<string> warnings) {
 			if (CacheHit(stream, relativePath, mods)) return;
 
-			_cache[relativePath] = new CacheEntry {
+			var newEntry = new CacheEntry {
 				FileLength = stream.Length,
 				FileChecksum1 = CacheEntry.CalculateChecksum1(stream),
 				FileChecksum2 = CacheEntry.CalculateChecksum2(stream),
@@ -137,7 +138,14 @@ namespace Overstrike.Detectors {
 			};
 
 			var modsBefore = mods.Count;
-			detector.Detect(stream, relativePath, mods);
+			var warningsBefore = warnings.Count;
+			detector.Detect(stream, relativePath, mods, warnings);
+
+			if (warnings.Count > warningsBefore) {
+				return; // don't cache entry for file that produced warnings
+			}
+
+			_cache[relativePath] = newEntry;
 
 			var entries = _cache[relativePath].ProducedEntries;
 			for (var i = modsBefore; i < mods.Count; ++i) {

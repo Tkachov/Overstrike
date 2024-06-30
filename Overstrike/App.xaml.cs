@@ -133,19 +133,40 @@ namespace Overstrike {
 		private void DetectMods() {
 			var cwd = Directory.GetCurrentDirectory();
 			var path = Path.Combine(cwd, "Mods Library");
+			var warnings = new List<string>();
 
 			_detection = Settings.CacheModsLibrary ? new ModsDetectionCached() : new ModsDetection();
-			_detection.Detect(path, Mods);
+			_detection.Detect(path, Mods, warnings);
 			_detection = null;
+
+			ShowModsDetectionWarnings(warnings);
 		}
 
 		private void DetectModsInFiles(List<string> filenames) {
 			var cwd = Directory.GetCurrentDirectory();
 			var path = Path.Combine(cwd, "Mods Library");
+			var warnings = new List<string>();
 
 			_detection = Settings.CacheModsLibrary ? new ModsDetectionCached() : new ModsDetection();
-			_detection.DetectInFiles(path, filenames, Mods);
+			_detection.DetectInFiles(path, filenames, Mods, warnings);
 			_detection = null;
+
+			ShowModsDetectionWarnings(warnings);
+		}
+
+		private void ShowModsDetectionWarnings(List<string> warnings) {
+			if (warnings.Count == 0) return;
+
+			if (warnings.Count == 1) {
+				MessageBox.Show(warnings[0], "Warning", MessageBoxButton.OK);
+				return;
+			}
+
+			var message = $"During scan, {warnings.Count} warnings happened:\n";
+			foreach (var warning in warnings) {
+				message += $"\n* {warning}\n";
+			}
+			MessageBox.Show(message, "Warnings", MessageBoxButton.OK);
 		}
 
 		private bool LoadModsFromCache() {

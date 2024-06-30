@@ -31,7 +31,7 @@ namespace Overstrike.Games {
 		}
 
 		public override bool IsCompatible(ModEntry mod) {
-			return (mod.Type == ModEntry.ModType.MMPC || mod.Type == ModEntry.ModType.SUIT_MM || mod.Type == ModEntry.ModType.SUIT_MM_V2 || mod.Type == ModEntry.ModType.STAGE_MM || mod.Type == ModEntry.ModType.SUITS_MENU);
+			return (mod.Type == ModEntry.ModType.MMPC || mod.Type == ModEntry.ModType.SUIT_MM || mod.Type == ModEntry.ModType.SUIT_MM_V2 || mod.Type == ModEntry.ModType.STAGE_MM || mod.Type == ModEntry.ModType.SUITS_MENU || mod.Type == ModEntry.ModType.MODULAR_MM);
 		}
 
 		public override MetaInstallerBase GetMetaInstaller(string gamePath, AppSettings settings, Profile profile) {

@@ -36,6 +36,7 @@ Supported mod formats:
 - .smpcmod/.mmpcmod
 - .suit
 - .stage
+- .modular
 
 Supported archives formats:
 - .7z
@@ -173,6 +174,10 @@ to change the order they install in. This list supports multiselect
 with Ctrl and Shift. Changing checkbox for one of the selected mods
 changes it for all other selected mods, allowing you to quickly enable
 or disable multiple mods at once.
+
+.modular mods can be customized. Right click such mod and press "Edit
+modules..." to open a window that allows to choose from options mod's
+author have provided.
 
 You can delete mods using Delete key. This deletes them from your
 'Mods Library/' folder. If mod you have selected is in archive, that

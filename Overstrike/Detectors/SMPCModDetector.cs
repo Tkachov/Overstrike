@@ -17,7 +17,7 @@ namespace Overstrike.Detectors {
 			return new string[] {"smpcmod", "mmpcmod"};
 		}
 
-		public override void Detect(Stream file, string path, List<ModEntry> mods) {
+		public override void Detect(Stream file, string path, List<ModEntry> mods, List<string> warnings) {
 			try {
 				bool hasFiles = false;
 				bool hasInfo = false;

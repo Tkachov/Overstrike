@@ -9,6 +9,7 @@ using System;
 using System.IO.Compression;
 using DAT1;
 using Overstrike.Data;
+using Overstrike.Utils;
 
 namespace Overstrike.Installers {
 	internal abstract class InstallerBase {
@@ -25,52 +26,7 @@ namespace Overstrike.Installers {
 		#region .zip
 
 		protected ZipArchive ReadModFile() {
-			var cwd = Directory.GetCurrentDirectory();
-			var fullPath = Path.Combine(cwd, "Mods Library", _mod.Path);
-			return new ZipArchive(GetFile(fullPath));
-		}
-
-		private Stream GetFile(string path) {
-			var index = path.IndexOf("||");
-			if (index != -1) {
-				string basefile = path.Substring(0, index);
-				string rest = path.Substring(index + 2);
-
-				using (var archive = ArchiveFactory.Open(File.OpenRead(basefile))) {
-					return GetFile(archive, rest);
-				}
-			}
-
-			return File.OpenRead(path);
-		}
-
-		private Stream GetFile(IArchive archive, string path) {
-			var fullpath = path;
-			var index = path.IndexOf("||");
-			if (index != -1) {
-				fullpath = path.Substring(0, index);
-			}
-
-			foreach (var entry in archive.Entries) {
-				if (entry.IsDirectory) continue;
-				if (entry.Key.Equals(fullpath, StringComparison.OrdinalIgnoreCase)) {
-					var file = new MemoryStream();
-					using (var entryStream = entry.OpenEntryStream()) {
-						entryStream.CopyTo(file);
-					}
-					file.Seek(0, SeekOrigin.Begin);
-
-					if (index == -1) {
-						return file;
-					} else {
-						using (var archive2 = ArchiveFactory.Open(file)) {
-							return GetFile(archive2, path.Substring(index + 2));
-						}
-					}
-				}
-			}
-
-			return null;
+			return NestedFiles.GetNestedZip(_mod.Path);
 		}
 
 		protected ZipArchiveEntry GetEntryByName(ZipArchive zip, string name) {

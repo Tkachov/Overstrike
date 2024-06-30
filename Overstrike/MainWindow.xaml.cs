@@ -291,13 +291,13 @@ namespace Overstrike {
 			foreach (var mod in _selectedProfile.Mods) { // first, adding previously known mods
 				if (availableMods.ContainsKey(mod.Path)) {
 					var install = mod.Install && profileInstalled[mod.Path];
-					_modsList.Add(new ModEntry(availableMods[mod.Path], install, index));
+					_modsList.Add(new ModEntry(availableMods[mod.Path], install, index, mod.Extras));
 					++index;
 				}
 			}
 			foreach (var mod in _mods) {
 				if (availableMods.ContainsKey(mod.Path) && !profileInstalled.ContainsKey(mod.Path)) { // then, adding new mods
-					_modsList.Add(new ModEntry(availableMods[mod.Path], mod.Install, index));
+					_modsList.Add(new ModEntry(availableMods[mod.Path], mod.Install, index, null));
 					++index;
 				}
 			}
@@ -310,7 +310,7 @@ namespace Overstrike {
 				}
 
 				var stub = new ModEntry("Suits Menu", path, ModEntry.ModType.SUITS_MENU);
-				_suitsMenuEntry = new ModEntry(stub, suitsMenuInstalled, index);
+				_suitsMenuEntry = new ModEntry(stub, suitsMenuInstalled, index, null);
 				_modsList.Add(_suitsMenuEntry);
 				++index;
 			}
@@ -647,7 +647,7 @@ namespace Overstrike {
 		private void ApplyModsStateToProfile() {
 			var mods = new List<ModEntry>();
 			foreach (var mod in _modsList) {
-				mods.Add(new ModEntry(mod.Path, mod.Install));
+				mods.Add(new ModEntry(mod.Path, mod.Install, mod.Extras));
 			}
 			_selectedProfile.Mods = mods;
 		}
@@ -667,10 +667,26 @@ namespace Overstrike {
 			foreach (var mod in _selectedProfile.Mods) {
 				if (!mod.Install) continue;
 				if (!availableMods.ContainsKey(mod.Path)) continue; // TODO: should not happen?
-				modsToInstall.Add(availableMods[mod.Path]);
+				
+				try {
+					AddEntriesToInstall(modsToInstall, availableMods[mod.Path], mod);
+				} catch (Exception ex) {
+					var message = $"There was an error processing '{availableMods[mod.Path].Name}' mod.\nPress Ctrl+C to copy this message.\n\n{ex}";
+					MessageBoxResult result = MessageBox.Show(message, "Error", MessageBoxButton.OK);
+					return;
+				}
 			}
 
 			StartInstallModsThread(modsToInstall, _selectedProfile.Game, _selectedProfile.GamePath);
+		}
+
+		private void AddEntriesToInstall(List<ModEntry> modsToInstall, ModEntry libraryMod, ModEntry profileMod) {
+			if (ModEntry.IsTypeFamilyModular(libraryMod.Type)) {
+				ModularInstaller.AddEntriesToInstall(modsToInstall, libraryMod, profileMod);
+				return;
+			}
+
+			modsToInstall.Add(libraryMod);
 		}
 
 		private void StartInstallModsThread(List<ModEntry> modsToInstall, string game, string gamePath, bool uninstalling = false) {
@@ -806,6 +822,7 @@ namespace Overstrike {
 
 				var suits = 0;
 				var stages = 0;
+				var modulars = 0;
 				var menu = 0;
 				foreach (var mod in modsToInstall) {
 					switch (mod.Type) {
@@ -823,13 +840,21 @@ namespace Overstrike {
 							++stages;
 						break;
 
+						case ModEntry.ModType.MODULAR_MSMR:
+						case ModEntry.ModType.MODULAR_MM:
+						case ModEntry.ModType.MODULAR_RCRA:
+						case ModEntry.ModType.MODULAR_I30:
+						case ModEntry.ModType.MODULAR_I33:
+							++modulars;
+						break;
+
 						case ModEntry.ModType.SUITS_MENU:
 							++menu;
 						break;
 					}
 				}
 
-				var extra = $" {version} {GetTocArchivesCount(game, gamePath)} {modsToInstall.Count} {suits} {stages} {menu}";
+				var extra = $" {version} {GetTocArchivesCount(game, gamePath)} {modsToInstall.Count} {suits} {stages} {modulars} {menu}";
 				stackTrace = stackTrace.Substring(0, i + 1) + extra + stackTrace.Substring(i + 1);
 			} catch {}
 		}
@@ -899,8 +924,8 @@ namespace Overstrike {
 			dialog.Multiselect = true;
 			dialog.RestoreDirectory = true;
 
-			dialog.Filters.Add(new CommonFileDialogFilter("All supported files", "*.smpcmod;*.mmpcmod;*.suit;*.stage;*.zip;*.rar;*.7z") { ShowExtensions = true });
-			dialog.Filters.Add(new CommonFileDialogFilter("All supported mod files", "*.smpcmod;*.mmpcmod;*.suit;*.stage") { ShowExtensions = true });
+			dialog.Filters.Add(new CommonFileDialogFilter("All supported files", "*.smpcmod;*.mmpcmod;*.suit;*.stage;*.modular;*.zip;*.rar;*.7z") { ShowExtensions = true });
+			dialog.Filters.Add(new CommonFileDialogFilter("All supported mod files", "*.smpcmod;*.mmpcmod;*.suit;*.stage;*.modular") { ShowExtensions = true });
 			dialog.Filters.Add(new CommonFileDialogFilter("Archives", "*.zip;*.rar;*.7z") { ShowExtensions = true });
 			dialog.Filters.Add(new CommonFileDialogFilter("All files", "*") { ShowExtensions = true });
 
@@ -1040,6 +1065,35 @@ namespace Overstrike {
 			} catch {}
 			
 			HideStatusMessageError();
+		}
+
+		private void ModsList_ModEntry_ContextMenuOpening(object sender, ContextMenuEventArgs e) {
+			var showMenu = false;
+
+			var grid = (Grid)sender;
+			if (grid != null) {
+				var mod = (ModEntry)grid.DataContext;
+				if (mod != null) {
+					showMenu = ModEntry.IsTypeFamilyModular(mod.Type);
+				}
+			}
+
+			if (!showMenu) {
+				e.Handled = true;
+				return;
+			}
+		}
+
+		private void EditModules_Click(object sender, RoutedEventArgs e) {
+			var menuItem = (MenuItem)sender;
+			if (menuItem == null) return;
+
+			var mod = (ModEntry)menuItem.DataContext;
+			if (mod == null) return;
+
+			new ModularWizard(mod, this).ShowDialog();
+			SaveProfile();
+			RefreshMods();
 		}
 	}
 }

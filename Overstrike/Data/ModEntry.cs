@@ -5,6 +5,7 @@
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Linq;
 using System.ComponentModel;
 using System.Windows.Media.Imaging;
 
@@ -25,6 +26,11 @@ namespace Overstrike.Data {
 			STAGE_I30,
 			STAGE_I33,
 			SUITS_MENU,
+			MODULAR_MSMR,
+			MODULAR_MM,
+			MODULAR_RCRA,
+			MODULAR_I30,
+			MODULAR_I33,
 
 			UNKNOWN
 		}
@@ -41,6 +47,7 @@ namespace Overstrike.Data {
 			}
 		}
 		public string Name { get; set; }
+		public JObject Extras { get; set; }
 
 		// run-time
 		public string Path { get; set; }
@@ -65,6 +72,12 @@ namespace Overstrike.Data {
 					++depth;
 				}
 
+				if (IsTypeFamilyModular(Type)) {
+					if (Extras != null && Extras.ContainsKey("description")) {
+						result += "\n" + Extras["description"];
+					}
+				}
+
 				return result;
 			}
 		}
@@ -77,23 +90,26 @@ namespace Overstrike.Data {
 			Install = true;
 			Name = name;
 			Path = path;
+			Extras = null;
 			Type = type;
 			Order = 0;
 			Badge = null;
 		}
 
-		public ModEntry(string path, bool install) {
+		public ModEntry(string path, bool install, JObject extras) {
 			Install = install;
 			Name = null;
 			Path = path;
+			Extras = extras;
 			Type = ModType.UNKNOWN;
 			Order = 0;
 			Badge = null;
 		}
 
-		public ModEntry(ModEntry mod, bool install, int order) {
+		public ModEntry(ModEntry mod, bool install, int order, JObject extrasOverride) {
 			Install = install;
 			Name = mod.Name;
+			Extras = (extrasOverride ?? mod.Extras);
 			Path = mod.Path;
 			Type = mod.Type;
 			Order = order;
@@ -122,6 +138,13 @@ namespace Overstrike.Data {
 				case ModType.SUITS_MENU:
 					return badge_suit; // TODO: custom badge?
 
+				case ModType.MODULAR_MSMR:
+				case ModType.MODULAR_MM:
+				case ModType.MODULAR_RCRA:
+				case ModType.MODULAR_I30:
+				case ModType.MODULAR_I33:
+					return badge_modular;
+
 				default:
 					return null;
 			}
@@ -131,6 +154,7 @@ namespace Overstrike.Data {
 		private static BitmapImage badge_mmpc = null;
 		private static BitmapImage badge_suit = null;
 		private static BitmapImage badge_stage = null;
+		private static BitmapImage badge_modular = null;
 
 		private static void LoadBadges() {
 			if (badge_smpc == null)
@@ -144,6 +168,13 @@ namespace Overstrike.Data {
 
 			if (badge_stage == null)
 				badge_stage = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.badge_stage);
+
+			if (badge_modular == null)
+				badge_modular = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.badge_modular);
+		}
+
+		public static bool IsTypeFamilyModular(ModType type) {
+			return (type == ModType.MODULAR_MSMR || type == ModType.MODULAR_MM || type == ModType.MODULAR_RCRA || type == ModType.MODULAR_I30 || type == ModType.MODULAR_I33);
 		}
 	}
 }

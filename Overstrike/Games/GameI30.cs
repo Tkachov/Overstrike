@@ -28,7 +28,7 @@ namespace Overstrike.Games {
 		}
 
 		public override bool IsCompatible(ModEntry mod) {
-			return (mod.Type == ModEntry.ModType.STAGE_I30);
+			return (mod.Type == ModEntry.ModType.STAGE_I30 || mod.Type == ModEntry.ModType.MODULAR_I30);
 		}
 
 		public override MetaInstallerBase GetMetaInstaller(string gamePath, AppSettings settings, Profile profile) {
