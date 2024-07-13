@@ -288,7 +288,7 @@ namespace DAT1 {
 
 			// insert into right place (SortAssets() is still required to fix SizesSection.Entries.Index)
 			var assetIndex = AssetIdsSection.Ids.BinarySearch((int)spanEntry.AssetIndex, (int)spanEntry.Count, assetId, null); // default comparer
-			Debug.Assert(assetIndex < 0, "AddAsset() should not be called if asset is already present");
+			Utils.Assert(assetIndex < 0, "AddAsset() should not be called if asset is already present");
 			assetIndex = ~assetIndex;			
 
 			++spanEntry.Count;
@@ -540,7 +540,7 @@ namespace DAT1 {
 
 			// insert into right place (SortAssets() shouldn't be required)
 			var assetIndex = AssetIdsSection.Ids.BinarySearch((int)spanEntry.AssetIndex, (int)spanEntry.Count, assetId, null); // default comparer
-			Debug.Assert(assetIndex < 0, "AddAsset() should not be called if asset is already present");
+			Utils.Assert(assetIndex < 0, "AddAsset() should not be called if asset is already present");
 			assetIndex = ~assetIndex;
 
 			++spanEntry.Count;

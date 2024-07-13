@@ -4,7 +4,6 @@
 // A copy of the that license should come with this program (LICENSE.txt). If not, see <http://www.gnu.org/licenses/>.
 
 using DAT1.Sections.Texture;
-using System.Diagnostics;
 using System.IO;
 
 namespace DAT1.Files {
@@ -78,7 +77,7 @@ namespace DAT1.Files {
 			magic = r.ReadUInt32();
 			dat1_size = r.ReadUInt32();
 			unk = r.ReadBytes(28);
-			Debug.Assert(magic == MAGIC, "Texture_I20(): bad magic");
+			Utils.Assert(magic == MAGIC, "Texture_I20(): bad magic");
 
 			Init(r);
 			raw = r.ReadBytes((int)(r.BaseStream.Length - r.BaseStream.Position));
@@ -92,7 +91,7 @@ namespace DAT1.Files {
 			magic = r.ReadUInt32();
 			dat1_size = r.ReadUInt32();
 			unk = r.ReadBytes(28);
-			Debug.Assert(magic == MAGIC, "Texture_I29(): bad magic");
+			Utils.Assert(magic == MAGIC, "Texture_I29(): bad magic");
 
 			Init(r);
 			raw = r.ReadBytes((int)(r.BaseStream.Length - r.BaseStream.Position));

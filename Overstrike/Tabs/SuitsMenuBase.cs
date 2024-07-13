@@ -794,7 +794,7 @@ namespace Overstrike.Tabs {
 		}
 
 		protected void ToggleSelectedSuitDeleted() {
-			Debug.Assert(SuitsSlots.SelectedItem != null);
+			DAT1.Utils.Assert(SuitsSlots.SelectedItem != null);
 
 			var selectedSuit = (SuitSlot)SuitsSlots.SelectedItem;
 
@@ -840,7 +840,7 @@ namespace Overstrike.Tabs {
 
 		protected void SuitLoadoutComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
 			if (e.AddedItems.Count <= 0) return;
-			Debug.Assert(SuitsSlots.SelectedItem != null);
+			DAT1.Utils.Assert(SuitsSlots.SelectedItem != null);
 
 			var loadout = (LoadoutItem)e.AddedItems[0];
 			var selectedSuit = (SuitSlot)SuitsSlots.SelectedItem;
@@ -860,7 +860,7 @@ namespace Overstrike.Tabs {
 
 		protected void SuitIconComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
 			if (e.AddedItems.Count <= 0) return;
-			Debug.Assert(SuitsSlots.SelectedItem != null);
+			DAT1.Utils.Assert(SuitsSlots.SelectedItem != null);
 
 			var icon = (IconItem)e.AddedItems[0];
 			var selectedSuit = (SuitSlot)SuitsSlots.SelectedItem;
@@ -884,7 +884,7 @@ namespace Overstrike.Tabs {
 
 		protected void SuitBigIconComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
 			if (e.AddedItems.Count <= 0) return;
-			Debug.Assert(SuitsSlots.SelectedItem != null);
+			DAT1.Utils.Assert(SuitsSlots.SelectedItem != null);
 
 			var icon = (IconItem)e.AddedItems[0];
 			var selectedSuit = (SuitSlot)SuitsSlots.SelectedItem;
@@ -911,7 +911,7 @@ namespace Overstrike.Tabs {
 		}
 
 		protected void ResetButtonClicked(object sender, RoutedEventArgs e) {
-			Debug.Assert(_hasChanges == false);
+			DAT1.Utils.Assert(_hasChanges == false);
 
 			string previouslySelectedSuitId = GetCurrentlySelectedSuitId();
 			if (_wasReset) {

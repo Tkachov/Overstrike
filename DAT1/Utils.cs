@@ -3,6 +3,8 @@
 // For more details, terms and conditions, see GNU General Public License.
 // A copy of the that license should come with this program (LICENSE.txt). If not, see <http://www.gnu.org/licenses/>.
 
+using System.Diagnostics;
+
 namespace DAT1 {
 	public class Utils {
 		public static string Normalize(string data) {
@@ -23,5 +25,15 @@ namespace DAT1 {
 
 			return replaced;
 		}
+
+		[Conditional("DEBUG")]
+		public static void Assert(bool condition, string message) {
+			if (!condition) {
+				throw new System.Exception(message);
+			}
+		}
+
+		[Conditional("DEBUG")]
+		public static void Assert(bool condition) => Assert(condition, string.Empty);
 	}
 }

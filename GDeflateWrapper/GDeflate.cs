@@ -23,8 +23,8 @@ namespace GDeflateWrapper {
 			byte id = r.ReadByte();
 			byte magic = r.ReadByte();
 
-			Debug.Assert(id == kGDeflateId, "GDeflate.Decompress(): bad TileStream.id");
-			Debug.Assert(id == (magic ^ 0xFF), "GDeflate.Decompress(): bad TileStream.magic");
+			Assert(id == kGDeflateId, "GDeflate.Decompress(): bad TileStream.id");
+			Assert(id == (magic ^ 0xFF), "GDeflate.Decompress(): bad TileStream.magic");
 
 			var numTiles = r.ReadUInt16();
 			var ignored = r.ReadUInt32(); // tileSizeIdx : 2, lastTileSize : 18, reserved1 : 12
@@ -72,6 +72,13 @@ namespace GDeflateWrapper {
 
 					return actualRead;
 				}
+			}
+		}
+
+		[Conditional("DEBUG")]
+		public static void Assert(bool condition, string message) {
+			if (!condition) {
+				throw new Exception(message);
 			}
 		}
 	}

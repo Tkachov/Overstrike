@@ -11,7 +11,6 @@ using SharpCompress.Archives;
 using SharpCompress.Compressors.Xz;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 
 namespace Overstrike.Detectors {
@@ -99,7 +98,7 @@ namespace Overstrike.Detectors {
 		}
 
 		protected string GetRelativePath(string file, string basepath) {
-			Debug.Assert(file.StartsWith(basepath, StringComparison.OrdinalIgnoreCase));
+			DAT1.Utils.Assert(file.StartsWith(basepath, StringComparison.OrdinalIgnoreCase));
 			var result = file.Substring(basepath.Length);
 			if (result.Length > 0) {
 				if (result[0] == '/' || result[0] == '\\')

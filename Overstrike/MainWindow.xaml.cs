@@ -242,7 +242,7 @@ namespace Overstrike {
 		private void SettingsSuitLanguageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
 			if (!_reactToSuitLanguageSelectionChange) return;
 			if (e.AddedItems.Count <= 0) return;
-			Debug.Assert(SettingsSuitLanguageComboBox.SelectedItem != null);
+			DAT1.Utils.Assert(SettingsSuitLanguageComboBox.SelectedItem != null);
 
 			LanguageItem item = (LanguageItem)e.AddedItems[0];
 			_selectedProfile.Settings_Suit_Language = item.InternalName;
@@ -326,7 +326,7 @@ namespace Overstrike {
 
 		private void ProfileComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e) {
 			if (e.AddedItems.Count <= 0) return;
-			Debug.Assert(ProfileComboBox.SelectedItem != null);
+			DAT1.Utils.Assert(ProfileComboBox.SelectedItem != null);
 
 			// TODO: check if profile needs saving, and save it (or ask to save?)
 
@@ -353,7 +353,7 @@ namespace Overstrike {
 
 		private void SwitchToNewProfile(Profile newProfile) {
 			_profiles = ((App)App.Current).ReloadProfiles();
-			Debug.Assert(_profiles.Count > 0);
+			DAT1.Utils.Assert(_profiles.Count > 0);
 
 			MakeProfileItems();
 

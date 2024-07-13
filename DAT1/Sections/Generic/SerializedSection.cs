@@ -77,8 +77,8 @@ namespace DAT1.Sections.Generic {
 			uint children_count = r.ReadUInt32();
 			uint data_length = r.ReadUInt32();
 
-			Debug.Assert(zero == 0);
-			Debug.Assert(unk == 0x03150044);
+			Utils.Assert(zero == 0);
+			Utils.Assert(unk == 0x03150044);
 
 			long start = r.BaseStream.Position;
 			List<ChildHeader> children = new List<ChildHeader>();
@@ -115,7 +115,7 @@ namespace DAT1.Sections.Generic {
 
 			long end = r.BaseStream.Position;
 			long left = data_length - (end - start);
-			Debug.Assert(left >= 0);
+			Utils.Assert(left >= 0);
 
 			if (left > 0)
 				r.ReadBytes((int)left);
@@ -358,7 +358,7 @@ namespace DAT1.Sections.Generic {
 				case JTokenType.Object: return NodeType.OBJECT;
 				case JTokenType.Array:
 					var arr = (JArray)value;
-					Debug.Assert(arr.Count > 0);
+					Utils.Assert(arr.Count > 0);
 
 					JToken item = arr[0];
 					if (item != null && item.Type == JTokenType.Integer)

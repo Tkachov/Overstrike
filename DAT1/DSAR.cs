@@ -7,7 +7,6 @@ using GDeflateWrapper;
 using K4os.Compression.LZ4;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 
 namespace DAT1 {
@@ -132,7 +131,7 @@ namespace DAT1 {
 					return output;
 
 				default:
-					Debug.Assert(false, "DSAR.Decompress(): unknown compression type");
+					Utils.Assert(false, "DSAR.Decompress(): unknown compression type");
 					return new byte[header.realSize];
 			}
 		}
