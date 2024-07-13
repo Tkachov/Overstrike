@@ -40,6 +40,8 @@
 						<Separator/>
 						<MenuItem x:Name="Mod_ReplaceAssetsFromStage" Header="Add from stage..." Click="Mod_ReplaceAssetsFromStage_Click" />
 						<MenuItem x:Name="Mod_CreateFromReplaced" Header="Pack as .stage..." Click="Mod_CreateFromReplaced_Click" />
+						<Separator/>
+						<MenuItem x:Name="Mod_CreateModular" Header="Create .modular..." Click="Mod_CreateModular_Click" />
 					</MenuItem>
 					<MenuItem Header="Tools">
 						<MenuItem x:Name="Tools_CalculateHash" Header="Calculate hash..." Click="Tools_CalculateHash_Click" />

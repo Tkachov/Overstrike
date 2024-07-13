@@ -892,6 +892,11 @@ namespace ModdingTool {
 			window.ShowDialog();
 		}
 
+		private void Mod_CreateModular_Click(object sender, RoutedEventArgs e) {
+			var window = new ModularCreationWindow();
+			window.ShowDialog();
+		}
+
 		private void Tools_CalculateHash_Click(object sender, RoutedEventArgs e) {
 			if (_hashToolWindow == null) {
 				_hashToolWindow = new HashToolWindow();
