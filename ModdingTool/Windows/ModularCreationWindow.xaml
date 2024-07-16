@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Create .modular" Height="480" Width="800" ResizeMode="NoResize">
+        Title="Create .modular" Height="480" Width="800" ResizeMode="NoResize" Drop="Window_Drop">
 	<Border BorderThickness="0,1,0,0" BorderBrush="#EEE">
 		<Grid>
 			<TabControl x:Name="Tabs" Margin="-1,7,-1,-1" SelectionChanged="Tabs_SelectionChanged">
@@ -23,13 +23,25 @@
 							</Grid.ColumnDefinitions>
 
 							<TextBlock Text="Modules:" FontWeight="Medium" Grid.Column="0" Margin="2,3,0,0" />
-							<ListBox x:Name="ModulesList" Grid.Column="0" Margin="0,25,4,0">
-
+							<ListBox x:Name="ModulesList" Grid.Column="0" Margin="0,25,4,0" SelectionMode="Extended">
+								<ListBox.ItemTemplate>
+									<DataTemplate>
+										<StackPanel Height="20">
+											<TextBlock Text="{Binding Name}" Margin="0,2,0,0" />
+										</StackPanel>
+									</DataTemplate>
+								</ListBox.ItemTemplate>
 							</ListBox>
 
 							<TextBlock Text="Icons:" FontWeight="Medium" Grid.Column="1" Margin="6,3,0,0" />
-							<ListBox x:Name="IconsList" Grid.Column="1" Margin="4,25,0,0">
-
+							<ListBox x:Name="IconsList" Grid.Column="1" Margin="4,25,0,0" SelectionMode="Extended">
+								<ListBox.ItemTemplate>
+									<DataTemplate>
+										<StackPanel Height="20">
+											<TextBlock Text="{Binding Name}" Margin="0,2,0,0" /> <!-- TODO: more height & image -->
+										</StackPanel>
+									</DataTemplate>
+								</ListBox.ItemTemplate>
 							</ListBox>
 						</Grid>
 						

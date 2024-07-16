@@ -3,7 +3,9 @@
 // For more details, terms and conditions, see GNU General Public License.
 // A copy of the that license should come with this program (LICENSE.txt). If not, see <http://www.gnu.org/licenses/>.
 
+using Microsoft.WindowsAPICodePack.Dialogs;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -15,6 +17,23 @@ public partial class ModularCreationWindow: Window {
 
 	private bool _initializing = true;
 
+	#region files tab
+	
+	private List<ModulePath> _modules = new();
+	private List<IconPath> _icons = new();
+
+	class ModulePath {
+		public string Name { get; set; }
+		public string Path;
+	}
+
+	class IconPath {
+		// TODO: icon bitmap
+		public string Name { get; set; }
+		public string Path;
+	}
+
+	#endregion
 	#region layout tab
 
 	private string _selectedStyle;
@@ -39,6 +58,7 @@ public partial class ModularCreationWindow: Window {
 	}
 
 	#endregion
+	
 	#endregion
 
 	public ModularCreationWindow() {
@@ -46,11 +66,67 @@ public partial class ModularCreationWindow: Window {
 		_initializing = false;
 		DataContext = this;
 
+		MakeFileLists();
 		MakeIconsStyleSelector();
 		MakeGamesSelector();
 	}
 
 	#region applying state
+
+	#region files tab
+
+	private void MakeFileLists() {
+		ModulesList.ItemsSource = new CompositeCollection {
+			new CollectionContainer() { Collection = _modules }
+		};
+
+		IconsList.ItemsSource = new CompositeCollection {
+			new CollectionContainer() { Collection = _icons }
+		};
+	}
+
+	private void AddFile(string filename) {
+		var extension = Path.GetExtension(filename).ToLower();
+		if (extension == ".png") {
+			AddIcon(filename);
+			return;
+		}
+		
+		if (extension == ".suit" || extension == ".stage") {
+			AddModule(filename);
+		}
+	}
+
+	private void AddIcon(string filename) {
+		// don't add the file if it's present already
+		foreach (var icon in _icons) {
+			if (icon.Path == filename) {
+				return;
+			}
+		}
+
+		var basename = Path.GetFileName(filename);
+		_icons.Add(new IconPath() { Name = basename, Path = filename });
+		// TODO: load .png (wrap with try/catch so we don't crash and simply ignore "bad" files)
+	}
+
+	private void AddModule(string filename) {
+		// don't add the file if it's present already
+		foreach (var module in _modules) {
+			if (module.Path == filename) {
+				return;
+			}
+		}
+
+		var basename = Path.GetFileName(filename);
+		_modules.Add(new ModulePath() { Name = basename, Path = filename });
+	}
+
+	private void UpdateFileLists() {
+		MakeFileLists();
+	}
+
+	#endregion
 	#region layout tab
 
 	private void MakeIconsStyleSelector() {
@@ -94,19 +170,51 @@ public partial class ModularCreationWindow: Window {
 	}
 
 	#endregion
+	
 	#endregion
 	#region event handlers
+
+	private void Window_Drop(object sender, DragEventArgs e) {
+		var filenames = (string[])e.Data.GetData(DataFormats.FileDrop);
+		if (filenames != null) {
+			foreach (string filename in filenames) {
+				AddFile(filename);
+			}
+
+			UpdateFileLists();
+		}
+	}
 
 	private void Tabs_SelectionChanged(object sender, SelectionChangedEventArgs e) {
 		// TODO: if preview tab is open, rebuild it
 		// TODO: maybe make a button instead in layout tab, so it opens a new preview window with the same resize logic as in Overstrike?
+
+		var isFilesTab = (Tabs.SelectedIndex == 0);
+		AllowDrop = isFilesTab;
 	}
 
 	#region files tab
 
 	private void AddFilesButton_Click(object sender, RoutedEventArgs e) {
-		// TODO: dialog (suit/stage/png)
-		// TODO: add files to either modules or icons list
+		var dialog = new CommonOpenFileDialog();
+		dialog.Title = "Select files to add...";
+		dialog.Multiselect = true;
+		dialog.RestoreDirectory = true;
+
+		dialog.Filters.Add(new CommonFileDialogFilter("All supported files", "*.suit;*.stage;*.png") { ShowExtensions = true });
+		dialog.Filters.Add(new CommonFileDialogFilter("All supported module files", "*.suit;*.stage") { ShowExtensions = true });
+		dialog.Filters.Add(new CommonFileDialogFilter("All supported icon files", "*.png") { ShowExtensions = true });
+		dialog.Filters.Add(new CommonFileDialogFilter("All files", "*") { ShowExtensions = true });
+
+		if (dialog.ShowDialog() != CommonFileDialogResult.Ok) {
+			return;
+		}
+
+		foreach (var filename in dialog.FileNames) {
+			AddFile(filename);
+		}
+
+		UpdateFileLists();
 	}
 
 	#endregion
@@ -135,5 +243,6 @@ public partial class ModularCreationWindow: Window {
 	}
 
 	#endregion
+
 	#endregion
 }
