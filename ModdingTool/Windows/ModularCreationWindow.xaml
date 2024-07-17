@@ -23,7 +23,7 @@
 							</Grid.ColumnDefinitions>
 
 							<TextBlock Text="Modules:" FontWeight="Medium" Grid.Column="0" Margin="2,3,0,0" />
-							<ListBox x:Name="ModulesList" Grid.Column="0" Margin="0,25,4,0" SelectionMode="Extended">
+							<ListBox x:Name="ModulesList" Grid.Column="0" Margin="0,25,4,0" SelectionMode="Extended" KeyUp="ModulesList_KeyUp">
 								<ListBox.ItemTemplate>
 									<DataTemplate>
 										<StackPanel Height="20">
@@ -34,7 +34,7 @@
 							</ListBox>
 
 							<TextBlock Text="Icons:" FontWeight="Medium" Grid.Column="1" Margin="6,3,0,0" />
-							<ListBox x:Name="IconsList" Grid.Column="1" Margin="4,25,0,0" SelectionMode="Extended">
+							<ListBox x:Name="IconsList" Grid.Column="1" Margin="4,25,0,0" SelectionMode="Extended" KeyUp="IconsList_KeyUp">
 								<ListBox.ItemTemplate>
 									<DataTemplate>
 										<Grid>

@@ -9,6 +9,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
 namespace ModdingTool;
@@ -241,6 +242,26 @@ public partial class ModularCreationWindow: Window {
 		}
 
 		UpdateFileLists();
+	}
+
+	private void ModulesList_KeyUp(object sender, KeyEventArgs e) {
+		if (e.Key == Key.Delete) {
+			foreach (var module in ModulesList.SelectedItems) {
+				_modules.Remove((ModulePath)module);
+			}
+
+			UpdateFileLists();
+		}
+	}
+
+	private void IconsList_KeyUp(object sender, KeyEventArgs e) {
+		if (e.Key == Key.Delete) {
+			foreach (var icon in IconsList.SelectedItems) {
+				_icons.Remove((IconPath)icon);
+			}
+
+			UpdateFileLists();
+		}
 	}
 
 	#endregion
