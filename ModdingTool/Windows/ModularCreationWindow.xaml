@@ -37,9 +37,10 @@
 							<ListBox x:Name="IconsList" Grid.Column="1" Margin="4,25,0,0" SelectionMode="Extended">
 								<ListBox.ItemTemplate>
 									<DataTemplate>
-										<StackPanel Height="20">
-											<TextBlock Text="{Binding Name}" Margin="0,2,0,0" /> <!-- TODO: more height & image -->
-										</StackPanel>
+										<Grid>
+											<Image Source="{Binding Icon}" HorizontalAlignment="Left" Stretch="Fill" Width="32" Height="32" />
+											<TextBlock Text="{Binding Name}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="39,0,0,0" />
+										</Grid>
 									</DataTemplate>
 								</ListBox.ItemTemplate>
 							</ListBox>
