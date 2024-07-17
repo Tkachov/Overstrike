@@ -40,10 +40,25 @@ public partial class ModularCreationWindow: Window {
 
 	private string _selectedStyle;
 	private List<IconsStyle> _styles = new();
+	private List<LayoutEntry> _entries = new();
 
 	class IconsStyle {
 		public string Name { get; set; }
 		public string Id;
+	}
+
+	abstract class LayoutEntry {
+		public abstract string Description { get; }
+	}
+
+	class HeaderEntry: LayoutEntry {
+		public string Text;
+
+		public override string Description {
+			get {
+				return $"Header: {Text}";
+			}
+		}
 	}
 
 	#endregion
@@ -169,6 +184,12 @@ public partial class ModularCreationWindow: Window {
 		IconsStyleComboBox.SelectedItem = selected;
 	}
 
+	private void UpdateEntriesList() {
+		LayoutEntriesList.ItemsSource = new CompositeCollection {
+			new CollectionContainer() { Collection = _entries }
+		};
+	}
+
 	#endregion
 	#region info tab
 
@@ -262,6 +283,40 @@ public partial class ModularCreationWindow: Window {
 
 			UpdateFileLists();
 		}
+	}
+
+	#endregion
+	#region layout tab
+
+	private void AddHeaderButton_Click(object sender, RoutedEventArgs e) {
+		_entries.Add(new HeaderEntry() { Text = "" });
+		UpdateEntriesList();
+	}
+
+	private void LayoutEntriesList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+		if (LayoutEntriesList.SelectedItems.Count == 0) {
+			// TODO: hide entry editing UI
+			SelectedEntryLabel.Text = "Selected entry: none";
+			return;
+		}
+
+		// TODO: other entry types
+		var selectedEntry = LayoutEntriesList.SelectedItems[0];
+		if (selectedEntry is HeaderEntry header) {
+			SelectedEntryLabel.Text = "Selected entry: header";
+			HeaderTextBox.Text = header.Text;
+		}
+	}
+
+	private void HeaderTextBox_TextChanged(object sender, TextChangedEventArgs e) {
+		if (LayoutEntriesList.SelectedItems.Count == 0) return;
+
+		var selectedEntry = LayoutEntriesList.SelectedItems[0];
+		if (selectedEntry is HeaderEntry header) {
+			header.Text = HeaderTextBox.Text;
+		}
+
+		UpdateEntriesList();
 	}
 
 	#endregion

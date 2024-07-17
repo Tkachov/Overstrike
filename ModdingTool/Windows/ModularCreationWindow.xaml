@@ -70,14 +70,20 @@
 							</Grid.ColumnDefinitions>
 
 							<TextBlock Text="Entries:" FontWeight="Medium" Grid.Column="0" Margin="2,3,0,0" />
-							<ListBox x:Name="LayoutEntriesList" Grid.Column="0" Margin="0,25,4,29">
-
+							<ListBox x:Name="LayoutEntriesList" Grid.Column="0" Margin="0,25,4,29" SelectionChanged="LayoutEntriesList_SelectionChanged">
+								<ListBox.ItemTemplate>
+									<DataTemplate>
+										<StackPanel Height="20">
+											<TextBlock Text="{Binding Description}" Margin="0,2,0,0" />
+										</StackPanel>
+									</DataTemplate>
+								</ListBox.ItemTemplate>
 							</ListBox>
 
-							<TextBlock Text="Selected entry:" FontWeight="Medium" Grid.Column="1" Margin="6,3,0,0" />
+							<TextBlock x:Name="SelectedEntryLabel" Text="Selected entry:" FontWeight="Medium" Grid.Column="1" Margin="6,3,0,0" />
 							<Grid x:Name="EditingHeader" Grid.Column="1" Margin="4,25,0,0">
 								<Grid Height="22" Margin="0,0,0,0" VerticalAlignment="Top">
-									<TextBox x:Name="HeaderTextBox" Text="" VerticalAlignment="Top" Height="22" Padding="1" />
+									<TextBox x:Name="HeaderTextBox" Text="" VerticalAlignment="Top" Height="22" Padding="1" TextChanged="HeaderTextBox_TextChanged" />
 									<TextBlock IsHitTestVisible="False" Text="Header" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="DarkGray">
 										<TextBlock.Style>
 											<Style TargetType="{x:Type TextBlock}">
@@ -103,7 +109,7 @@
 									<ColumnDefinition Width="30" />
 								</Grid.ColumnDefinitions>
 
-								<Button x:Name="AddHeaderButton" Grid.Column="0" Content="+" Margin="0,0,5,0" />
+								<Button x:Name="AddHeaderButton" Grid.Column="0" Content="+" Margin="0,0,5,0" Click="AddHeaderButton_Click" />
 								<Button x:Name="AddModuleButton" Grid.Column="1" Content="+" Margin="0,0,5,0" />
 								<Button x:Name="AddSeparatorButton" Grid.Column="2" Content="+" Margin="0,0,5,0" />
 
