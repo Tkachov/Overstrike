@@ -98,7 +98,24 @@
 									</TextBlock>
 								</Grid>
 							</Grid>
-							
+							<Grid x:Name="EditingModule" Grid.Column="1" Margin="4,25,0,0">
+								<Grid Height="22" Margin="0,0,0,0" VerticalAlignment="Top">
+									<TextBox x:Name="ModuleNameTextBox" Text="" VerticalAlignment="Top" Height="22" Padding="1" TextChanged="ModuleNameTextBox_TextChanged" />
+									<TextBlock IsHitTestVisible="False" Text="Module name" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="DarkGray">
+										<TextBlock.Style>
+											<Style TargetType="{x:Type TextBlock}">
+												<Setter Property="Visibility" Value="Collapsed"/>
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Text, ElementName=ModuleNameTextBox}" Value="">
+														<Setter Property="Visibility" Value="Visible"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</TextBlock.Style>
+									</TextBlock>
+								</Grid>
+							</Grid>
+
 							<Grid Height="22" Grid.Column="0" Margin="0,0,4,0" VerticalAlignment="Bottom">
 								<Grid.ColumnDefinitions>
 									<ColumnDefinition Width="30" />
@@ -110,8 +127,8 @@
 								</Grid.ColumnDefinitions>
 
 								<Button x:Name="AddHeaderButton" Grid.Column="0" Content="+" Margin="0,0,5,0" Click="AddHeaderButton_Click" />
-								<Button x:Name="AddModuleButton" Grid.Column="1" Content="+" Margin="0,0,5,0" />
-								<Button x:Name="AddSeparatorButton" Grid.Column="2" Content="+" Margin="0,0,5,0" />
+								<Button x:Name="AddModuleButton" Grid.Column="1" Content="+" Margin="0,0,5,0" Click="AddModuleButton_Click" />
+								<Button x:Name="AddSeparatorButton" Grid.Column="2" Content="+" Margin="0,0,5,0" Click="AddSeparatorButton_Click" />
 
 								<Button x:Name="MoveEntryUpButton" Grid.Column="4" Content="^" Margin="5,0,0,0" />
 								<Button x:Name="MoveEntryDownButton" Grid.Column="5" Content="v" Margin="5,0,0,0" />

@@ -61,6 +61,21 @@ public partial class ModularCreationWindow: Window {
 		}
 	}
 
+	class SeparatorEntry: LayoutEntry {
+		public override string Description { get => "Separator"; }
+	}
+
+	class ModuleEntry: LayoutEntry {
+		public string Name;
+		// TODO: options
+
+		public override string Description {
+			get {
+				return $"Module: {Name}"; // TODO: options
+			}
+		}
+	}
+
 	#endregion
 	#region info tab
 
@@ -85,6 +100,7 @@ public partial class ModularCreationWindow: Window {
 
 		MakeFileLists();
 		MakeIconsStyleSelector();
+		UpdateSelectedEntryElements();
 		MakeGamesSelector();
 	}
 
@@ -190,6 +206,31 @@ public partial class ModularCreationWindow: Window {
 		};
 	}
 
+	private void UpdateSelectedEntryElements() {
+		EditingHeader.Visibility = Visibility.Collapsed;
+		EditingModule.Visibility = Visibility.Collapsed;
+
+		if (LayoutEntriesList.SelectedItems.Count == 0) {
+			SelectedEntryLabel.Text = "Selected entry: none";
+			return;
+		}
+
+		var selectedEntry = LayoutEntriesList.SelectedItems[0];
+		if (selectedEntry is HeaderEntry header) {
+			SelectedEntryLabel.Text = "Selected entry: header";
+			HeaderTextBox.Text = header.Text;
+			EditingHeader.Visibility = Visibility.Visible;
+		} else if (selectedEntry is SeparatorEntry) {
+			SelectedEntryLabel.Text = "Selected entry: separator";
+			// nothing to edit
+		} else if (selectedEntry is ModuleEntry module) {
+			SelectedEntryLabel.Text = "Selected entry: module";
+			ModuleNameTextBox.Text = module.Name;
+			// TODO: options
+			EditingModule.Visibility = Visibility.Visible;
+		}
+	}
+
 	#endregion
 	#region info tab
 
@@ -293,19 +334,18 @@ public partial class ModularCreationWindow: Window {
 		UpdateEntriesList();
 	}
 
-	private void LayoutEntriesList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-		if (LayoutEntriesList.SelectedItems.Count == 0) {
-			// TODO: hide entry editing UI
-			SelectedEntryLabel.Text = "Selected entry: none";
-			return;
-		}
+	private void AddModuleButton_Click(object sender, RoutedEventArgs e) {
+		_entries.Add(new ModuleEntry() { Name = "" });
+		UpdateEntriesList();
+	}
 
-		// TODO: other entry types
-		var selectedEntry = LayoutEntriesList.SelectedItems[0];
-		if (selectedEntry is HeaderEntry header) {
-			SelectedEntryLabel.Text = "Selected entry: header";
-			HeaderTextBox.Text = header.Text;
-		}
+	private void AddSeparatorButton_Click(object sender, RoutedEventArgs e) {
+		_entries.Add(new SeparatorEntry());
+		UpdateEntriesList();
+	}
+
+	private void LayoutEntriesList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+		UpdateSelectedEntryElements();
 	}
 
 	private void HeaderTextBox_TextChanged(object sender, TextChangedEventArgs e) {
@@ -314,6 +354,17 @@ public partial class ModularCreationWindow: Window {
 		var selectedEntry = LayoutEntriesList.SelectedItems[0];
 		if (selectedEntry is HeaderEntry header) {
 			header.Text = HeaderTextBox.Text;
+		}
+
+		UpdateEntriesList();
+	}
+
+	private void ModuleNameTextBox_TextChanged(object sender, TextChangedEventArgs e) {
+		if (LayoutEntriesList.SelectedItems.Count == 0) return;
+
+		var selectedEntry = LayoutEntriesList.SelectedItems[0];
+		if (selectedEntry is ModuleEntry module) {
+			module.Name = ModuleNameTextBox.Text;
 		}
 
 		UpdateEntriesList();
