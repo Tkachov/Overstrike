@@ -12,7 +12,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
-namespace ModdingTool;
+namespace ModdingTool.Windows;
 
 public partial class ModularCreationWindow: Window {
 	#region state
@@ -236,6 +236,7 @@ public partial class ModularCreationWindow: Window {
 
 	private void MakeGamesSelector() {
 		// should be in sync with Overstrike.Games
+		// TODO: have these moved into OverstrikeShared
 		_games.Clear();
 		_games.Add(new Game() { Name = "Marvel's Spider-Man Remastered", Id = "MSMR" });
 		_games.Add(new Game() { Name = "Marvel's Spider-Man: Miles Morales", Id = "MM" });
@@ -275,9 +276,6 @@ public partial class ModularCreationWindow: Window {
 	}
 
 	private void Tabs_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-		// TODO: if preview tab is open, rebuild it
-		// TODO: maybe make a button instead in layout tab, so it opens a new preview window with the same resize logic as in Overstrike?
-
 		var isFilesTab = (Tabs.SelectedIndex == 0);
 		AllowDrop = isFilesTab;
 	}
@@ -368,6 +366,10 @@ public partial class ModularCreationWindow: Window {
 		}
 
 		UpdateEntriesList();
+	}
+
+	private void OpenPreviewButton_Click(object sender, RoutedEventArgs e) {
+		new ModularWizardPreview(this).ShowDialog();
 	}
 
 	#endregion

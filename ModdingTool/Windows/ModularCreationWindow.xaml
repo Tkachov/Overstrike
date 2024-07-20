@@ -1,4 +1,4 @@
-﻿<Window x:Class="ModdingTool.ModularCreationWindow"
+﻿<Window x:Class="ModdingTool.Windows.ModularCreationWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -133,10 +133,12 @@
 								<Button x:Name="MoveEntryUpButton" Grid.Column="4" Content="^" Margin="5,0,0,0" />
 								<Button x:Name="MoveEntryDownButton" Grid.Column="5" Content="v" Margin="5,0,0,0" />
 							</Grid>
+
+							<Grid Height="22" Grid.Column="1" Margin="0,0,0,0" VerticalAlignment="Bottom">
+								<Button Content="Open preview" x:Name="OpenPreviewButton" Width="120" Height="22" HorizontalAlignment="Right" Click="OpenPreviewButton_Click" />
+							</Grid>
 						</Grid>
 					</Grid>
-				</TabItem>
-				<TabItem Header="Preview">
 				</TabItem>
 				<TabItem Header="Info" Height="20" VerticalAlignment="Bottom">
 					<Grid>

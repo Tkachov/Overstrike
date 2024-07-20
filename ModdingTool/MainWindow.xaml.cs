@@ -7,6 +7,7 @@ using DAT1;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using ModdingTool.Structs;
 using ModdingTool.Utils;
+using ModdingTool.Windows;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

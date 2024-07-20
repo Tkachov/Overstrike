@@ -1,0 +1,28 @@
+﻿<sharedWindows:ModularWizardBase x:Class="ModdingTool.Windows.ModularWizardPreview"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:sharedWindows="clr-namespace:OverstrikeShared.Windows;assembly=OverstrikeShared"
+		mc:Ignorable="d"
+		Title="Overstrike Wizard" MinHeight="481" Height="481" Width="410" MinWidth="400" WindowStartupLocation="CenterScreen">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition />
+			<RowDefinition Height="30" />
+		</Grid.RowDefinitions>
+
+		<Border BorderThickness="0,1,0,1" BorderBrush="#CCC">
+			<ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible" Grid.Row="0">
+				<Grid x:Name="_MainGrid" HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="#FFF" />
+			</ScrollViewer>
+		</Border>
+
+		<Grid Grid.Row="1" Background="#FFF">
+			<Label x:Name="_NumberLabel" Content="#13/37" HorizontalAlignment="Stretch" Margin="1,2,0,0" Foreground="#CCC" VerticalAlignment="Top" Height="30" MouseLeftButtonUp="NumberLabel_MouseLeftButtonUp" />
+			<TextBox x:Name="_NumberBox" Margin="4,6,0,0" Visibility="Collapsed" Text="13" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top" Height="20" LostFocus="NumberBox_LostFocus" TextChanged="NumberBox_TextChanged" />
+
+			<Button Margin="4,4,4,4" Content="Close" VerticalAlignment="Top" HorizontalAlignment="Right" Width="80" Height="22" Click="SaveButton_Click" />
+		</Grid>
+	</Grid>
+</sharedWindows:ModularWizardBase>
