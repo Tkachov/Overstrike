@@ -209,9 +209,11 @@ public partial class ModularCreationWindow: Window {
 	private void UpdateSelectedEntryElements() {
 		EditingHeader.Visibility = Visibility.Collapsed;
 		EditingModule.Visibility = Visibility.Collapsed;
+		MoveEntryUpButton.IsEnabled = MoveEntryDownButton.IsEnabled = true;
 
 		if (LayoutEntriesList.SelectedItems.Count == 0) {
 			SelectedEntryLabel.Text = "Selected entry: none";
+			MoveEntryUpButton.IsEnabled = MoveEntryDownButton.IsEnabled = false;
 			return;
 		}
 
@@ -340,6 +342,30 @@ public partial class ModularCreationWindow: Window {
 	private void AddSeparatorButton_Click(object sender, RoutedEventArgs e) {
 		_entries.Add(new SeparatorEntry());
 		UpdateEntriesList();
+	}
+
+	private void MoveEntryUpButton_Click(object sender, RoutedEventArgs e) {
+		if (LayoutEntriesList.SelectedItem == null) return;
+
+		var index = LayoutEntriesList.SelectedIndex;
+		if (index < 1) return;
+
+		(_entries[index - 1], _entries[index]) = (_entries[index], _entries[index - 1]);
+
+		UpdateEntriesList();
+		LayoutEntriesList.SelectedIndex = index - 1;
+	}
+
+	private void MoveEntryDownButton_Click(object sender, RoutedEventArgs e) {
+		if (LayoutEntriesList.SelectedItem == null) return;
+
+		var index = LayoutEntriesList.SelectedIndex;
+		if (index + 1 >= _entries.Count) return;
+
+		(_entries[index + 1], _entries[index]) = (_entries[index], _entries[index + 1]);
+
+		UpdateEntriesList();
+		LayoutEntriesList.SelectedIndex = index + 1;
 	}
 
 	private void LayoutEntriesList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
