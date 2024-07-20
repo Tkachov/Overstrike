@@ -207,9 +207,10 @@ public partial class ModularCreationWindow: Window {
 	}
 
 	private void UpdateSelectedEntryElements() {
+		UpdateMoveEntryUpDownButtons();
+
 		EditingHeader.Visibility = Visibility.Collapsed;
-		EditingModule.Visibility = Visibility.Collapsed;
-		MoveEntryUpButton.IsEnabled = MoveEntryDownButton.IsEnabled = true;
+		EditingModule.Visibility = Visibility.Collapsed;		
 
 		if (LayoutEntriesList.SelectedItems.Count == 0) {
 			SelectedEntryLabel.Text = "Selected entry: none";
@@ -231,6 +232,16 @@ public partial class ModularCreationWindow: Window {
 			// TODO: options
 			EditingModule.Visibility = Visibility.Visible;
 		}
+	}
+
+	private void UpdateMoveEntryUpDownButtons() {
+		if (LayoutEntriesList.SelectedItems.Count == 0) {
+			MoveEntryUpButton.IsEnabled = MoveEntryDownButton.IsEnabled = false;
+			return;
+		}
+
+		MoveEntryUpButton.IsEnabled = (LayoutEntriesList.SelectedIndex > 0);
+		MoveEntryDownButton.IsEnabled = (LayoutEntriesList.SelectedIndex < _entries.Count - 1);
 	}
 
 	#endregion
@@ -354,6 +365,7 @@ public partial class ModularCreationWindow: Window {
 
 		UpdateEntriesList();
 		LayoutEntriesList.SelectedIndex = index - 1;
+		UpdateMoveEntryUpDownButtons();
 	}
 
 	private void MoveEntryDownButton_Click(object sender, RoutedEventArgs e) {
@@ -366,6 +378,7 @@ public partial class ModularCreationWindow: Window {
 
 		UpdateEntriesList();
 		LayoutEntriesList.SelectedIndex = index + 1;
+		UpdateMoveEntryUpDownButtons();
 	}
 
 	private void LayoutEntriesList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
