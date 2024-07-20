@@ -11,6 +11,7 @@ using Overstrike.Installers;
 using Overstrike.MetaInstallers;
 using Overstrike.Tabs;
 using Overstrike.Utils;
+using Overstrike.Windows;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

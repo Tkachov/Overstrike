@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Blend for Visual Studio Version 17
+# Visual Studio Version 17
 VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Overstrike", "Overstrike\Overstrike.csproj", "{34E04532-0463-4D48-924F-B72C0B80DC4E}"
@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GDeflateWrapper", "GDeflate
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModdingTool", "ModdingTool\ModdingTool.csproj", "{A6272D46-EC50-4484-B740-89A805B2A463}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalizationTool", "LocalizationTool\LocalizationTool.csproj", "{563FA79A-C72E-41F4-8B25-A85C24940F78}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LocalizationTool", "LocalizationTool\LocalizationTool.csproj", "{563FA79A-C72E-41F4-8B25-A85C24940F78}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OverstrikeShared", "OverstrikeCore\OverstrikeShared.csproj", "{54F21113-DE19-442B-9723-DD29781D7BE1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +63,14 @@ Global
 		{563FA79A-C72E-41F4-8B25-A85C24940F78}.Release|Any CPU.Build.0 = Release|Any CPU
 		{563FA79A-C72E-41F4-8B25-A85C24940F78}.Release|x64.ActiveCfg = Release|Any CPU
 		{563FA79A-C72E-41F4-8B25-A85C24940F78}.Release|x64.Build.0 = Release|Any CPU
+		{54F21113-DE19-442B-9723-DD29781D7BE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54F21113-DE19-442B-9723-DD29781D7BE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54F21113-DE19-442B-9723-DD29781D7BE1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{54F21113-DE19-442B-9723-DD29781D7BE1}.Debug|x64.Build.0 = Debug|Any CPU
+		{54F21113-DE19-442B-9723-DD29781D7BE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54F21113-DE19-442B-9723-DD29781D7BE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54F21113-DE19-442B-9723-DD29781D7BE1}.Release|x64.ActiveCfg = Release|Any CPU
+		{54F21113-DE19-442B-9723-DD29781D7BE1}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

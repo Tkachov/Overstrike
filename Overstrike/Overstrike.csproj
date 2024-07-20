@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DAT1\DAT1.csproj" />
+    <ProjectReference Include="..\OverstrikeCore\OverstrikeShared.csproj" />
   </ItemGroup>
 
   <ItemGroup>
