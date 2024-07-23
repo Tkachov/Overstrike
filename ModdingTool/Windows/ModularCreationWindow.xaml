@@ -70,7 +70,7 @@
 							</Grid.ColumnDefinitions>
 
 							<TextBlock Text="Entries:" FontWeight="Medium" Grid.Column="0" Margin="2,3,0,0" />
-							<ListBox x:Name="LayoutEntriesList" Grid.Column="0" Margin="0,25,4,29" SelectionChanged="LayoutEntriesList_SelectionChanged">
+							<ListBox x:Name="LayoutEntriesList" Grid.Column="0" Margin="0,25,4,29" SelectionChanged="LayoutEntriesList_SelectionChanged" d:ItemsSource="{d:SampleData ItemCount=5}">
 								<ListBox.ItemTemplate>
 									<DataTemplate>
 										<StackPanel Height="20">
@@ -99,7 +99,13 @@
 								</Grid>
 							</Grid>
 							<Grid x:Name="EditingModule" Grid.Column="1" Margin="4,25,0,0">
-								<Grid Height="22" Margin="0,0,0,0" VerticalAlignment="Top">
+								<Grid.RowDefinitions>
+									<RowDefinition Height="22" />
+									<RowDefinition Height="*" />
+									<RowDefinition Height="139" />
+								</Grid.RowDefinitions>
+								
+								<Grid Grid.Row="0">
 									<TextBox x:Name="ModuleNameTextBox" Text="" VerticalAlignment="Top" Height="22" Padding="1" TextChanged="ModuleNameTextBox_TextChanged" />
 									<TextBlock IsHitTestVisible="False" Text="Module name" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="DarkGray">
 										<TextBlock.Style>
@@ -113,6 +119,75 @@
 											</Style>
 										</TextBlock.Style>
 									</TextBlock>
+								</Grid>
+
+								<Grid Grid.Row="1" Margin="0,10,0,0">
+									<TextBlock Text="Options:" FontWeight="Medium" Grid.Column="1" Margin="2,0,0,0" />
+									<ListBox x:Name="OptionsList" Grid.Column="1" Margin="0,22,0,28" SelectionMode="Extended" SelectionChanged="OptionsList_SelectionChanged" d:ItemsSource="{d:SampleData ItemCount=5}">
+										<ListBox.ItemTemplate>
+											<DataTemplate>
+												<Grid>
+													<Image Source="{Binding Icon}" HorizontalAlignment="Left" Stretch="Fill" Width="32" Height="32" />
+													<TextBlock Text="{Binding Name}" FontWeight="Medium" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="39,0,0,0" />
+													<TextBlock Text="{Binding File}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="39,20,0,0" />
+												</Grid>
+											</DataTemplate>
+										</ListBox.ItemTemplate>
+									</ListBox>
+
+									<Grid Height="22" Grid.Column="0" Margin="0,0,0,0" VerticalAlignment="Bottom">
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition Width="30" />
+											<ColumnDefinition Width="*" />
+											<ColumnDefinition Width="30" />
+											<ColumnDefinition Width="30" />
+										</Grid.ColumnDefinitions>
+
+										<Button x:Name="AddOptionButton" Grid.Column="0" Content="+" Margin="0,0,5,0" Click="AddOptionButton_Click" />
+
+										<Button x:Name="MoveOptionUpButton" Grid.Column="2" Content="&#8593;" Margin="5,0,0,0" />
+										<Button x:Name="MoveOptionDownButton" Grid.Column="3" Content="&#8595;" Margin="5,0,0,0" />
+									</Grid>
+								</Grid>
+
+								<Grid x:Name="EditingOption" Grid.Row="2" Margin="0,10,0,0">
+									<TextBlock Text="Selected option:" FontWeight="Medium" Margin="2,0,0,0" />
+
+									<Grid Height="22" Margin="0,22,0,0" VerticalAlignment="Top">
+										<TextBox x:Name="OptionNameTextBox" Text="" VerticalAlignment="Top" Height="22" Padding="1" />
+										<TextBlock IsHitTestVisible="False" Text="Option name" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="DarkGray">
+											<TextBlock.Style>
+												<Style TargetType="{x:Type TextBlock}">
+													<Setter Property="Visibility" Value="Collapsed"/>
+													<Style.Triggers>
+														<DataTrigger Binding="{Binding Text, ElementName=OptionNameTextBox}" Value="">
+															<Setter Property="Visibility" Value="Visible"/>
+														</DataTrigger>
+													</Style.Triggers>
+												</Style>
+											</TextBlock.Style>
+										</TextBlock>
+									</Grid>
+
+									<Grid Height="22" Margin="0,50,0,0" VerticalAlignment="Top">
+										<ComboBox x:Name="OptionIconComboBox" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+											<ComboBox.ItemTemplate>
+												<DataTemplate>
+													<TextBlock Text="{Binding Name}"  />
+												</DataTemplate>
+											</ComboBox.ItemTemplate>
+										</ComboBox>
+									</Grid>
+
+									<Grid Height="22" Margin="0,78,0,0" VerticalAlignment="Top">
+										<ComboBox x:Name="OptionPathComboBox" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+											<ComboBox.ItemTemplate>
+												<DataTemplate>
+													<TextBlock Text="{Binding Name}"  />
+												</DataTemplate>
+											</ComboBox.ItemTemplate>
+										</ComboBox>
+									</Grid>
 								</Grid>
 							</Grid>
 

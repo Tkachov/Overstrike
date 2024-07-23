@@ -67,13 +67,50 @@ public partial class ModularCreationWindow: Window {
 
 	class ModuleEntry: LayoutEntry {
 		public string Name;
-		// TODO: options
+		public List<ModuleOption> Options = new();
 
 		public override string Description {
 			get {
-				return $"Module: {Name}"; // TODO: options
+				var suffix = "";
+				if (Options.Count == 0) {
+					suffix = "| WARNING: NO OPTIONS!";
+				} else if (Options.Count == 1) {
+					suffix = "(internal)";
+				} else {
+					suffix = $"({Options.Count} options)";
+				}
+
+				return $"Module: {Name} {suffix}";
 			}
 		}
+	}
+
+	class ModuleOption {
+		public string _name = "";
+		public string _path = "";
+
+		public string Name {
+			get {
+				if (_name == "") return "(no name)";
+				return _name;
+			}
+			set {
+				_name = value;
+			}
+		}
+
+		public string File {
+			get {
+				if (_path == "") return "(no file)";
+				return Path.GetFileName(_path);
+			}
+			set {
+				_path = value;
+			}
+		}
+
+		public string IconPath;
+		public BitmapSource Icon { get; set; }
 	}
 
 	#endregion
@@ -204,6 +241,18 @@ public partial class ModularCreationWindow: Window {
 		LayoutEntriesList.ItemsSource = new CompositeCollection {
 			new CollectionContainer() { Collection = _entries }
 		};
+		UpdateMoveEntryUpDownButtons();
+	}
+
+	private void UpdateOptionsList(ModuleEntry selectedEntry) {
+		if (selectedEntry == null) {
+			OptionsList.ItemsSource = new CompositeCollection {};
+			return;
+		}
+
+		OptionsList.ItemsSource = new CompositeCollection {
+			new CollectionContainer() { Collection = selectedEntry.Options }
+		};
 	}
 
 	private void UpdateSelectedEntryElements() {
@@ -229,8 +278,10 @@ public partial class ModularCreationWindow: Window {
 		} else if (selectedEntry is ModuleEntry module) {
 			SelectedEntryLabel.Text = "Selected entry: module";
 			ModuleNameTextBox.Text = module.Name;
-			// TODO: options
+			UpdateOptionsList(module);
 			EditingModule.Visibility = Visibility.Visible;
+			EditingOption.Visibility = Visibility.Collapsed;
+			UpdateSelectedOptionElements();
 		}
 	}
 
@@ -242,6 +293,37 @@ public partial class ModularCreationWindow: Window {
 
 		MoveEntryUpButton.IsEnabled = (LayoutEntriesList.SelectedIndex > 0);
 		MoveEntryDownButton.IsEnabled = (LayoutEntriesList.SelectedIndex < _entries.Count - 1);
+	}
+
+	private void UpdateSelectedOptionElements() {
+		UpdateMoveOptionUpDownButtons();
+
+		if (OptionsList.SelectedItems.Count == 0) {
+			EditingOption.Visibility = Visibility.Collapsed;
+			return;
+		}
+
+		EditingOption.Visibility = Visibility.Visible;
+
+		var option = (ModuleOption)OptionsList.SelectedItems[0];
+		// TODO:
+		OptionNameTextBox.Text = option._name;
+		// selected in combobox 1
+		// selected in combobox 2
+
+		// TODO: fill comboboxes
+		// TODO: react to change and update Options[<index>] of selected module
+		// TODO: move up and down buttons for options
+	}
+
+	private void UpdateMoveOptionUpDownButtons() {
+		if (OptionsList.SelectedItems.Count == 0) {
+			MoveOptionUpButton.IsEnabled = MoveOptionDownButton.IsEnabled = false;
+			return;
+		}
+
+		MoveOptionUpButton.IsEnabled = (OptionsList.SelectedIndex > 0);
+		MoveOptionDownButton.IsEnabled = (OptionsList.SelectedIndex < OptionsList.Items.Count - 1);
 	}
 
 	#endregion
@@ -405,6 +487,19 @@ public partial class ModularCreationWindow: Window {
 		}
 
 		UpdateEntriesList();
+	}
+
+	private void OptionsList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+		UpdateSelectedOptionElements();
+	}
+
+	private void AddOptionButton_Click(object sender, RoutedEventArgs e) {
+		var selectedEntry = LayoutEntriesList.SelectedItems[0];
+		if (selectedEntry is ModuleEntry module) {
+			module.Options.Add(new ModuleOption());
+			UpdateOptionsList(module);
+			UpdateEntriesList();
+		}
 	}
 
 	private void OpenPreviewButton_Click(object sender, RoutedEventArgs e) {
