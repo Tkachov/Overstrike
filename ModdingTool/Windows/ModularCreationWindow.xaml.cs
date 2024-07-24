@@ -14,6 +14,28 @@ using System.Windows.Media.Imaging;
 
 namespace ModdingTool.Windows;
 
+// TODO: move to separate file
+abstract public class LayoutEntry {
+	// TODO: get rid of this property
+	public abstract string Description { get; }
+}
+
+public class AddingEntriesButtonsEntry: LayoutEntry {
+	public override string Description => "";
+
+	public bool IsAddingEntriesButtonsEntry { get => true; }
+}
+
+public class HeaderEntry: LayoutEntry {
+	public string Text;
+	
+	public override string Description {
+		get {
+			return $"Header: {Text}";
+		}
+	}
+}
+
 public partial class ModularCreationWindow: Window {
 	#region state
 
@@ -45,20 +67,6 @@ public partial class ModularCreationWindow: Window {
 	class IconsStyle {
 		public string Name { get; set; }
 		public string Id;
-	}
-
-	abstract class LayoutEntry {
-		public abstract string Description { get; }
-	}
-
-	class HeaderEntry: LayoutEntry {
-		public string Text;
-
-		public override string Description {
-			get {
-				return $"Header: {Text}";
-			}
-		}
 	}
 
 	class SeparatorEntry: LayoutEntry {
@@ -137,8 +145,18 @@ public partial class ModularCreationWindow: Window {
 
 		MakeFileLists();
 		MakeIconsStyleSelector();
-		UpdateSelectedEntryElements();
+		//UpdateSelectedEntryElements(); // TODO: get rid of old stuff
 		MakeGamesSelector();
+
+		// TODO: drag n drop
+		// TODO: delete key
+
+		// TODO: change how entries are added & items source is made
+		_entries.Add(new HeaderEntry());
+		_entries.Add(new AddingEntriesButtonsEntry());
+		LayoutEntriesList.ItemsSource = new CompositeCollection {
+			new CollectionContainer() { Collection = _entries }
+		};
 	}
 
 	#region applying state
@@ -220,6 +238,7 @@ public partial class ModularCreationWindow: Window {
 	private void UpdateFileLists() {
 		MakeFileLists();
 
+		/*
 		// update combobox in other tab if needed
 		if (OptionsList.SelectedItems.Count > 0) {
 			var option = OptionsList.SelectedItems[0];
@@ -227,6 +246,7 @@ public partial class ModularCreationWindow: Window {
 				MakeOptionPathSelector(module);
 			}
 		}
+		*/
 	}
 
 	#endregion
@@ -249,9 +269,10 @@ public partial class ModularCreationWindow: Window {
 		LayoutEntriesList.ItemsSource = new CompositeCollection {
 			new CollectionContainer() { Collection = _entries }
 		};
-		UpdateMoveEntryUpDownButtons();
+		//UpdateMoveEntryUpDownButtons();
 	}
 
+	/*
 	private void UpdateOptionsList(ModuleEntry selectedEntry) {
 		if (selectedEntry == null) {
 			OptionsList.ItemsSource = new CompositeCollection {};
@@ -353,6 +374,7 @@ public partial class ModularCreationWindow: Window {
 		MoveOptionUpButton.IsEnabled = (OptionsList.SelectedIndex > 0);
 		MoveOptionDownButton.IsEnabled = (OptionsList.SelectedIndex < OptionsList.Items.Count - 1);
 	}
+	*/
 
 	#endregion
 	#region info tab
@@ -465,6 +487,7 @@ public partial class ModularCreationWindow: Window {
 		UpdateEntriesList();
 	}
 
+	/*
 	private void MoveEntryUpButton_Click(object sender, RoutedEventArgs e) {
 		if (LayoutEntriesList.SelectedItem == null) return;
 
@@ -490,11 +513,13 @@ public partial class ModularCreationWindow: Window {
 		LayoutEntriesList.SelectedIndex = index + 1;
 		UpdateMoveEntryUpDownButtons();
 	}
+	*/
 
 	private void LayoutEntriesList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-		UpdateSelectedEntryElements();
+		//UpdateSelectedEntryElements();
 	}
 
+	/*
 	private void HeaderTextBox_TextChanged(object sender, TextChangedEventArgs e) {
 		if (LayoutEntriesList.SelectedItems.Count == 0) return;
 
@@ -569,6 +594,7 @@ public partial class ModularCreationWindow: Window {
 			UpdateOptionsList(module);
 		}
 	}
+	*/
 
 	private void OpenPreviewButton_Click(object sender, RoutedEventArgs e) {
 		new ModularWizardPreview(this).ShowDialog();

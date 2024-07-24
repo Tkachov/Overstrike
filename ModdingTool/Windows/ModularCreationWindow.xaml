@@ -2,9 +2,55 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"		
+        xmlns:local="clr-namespace:ModdingTool.Windows"
         mc:Ignorable="d"
         Title="Create .modular" Height="480" Width="800" ResizeMode="NoResize" Drop="Window_Drop">
+
+	<Window.Resources>
+		<!-- style only for ListBoxItem with data == AddingEntriesButtonsEntry -->
+		<Style TargetType="ListBoxItem">
+			<Style.Triggers>
+				<!-- checking a property that only exists in that class -->
+				<DataTrigger Binding="{Binding Path=IsAddingEntriesButtonsEntry}" Value="true">
+					<!-- setting Template to override highlight/border & Background for background -->
+					<Setter Property="Template">
+						<Setter.Value>
+							<ControlTemplate TargetType="{x:Type ListBoxItem}">
+								<Border BorderBrush="Transparent" BorderThickness="0" Background="{TemplateBinding Background}" Padding="0" SnapsToDevicePixels="true">
+									<ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+								</Border>
+							</ControlTemplate>
+						</Setter.Value>
+					</Setter>
+					<Setter Property="Background" Value="Transparent" />
+				</DataTrigger>
+			</Style.Triggers>
+		</Style>
+
+		<DataTemplate DataType="{x:Type local:AddingEntriesButtonsEntry}">
+			<Grid Height="22" Margin="0,2,0,2">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="124" />
+					<ColumnDefinition Width="120" />
+					<ColumnDefinition Width="124" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+
+				<Button Grid.Column="1" Content="Add header" Width="120" Height="22" Margin="0,0,4,0" />
+				<Button Grid.Column="2" Content="Add module" Width="120" Height="22" Margin="0,0,0,0" />
+				<Button Grid.Column="3" Content="Add separator" Width="120" Height="22" Margin="4,0,0,0" />
+			</Grid>
+		</DataTemplate>
+		
+		<DataTemplate DataType="{x:Type local:HeaderEntry}">
+			<StackPanel Height="20">
+				<TextBlock Text="{Binding Description}" Margin="0,2,0,0" />
+			</StackPanel>
+		</DataTemplate>
+	</Window.Resources>
+
 	<Border BorderThickness="0,1,0,0" BorderBrush="#EEE">
 		<Grid>
 			<TabControl x:Name="Tabs" Margin="-1,7,-1,-1" SelectionChanged="Tabs_SelectionChanged">
@@ -53,160 +99,25 @@
 				</TabItem>
 				<TabItem Header="Layout">
 					<Grid>
-						<Grid Height="22" Margin="5,7,5,0" VerticalAlignment="Top">
-							<ComboBox x:Name="IconsStyleComboBox" VerticalAlignment="Top" HorizontalAlignment="Stretch">
-								<ComboBox.ItemTemplate>
-									<DataTemplate>
-										<TextBlock Text="{Binding Name}"  />
-									</DataTemplate>
-								</ComboBox.ItemTemplate>
-							</ComboBox>
+						<Grid Margin="5,7,5,34">
+							<ListBox x:Name="LayoutEntriesList" Grid.Column="0" Margin="0,0,0,0" SelectionChanged="LayoutEntriesList_SelectionChanged" HorizontalContentAlignment="Stretch" />
 						</Grid>
-
-						<Grid Margin="5,35,5,5">
+						<Grid Height="22" Grid.Column="0" Margin="5,0,5,5" VerticalAlignment="Bottom">
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="*" />
 								<ColumnDefinition Width="*" />
 							</Grid.ColumnDefinitions>
 
-							<TextBlock Text="Entries:" FontWeight="Medium" Grid.Column="0" Margin="2,3,0,0" />
-							<ListBox x:Name="LayoutEntriesList" Grid.Column="0" Margin="0,25,4,29" SelectionChanged="LayoutEntriesList_SelectionChanged" d:ItemsSource="{d:SampleData ItemCount=5}">
-								<ListBox.ItemTemplate>
-									<DataTemplate>
-										<StackPanel Height="20">
-											<TextBlock Text="{Binding Description}" Margin="0,2,0,0" />
-										</StackPanel>
-									</DataTemplate>
-								</ListBox.ItemTemplate>
-							</ListBox>
+							<Grid Height="22" Margin="0,0,4,0">
+								<TextBlock Text="Icons style:" FontWeight="Medium" Grid.Column="0" Margin="2,3,0,0" />
 
-							<TextBlock x:Name="SelectedEntryLabel" Text="Selected entry:" FontWeight="Medium" Grid.Column="1" Margin="6,3,0,0" />
-							<Grid x:Name="EditingHeader" Grid.Column="1" Margin="4,25,0,0">
-								<Grid Height="22" Margin="0,0,0,0" VerticalAlignment="Top">
-									<TextBox x:Name="HeaderTextBox" Text="" VerticalAlignment="Top" Height="22" Padding="1" TextChanged="HeaderTextBox_TextChanged" />
-									<TextBlock IsHitTestVisible="False" Text="Header" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="DarkGray">
-										<TextBlock.Style>
-											<Style TargetType="{x:Type TextBlock}">
-												<Setter Property="Visibility" Value="Collapsed"/>
-												<Style.Triggers>
-													<DataTrigger Binding="{Binding Text, ElementName=HeaderTextBox}" Value="">
-														<Setter Property="Visibility" Value="Visible"/>
-													</DataTrigger>
-												</Style.Triggers>
-											</Style>
-										</TextBlock.Style>
-									</TextBlock>
-								</Grid>
-							</Grid>
-							<Grid x:Name="EditingModule" Grid.Column="1" Margin="4,25,0,0">
-								<Grid.RowDefinitions>
-									<RowDefinition Height="22" />
-									<RowDefinition Height="*" />
-									<RowDefinition Height="139" />
-								</Grid.RowDefinitions>
-								
-								<Grid Grid.Row="0">
-									<TextBox x:Name="ModuleNameTextBox" Text="" VerticalAlignment="Top" Height="22" Padding="1" TextChanged="ModuleNameTextBox_TextChanged" />
-									<TextBlock IsHitTestVisible="False" Text="Module name" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="DarkGray">
-										<TextBlock.Style>
-											<Style TargetType="{x:Type TextBlock}">
-												<Setter Property="Visibility" Value="Collapsed"/>
-												<Style.Triggers>
-													<DataTrigger Binding="{Binding Text, ElementName=ModuleNameTextBox}" Value="">
-														<Setter Property="Visibility" Value="Visible"/>
-													</DataTrigger>
-												</Style.Triggers>
-											</Style>
-										</TextBlock.Style>
-									</TextBlock>
-								</Grid>
-
-								<Grid Grid.Row="1" Margin="0,10,0,0">
-									<TextBlock Text="Options:" FontWeight="Medium" Grid.Column="1" Margin="2,0,0,0" />
-									<ListBox x:Name="OptionsList" Grid.Column="1" Margin="0,22,0,28" SelectionMode="Extended" SelectionChanged="OptionsList_SelectionChanged" d:ItemsSource="{d:SampleData ItemCount=5}">
-										<ListBox.ItemTemplate>
-											<DataTemplate>
-												<Grid>
-													<Image Source="{Binding Icon}" HorizontalAlignment="Left" Stretch="Fill" Width="32" Height="32" />
-													<TextBlock Text="{Binding Name}" FontWeight="Medium" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="39,0,0,0" />
-													<TextBlock Text="{Binding File}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="39,20,0,0" />
-												</Grid>
-											</DataTemplate>
-										</ListBox.ItemTemplate>
-									</ListBox>
-
-									<Grid Height="22" Grid.Column="0" Margin="0,0,0,0" VerticalAlignment="Bottom">
-										<Grid.ColumnDefinitions>
-											<ColumnDefinition Width="30" />
-											<ColumnDefinition Width="*" />
-											<ColumnDefinition Width="30" />
-											<ColumnDefinition Width="30" />
-										</Grid.ColumnDefinitions>
-
-										<Button x:Name="AddOptionButton" Grid.Column="0" Content="+" Margin="0,0,5,0" Click="AddOptionButton_Click" />
-
-										<Button x:Name="MoveOptionUpButton" Grid.Column="2" Content="&#8593;" Margin="5,0,0,0" />
-										<Button x:Name="MoveOptionDownButton" Grid.Column="3" Content="&#8595;" Margin="5,0,0,0" />
-									</Grid>
-								</Grid>
-
-								<Grid x:Name="EditingOption" Grid.Row="2" Margin="0,10,0,0">
-									<TextBlock Text="Selected option:" FontWeight="Medium" Margin="2,0,0,0" />
-
-									<Grid Height="22" Margin="0,22,0,0" VerticalAlignment="Top">
-										<TextBox x:Name="OptionNameTextBox" Text="" VerticalAlignment="Top" Height="22" Padding="1" TextChanged="OptionNameTextBox_TextChanged" />
-										<TextBlock IsHitTestVisible="False" Text="Option name" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="DarkGray">
-											<TextBlock.Style>
-												<Style TargetType="{x:Type TextBlock}">
-													<Setter Property="Visibility" Value="Collapsed"/>
-													<Style.Triggers>
-														<DataTrigger Binding="{Binding Text, ElementName=OptionNameTextBox}" Value="">
-															<Setter Property="Visibility" Value="Visible"/>
-														</DataTrigger>
-													</Style.Triggers>
-												</Style>
-											</TextBlock.Style>
-										</TextBlock>
-									</Grid>
-
-									<Grid Height="22" Margin="0,50,0,0" VerticalAlignment="Top">
-										<ComboBox x:Name="OptionIconComboBox" VerticalAlignment="Top" HorizontalAlignment="Stretch">
-											<ComboBox.ItemTemplate>
-												<DataTemplate>
-													<TextBlock Text="{Binding Name}"  />
-												</DataTemplate>
-											</ComboBox.ItemTemplate>
-										</ComboBox>
-									</Grid>
-
-									<Grid Height="22" Margin="0,78,0,0" VerticalAlignment="Top">
-										<ComboBox x:Name="OptionPathComboBox" VerticalAlignment="Top" HorizontalAlignment="Stretch" SelectionChanged="OptionPathComboBox_SelectionChanged">
-											<ComboBox.ItemTemplate>
-												<DataTemplate>
-													<TextBlock Text="{Binding Name}"  />
-												</DataTemplate>
-											</ComboBox.ItemTemplate>
-										</ComboBox>
-									</Grid>
-								</Grid>
-							</Grid>
-
-							<Grid Height="22" Grid.Column="0" Margin="0,0,4,0" VerticalAlignment="Bottom">
-								<Grid.ColumnDefinitions>
-									<ColumnDefinition Width="30" />
-									<ColumnDefinition Width="30" />
-									<ColumnDefinition Width="30" />
-									<ColumnDefinition Width="*" />
-									<ColumnDefinition Width="30" />
-									<ColumnDefinition Width="30" />
-								</Grid.ColumnDefinitions>
-
-								<Button x:Name="AddHeaderButton" Grid.Column="0" Content="+" Margin="0,0,5,0" Click="AddHeaderButton_Click" />
-								<Button x:Name="AddModuleButton" Grid.Column="1" Content="+" Margin="0,0,5,0" Click="AddModuleButton_Click" />
-								<Button x:Name="AddSeparatorButton" Grid.Column="2" Content="+" Margin="0,0,5,0" Click="AddSeparatorButton_Click" />
-
-								<Button x:Name="MoveEntryUpButton" Grid.Column="4" Content="&#8593;" Margin="5,0,0,0" Click="MoveEntryUpButton_Click" />
-								<Button x:Name="MoveEntryDownButton" Grid.Column="5" Content="&#8595;" Margin="5,0,0,0" Click="MoveEntryDownButton_Click" />
+								<ComboBox x:Name="IconsStyleComboBox" Margin="70,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+									<ComboBox.ItemTemplate>
+										<DataTemplate>
+											<TextBlock Text="{Binding Name}"  />
+										</DataTemplate>
+									</ComboBox.ItemTemplate>
+								</ComboBox>
 							</Grid>
 
 							<Grid Height="22" Grid.Column="1" Margin="0,0,0,0" VerticalAlignment="Bottom">
