@@ -219,6 +219,14 @@ public partial class ModularCreationWindow: Window {
 
 	private void UpdateFileLists() {
 		MakeFileLists();
+
+		// update combobox in other tab if needed
+		if (OptionsList.SelectedItems.Count > 0) {
+			var option = OptionsList.SelectedItems[0];
+			if (option is ModuleOption module) {
+				MakeOptionPathSelector(module);
+			}
+		}
 	}
 
 	#endregion
@@ -309,11 +317,31 @@ public partial class ModularCreationWindow: Window {
 		// TODO:
 		OptionNameTextBox.Text = option._name;
 		// selected in combobox 1
-		// selected in combobox 2
+		MakeOptionPathSelector(option);
 
 		// TODO: fill comboboxes
 		// TODO: react to change and update Options[<index>] of selected module
 		// TODO: move up and down buttons for options
+	}
+
+	private void MakeOptionPathSelector(ModuleOption option) {
+		var paths = new List<ModulePath> {
+			new() { Name = "(no file)", Path = "" }
+		};
+		paths.AddRange(_modules);
+
+		OptionPathComboBox.ItemsSource = new CompositeCollection {
+			new CollectionContainer() { Collection = paths }
+		};
+
+		var selected = paths[0];
+		foreach (var path in paths) {
+			if (option._path == path.Path) {
+				selected = path;
+				break;
+			}
+		}
+		OptionPathComboBox.SelectedItem = selected;
 	}
 
 	private void UpdateMoveOptionUpDownButtons() {
@@ -499,6 +527,46 @@ public partial class ModularCreationWindow: Window {
 			module.Options.Add(new ModuleOption());
 			UpdateOptionsList(module);
 			UpdateEntriesList();
+		}
+	}
+
+	private void OptionNameTextBox_TextChanged(object sender, TextChangedEventArgs e) {
+		// take selected entry from the left
+		if (LayoutEntriesList.SelectedItems.Count == 0) return;
+
+		var selectedEntry = LayoutEntriesList.SelectedItems[0];
+
+		// and selected option from the right
+		if (OptionsList.SelectedItems.Count == 0) return;
+
+		var option = (ModuleOption)OptionsList.SelectedItems[0];
+		option.Name = OptionNameTextBox.Text;
+
+		if (selectedEntry is ModuleEntry module) {
+			//module.Options[OptionsList.SelectedIndex].File = modulePath.Path;
+			UpdateOptionsList(module);
+		}
+	}
+
+	private void OptionPathComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+		if (OptionPathComboBox.SelectedItem == null) return;
+
+		var modulePath = (ModulePath)OptionPathComboBox.SelectedItem;
+
+		// take selected entry from the left
+		if (LayoutEntriesList.SelectedItems.Count == 0) return;
+
+		var selectedEntry = LayoutEntriesList.SelectedItems[0];
+
+		// and selected option from the right
+		if (OptionsList.SelectedItems.Count == 0) return;
+
+		var option = (ModuleOption)OptionsList.SelectedItems[0];
+		option.File = modulePath.Path;
+
+		if (selectedEntry is ModuleEntry module) {
+			//module.Options[OptionsList.SelectedIndex].File = modulePath.Path;
+			UpdateOptionsList(module);
 		}
 	}
 
