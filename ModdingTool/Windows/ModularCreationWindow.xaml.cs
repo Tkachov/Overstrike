@@ -14,27 +14,7 @@ using System.Windows.Media.Imaging;
 
 namespace ModdingTool.Windows;
 
-// TODO: move to separate file
-abstract public class LayoutEntry {
-	// TODO: get rid of this property
-	public abstract string Description { get; }
-}
 
-public class AddingEntriesButtonsEntry: LayoutEntry {
-	public override string Description => "";
-
-	public bool IsAddingEntriesButtonsEntry { get => true; }
-}
-
-public class HeaderEntry: LayoutEntry {
-	public string Text;
-	
-	public override string Description {
-		get {
-			return $"Header: {Text}";
-		}
-	}
-}
 
 public partial class ModularCreationWindow: Window {
 	#region state
@@ -63,62 +43,13 @@ public partial class ModularCreationWindow: Window {
 	private string _selectedStyle;
 	private List<IconsStyle> _styles = new();
 	private List<LayoutEntry> _entries = new();
+	private LayoutEntry _buttonsEntry = new AddingEntriesButtonsEntry();
+
+	internal List<LayoutEntry> Entries { get => _entries; }
 
 	class IconsStyle {
 		public string Name { get; set; }
 		public string Id;
-	}
-
-	class SeparatorEntry: LayoutEntry {
-		public override string Description { get => "Separator"; }
-	}
-
-	class ModuleEntry: LayoutEntry {
-		public string Name;
-		public List<ModuleOption> Options = new();
-
-		public override string Description {
-			get {
-				var suffix = "";
-				if (Options.Count == 0) {
-					suffix = "| WARNING: NO OPTIONS!";
-				} else if (Options.Count == 1) {
-					suffix = "(internal)";
-				} else {
-					suffix = $"({Options.Count} options)";
-				}
-
-				return $"Module: {Name} {suffix}";
-			}
-		}
-	}
-
-	class ModuleOption {
-		public string _name = "";
-		public string _path = "";
-
-		public string Name {
-			get {
-				if (_name == "") return "(no name)";
-				return _name;
-			}
-			set {
-				_name = value;
-			}
-		}
-
-		public string File {
-			get {
-				if (_path == "") return "(no file)";
-				return Path.GetFileName(_path);
-			}
-			set {
-				_path = value;
-			}
-		}
-
-		public string IconPath;
-		public BitmapSource Icon { get; set; }
 	}
 
 	#endregion
@@ -150,13 +81,8 @@ public partial class ModularCreationWindow: Window {
 
 		// TODO: drag n drop
 		// TODO: delete key
-
-		// TODO: change how entries are added & items source is made
-		_entries.Add(new HeaderEntry());
-		_entries.Add(new AddingEntriesButtonsEntry());
-		LayoutEntriesList.ItemsSource = new CompositeCollection {
-			new CollectionContainer() { Collection = _entries }
-		};
+		
+		UpdateEntriesList();
 	}
 
 	#region applying state
@@ -266,6 +192,14 @@ public partial class ModularCreationWindow: Window {
 	}
 
 	private void UpdateEntriesList() {
+		var i = _entries.IndexOf(_buttonsEntry);
+		if (i == -1) {
+			_entries.Add(_buttonsEntry);
+		} else if (i != _entries.Count - 1) {
+			_entries.RemoveAt(i);
+			_entries.Add(_buttonsEntry);
+		}
+
 		LayoutEntriesList.ItemsSource = new CompositeCollection {
 			new CollectionContainer() { Collection = _entries }
 		};
@@ -472,21 +406,6 @@ public partial class ModularCreationWindow: Window {
 	#endregion
 	#region layout tab
 
-	private void AddHeaderButton_Click(object sender, RoutedEventArgs e) {
-		_entries.Add(new HeaderEntry() { Text = "" });
-		UpdateEntriesList();
-	}
-
-	private void AddModuleButton_Click(object sender, RoutedEventArgs e) {
-		_entries.Add(new ModuleEntry() { Name = "" });
-		UpdateEntriesList();
-	}
-
-	private void AddSeparatorButton_Click(object sender, RoutedEventArgs e) {
-		_entries.Add(new SeparatorEntry());
-		UpdateEntriesList();
-	}
-
 	/*
 	private void MoveEntryUpButton_Click(object sender, RoutedEventArgs e) {
 		if (LayoutEntriesList.SelectedItem == null) return;
@@ -595,6 +514,27 @@ public partial class ModularCreationWindow: Window {
 		}
 	}
 	*/
+
+	private void AddingEntriesButtonsEntry_AddHeader_Click(object sender, RoutedEventArgs e) {
+		AddEntry(new HeaderEntry() { Text = "" });
+	}
+
+	private void AddingEntriesButtonsEntry_AddModule_Click(object sender, RoutedEventArgs e) {
+		AddEntry(new ModuleEntry() { Name = "" });
+	}
+
+	private void AddingEntriesButtonsEntry_AddSeparator_Click(object sender, RoutedEventArgs e) {
+		AddEntry(new SeparatorEntry());		
+	}
+
+	private void AddEntry(LayoutEntry entry) {
+		_entries.Add(entry);
+		UpdateEntriesList();
+
+		// additionally, scroll to the bottom & select the latest added entry
+		LayoutEntriesList.ScrollIntoView(_buttonsEntry);
+		LayoutEntriesList.SelectedItem = entry;
+	}
 
 	private void OpenPreviewButton_Click(object sender, RoutedEventArgs e) {
 		new ModularWizardPreview(this).ShowDialog();

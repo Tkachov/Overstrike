@@ -29,7 +29,7 @@
 		</Style>
 
 		<DataTemplate DataType="{x:Type local:AddingEntriesButtonsEntry}">
-			<Grid Height="22" Margin="0,2,0,2">
+			<Grid Height="22" Margin="0,8,0,4">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="*" />
 					<ColumnDefinition Width="124" />
@@ -38,15 +38,65 @@
 					<ColumnDefinition Width="*" />
 				</Grid.ColumnDefinitions>
 
-				<Button Grid.Column="1" Content="Add header" Width="120" Height="22" Margin="0,0,4,0" />
-				<Button Grid.Column="2" Content="Add module" Width="120" Height="22" Margin="0,0,0,0" />
-				<Button Grid.Column="3" Content="Add separator" Width="120" Height="22" Margin="4,0,0,0" />
+				<Button Grid.Column="1" Content="Add header" Width="120" Height="22" Margin="0,0,4,0" Click="AddingEntriesButtonsEntry_AddHeader_Click" />
+				<Button Grid.Column="2" Content="Add module" Width="120" Height="22" Margin="0,0,0,0" Click="AddingEntriesButtonsEntry_AddModule_Click" />
+				<Button Grid.Column="3" Content="Add separator" Width="120" Height="22" Margin="4,0,0,0" Click="AddingEntriesButtonsEntry_AddSeparator_Click" />
 			</Grid>
 		</DataTemplate>
 		
 		<DataTemplate DataType="{x:Type local:HeaderEntry}">
-			<StackPanel Height="20">
-				<TextBlock Text="{Binding Description}" Margin="0,2,0,0" />
+			<StackPanel Height="40">
+				<Grid Height="30" Margin="2,5,20,0" VerticalAlignment="Top">
+					<TextBox x:Name="HeaderTextTextBox" Text="{Binding Text}" VerticalAlignment="Top" Height="30" Padding="1" FontSize="18" />
+					<TextBlock IsHitTestVisible="False" Text="Header" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-2,0,0" Padding="1" FontSize="18" Foreground="DarkGray">
+						<TextBlock.Style>
+							<Style TargetType="{x:Type TextBlock}">
+								<Setter Property="Visibility" Value="Collapsed"/>
+								<Style.Triggers>
+									<DataTrigger Binding="{Binding Text, ElementName=HeaderTextTextBox}" Value="">
+										<Setter Property="Visibility" Value="Visible"/>
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+						</TextBlock.Style>
+					</TextBlock>
+					<TextBlock IsHitTestVisible="False" Text="&#10495;" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,-3,-17,0" Foreground="LightGray" />
+				</Grid>
+			</StackPanel>
+		</DataTemplate>
+
+		<DataTemplate DataType="{x:Type local:ModuleEntry}">
+			<StackPanel Height="120">
+				<Grid Height="120">
+					<Grid Height="22" Margin="2,5,20,0" VerticalAlignment="Top">
+						<TextBox x:Name="ModuleNameTextBox" Text="{Binding Name}" VerticalAlignment="Top" Height="22" Padding="1" />
+						<TextBlock IsHitTestVisible="False" Text="Module name" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="DarkGray">
+							<TextBlock.Style>
+								<Style TargetType="{x:Type TextBlock}">
+									<Setter Property="Visibility" Value="Collapsed"/>
+									<Style.Triggers>
+										<DataTrigger Binding="{Binding Text, ElementName=ModuleNameTextBox}" Value="">
+											<Setter Property="Visibility" Value="Visible"/>
+										</DataTrigger>
+									</Style.Triggers>
+								</Style>
+							</TextBlock.Style>
+						</TextBlock>
+					</Grid>
+
+					<ListBox x:Name="OptionsList" Margin="20,28,20,0" Height="82" HorizontalContentAlignment="Stretch" />
+
+					<TextBlock IsHitTestVisible="False" Text="&#10495;" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,-3,3,0" Foreground="LightGray" />
+				</Grid>
+			</StackPanel>
+		</DataTemplate>
+
+		<DataTemplate DataType="{x:Type local:SeparatorEntry}">
+			<StackPanel Height="24">
+				<Grid Height="24" Margin="2,0,20,0" VerticalAlignment="Top">
+					<Separator HorizontalAlignment="Stretch" Height="4" Margin="0,3,0,0" />
+					<TextBlock IsHitTestVisible="False" Text="&#10495;" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,-3,-17,0" Foreground="LightGray" />
+				</Grid>
 			</StackPanel>
 		</DataTemplate>
 	</Window.Resources>

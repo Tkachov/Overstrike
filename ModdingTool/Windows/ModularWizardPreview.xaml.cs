@@ -11,8 +11,12 @@ using System.Windows.Controls;
 namespace ModdingTool.Windows;
 
 public partial class ModularWizardPreview: ModularWizardBase {
+	private ModularCreationWindow _creationWindow;
+
 	public ModularWizardPreview(Window mainWindow) { // TODO: pass something to get layout from
 		InitializeComponent();
+
+		_creationWindow = (ModularCreationWindow)mainWindow;
 		Init(mainWindow);
 	}
 
@@ -25,7 +29,24 @@ public partial class ModularWizardPreview: ModularWizardBase {
 	protected override string ModName { get => "Untitled"; } // TODO: take name from creation window's last tab
 
 	protected override JArray LoadLayout() {
-		return new JArray(); // TODO: get layout from creation window
+		var entries = _creationWindow.Entries;
+		var layout = new JArray();
+
+		foreach (var entry in entries) {
+			if (entry is HeaderEntry header) {
+				layout.Add(new JArray() { "header", header.Text });
+			} else if (entry is ModuleEntry module) {
+				// TODO: add a module with 0 options causes a crash
+				layout.Add(new JArray() { "module", module.Name, new JArray() {
+					new JArray() { "(icon)", "(name)", "(file)" },
+					new JArray() { "(icon)", "(name)", "(file)" }
+				} });
+			} else if (entry is SeparatorEntry) {
+				layout.Add(new JArray() { "separator" });
+			}
+		}
+
+		return layout;
 	}
 
 	protected override ulong LoadSelectedCombinationNumber() {
