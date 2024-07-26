@@ -49,9 +49,7 @@ public partial class ModularWizardPreview: ModularWizardBase {
 		return layout;
 	}
 
-	protected override ulong LoadSelectedCombinationNumber() {
-		return 1;
-	}
+	protected override ulong LoadSelectedCombinationNumber() { return 1; }
 
 	protected override void SaveSelection() {}
 }

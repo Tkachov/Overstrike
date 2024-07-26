@@ -14,8 +14,6 @@ using System.Windows.Media.Imaging;
 
 namespace ModdingTool.Windows;
 
-
-
 public partial class ModularCreationWindow: Window {
 	#region state
 
@@ -46,6 +44,7 @@ public partial class ModularCreationWindow: Window {
 	private LayoutEntry _buttonsEntry = new AddingEntriesButtonsEntry();
 
 	internal List<LayoutEntry> Entries { get => _entries; }
+	internal CompositeCollection OptionPathCollection = new();
 
 	class IconsStyle {
 		public string Name { get; set; }
@@ -163,16 +162,7 @@ public partial class ModularCreationWindow: Window {
 
 	private void UpdateFileLists() {
 		MakeFileLists();
-
-		/*
-		// update combobox in other tab if needed
-		if (OptionsList.SelectedItems.Count > 0) {
-			var option = OptionsList.SelectedItems[0];
-			if (option is ModuleOption module) {
-				MakeOptionPathSelector(module);
-			}
-		}
-		*/
+		MakeOptionPathSelector();
 	}
 
 	#endregion
@@ -203,60 +193,9 @@ public partial class ModularCreationWindow: Window {
 		LayoutEntriesList.ItemsSource = new CompositeCollection {
 			new CollectionContainer() { Collection = _entries }
 		};
-		//UpdateMoveEntryUpDownButtons();
 	}
 
 	/*
-	private void UpdateOptionsList(ModuleEntry selectedEntry) {
-		if (selectedEntry == null) {
-			OptionsList.ItemsSource = new CompositeCollection {};
-			return;
-		}
-
-		OptionsList.ItemsSource = new CompositeCollection {
-			new CollectionContainer() { Collection = selectedEntry.Options }
-		};
-	}
-
-	private void UpdateSelectedEntryElements() {
-		UpdateMoveEntryUpDownButtons();
-
-		EditingHeader.Visibility = Visibility.Collapsed;
-		EditingModule.Visibility = Visibility.Collapsed;		
-
-		if (LayoutEntriesList.SelectedItems.Count == 0) {
-			SelectedEntryLabel.Text = "Selected entry: none";
-			MoveEntryUpButton.IsEnabled = MoveEntryDownButton.IsEnabled = false;
-			return;
-		}
-
-		var selectedEntry = LayoutEntriesList.SelectedItems[0];
-		if (selectedEntry is HeaderEntry header) {
-			SelectedEntryLabel.Text = "Selected entry: header";
-			HeaderTextBox.Text = header.Text;
-			EditingHeader.Visibility = Visibility.Visible;
-		} else if (selectedEntry is SeparatorEntry) {
-			SelectedEntryLabel.Text = "Selected entry: separator";
-			// nothing to edit
-		} else if (selectedEntry is ModuleEntry module) {
-			SelectedEntryLabel.Text = "Selected entry: module";
-			ModuleNameTextBox.Text = module.Name;
-			UpdateOptionsList(module);
-			EditingModule.Visibility = Visibility.Visible;
-			EditingOption.Visibility = Visibility.Collapsed;
-			UpdateSelectedOptionElements();
-		}
-	}
-
-	private void UpdateMoveEntryUpDownButtons() {
-		if (LayoutEntriesList.SelectedItems.Count == 0) {
-			MoveEntryUpButton.IsEnabled = MoveEntryDownButton.IsEnabled = false;
-			return;
-		}
-
-		MoveEntryUpButton.IsEnabled = (LayoutEntriesList.SelectedIndex > 0);
-		MoveEntryDownButton.IsEnabled = (LayoutEntriesList.SelectedIndex < _entries.Count - 1);
-	}
 
 	private void UpdateSelectedOptionElements() {
 		UpdateMoveOptionUpDownButtons();
@@ -278,17 +217,19 @@ public partial class ModularCreationWindow: Window {
 		// TODO: react to change and update Options[<index>] of selected module
 		// TODO: move up and down buttons for options
 	}
+	*/
 
-	private void MakeOptionPathSelector(ModuleOption option) {
+	private void MakeOptionPathSelector() {
 		var paths = new List<ModulePath> {
 			new() { Name = "(no file)", Path = "" }
 		};
 		paths.AddRange(_modules);
 
-		OptionPathComboBox.ItemsSource = new CompositeCollection {
+		OptionPathCollection = new CompositeCollection {
 			new CollectionContainer() { Collection = paths }
 		};
 
+		/*
 		var selected = paths[0];
 		foreach (var path in paths) {
 			if (option._path == path.Path) {
@@ -297,18 +238,8 @@ public partial class ModularCreationWindow: Window {
 			}
 		}
 		OptionPathComboBox.SelectedItem = selected;
+		*/
 	}
-
-	private void UpdateMoveOptionUpDownButtons() {
-		if (OptionsList.SelectedItems.Count == 0) {
-			MoveOptionUpButton.IsEnabled = MoveOptionDownButton.IsEnabled = false;
-			return;
-		}
-
-		MoveOptionUpButton.IsEnabled = (OptionsList.SelectedIndex > 0);
-		MoveOptionDownButton.IsEnabled = (OptionsList.SelectedIndex < OptionsList.Items.Count - 1);
-	}
-	*/
 
 	#endregion
 	#region info tab
@@ -407,38 +338,6 @@ public partial class ModularCreationWindow: Window {
 	#region layout tab
 
 	/*
-	private void MoveEntryUpButton_Click(object sender, RoutedEventArgs e) {
-		if (LayoutEntriesList.SelectedItem == null) return;
-
-		var index = LayoutEntriesList.SelectedIndex;
-		if (index < 1) return;
-
-		(_entries[index - 1], _entries[index]) = (_entries[index], _entries[index - 1]);
-
-		UpdateEntriesList();
-		LayoutEntriesList.SelectedIndex = index - 1;
-		UpdateMoveEntryUpDownButtons();
-	}
-
-	private void MoveEntryDownButton_Click(object sender, RoutedEventArgs e) {
-		if (LayoutEntriesList.SelectedItem == null) return;
-
-		var index = LayoutEntriesList.SelectedIndex;
-		if (index + 1 >= _entries.Count) return;
-
-		(_entries[index + 1], _entries[index]) = (_entries[index], _entries[index + 1]);
-
-		UpdateEntriesList();
-		LayoutEntriesList.SelectedIndex = index + 1;
-		UpdateMoveEntryUpDownButtons();
-	}
-	*/
-
-	private void LayoutEntriesList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-		//UpdateSelectedEntryElements();
-	}
-
-	/*
 	private void HeaderTextBox_TextChanged(object sender, TextChangedEventArgs e) {
 		if (LayoutEntriesList.SelectedItems.Count == 0) return;
 
@@ -534,6 +433,15 @@ public partial class ModularCreationWindow: Window {
 		// additionally, scroll to the bottom & select the latest added entry
 		LayoutEntriesList.ScrollIntoView(_buttonsEntry);
 		LayoutEntriesList.SelectedItem = entry;
+	}
+
+	private void Module_AddOptionButton_Click(object sender, RoutedEventArgs e) {
+		var button = (Button)sender;
+		var module = (ModuleEntry)button?.DataContext;
+		module?.Options.Add(new ModuleOption() { Window = this });
+		module?.UpdateOptions();
+
+		UpdateEntriesList();
 	}
 
 	private void OpenPreviewButton_Click(object sender, RoutedEventArgs e) {

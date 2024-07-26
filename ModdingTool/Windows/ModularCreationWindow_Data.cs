@@ -1,13 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Windows.Data;
 using System.Windows.Media.Imaging;
 
 namespace ModdingTool.Windows;
 
-abstract internal class LayoutEntry {}
+abstract internal class LayoutEntry {
+	public virtual bool IsAddingEntriesButtonsEntry { get => false; }
+}
 
 internal class AddingEntriesButtonsEntry: LayoutEntry {
-	public bool IsAddingEntriesButtonsEntry { get => true; } // TODO: have it in all entries so xaml binding warning does not happen?
+	public override bool IsAddingEntriesButtonsEntry { get => true; }
 }
 
 internal class HeaderEntry: LayoutEntry {
@@ -19,38 +22,32 @@ internal class SeparatorEntry: LayoutEntry {}
 internal class ModuleEntry: LayoutEntry {
 	public string Name { get; set; }
 	public List<ModuleOption> Options = new();
+	public CompositeCollection OptionsCollection { get; set; } = new();
 
-	/*
-	public override string Description {
+	public string OptionsDescription {
 		get {
 			var suffix = "";
 			if (Options.Count == 0) {
-				suffix = "| WARNING: NO OPTIONS!";
+				//suffix = "| WARNING: won't exist in the file unless more options added!";
 			} else if (Options.Count == 1) {
 				suffix = "(internal)";
-			} else {
-				suffix = $"({Options.Count} options)";
 			}
 
-			return $"Module: {Name} {suffix}";
+			return $"{Options.Count} options {suffix}";
 		}
 	}
-	*/
+
+	public void UpdateOptions() {
+		OptionsCollection = new CompositeCollection {
+			new CollectionContainer() { Collection = Options }
+		};
+	}
 }
 
 class ModuleOption {
-	public string _name = "";
 	public string _path = "";
 
-	public string Name {
-		get {
-			if (_name == "") return "(no name)";
-			return _name;
-		}
-		set {
-			_name = value;
-		}
-	}
+	public string Name { get; set; }
 
 	public string File {
 		get {
@@ -64,4 +61,7 @@ class ModuleOption {
 
 	public string IconPath;
 	public BitmapSource Icon { get; set; }
+
+	public CompositeCollection OptionPathCollection { get => Window.OptionPathCollection; }
+	public ModularCreationWindow Window;
 }
