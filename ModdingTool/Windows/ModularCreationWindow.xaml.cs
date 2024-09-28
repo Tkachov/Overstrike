@@ -24,17 +24,6 @@ public partial class ModularCreationWindow: Window {
 	private List<ModulePath> _modules = new();
 	private List<IconPath> _icons = new();
 
-	class ModulePath {
-		public string Name { get; set; }
-		public string Path;
-	}
-
-	class IconPath {
-		public string Name { get; set; }
-		public string Path;
-		public BitmapSource Icon { get; set; }
-	}
-
 	#endregion
 	#region layout tab
 
@@ -45,6 +34,7 @@ public partial class ModularCreationWindow: Window {
 
 	internal List<LayoutEntry> Entries { get => _entries; }
 	internal CompositeCollection OptionPathCollection = new();
+	internal CompositeCollection OptionIconCollection = new();
 
 	class IconsStyle {
 		public string Name { get; set; }
@@ -82,6 +72,7 @@ public partial class ModularCreationWindow: Window {
 		// TODO: delete key
 		
 		UpdateEntriesList();
+		MakeOptionPathSelector();
 	}
 
 	#region applying state
@@ -229,16 +220,16 @@ public partial class ModularCreationWindow: Window {
 			new CollectionContainer() { Collection = paths }
 		};
 
-		/*
-		var selected = paths[0];
-		foreach (var path in paths) {
-			if (option._path == path.Path) {
-				selected = path;
-				break;
-			}
-		}
-		OptionPathComboBox.SelectedItem = selected;
-		*/
+		var icons = new List<IconPath> {
+			new() { Name = "(no icon)", Path = "", Icon = null }
+		};
+		icons.AddRange(_icons);
+
+		OptionIconCollection = new CompositeCollection {
+			new CollectionContainer() { Collection = icons }
+		};
+
+		UpdateEntriesList();
 	}
 
 	#endregion
@@ -312,6 +303,7 @@ public partial class ModularCreationWindow: Window {
 		}
 
 		UpdateFileLists();
+		Focus();
 	}
 
 	private void ModulesList_KeyUp(object sender, KeyEventArgs e) {

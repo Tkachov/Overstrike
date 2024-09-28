@@ -44,6 +44,17 @@ internal class ModuleEntry: LayoutEntry {
 	}
 }
 
+class ModulePath {
+	public string Name { get; set; }
+	public string Path;
+}
+
+class IconPath {
+	public string Name { get; set; }
+	public string Path;
+	public BitmapSource Icon { get; set; }
+}
+
 class ModuleOption {
 	public string _path = "";
 
@@ -59,9 +70,57 @@ class ModuleOption {
 		}
 	}
 
-	public string IconPath;
-	public BitmapSource Icon { get; set; }
+	public string _iconPath = "";
 
-	public CompositeCollection OptionPathCollection { get => Window.OptionPathCollection; }
 	public ModularCreationWindow Window;
+	public CompositeCollection OptionPathCollection { get => Window.OptionPathCollection; }
+	public CompositeCollection OptionIconCollection { get => Window.OptionIconCollection; }
+
+	public ModulePath SelectedPathItem { // surprisingly, this seems to work
+		get {
+			ModulePath first = null;
+
+			foreach (CollectionContainer container in OptionPathCollection) {
+				foreach (ModulePath option in container.Collection) {
+					if (first == null) {
+						first = option;
+					}
+
+					if (option.Path == _path) {
+						return option;
+					}
+				}
+			}
+
+			return first;
+		}
+
+		set {
+			_path = value.Path;
+		}
+	}
+
+	public IconPath SelectedIconItem {
+		get {
+			IconPath first = null;
+
+			foreach (CollectionContainer container in OptionIconCollection) {
+				foreach (IconPath option in container.Collection) {
+					if (first == null) {
+						first = option;
+					}
+
+					if (option.Path == _iconPath) {
+						return option;
+					}
+				}
+			}
+
+			return first;
+		}
+
+		set {
+			_iconPath = value.Path;
+		}
+	}
 }

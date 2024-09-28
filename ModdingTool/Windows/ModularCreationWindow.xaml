@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"		
         xmlns:local="clr-namespace:ModdingTool.Windows"
         mc:Ignorable="d"
-        Title="Create .modular" Height="480" Width="800" ResizeMode="NoResize" Drop="Window_Drop">
+        Title="Create .modular" Height="600" Width="1000" Drop="Window_Drop">
 
 	<Window.Resources>
 		<!-- style only for ListBoxItem with data == AddingEntriesButtonsEntry -->
@@ -117,9 +117,10 @@
 						<ColumnDefinition Width="*" />
 						<ColumnDefinition Width="*" />
 						<ColumnDefinition Width="*" />
+						<ColumnDefinition Width="20" />
 					</Grid.ColumnDefinitions>
 
-					<ComboBox Grid.Column="0" Margin="4,0,4,0" VerticalAlignment="Top" HorizontalAlignment="Stretch" ItemsSource="{Binding OptionPathCollection}">
+					<ComboBox Grid.Column="0" Margin="4,0,4,0" VerticalAlignment="Top" HorizontalAlignment="Stretch" ItemsSource="{Binding OptionPathCollection}" SelectedItem="{Binding SelectedPathItem}">
 						<ComboBox.ItemTemplate>
 							<DataTemplate>
 								<TextBlock Text="{Binding Name}"  />
@@ -127,7 +128,18 @@
 						</ComboBox.ItemTemplate>
 					</ComboBox>
 
-					<Grid Grid.Column="1" Height="22" Margin="4,0,4,0" VerticalAlignment="Top">
+					<ComboBox Grid.Column="1" Margin="4,0,4,0" VerticalAlignment="Top" HorizontalAlignment="Stretch" ItemsSource="{Binding OptionIconCollection}" SelectedItem="{Binding SelectedIconItem}">
+						<ComboBox.ItemTemplate>
+							<DataTemplate>
+								<Grid>
+									<Image Source="{Binding Icon}" HorizontalAlignment="Left" Stretch="Fill" Width="16" Height="16" />
+									<TextBlock Text="{Binding Name}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="23,0,0,0" />
+								</Grid>
+							</DataTemplate>
+						</ComboBox.ItemTemplate>
+					</ComboBox>
+
+					<Grid Grid.Column="2" Height="22" Margin="4,0,4,0" VerticalAlignment="Top">
 						<TextBox x:Name="ModuleNameTextBox" Text="{Binding Name}" VerticalAlignment="Top" Height="22" Padding="1" />
 						<TextBlock IsHitTestVisible="False" Text="Module name" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="DarkGray">
 							<TextBlock.Style>
@@ -143,7 +155,7 @@
 						</TextBlock>
 					</Grid>
 
-					<TextBlock Grid.Column="2" IsHitTestVisible="False" Text="&#10495;" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,-3,3,0" Foreground="LightGray" />
+					<TextBlock Grid.Column="3" IsHitTestVisible="False" Text="&#10495;" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,-3,3,0" Foreground="LightGray" />
 				</Grid>
 			</StackPanel>
 		</DataTemplate>
