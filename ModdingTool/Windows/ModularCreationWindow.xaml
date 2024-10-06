@@ -283,6 +283,7 @@
 						<TextBox x:Name="LogTextBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Text="Fill the fields above and press the button." Margin="5,100,5,34" TextWrapping="NoWrap" IsReadOnly="True" AcceptsReturn="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" />
 
 						<Grid Margin="5,0,5,5" VerticalAlignment="Bottom">
+							<Button Content="Load info.json" x:Name="LoadInfoJsonButton" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Bottom" Width="120" Height="22" Click="LoadInfoJsonButton_Click" />
 							<Button Content="Pack as .modular" x:Name="SaveModularButton" IsEnabled="False" HorizontalAlignment="Right" Margin="0,0,0,0" VerticalAlignment="Bottom" Width="120" Height="22" Click="SaveModularButton_Click" />
 						</Grid>
 					</Grid>

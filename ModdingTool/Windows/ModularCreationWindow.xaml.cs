@@ -4,6 +4,8 @@
 // A copy of the that license should come with this program (LICENSE.txt). If not, see <http://www.gnu.org/licenses/>.
 
 using Microsoft.WindowsAPICodePack.Dialogs;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
@@ -359,6 +361,96 @@ public partial class ModularCreationWindow: Window {
 	private void GameComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
 		if (_initializing) return;
 		_gameId = ((Game)GameComboBox.SelectedItem).Id;
+	}
+
+	private void LoadInfoJsonButton_Click(object sender, RoutedEventArgs e) {
+		var dialog = new CommonOpenFileDialog();
+		dialog.Title = "Select 'info.json' to load...";
+		dialog.RestoreDirectory = true;
+
+		dialog.Filters.Add(new CommonFileDialogFilter("All supported files", "*.json") { ShowExtensions = true });
+		dialog.Filters.Add(new CommonFileDialogFilter("All files", "*") { ShowExtensions = true });
+
+		if (dialog.ShowDialog() != CommonFileDialogResult.Ok) {
+			return;
+		}
+
+		try {
+			var filename = dialog.FileName;
+			var jsonDir = Path.GetDirectoryName(filename);
+			var json = JObject.Parse(File.ReadAllText(filename));
+
+			// general fields
+
+			var gameId = (string)json["game"];
+			var modName = (string)json["name"];
+			var author = (string)json["author"];
+
+			NameTextBox.Text = modName;
+			AuthorTextBox.Text = author;
+			foreach (var game in _games) {
+				if (game.Id == gameId) {
+					GameComboBox.SelectedItem = game;
+					break;
+				}
+			}
+
+			var iconsStyle = (string)json["icons_style"];
+			foreach (var style in _styles) {
+				if (style.Id == iconsStyle) {
+					IconsStyleComboBox.SelectedItem = style;
+					break;
+				}
+			}
+
+			// files & layout
+
+			_entries.Clear();
+			_modules.Clear();
+			_icons.Clear();
+
+			var layout = json["layout"];
+			foreach (var entry in layout) {
+				var entryType = (string)entry[0];
+				if (entryType == "header") {
+					_entries.Add(new HeaderEntry() { Text = (string)entry[1] });
+				} else if (entryType == "separator") {
+					_entries.Add(new SeparatorEntry());
+				} else if (entryType == "module") {
+					var options = (JArray)entry[2];
+					if (options.Count > 0) {
+						var moduleEntry = new ModuleEntry() { Name = (string)entry[1] };
+
+						foreach (var option in options) {
+							var icon = (string)option[0];
+							var optionName = (string)option[1];
+							var optionPath = (string)option[2];
+
+							if (icon != "")
+								AddFile(Path.Combine(jsonDir, icon));
+
+							if (optionPath != "")
+								AddFile(Path.Combine(jsonDir, optionPath));
+
+							moduleEntry.Options.Add(new ModuleOption() {
+								Window = this,
+								_path = Path.Combine(jsonDir, optionPath),
+								_iconPath = Path.Combine(jsonDir, icon),
+								Name = optionName
+							});
+						}
+
+						moduleEntry.UpdateOptions();
+						_entries.Add(moduleEntry);
+					}
+				}
+			}
+
+			UpdateFileLists();
+			UpdateEntriesList();
+		} catch (Exception) {}
+
+		Focus();
 	}
 
 	private void SaveModularButton_Click(object sender, RoutedEventArgs e) {
