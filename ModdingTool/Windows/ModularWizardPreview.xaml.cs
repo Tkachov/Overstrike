@@ -36,11 +36,13 @@ public partial class ModularWizardPreview: ModularWizardBase {
 			if (entry is HeaderEntry header) {
 				layout.Add(new JArray() { "header", header.Text });
 			} else if (entry is ModuleEntry module) {
-				// TODO: add a module with 0 options causes a crash
-				layout.Add(new JArray() { "module", module.Name, new JArray() {
-					new JArray() { "(icon)", "(name)", "(file)" },
-					new JArray() { "(icon)", "(name)", "(file)" }
-				} });
+				if (module.Options.Count > 1) {
+					var options = new JArray();
+					foreach (var option in module.Options) {
+						options.Add(new JArray() { option._iconPath, option.Name, option._path });
+					}					
+					layout.Add(new JArray() { "module", module.Name, options });
+				}
 			} else if (entry is SeparatorEntry) {
 				layout.Add(new JArray() { "separator" });
 			}
