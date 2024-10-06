@@ -65,12 +65,14 @@ public partial class ModularCreationWindow: Window {
 
 		MakeFileLists();
 		MakeIconsStyleSelector();
-		//UpdateSelectedEntryElements(); // TODO: get rid of old stuff
 		MakeGamesSelector();
 
-		// TODO: drag n drop
-		// TODO: delete key
-		
+		// TODO: drag n drop -- both options of modules and entries
+		// TODO: delete key -- both options of modules and entries
+		// TODO: icon styles
+		// TODO: save button to show warnings and produce file
+		// TODO: button to load info.json
+
 		UpdateEntriesList();
 		MakeOptionPathSelector();
 	}
@@ -161,7 +163,7 @@ public partial class ModularCreationWindow: Window {
 
 	private void MakeIconsStyleSelector() {
 		_styles.Clear();
-		_styles.Add(new IconsStyle() { Name = "No icons", Id = "none" });
+		_styles.Add(new IconsStyle() { Name = "No icons", Id = "none" }); // TODO: more styles
 
 		IconsStyleComboBox.ItemsSource = new CompositeCollection {
 			new CollectionContainer() { Collection = _styles }
@@ -185,30 +187,6 @@ public partial class ModularCreationWindow: Window {
 			new CollectionContainer() { Collection = _entries }
 		};
 	}
-
-	/*
-
-	private void UpdateSelectedOptionElements() {
-		UpdateMoveOptionUpDownButtons();
-
-		if (OptionsList.SelectedItems.Count == 0) {
-			EditingOption.Visibility = Visibility.Collapsed;
-			return;
-		}
-
-		EditingOption.Visibility = Visibility.Visible;
-
-		var option = (ModuleOption)OptionsList.SelectedItems[0];
-		// TODO:
-		OptionNameTextBox.Text = option._name;
-		// selected in combobox 1
-		MakeOptionPathSelector(option);
-
-		// TODO: fill comboboxes
-		// TODO: react to change and update Options[<index>] of selected module
-		// TODO: move up and down buttons for options
-	}
-	*/
 
 	private void MakeOptionPathSelector() {
 		var paths = new List<ModulePath> {
@@ -328,83 +306,6 @@ public partial class ModularCreationWindow: Window {
 
 	#endregion
 	#region layout tab
-
-	/*
-	private void HeaderTextBox_TextChanged(object sender, TextChangedEventArgs e) {
-		if (LayoutEntriesList.SelectedItems.Count == 0) return;
-
-		var selectedEntry = LayoutEntriesList.SelectedItems[0];
-		if (selectedEntry is HeaderEntry header) {
-			header.Text = HeaderTextBox.Text;
-		}
-
-		UpdateEntriesList();
-	}
-
-	private void ModuleNameTextBox_TextChanged(object sender, TextChangedEventArgs e) {
-		if (LayoutEntriesList.SelectedItems.Count == 0) return;
-
-		var selectedEntry = LayoutEntriesList.SelectedItems[0];
-		if (selectedEntry is ModuleEntry module) {
-			module.Name = ModuleNameTextBox.Text;
-		}
-
-		UpdateEntriesList();
-	}
-
-	private void OptionsList_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-		UpdateSelectedOptionElements();
-	}
-
-	private void AddOptionButton_Click(object sender, RoutedEventArgs e) {
-		var selectedEntry = LayoutEntriesList.SelectedItems[0];
-		if (selectedEntry is ModuleEntry module) {
-			module.Options.Add(new ModuleOption());
-			UpdateOptionsList(module);
-			UpdateEntriesList();
-		}
-	}
-
-	private void OptionNameTextBox_TextChanged(object sender, TextChangedEventArgs e) {
-		// take selected entry from the left
-		if (LayoutEntriesList.SelectedItems.Count == 0) return;
-
-		var selectedEntry = LayoutEntriesList.SelectedItems[0];
-
-		// and selected option from the right
-		if (OptionsList.SelectedItems.Count == 0) return;
-
-		var option = (ModuleOption)OptionsList.SelectedItems[0];
-		option.Name = OptionNameTextBox.Text;
-
-		if (selectedEntry is ModuleEntry module) {
-			//module.Options[OptionsList.SelectedIndex].File = modulePath.Path;
-			UpdateOptionsList(module);
-		}
-	}
-
-	private void OptionPathComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-		if (OptionPathComboBox.SelectedItem == null) return;
-
-		var modulePath = (ModulePath)OptionPathComboBox.SelectedItem;
-
-		// take selected entry from the left
-		if (LayoutEntriesList.SelectedItems.Count == 0) return;
-
-		var selectedEntry = LayoutEntriesList.SelectedItems[0];
-
-		// and selected option from the right
-		if (OptionsList.SelectedItems.Count == 0) return;
-
-		var option = (ModuleOption)OptionsList.SelectedItems[0];
-		option.File = modulePath.Path;
-
-		if (selectedEntry is ModuleEntry module) {
-			//module.Options[OptionsList.SelectedIndex].File = modulePath.Path;
-			UpdateOptionsList(module);
-		}
-	}
-	*/
 
 	private void AddingEntriesButtonsEntry_AddHeader_Click(object sender, RoutedEventArgs e) {
 		AddEntry(new HeaderEntry() { Text = "" });

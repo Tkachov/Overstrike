@@ -13,7 +13,7 @@ namespace ModdingTool.Windows;
 public partial class ModularWizardPreview: ModularWizardBase {
 	private ModularCreationWindow _creationWindow;
 
-	public ModularWizardPreview(Window mainWindow) { // TODO: pass something to get layout from
+	public ModularWizardPreview(Window mainWindow) {
 		InitializeComponent();
 
 		_creationWindow = (ModularCreationWindow)mainWindow;
