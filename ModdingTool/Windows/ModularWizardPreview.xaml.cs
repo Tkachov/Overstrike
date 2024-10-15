@@ -26,7 +26,7 @@ public partial class ModularWizardPreview: ModularWizardBase {
 	protected override Label NumberLabel { get => _NumberLabel; }
 	protected override TextBox NumberBox { get => _NumberBox; }
 
-	protected override string ModName { get => "Untitled"; } // TODO: take name from creation window's last tab
+	protected override string ModName { get => _creationWindow.ModName; }
 
 	protected override JArray LoadLayout() {
 		var entries = _creationWindow.Entries;

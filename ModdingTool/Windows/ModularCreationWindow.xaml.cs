@@ -73,11 +73,12 @@ public partial class ModularCreationWindow: Window {
 		// TODO: delete key -- both options of modules and entries
 		// TODO: icon styles
 		// TODO: save button to show warnings and produce file
-		// TODO: button to load info.json
 
 		UpdateEntriesList();
 		MakeOptionPathSelector();
 	}
+
+	public string ModName => (_modName == null || _modName.Trim() == "" ? "Untitled" : _modName);
 
 	#region applying state
 
