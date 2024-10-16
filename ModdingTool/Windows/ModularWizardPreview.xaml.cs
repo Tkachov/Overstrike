@@ -27,6 +27,7 @@ public partial class ModularWizardPreview: ModularWizardBase {
 	protected override TextBox NumberBox { get => _NumberBox; }
 
 	protected override string ModName { get => _creationWindow.ModName; }
+	protected override string IconsStyle { get => _creationWindow.SelectedIconsStyle; }
 
 	protected override JArray LoadLayout() {
 		var entries = _creationWindow.Entries;

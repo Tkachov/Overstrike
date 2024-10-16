@@ -6,6 +6,19 @@
 		xmlns:sharedWindows="clr-namespace:OverstrikeShared.Windows;assembly=OverstrikeShared"
 		mc:Ignorable="d"
 		Title="Overstrike Wizard" MinHeight="481" Height="481" Width="410" MinWidth="400" WindowStartupLocation="CenterScreen">
+	<Window.Resources>
+		<DataTemplate x:Key="IconStyle_none">
+			<Grid>
+				<TextBlock Text="{Binding Name}" HorizontalAlignment="Left" Margin="0,0,0,0" />
+			</Grid>
+		</DataTemplate>
+		<DataTemplate x:Key="IconStyle_small">
+			<Grid>
+				<Image Source="{Binding Icon}" HorizontalAlignment="Left" Stretch="Fill" Width="32" Height="32" />
+				<TextBlock Text="{Binding Name}" HorizontalAlignment="Left" Margin="39,8,0,0" />
+			</Grid>
+		</DataTemplate>
+	</Window.Resources>
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition />

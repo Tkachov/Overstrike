@@ -2,8 +2,14 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media.Imaging;
 
 namespace OverstrikeShared.Windows {
+	class ModuleOption {
+		public string Name { get; set; }
+		public BitmapSource Icon { get; set; }
+	}
+
 	public abstract class ModularWizardBase: Window {
 		#region implementation-defined
 
@@ -12,7 +18,8 @@ namespace OverstrikeShared.Windows {
 		protected abstract TextBox NumberBox { get; }
 
 		protected abstract string ModName { get; }
-		
+		protected abstract string IconsStyle { get; }
+
 		protected abstract JArray LoadLayout();
 		protected abstract ulong LoadSelectedCombinationNumber();
 
@@ -30,8 +37,8 @@ namespace OverstrikeShared.Windows {
 		#endregion
 
 		// TODO: support icons
-		// - get icons style from config
-		// - different logic based on style string (somehow changes the look of dropdowns, and uses different height in calculations)
+		// + get icons style from config
+		// + different logic based on style string (somehow changes the look of dropdowns, and uses different height in calculations)
 		// - get bitmap by path (virtual)
 
 		protected void Init(Window mainWindow) {
@@ -120,6 +127,22 @@ namespace OverstrikeShared.Windows {
 			top += 20;
 		}
 
+		private DataTemplate GetModuleSelectorTemplate() {
+			return (DataTemplate)Resources["IconStyle_" + IconsStyle];
+		}
+
+		private int GetModuleLabelYOffset() {
+			var style = IconsStyle;
+			if (style == "small") return 8;
+			return 0;
+		}
+
+		private int GetModuleLabelHeight() {
+			var style = IconsStyle;
+			if (style == "small") return 44;
+			return 28;
+		}
+
 		private void MakeModule(JToken entry, ref int top) {
 			var options = (JArray)entry[2];
 			if (options.Count == 1) return;
@@ -132,7 +155,7 @@ namespace OverstrikeShared.Windows {
 				FontWeight = FontWeights.Bold,
 				HorizontalAlignment = HorizontalAlignment.Left,
 				VerticalAlignment = VerticalAlignment.Top,
-				Margin = new Thickness(15, top, 0, 20)
+				Margin = new Thickness(15, top + GetModuleLabelYOffset(), 0, 20)
 			};
 			MainGrid.Children.Add(label);
 			_moduleNamesLabels.Add(label);
@@ -143,12 +166,13 @@ namespace OverstrikeShared.Windows {
 				HorizontalAlignment = HorizontalAlignment.Left,
 				VerticalAlignment = VerticalAlignment.Top,
 				Margin = new Thickness(300 + 15, top - 3, 0, 20),
-				Width = 200
+				Width = 200,
+				ItemTemplate = GetModuleSelectorTemplate()
 			};
 
-			var optionsItems = new List<string>();
+			var optionsItems = new List<ModuleOption>();
 			foreach (var item in options) {
-				optionsItems.Add((string)item[1]);
+				optionsItems.Add(new ModuleOption() { Name = (string)item[1] });
 			}
 
 			selector.ItemsSource = new CompositeCollection {
@@ -160,7 +184,7 @@ namespace OverstrikeShared.Windows {
 			MainGrid.Children.Add(selector);
 			_optionsSelectors.Add(selector);
 
-			top += 28;
+			top += GetModuleLabelHeight();
 		}
 
 		#endregion

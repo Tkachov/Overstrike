@@ -71,7 +71,6 @@ public partial class ModularCreationWindow: Window {
 
 		// TODO: drag n drop -- both options of modules and entries
 		// TODO: delete key -- both options of modules and entries
-		// TODO: icon styles
 		// TODO: save button to show warnings and produce file
 
 		UpdateEntriesList();
@@ -79,6 +78,7 @@ public partial class ModularCreationWindow: Window {
 	}
 
 	public string ModName => (_modName == null || _modName.Trim() == "" ? "Untitled" : _modName);
+	public string SelectedIconsStyle => _selectedStyle;
 
 	#region applying state
 
@@ -166,7 +166,8 @@ public partial class ModularCreationWindow: Window {
 
 	private void MakeIconsStyleSelector() {
 		_styles.Clear();
-		_styles.Add(new IconsStyle() { Name = "No icons", Id = "none" }); // TODO: more styles
+		_styles.Add(new IconsStyle() { Name = "No icons", Id = "none" });
+		_styles.Add(new IconsStyle() { Name = "32x32 icons", Id = "small" });
 
 		IconsStyleComboBox.ItemsSource = new CompositeCollection {
 			new CollectionContainer() { Collection = _styles }
@@ -338,6 +339,11 @@ public partial class ModularCreationWindow: Window {
 		module?.UpdateOptions();
 
 		UpdateEntriesList();
+	}
+
+	private void IconsStyleComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+		if (_initializing) return;
+		_selectedStyle = ((IconsStyle)IconsStyleComboBox.SelectedItem).Id;
 	}
 
 	private void OpenPreviewButton_Click(object sender, RoutedEventArgs e) {

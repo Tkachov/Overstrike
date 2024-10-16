@@ -29,9 +29,13 @@ namespace Overstrike.Windows {
 
 		protected override string ModName { get => _mod.Name; }
 
+		private string _iconsStyle;
+		protected override string IconsStyle { get => _iconsStyle; }
+
 		protected override JArray LoadLayout() {
 			using var modular = ModularInstaller.ReadModularFile(_mod);
 			var info = ModularInstaller.GetInfo(modular);
+			_iconsStyle = (string)info["icons_style"];
 			return (JArray)info["layout"];
 		}
 
