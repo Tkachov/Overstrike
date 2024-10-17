@@ -341,6 +341,33 @@ public partial class ModularCreationWindow: Window {
 		UpdateEntriesList();
 	}
 
+	private void ModulesOrOptionsList_KeyUp(object sender, KeyEventArgs e) {
+		if (e.Key == Key.Delete) {
+			if (sender is ListBox listBox) {
+				var focusedElement = FocusManager.GetFocusedElement(this);
+				if (focusedElement is ListBoxItem listBoxItem) {
+					if (listBoxItem.IsDescendantOf(listBox)) {
+						// Delete pressed when focus in on list item, not some control inside of that item
+						if (listBoxItem.DataContext is ModuleOption option) {
+							if (listBox.DataContext is ModuleEntry module) {
+								module.Options.Remove(option);
+								module.UpdateOptions();
+								UpdateEntriesList();
+							}
+						} else if (listBoxItem.DataContext is LayoutEntry entry) {
+							_entries.Remove(entry);
+							UpdateEntriesList();
+						}
+
+						// prevent bubbling so the outer list box doesn't handle Delete after inner did
+						e.Handled = true;
+						return;
+					}
+				}
+			}
+		}
+	}
+
 	private void IconsStyleComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
 		if (_initializing) return;
 		_selectedStyle = ((IconsStyle)IconsStyleComboBox.SelectedItem).Id;
