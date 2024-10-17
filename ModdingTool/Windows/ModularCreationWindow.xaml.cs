@@ -70,7 +70,6 @@ public partial class ModularCreationWindow: Window {
 		MakeGamesSelector();
 
 		// TODO: drag n drop -- both options of modules and entries
-		// TODO: delete key -- both options of modules and entries
 		// TODO: save button to show warnings and produce file
 
 		UpdateEntriesList();

@@ -7,6 +7,8 @@ using Newtonsoft.Json.Linq;
 using OverstrikeShared.Windows;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Media.Imaging;
 
 namespace ModdingTool.Windows;
 
@@ -53,6 +55,20 @@ public partial class ModularWizardPreview: ModularWizardBase {
 	}
 
 	protected override ulong LoadSelectedCombinationNumber() { return 1; }
+
+	protected override BitmapSource GetImageByPath(string path) {
+		if (path == "") return null;
+
+		foreach (CollectionContainer container in _creationWindow.OptionIconCollection) {
+			foreach (IconPath icon in container.Collection) {
+				if (icon.Path == path) {
+					return icon.Icon;
+				}
+			}
+		}
+
+		return null;
+	}
 
 	protected override void SaveSelection() {}
 }
