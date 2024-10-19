@@ -56,7 +56,7 @@ public partial class ModularWizardPreview: ModularWizardBase {
 
 	protected override ulong LoadSelectedCombinationNumber() { return 1; }
 
-	protected override BitmapSource GetImageByPath(string path) {
+	protected override BitmapSource GetIconByPath(string path) {
 		if (path == "") return null;
 
 		foreach (CollectionContainer container in _creationWindow.OptionIconCollection) {

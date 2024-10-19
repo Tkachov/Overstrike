@@ -115,32 +115,13 @@ public partial class ModularCreationWindow: Window {
 
 		BitmapSource png;
 		try {
-			png = LoadPng(File.ReadAllBytes(filename));
+			png = OverstrikeShared.Utils.Imaging.LoadImage(File.ReadAllBytes(filename));
 		} catch {
-			return; // bad .png => don't add to the list
+			return; // bad icon => don't add to the list
 		}
 
 		var basename = Path.GetFileName(filename);
 		_icons.Add(new IconPath() { Name = basename, Path = filename, Icon = png });
-	}
-
-	// copied from Overstrike.Utils.Imaging
-	// TODO: move to some common assembly
-	private static BitmapImage LoadPng(byte[] bytes) {
-		using var memoryStream = new MemoryStream();
-		memoryStream.Write(bytes, 0, bytes.Length);
-		memoryStream.Position = 0;
-
-		return LoadPng(memoryStream);
-	}
-
-	private static BitmapImage LoadPng(Stream stream) {
-		var bitmapImage = new BitmapImage();
-		bitmapImage.BeginInit();
-		bitmapImage.StreamSource = stream;
-		bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-		bitmapImage.EndInit();
-		return bitmapImage;
 	}
 
 	private void AddModule(string filename) {

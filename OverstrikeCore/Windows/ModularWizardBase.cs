@@ -22,7 +22,7 @@ namespace OverstrikeShared.Windows {
 
 		protected abstract JArray LoadLayout();
 		protected abstract ulong LoadSelectedCombinationNumber();
-		protected abstract BitmapSource GetImageByPath(string path);
+		protected abstract BitmapSource GetIconByPath(string path);
 
 		protected abstract void SaveSelection();
 
@@ -36,11 +36,6 @@ namespace OverstrikeShared.Windows {
 		protected bool _ignoreChanges = true;
 
 		#endregion
-
-		// TODO: support icons
-		// + get icons style from config
-		// + different logic based on style string (somehow changes the look of dropdowns, and uses different height in calculations)
-		// + get bitmap by path (virtual)
 
 		protected void Init(Window mainWindow) {
 			MainGrid.Children.Clear();
@@ -173,7 +168,7 @@ namespace OverstrikeShared.Windows {
 
 			var optionsItems = new List<ModuleOption>();
 			foreach (var item in options) {
-				optionsItems.Add(new ModuleOption() { Icon = GetImageByPath((string)item[0]), Name = (string)item[1] });
+				optionsItems.Add(new ModuleOption() { Icon = GetIconByPath((string)item[0]), Name = (string)item[1] });
 			}
 
 			selector.ItemsSource = new CompositeCollection {

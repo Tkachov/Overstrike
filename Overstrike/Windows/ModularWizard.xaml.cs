@@ -53,31 +53,18 @@ namespace Overstrike.Windows {
 				// maybe move the part that traverses layout to base class, so in case the format changes it's updated in the same place?
 				foreach (var layoutEntry in layout) {
 					var entryType = (string)layoutEntry[0];
-					if (entryType == "module") {
-						var options = (JArray)layoutEntry[2];
-						if (options.Count > 1) {
-							foreach (var item in options) {
-								var path = (string)item[0];
-								if (path == "") continue;
-								if (_icons.ContainsKey(path)) continue;
+					if (entryType != "module") continue;
 
-								var entry = NestedFiles.GetZipEntryByFullName(modular, path);
-								if (entry == null) continue;
+					var options = (JArray)layoutEntry[2];
+					if (options.Count < 2) continue;
 
-								using var stream = entry.Open();
-								var file = new MemoryStream();
-								stream.CopyTo(file);
-								file.Seek(0, SeekOrigin.Begin);
-								
-								BitmapSource png;
-								try {
-									png = LoadPng(file);
-								} catch {
-									continue; // bad .png => don't add to the list
-								}
-								_icons[path] = png;
-							}
-						}
+					foreach (var item in options) {
+						var path = (string)item[0];
+						if (path == "") continue;
+						if (_icons.ContainsKey(path)) continue;
+
+						var entry = NestedFiles.GetZipEntryByFullName(modular, path);
+						AddIconFromZipEntry(entry, path);
 					}
 				}
 			} catch {}
@@ -88,36 +75,32 @@ namespace Overstrike.Windows {
 		}
 
 		private Dictionary<string, BitmapSource> _icons = new();
-		protected override BitmapSource GetImageByPath(string path) {
+		protected override BitmapSource GetIconByPath(string path) {
 			if (path == "") return null;
 			if (_icons.TryGetValue(path, out BitmapSource? value)) return value;
 
 			using var modular = ModularInstaller.ReadModularFile(_mod);
 			var entry = NestedFiles.GetZipEntryByFullName(modular, path);
+			return AddIconFromZipEntry(entry, path);
+		}
+
+		private BitmapSource AddIconFromZipEntry(ZipArchiveEntry entry, string path) {
+			if (entry == null) return null;
+
 			using var stream = entry.Open();
-			var bitmap = LoadPng(stream);
-			_icons[path] = bitmap;
-			return bitmap;
-		}
+			var file = new MemoryStream();
+			stream.CopyTo(file);
+			file.Seek(0, SeekOrigin.Begin);
 
-		/// this part needs to be in common
-		private static BitmapImage LoadPng(byte[] bytes) {
-			using var memoryStream = new MemoryStream();
-			memoryStream.Write(bytes, 0, bytes.Length);
-			memoryStream.Position = 0;
-
-			return LoadPng(memoryStream);
+			BitmapSource icon;
+			try {
+				icon = OverstrikeShared.Utils.Imaging.LoadImage(file);
+			} catch {
+				return null; // bad icon => don't add to the list
+			}
+			_icons[path] = icon;
+			return icon;
 		}
-
-		private static BitmapImage LoadPng(Stream stream) { // TODO: works with jpg too
-			var bitmapImage = new BitmapImage();
-			bitmapImage.BeginInit();
-			bitmapImage.StreamSource = stream;
-			bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-			bitmapImage.EndInit();
-			return bitmapImage;
-		}
-		///
 
 		protected override void SaveSelection() {
 			if (_mod.Extras == null) {
