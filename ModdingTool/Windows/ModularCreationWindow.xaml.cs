@@ -448,8 +448,8 @@ public partial class ModularCreationWindow: Window {
 
 							moduleEntry.Options.Add(new ModuleOption() {
 								Window = this,
-								_path = Path.Combine(jsonDir, optionPath),
-								_iconPath = Path.Combine(jsonDir, icon),
+								_path = (optionPath == "" ? optionPath : Path.Combine(jsonDir, optionPath)),
+								_iconPath = (icon == "" ? icon : Path.Combine(jsonDir, icon)),
 								Name = optionName
 							});
 						}
@@ -470,6 +470,170 @@ public partial class ModularCreationWindow: Window {
 	private void SaveModularButton_Click(object sender, RoutedEventArgs e) {
 		// TODO: dialog (modular)
 		// TODO: save file with stuff set in all the tabs
+		var log = "";
+
+		try {
+			// TODO: "saving into {filename}"
+
+			// some checks & warnings
+			var headerIndex = -1;
+			var moduleIndex = -1;
+			var usedFiles = new Dictionary<string, int>();
+			var usedIcons = new Dictionary<string, int>();
+
+			static bool isEmpty(string s) => (s == null || s == "");
+
+			foreach (var entry in _entries) {
+				if (entry is HeaderEntry header) {
+					++headerIndex;
+					if (isEmpty(header.Text)) {
+						log += $"Header #{headerIndex + 1} is empty!\n\n";
+					}
+				} else if (entry is ModuleEntry module) {
+					++moduleIndex;
+
+					var moduleMessages = new List<string>();
+					var moduleName = "";
+
+					if (isEmpty(module.Name)) {
+						if (module.Options.Count > 1) {
+							moduleMessages.Add("has no name!");
+						}
+					} else {
+						moduleName = $" (\"{module.Name}\")";
+					}
+
+					if (module.Options.Count == 0) {
+						moduleMessages.Add("skipped (contains no options).");
+					} else if (module.Options.Count == 1) {
+						moduleMessages.Add("internal. Will not be shown to user.");
+
+						if (!isEmpty(module.Options[0]._iconPath) && module.Options[0].SelectedIconItem != null) {
+							moduleMessages.Add($"has icon \"{module.Options[0].SelectedIconItem.Name}\" set. It will be ignored.");
+						}
+					}
+
+					var emptyFiles = 0;
+					var emptyIcons = 0;
+					var nonEmptyIcons = 0;
+					var optionIndex = -1;
+					foreach (var option in module.Options) {
+						++optionIndex;
+
+						if (isEmpty(option.Name) && module.Options.Count > 1) {
+							moduleMessages.Add($"option #{optionIndex + 1} has no name!");
+						}
+
+						if (isEmpty(option._iconPath)) {
+							++emptyIcons;
+						} else {
+							if (option.SelectedIconItem != null) ++nonEmptyIcons;
+
+							if (module.Options.Count > 1) {
+								if (usedIcons.ContainsKey(option._iconPath)) {
+									var warning = $"option #{optionIndex + 1}";
+									if (option.Name != "") warning += $" (\"{option.Name}\")";
+
+									warning += " uses the same icon";
+									if (option.SelectedIconItem != null) {
+										warning += $" \"{option.SelectedIconItem.Name}\"";
+									}
+
+									warning += $" as was used previously in option of module #{usedIcons[option._iconPath] + 1}. Could this be a mistake?";
+									moduleMessages.Add(warning);
+									usedIcons[option._iconPath] = moduleIndex;
+								} else {
+									usedIcons.Add(option._iconPath, moduleIndex);
+								}
+							}
+						}
+
+						if (isEmpty(option._path)) {
+							++emptyFiles;
+						} else {
+							if (usedFiles.ContainsKey(option._path)) {
+								var warning = $"option #{optionIndex + 1}";
+								if (option.Name != "") warning += $" (\"{option.Name}\")";
+
+								warning += " uses the same file";
+								if (option.SelectedPathItem != null) {
+									warning += $" \"{option.SelectedPathItem.Name}\"";
+								}
+
+								warning += $" as was used previously in option of module #{usedFiles[option._path] + 1}!";
+								moduleMessages.Add(warning);
+								usedFiles[option._path] = moduleIndex;
+							} else {
+								usedFiles.Add(option._path, moduleIndex);
+							}
+						}
+					}
+
+					if (nonEmptyIcons > 0 && _selectedStyle == "none") {
+						moduleMessages.Add($"has options with icons, but style is \"No icons\"!");
+					}
+					if (emptyIcons > 1 && _selectedStyle != "none") {
+						moduleMessages.Add($"has more than one option without icon. Could this be a mistake?");
+					}
+
+					if (moduleMessages.Count > 0) {
+						if (moduleMessages.Count == 1) {
+							log += $"Module #{moduleIndex + 1}{moduleName}: {moduleMessages[0]}\n\n";
+						} else {
+							log += $"Module #{moduleIndex + 1}{moduleName}:\n";
+							foreach (var message in moduleMessages) {
+								log += "- " + message + "\n";
+							}
+							log += $"\n";
+						}
+					}
+				}
+			}
+
+			if (moduleIndex == -1) {
+				log += "Layout contains no modules!\n\n";
+			}
+
+			var first = true;
+			foreach (var file in _modules) {
+				if (!usedFiles.ContainsKey(file.Path)) {
+					if (first) {
+						log += "Unused files:\n";
+						first = false;
+					}
+
+					log += $"- \"{file.Name}\"\n";
+				}
+			}
+			if (!first) log += "\n";
+
+			if (_selectedStyle != "none") {
+				first = true;
+				foreach (var icon in _icons) {
+					if (!usedIcons.ContainsKey(icon.Path)) {
+						if (first) {
+							log += "Unused icons:\n";
+							first = false;
+						}
+
+						log += $"- \"{icon.Name}\"\n";
+					}
+				}
+				if (!first) log += "\n";
+			}
+
+			// TODO: generate names ("modules/00_ModuleName/00_Option.stage", "icons/00_ModuleName/00_Option.png")
+			// TODO: form .json with names generated for the archive
+			// TODO: form archive with files and generated names
+
+			log += "Done!\n";
+		} catch (Exception ex) {
+			log += "Exception happened:\n";
+			log += ex.ToString();
+		}
+
+		LogTextBox.Text = log;
+		Focus();
 	}
 
 	#endregion
