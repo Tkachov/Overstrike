@@ -40,7 +40,7 @@ namespace OverstrikeShared.Windows {
 		// TODO: support icons
 		// + get icons style from config
 		// + different logic based on style string (somehow changes the look of dropdowns, and uses different height in calculations)
-		// ~ get bitmap by path (virtual)
+		// + get bitmap by path (virtual)
 
 		protected void Init(Window mainWindow) {
 			MainGrid.Children.Clear();
