@@ -46,9 +46,8 @@ public partial class ModularCreationWindow: Window {
 	}
 
 	private Point _dragStartPosition;
-	//private DragAdorner _adorner;
-	//private AdornerLayer _layer;
 	private Point _dragCurrentPosition;
+	private static string DND_DATA_FORMAT = "ModularCreationWindowDragAndDropDataFormat";
 
 	#endregion
 	#region info tab
@@ -301,8 +300,6 @@ public partial class ModularCreationWindow: Window {
 	#region Drag and Drop
 
 	// TODO: rename ModsList_
-	// TODO: think of a way to have it common between projects?
-	// TODO: adorner?
 	private void ModsList_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
 		_dragStartPosition = e.GetPosition(null);
 	}
@@ -318,36 +315,13 @@ public partial class ModularCreationWindow: Window {
 		}
 	}
 
-	/*
-	internal static class DragDrop {
-		// Helper to search up the VisualTree
-		internal static T FindAncestor<T>(DependencyObject current)
-			where T : DependencyObject {
-			try {
-				do {
-					if (current is T) {
-						return (T)current;
-					}
-					current = VisualTreeHelper.GetParent(current);
-				}
-				while (current != null);
-			} catch (Exception ex) {
-				// happens when listview is filtered
-			}
-			return null;
-		}
-	}
-	*/
-
 	private void BeginDrag(object sender, MouseEventArgs e) {
-		ListBox listBox = sender as ListBox;
-		if (listBox == null) {
+		if (sender is not ListBox listBox) {
 			return;
 		}
 
 		var focusedElement = FocusManager.GetFocusedElement(this);
-		ListBoxItem listBoxItem = focusedElement as ListBoxItem;
-		if (listBoxItem == null) {
+		if (focusedElement is not ListBoxItem listBoxItem) {
 			return;
 		}
 
@@ -355,75 +329,58 @@ public partial class ModularCreationWindow: Window {
 			return;
 		}
 
-		// get the data for the ListViewItem
-		object name = listBox.ItemContainerGenerator.ItemFromContainer(listBoxItem); // TODO: rename from "name"
+		//
 
-		// setup the drag adorner
-		/// InitialiseAdorner(listBoxItem);
+		var draggedItem = listBox.ItemContainerGenerator.ItemFromContainer(listBoxItem);
 
-		// add handles to update the adorner
-		listBox.DragEnter += ModsList_DragEnter;
+		var data = new DataObject(DND_DATA_FORMAT, listBoxItem);
+		DragDrop.DoDragDrop(listBox, data, DragDropEffects.Move);
 
-		DataObject data = new DataObject("dataFormat", listBoxItem); // listBox.SelectedItem);
-		System.Windows.DragDrop.DoDragDrop(listBox, data, DragDropEffects.Move);
-
-		// cleanup
-		listBox.DragEnter -= ModsList_DragEnter;
-
-		/*
-		if (_adorner != null) {
-			AdornerLayer.GetAdornerLayer(listView).Remove(_adorner);
-			_adorner = null;
-		}
-		*/
-
-		listBox.SelectedItem = name;
+		listBox.SelectedItem = draggedItem;
 	}
 
 	private void ModsList_DragEnter(object sender, DragEventArgs e) {
-		if (!e.Data.GetDataPresent("dataFormat") || sender == e.Source) {
+		if (!e.Data.GetDataPresent(DND_DATA_FORMAT) || sender == e.Source) {
 			e.Effects = DragDropEffects.None;
 		}
 	}
 
 	private void ModsList_Drop(object sender, DragEventArgs e) {
-		if (e.Data.GetDataPresent("dataFormat")) {
-			object name = e.Data.GetData("dataFormat");
+		if (sender is not ListBox listBox) {
+			return;
+		}
 
-			ListBox listBox = sender as ListBox;			
-			if (listBox == null) {
-				return;
-			}
+		if (!e.Data.GetDataPresent(DND_DATA_FORMAT)) {
+			return;
+		}
 
-			ListBoxItem listBoxItem = name as ListBoxItem;
-			if (listBoxItem == null) {
-				return;
-			}
+		var dndData = e.Data.GetData(DND_DATA_FORMAT);
+		if (dndData is not ListBoxItem listBoxItem) {
+			return;
+		}
 
-			if (!listBoxItem.IsDescendantOf(listBox)) {
-				return;
-			}
+		if (!listBoxItem.IsDescendantOf(listBox)) {
+			return;
+		}
 
-			
-			var dropAt = e.OriginalSource as FrameworkElement;
-			var dropAtParent = dropAt.TemplatedParent;
-			var dropAtLBI = dropAtParent as ListBoxItem;
-			if (dropAtLBI == null) {
-				return;
-			}
-			if (!dropAtLBI.IsDescendantOf(listBox)) {
-				return;
-			}
+		//
 
-			var index = 0;
-			if (dropAtLBI.DataContext is LayoutEntry entry) {
-				index = _entries.IndexOf(entry);
-			}
-			if (listBoxItem.DataContext is LayoutEntry entry2) {
-				_entries.Remove(entry2);
-				_entries.Insert(index, entry2);
-				UpdateEntriesList();
-			}
+		var dropAtElement = e.OriginalSource as FrameworkElement;
+		if (dropAtElement?.TemplatedParent is not ListBoxItem listBoxItemToDropAt) {
+			return;
+		}
+
+		if (!listBoxItemToDropAt.IsDescendantOf(listBox)) {
+			return;
+		}
+
+		// non-generic part
+		
+		if (listBoxItem.DataContext is LayoutEntry draggedEntry && listBoxItemToDropAt.DataContext is LayoutEntry entryToDropAt) {
+			var index = _entries.IndexOf(entryToDropAt);
+			_entries.Remove(draggedEntry);
+			_entries.Insert(index, draggedEntry);
+			UpdateEntriesList();
 		}
 	}
 
