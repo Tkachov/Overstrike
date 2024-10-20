@@ -574,6 +574,23 @@ public partial class ModularCreationWindow: Window {
 									usedIcons[option._iconPath] = moduleIndex;
 								} else {
 									usedIcons.Add(option._iconPath, moduleIndex);
+
+									var iconItem = option.SelectedIconItem;
+									var icon = option.SelectedIconItem?.Icon;
+									if (iconItem != null && icon != null) {
+										if (_selectedStyle == "small" && (icon.PixelWidth != 32 || icon.PixelHeight != 32)) {
+											var warning = $"option #{optionIndex + 1}";
+											if (option.Name != "") warning += $" (\"{option.Name}\")";
+
+											warning += $" uses icon";
+											if (option.SelectedIconItem != null) {
+												warning += $" \"{option.SelectedIconItem.Name}\"";
+											}
+
+											warning += $" with size {icon.PixelWidth}x{icon.PixelHeight} (expected 32x32). It might appear stretched in case of aspect ratio mismatch or cause higher file size in case it's bigger than necessary.";
+											moduleMessages.Add(warning);
+										}
+									}
 								}
 
 								if (!generatedNames.ContainsKey(option._iconPath)) {
