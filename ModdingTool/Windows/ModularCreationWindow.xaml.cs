@@ -45,6 +45,11 @@ public partial class ModularCreationWindow: Window {
 		public string Id;
 	}
 
+	private Point _dragStartPosition;
+	//private DragAdorner _adorner;
+	//private AdornerLayer _layer;
+	private Point _dragCurrentPosition;
+
 	#endregion
 	#region info tab
 
@@ -72,7 +77,6 @@ public partial class ModularCreationWindow: Window {
 		MakeGamesSelector();
 
 		// TODO: drag n drop -- both options of modules and entries
-		// TODO: save button to show warnings and produce file
 
 		UpdateEntriesList();
 		MakeOptionPathSelector();
@@ -233,6 +237,7 @@ public partial class ModularCreationWindow: Window {
 		var filenames = (string[])e.Data.GetData(DataFormats.FileDrop);
 		if (filenames != null) {
 			foreach (string filename in filenames) {
+				// TODO: check if directory and recursively add all files from it?
 				AddFile(filename);
 			}
 
@@ -292,6 +297,137 @@ public partial class ModularCreationWindow: Window {
 
 	#endregion
 	#region layout tab
+
+	#region Drag and Drop
+
+	// TODO: rename ModsList_
+	// TODO: think of a way to have it common between projects?
+	// TODO: adorner?
+	private void ModsList_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+		_dragStartPosition = e.GetPosition(null);
+	}
+
+	private void ModsList_MouseMove(object sender, MouseEventArgs e) {
+		if (e.LeftButton == MouseButtonState.Pressed) {
+			_dragCurrentPosition = e.GetPosition(null);
+
+			if (Math.Abs(_dragCurrentPosition.X - _dragStartPosition.X) > SystemParameters.MinimumHorizontalDragDistance ||
+				Math.Abs(_dragCurrentPosition.Y - _dragStartPosition.Y) > SystemParameters.MinimumVerticalDragDistance) {
+				BeginDrag(sender, e);
+			}
+		}
+	}
+
+	/*
+	internal static class DragDrop {
+		// Helper to search up the VisualTree
+		internal static T FindAncestor<T>(DependencyObject current)
+			where T : DependencyObject {
+			try {
+				do {
+					if (current is T) {
+						return (T)current;
+					}
+					current = VisualTreeHelper.GetParent(current);
+				}
+				while (current != null);
+			} catch (Exception ex) {
+				// happens when listview is filtered
+			}
+			return null;
+		}
+	}
+	*/
+
+	private void BeginDrag(object sender, MouseEventArgs e) {
+		ListBox listBox = sender as ListBox;
+		if (listBox == null) {
+			return;
+		}
+
+		var focusedElement = FocusManager.GetFocusedElement(this);
+		ListBoxItem listBoxItem = focusedElement as ListBoxItem;
+		if (listBoxItem == null) {
+			return;
+		}
+
+		if (!listBoxItem.IsDescendantOf(listBox)) {
+			return;
+		}
+
+		// get the data for the ListViewItem
+		object name = listBox.ItemContainerGenerator.ItemFromContainer(listBoxItem); // TODO: rename from "name"
+
+		// setup the drag adorner
+		/// InitialiseAdorner(listBoxItem);
+
+		// add handles to update the adorner
+		listBox.DragEnter += ModsList_DragEnter;
+
+		DataObject data = new DataObject("dataFormat", listBoxItem); // listBox.SelectedItem);
+		System.Windows.DragDrop.DoDragDrop(listBox, data, DragDropEffects.Move);
+
+		// cleanup
+		listBox.DragEnter -= ModsList_DragEnter;
+
+		/*
+		if (_adorner != null) {
+			AdornerLayer.GetAdornerLayer(listView).Remove(_adorner);
+			_adorner = null;
+		}
+		*/
+
+		listBox.SelectedItem = name;
+	}
+
+	private void ModsList_DragEnter(object sender, DragEventArgs e) {
+		if (!e.Data.GetDataPresent("dataFormat") || sender == e.Source) {
+			e.Effects = DragDropEffects.None;
+		}
+	}
+
+	private void ModsList_Drop(object sender, DragEventArgs e) {
+		if (e.Data.GetDataPresent("dataFormat")) {
+			object name = e.Data.GetData("dataFormat");
+
+			ListBox listBox = sender as ListBox;			
+			if (listBox == null) {
+				return;
+			}
+
+			ListBoxItem listBoxItem = name as ListBoxItem;
+			if (listBoxItem == null) {
+				return;
+			}
+
+			if (!listBoxItem.IsDescendantOf(listBox)) {
+				return;
+			}
+
+			
+			var dropAt = e.OriginalSource as FrameworkElement;
+			var dropAtParent = dropAt.TemplatedParent;
+			var dropAtLBI = dropAtParent as ListBoxItem;
+			if (dropAtLBI == null) {
+				return;
+			}
+			if (!dropAtLBI.IsDescendantOf(listBox)) {
+				return;
+			}
+
+			var index = 0;
+			if (dropAtLBI.DataContext is LayoutEntry entry) {
+				index = _entries.IndexOf(entry);
+			}
+			if (listBoxItem.DataContext is LayoutEntry entry2) {
+				_entries.Remove(entry2);
+				_entries.Insert(index, entry2);
+				UpdateEntriesList();
+			}
+		}
+	}
+
+	#endregion Drag and Drop
 
 	private void AddingEntriesButtonsEntry_AddHeader_Click(object sender, RoutedEventArgs e) {
 		AddEntry(new HeaderEntry() { Text = "" });
