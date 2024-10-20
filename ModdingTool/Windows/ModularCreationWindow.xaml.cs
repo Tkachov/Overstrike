@@ -8,6 +8,8 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -468,20 +470,48 @@ public partial class ModularCreationWindow: Window {
 	}
 
 	private void SaveModularButton_Click(object sender, RoutedEventArgs e) {
-		// TODO: dialog (modular)
-		// TODO: save file with stuff set in all the tabs
+		var dialog = new CommonSaveFileDialog();
+		dialog.Title = "Save .modular...";
+		dialog.RestoreDirectory = true;
+		dialog.Filters.Add(new CommonFileDialogFilter("Modular", "*.modular") { ShowExtensions = true });
+		dialog.Filters.Add(new CommonFileDialogFilter("All files", "*") { ShowExtensions = true });
+		dialog.DefaultFileName = "*.modular";
+
+		if (dialog.ShowDialog() != CommonFileDialogResult.Ok) {
+			return;
+		}
+
+		// TODO: do this in a separate thread so app doesn't hang?
+		// TODO: maybe provide an option to save just info.json (with non-generated filenames? so have to assume all files are in subdirectories relative to it) without packing .modular?
+
+		// save file with stuff set in all the tabs
+		var filename = dialog.FileName;
 		var log = "";
 
 		try {
-			// TODO: "saving into {filename}"
+			log += $"Saving into \"{filename}\"...\n\n";
 
-			// some checks & warnings
+			// some checks & warnings + filenames generation
 			var headerIndex = -1;
 			var moduleIndex = -1;
 			var usedFiles = new Dictionary<string, int>();
 			var usedIcons = new Dictionary<string, int>();
+			var generatedNames = new Dictionary<string, string> {
+				{ "", "" }
+			};
 
 			static bool isEmpty(string s) => (s == null || s == "");
+			static string cleanName(string s) {
+				var result = "";
+				foreach (var c in s) {
+					if (char.IsAsciiLetterOrDigit(c)) {
+						result += c;
+					} else if (c == ' ') {
+						result += '_';
+					}
+				}
+				return result;
+			}
 
 			foreach (var entry in _entries) {
 				if (entry is HeaderEntry header) {
@@ -545,6 +575,10 @@ public partial class ModularCreationWindow: Window {
 								} else {
 									usedIcons.Add(option._iconPath, moduleIndex);
 								}
+
+								if (!generatedNames.ContainsKey(option._iconPath)) {
+									generatedNames[option._iconPath] = $"icons/{moduleIndex:D2}_{cleanName(moduleName)}/{optionIndex:D2}_{cleanName(option.Name)}{Path.GetExtension(option._iconPath)}";
+								}
 							}
 						}
 
@@ -565,6 +599,10 @@ public partial class ModularCreationWindow: Window {
 								usedFiles[option._path] = moduleIndex;
 							} else {
 								usedFiles.Add(option._path, moduleIndex);
+							}
+
+							if (!generatedNames.ContainsKey(option._path)) {
+								generatedNames[option._path] = $"modules/{moduleIndex:D2}_{cleanName(moduleName)}/{optionIndex:D2}_{cleanName(option.Name)}{Path.GetExtension(option._path)}";
 							}
 						}
 					}
@@ -622,9 +660,78 @@ public partial class ModularCreationWindow: Window {
 				if (!first) log += "\n";
 			}
 
-			// TODO: generate names ("modules/00_ModuleName/00_Option.stage", "icons/00_ModuleName/00_Option.png")
-			// TODO: form .json with names generated for the archive
-			// TODO: form archive with files and generated names
+			// form .json with names generated for the archive
+			var layout = new JArray();
+
+			foreach (var entry in _entries) {
+				if (entry is HeaderEntry header) {
+					layout.Add(new JArray() { "header", header.Text });
+					continue;
+				}
+				
+				if (entry is ModuleEntry module) {
+					// 1 option -- internal module -- no icon
+					if (module.Options.Count == 1) {
+						var options = new JArray();
+						foreach (var option in module.Options) {
+							options.Add(new JArray() { "", option.Name, generatedNames[option._path] });
+						}
+						layout.Add(new JArray() { "module", module.Name, options });
+						continue;
+					}
+					
+					if (module.Options.Count > 1) {
+						var options = new JArray();
+						foreach (var option in module.Options) {
+							options.Add(new JArray() { generatedNames[option._iconPath], option.Name, generatedNames[option._path] });
+						}
+						layout.Add(new JArray() { "module", module.Name, options });
+						continue;
+					}
+
+					continue;
+				}
+				
+				if (entry is SeparatorEntry) {
+					layout.Add(new JArray() { "separator" });
+					continue;
+				}
+			}
+
+			var info = new JObject {
+				["game"] = _gameId,
+				["name"] = _modName,
+				["author"] = _author,
+
+				["format_version"] = 1,
+				["icons_style"] = _selectedStyle,
+
+				["layout"] = layout
+			};
+
+			// form archive with files and generated names
+			using var f = new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.None);
+			using var zip = new ZipArchive(f, ZipArchiveMode.Create);
+
+			{
+				var text = info.ToString();
+				var data = Encoding.UTF8.GetBytes(text);
+
+				var entry = zip.CreateEntry("info.json");
+				using var ef = entry.Open();
+				ef.Write(data, 0, data.Length);
+			}
+
+			foreach (var realPath in generatedNames.Keys) {
+				if (realPath == "") continue;
+
+				var bytes = File.ReadAllBytes(realPath);
+
+				var path = generatedNames[realPath];
+				var entry = zip.CreateEntry(path);
+				using var ef = entry.Open();
+				ef.Write(bytes, 0, bytes.Length);
+			}
 
 			log += "Done!\n";
 		} catch (Exception ex) {
