@@ -75,8 +75,6 @@ public partial class ModularCreationWindow: Window {
 		MakeIconsStyleSelector();
 		MakeGamesSelector();
 
-		// TODO: drag n drop -- both options of modules and entries
-
 		UpdateEntriesList();
 		MakeOptionPathSelector();
 	}
@@ -299,12 +297,13 @@ public partial class ModularCreationWindow: Window {
 
 	#region Drag and Drop
 
-	// TODO: rename ModsList_
-	private void ModsList_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+	// same handlers for LayoutEntriesList and options listboxes
+
+	private void ListBox_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
 		_dragStartPosition = e.GetPosition(null);
 	}
 
-	private void ModsList_MouseMove(object sender, MouseEventArgs e) {
+	private void ListBox_MouseMove(object sender, MouseEventArgs e) {
 		if (e.LeftButton == MouseButtonState.Pressed) {
 			_dragCurrentPosition = e.GetPosition(null);
 
@@ -339,13 +338,13 @@ public partial class ModularCreationWindow: Window {
 		listBox.SelectedItem = draggedItem;
 	}
 
-	private void ModsList_DragEnter(object sender, DragEventArgs e) {
+	private void ListBox_DragEnter(object sender, DragEventArgs e) {
 		if (!e.Data.GetDataPresent(DND_DATA_FORMAT) || sender == e.Source) {
 			e.Effects = DragDropEffects.None;
 		}
 	}
 
-	private void ModsList_Drop(object sender, DragEventArgs e) {
+	private void ListBox_Drop(object sender, DragEventArgs e) {
 		if (sender is not ListBox listBox) {
 			return;
 		}
@@ -381,6 +380,16 @@ public partial class ModularCreationWindow: Window {
 			_entries.Remove(draggedEntry);
 			_entries.Insert(index, draggedEntry);
 			UpdateEntriesList();
+		}
+
+		if (listBoxItem.DataContext is ModuleOption draggedOption && listBoxItemToDropAt.DataContext is ModuleOption optionToDropAt) {
+			if (listBox.DataContext is ModuleEntry module) {
+				var index = module.Options.IndexOf(optionToDropAt);
+				module.Options.Remove(draggedOption);
+				module.Options.Insert(index, draggedOption);
+				module.UpdateOptions();
+				UpdateEntriesList();
+			}
 		}
 	}
 

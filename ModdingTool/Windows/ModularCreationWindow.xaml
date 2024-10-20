@@ -84,7 +84,8 @@
 						</TextBlock>
 					</Grid>
 
-					<ListBox x:Name="OptionsList" Margin="20,32,20,0" Height="82" VerticalAlignment="Top" HorizontalContentAlignment="Stretch" ItemsSource="{Binding OptionsCollection}" KeyUp="ModulesOrOptionsList_KeyUp" />
+					<ListBox x:Name="OptionsList" Margin="20,32,20,0" Height="82" VerticalAlignment="Top" HorizontalContentAlignment="Stretch" ItemsSource="{Binding OptionsCollection}" KeyUp="ModulesOrOptionsList_KeyUp"
+							 MouseLeftButtonDown="ListBox_MouseLeftButtonDown" MouseMove="ListBox_MouseMove" DragEnter="ListBox_DragEnter" Drop="ListBox_Drop" AllowDrop="True" />
 
 					<Grid Height="22" Margin="20,119,20,5" VerticalAlignment="Top">
 						<Grid.ColumnDefinitions>
@@ -211,7 +212,7 @@
 					<Grid>
 						<Grid Margin="5,7,5,34">
 							<ListBox x:Name="LayoutEntriesList" Grid.Column="0" Margin="0,0,0,0" HorizontalContentAlignment="Stretch" KeyUp="ModulesOrOptionsList_KeyUp"
-									 MouseLeftButtonDown="ModsList_MouseLeftButtonDown" MouseMove="ModsList_MouseMove" DragEnter="ModsList_DragEnter" Drop="ModsList_Drop" AllowDrop="True" />
+									 MouseLeftButtonDown="ListBox_MouseLeftButtonDown" MouseMove="ListBox_MouseMove" DragEnter="ListBox_DragEnter" Drop="ListBox_Drop" AllowDrop="True" />
 						</Grid>
 						<Grid Height="22" Grid.Column="0" Margin="5,0,5,5" VerticalAlignment="Bottom">
 							<Grid.ColumnDefinitions>
