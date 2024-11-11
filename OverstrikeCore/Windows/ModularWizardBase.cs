@@ -303,7 +303,7 @@ namespace OverstrikeShared.Windows {
 					var options = (JArray)entry[2];
 					if (options.Count == 1) continue;
 
-					description += "\n" + (string)entry[1] + ": " + _optionsSelectors[selectorIndex].SelectedItem;
+					description += "\n" + (string)entry[1] + ": " + ((ModuleOption)_optionsSelectors[selectorIndex].SelectedItem).Name;
 					++selectorIndex;
 				}
 			}
