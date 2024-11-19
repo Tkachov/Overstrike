@@ -605,11 +605,13 @@ public partial class ModularCreationWindow: Window {
 			static bool isEmpty(string s) => (s == null || s == "");
 			static string cleanName(string s) {
 				var result = "";
-				foreach (var c in s) {
-					if (char.IsAsciiLetterOrDigit(c)) {
-						result += c;
-					} else if (c == ' ') {
-						result += '_';
+				if (s != null) {
+					foreach (var c in s) {
+						if (char.IsAsciiLetterOrDigit(c)) {
+							result += c;
+						} else if (c == ' ') {
+							result += '_';
+						}
 					}
 				}
 				return result;
