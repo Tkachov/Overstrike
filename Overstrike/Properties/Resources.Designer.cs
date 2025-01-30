@@ -193,6 +193,26 @@ namespace Overstrike.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] banner_msm2_logo {
+            get {
+                object obj = ResourceManager.GetObject("banner_msm2_logo", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] banner_msm2_logo2 {
+            get {
+                object obj = ResourceManager.GetObject("banner_msm2_logo2", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] banner_msmr_back {
             get {
                 object obj = ResourceManager.GetObject("banner_msmr_back", resourceCulture);

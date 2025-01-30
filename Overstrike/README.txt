@@ -29,6 +29,7 @@ Supported games:
 - Marvel's Spider-Man Remastered
 - Marvel's Spider-Man: Miles Morales
 - Ratchet & Clank: Rift Apart
+- Marvel's Spider-Man 2
 - i30 (Marvel's Spider-Man 2)
 - i33 (Marvel's Wolverine)
 

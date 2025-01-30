@@ -25,12 +25,14 @@ namespace Overstrike.Data {
 			STAGE_RCRA,
 			STAGE_I30,
 			STAGE_I33,
+			STAGE_MSM2,
 			SUITS_MENU,
 			MODULAR_MSMR,
 			MODULAR_MM,
 			MODULAR_RCRA,
 			MODULAR_I30,
 			MODULAR_I33,
+			MODULAR_MSM2,
 
 			UNKNOWN
 		}
@@ -133,6 +135,7 @@ namespace Overstrike.Data {
 				case ModType.STAGE_RCRA:
 				case ModType.STAGE_I30:
 				case ModType.STAGE_I33:
+				case ModType.STAGE_MSM2:
 					return badge_stage;
 
 				case ModType.SUITS_MENU:
@@ -143,6 +146,7 @@ namespace Overstrike.Data {
 				case ModType.MODULAR_RCRA:
 				case ModType.MODULAR_I30:
 				case ModType.MODULAR_I33:
+				case ModType.MODULAR_MSM2:
 					return badge_modular;
 
 				default:
@@ -174,7 +178,7 @@ namespace Overstrike.Data {
 		}
 
 		public static bool IsTypeFamilyModular(ModType type) {
-			return (type == ModType.MODULAR_MSMR || type == ModType.MODULAR_MM || type == ModType.MODULAR_RCRA || type == ModType.MODULAR_I30 || type == ModType.MODULAR_I33);
+			return (type == ModType.MODULAR_MSMR || type == ModType.MODULAR_MM || type == ModType.MODULAR_RCRA || type == ModType.MODULAR_I30 || type == ModType.MODULAR_I33 || type == ModType.MODULAR_MSM2);
 		}
 	}
 }

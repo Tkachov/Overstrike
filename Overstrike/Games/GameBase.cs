@@ -18,6 +18,7 @@ namespace Overstrike.Games {
 				case GameRCRA.ID: return GameRCRA.Instance;
 				case GameI30.ID: return GameI30.Instance;
 				case GameI33.ID: return GameI33.Instance;
+				case GameMSM2.ID: return GameMSM2.Instance;
 				default: return null;
 			}
 		}
@@ -31,6 +32,7 @@ namespace Overstrike.Games {
 				if (GameRCRA.Instance.IsGameInstallation(gamePath)) return GameRCRA.ID;
 				if (GameI30.Instance.IsGameInstallation(gamePath)) return GameI30.ID;
 				if (GameI33.Instance.IsGameInstallation(gamePath)) return GameI33.ID;
+				if (GameMSM2.Instance.IsGameInstallation(gamePath)) return GameMSM2.ID;
 			} catch (Exception) { }
 
 			return null;

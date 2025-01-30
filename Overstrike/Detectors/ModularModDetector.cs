@@ -55,6 +55,7 @@ namespace Overstrike.Detectors {
 						else if (g == GameRCRA.ID) type = ModEntry.ModType.MODULAR_RCRA;
 						else if (g == GameI30.ID) type = ModEntry.ModType.MODULAR_I30;
 						else if (g == GameI33.ID) type = ModEntry.ModType.MODULAR_I33;
+						else if (g == GameMSM2.ID) type = ModEntry.ModType.MODULAR_MSM2;
 					}
 				}
 

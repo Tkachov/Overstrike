@@ -25,7 +25,7 @@ To run, it needs x64 version of .NET 7.0 Desktop Runtime installed:
 https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-7.0.10-windows-x64-installer?cid=getdotnetcore
 
 Before you run it, you might want to rename one of the hashes file to 'hashes.txt'.
-The one named so by default is for MSMR, MM and RCRA.
+The one named so by default is for MSMR, MM, RCRA and MSM2.
 There are also 'hashes_i30.txt' and 'hashes_i33.txt' for i30 and i33.
 If you want the tool to know file names from one of these, rename one of those
 files into 'hashes.txt' and then run the 'ModdingTool.exe'.

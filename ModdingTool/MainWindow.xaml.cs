@@ -11,6 +11,7 @@ using ModdingTool.Windows;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -908,6 +909,15 @@ namespace ModdingTool {
 			} else {
 				_hashToolWindow.Focus();
 			}
+		}
+
+		private void Help_JoinDiscord_Click(object sender, RoutedEventArgs e) {
+			try {
+				Process.Start(new ProcessStartInfo() {
+					FileName = "https://discord.gg/XB4RkkvSGD",
+					UseShellExecute = true
+				});
+			} catch {}
 		}
 
 		#endregion
