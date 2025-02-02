@@ -10,9 +10,7 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
-using SharpCompress.Common;
 using Overstrike.Data;
-using BCnEncoder.Shared.ImageFiles;
 
 namespace Overstrike.Installers {
 	internal abstract class StageInstallerHelper {
@@ -239,12 +237,12 @@ namespace Overstrike.Installers {
 					byte[] actualBytes = br.ReadBytes((int)(bytes.Length - br.BaseStream.Position));
 
 					byte[] header = null;
-					if ((flags & 0x1) != 0) {
+					if ((flags & 0x1) != 0) { // TODO: constant
 						header = headerData;
 					}
 
 					byte[] textureMeta = null;
-					if ((flags & 0x2) != 0) {
+					if ((flags & 0x2) != 0) { // TODO: constant
 						textureMeta = textureMetaData;
 					}
 
