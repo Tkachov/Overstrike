@@ -135,7 +135,7 @@ namespace Overstrike.Installers {
 					return (innerModType == ModEntry.ModType.SUIT_MM || innerModType == ModEntry.ModType.SUIT_MM_V2 || innerModType == ModEntry.ModType.STAGE_MM);
 
 				case ModEntry.ModType.MODULAR_RCRA:
-					return (innerModType == ModEntry.ModType.STAGE_RCRA);
+					return (innerModType == ModEntry.ModType.STAGE_RCRA || innerModType == ModEntry.ModType.STAGE_RCRA_V2);
 
 				case ModEntry.ModType.MODULAR_I30:
 					return (innerModType == ModEntry.ModType.STAGE_I30);
@@ -144,7 +144,7 @@ namespace Overstrike.Installers {
 					return (innerModType == ModEntry.ModType.STAGE_I33);
 
 				case ModEntry.ModType.MODULAR_MSM2:
-					return (innerModType == ModEntry.ModType.STAGE_MSM2);
+					return (innerModType == ModEntry.ModType.STAGE_MSM2 || innerModType == ModEntry.ModType.STAGE_MSM2_V2);
 
 				default: return false;
 			}

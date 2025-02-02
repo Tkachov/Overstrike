@@ -88,7 +88,7 @@ namespace Overstrike.Installers {
 
 		#region toc
 
-		protected void OverwriteAsset(byte span, ulong assetId, uint archiveIndex, BinaryWriter archiveWriter, Stream data, bool withHeader) {
+		protected void OverwriteAsset_v1(byte span, ulong assetId, uint archiveIndex, BinaryWriter archiveWriter, Stream data, bool withHeader) {
 			byte[] header = new byte[36];
 			if (withHeader) data.Read(header, 0, 36);
 
@@ -98,7 +98,23 @@ namespace Overstrike.Installers {
 
 			int assetIndex = _toc.FindOrAddAsset(span, assetId);
 			var updater = new TOC_I29.AssetUpdater(assetIndex);
-			if (withHeader) updater.UpdateHeader(header);
+			// if (withHeader) updater.UpdateHeader(header); // keep the original header, as V1 didn't extract the correct bytes
+			updater
+				.UpdateArchiveIndex(archiveIndex)
+				.UpdateArchiveOffset((uint)archiveOffset)
+				.UpdateSize((uint)fileSize)
+				.Apply(_toc);
+		}
+
+		protected void OverwriteAsset(byte span, ulong assetId, uint archiveIndex, BinaryWriter archiveWriter, byte[] header, byte[] textureMeta, byte[] data) {
+			long archiveOffset = archiveWriter.BaseStream.Position;
+			archiveWriter.Write(data);
+			long fileSize = archiveWriter.BaseStream.Position - archiveOffset;
+
+			int assetIndex = _toc.FindOrAddAsset(span, assetId);
+			var updater = new TOC_I29.AssetUpdater(assetIndex);
+			if (header != null) updater.UpdateHeader(header);
+			if (textureMeta != null) updater.UpdateTextureMeta(textureMeta);
 			updater
 				.UpdateArchiveIndex(archiveIndex)
 				.UpdateArchiveOffset((uint)archiveOffset)

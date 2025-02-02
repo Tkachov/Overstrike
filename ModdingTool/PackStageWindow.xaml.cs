@@ -165,7 +165,6 @@ namespace ModdingTool {
 				MessageBox.Show($"Warning: adding new .texture assets is not implemented.\n\nThe game might work incorrectly with these or even crash because of them.", "Warning", MessageBoxButton.OK);
 			}
 
-			var headerless = new JArray();
 			var stageFileName = dialog.FileName;
 			try {
 				using var f = new FileStream(stageFileName, FileMode.Create, FileAccess.Write, FileShare.None);
@@ -179,10 +178,6 @@ namespace ModdingTool {
 						var assetPath = asset.RefPath;
 						if (asset.FullPath != null)
 							assetPath = $"{asset.Span}/" + DAT1.Utils.Normalize(asset.FullPath);
-
-						if (!asset.HasHeader) {
-							headerless.Add(assetPath);
-						}
 
 						var entry = zip.CreateEntry(assetPath);
 						using var ef = entry.Open();
@@ -198,7 +193,7 @@ namespace ModdingTool {
 						["game"] = _gameId,
 						["name"] = _modName,
 						["author"] = _author,
-						["headerless"] = headerless
+						["format_version"] = 2
 					};
 
 					var text = j.ToString();

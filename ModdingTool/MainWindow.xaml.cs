@@ -620,7 +620,7 @@ namespace ModdingTool {
 					w.Write(flags);
 
 					w.Write((header == null ? 0 : header.Length));
-					w.Write((textureMeta == null ? 0 : textureMeta.Length));
+					w.Write((textureMeta == null ? 0 : textureMeta.Length)); // TODO: specifically do uint32 writing here
 					
 					if (header != null) {
 						w.Write(header);

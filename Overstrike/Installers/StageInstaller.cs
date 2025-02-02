@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using SharpCompress.Common;
 using Overstrike.Data;
+using BCnEncoder.Shared.ImageFiles;
 
 namespace Overstrike.Installers {
 	internal abstract class StageInstallerHelper {
@@ -181,7 +182,85 @@ namespace Overstrike.Installers {
 					hasHeader = false;
 				}
 
-				_outer.OverwriteAsset(span, assetId, archiveIndexToWriteInto, archiveWriter, entry.Open(), hasHeader);
+				_outer.OverwriteAsset_v1(span, assetId, archiveIndexToWriteInto, archiveWriter, entry.Open(), hasHeader);
+			}
+
+			protected override void SortAssets() => _outer._toc.SortAssets();
+		}
+	}
+	
+	internal class StageInstaller_I29_V2: InstallerBase_I29 {
+		public StageInstaller_I29_V2(TOC_I29 toc, string gamePath) : base(toc, gamePath) {}
+
+		public override void Install(ModEntry mod, int index) {
+			_mod = mod;
+
+			var modsPath = Path.Combine(_gamePath, "d", "mods");
+			var modPath = Path.Combine(modsPath, "mod" + index);
+			var relativeModPath = "d\\mods\\mod" + index;
+
+			new Helper(this).Work(modPath, relativeModPath);
+		}
+
+		class Helper: StageInstallerHelper {
+			private StageInstaller_I29_V2 _outer;
+			public Helper(StageInstaller_I29_V2 outer) {
+				_outer = outer;
+			}
+
+			protected override uint CreateArchive(string filename) => _outer._toc.AddNewArchive(filename, TOCBase.ArchiveAddingImpl.DEFAULT);
+
+			protected override void PrepWork(ZipArchive zip) {}
+
+			protected override ZipArchive ReadStageFile() => _outer.ReadModFile();
+
+			protected override void ProcessAsset(byte span, ulong assetId, ZipArchiveEntry entry, uint archiveIndexToWriteInto, BinaryWriter archiveWriter) {
+				using var data = entry.Open();
+				using var ms = new MemoryStream();
+				data.CopyTo(ms);
+
+				byte[] bytes = ms.ToArray();
+
+				using var br = new BinaryReader(new MemoryStream(bytes));
+				var magic = br.ReadUInt32();
+
+				// TODO: a class in shared for that?
+				if (magic == 0x00475453) { // STG\x00
+					var flags = br.ReadUInt32();
+					var headerSize = br.ReadUInt32();
+					var textureMetaSize = br.ReadUInt32();
+					
+					var headerData = br.ReadBytes((int)headerSize);
+					Align16(br);
+
+					var textureMetaData = br.ReadBytes((int)textureMetaSize);
+					Align16(br);
+
+					byte[] actualBytes = br.ReadBytes((int)(bytes.Length - br.BaseStream.Position));
+
+					byte[] header = null;
+					if ((flags & 0x1) != 0) {
+						header = headerData;
+					}
+
+					byte[] textureMeta = null;
+					if ((flags & 0x2) != 0) {
+						textureMeta = textureMetaData;
+					}
+
+					_outer.OverwriteAsset(span, assetId, archiveIndexToWriteInto, archiveWriter, header, textureMeta, actualBytes);
+					return;
+				}
+
+				_outer.OverwriteAsset(span, assetId, archiveIndexToWriteInto, archiveWriter, null, null, bytes);
+
+				static void Align16(BinaryReader br) {
+					var pos = br.BaseStream.Position % 16;
+					if (pos != 0) {
+						var rem = 16 - pos;
+						br.ReadBytes((int)rem);
+					}
+				}
 			}
 
 			protected override void SortAssets() => _outer._toc.SortAssets();

@@ -70,6 +70,14 @@ namespace Overstrike.Detectors {
 						else if (g == GameI33.ID) type = ModEntry.ModType.STAGE_I33;
 						else if (g == GameMSM2.ID) type = ModEntry.ModType.STAGE_MSM2;
 					}
+
+					if (info.ContainsKey("format_version")) {
+						var version = (int)info["format_version"];
+						if (version == 2) {
+							if (type == ModEntry.ModType.STAGE_RCRA) type = ModEntry.ModType.STAGE_RCRA_V2;
+							else if (type == ModEntry.ModType.STAGE_MSM2) type = ModEntry.ModType.STAGE_MSM2_V2;
+						}
+					}
 				}
 
 				if (type != ModEntry.ModType.UNKNOWN) {

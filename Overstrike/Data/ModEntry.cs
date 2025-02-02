@@ -23,9 +23,11 @@ namespace Overstrike.Data {
 			STAGE_MSMR,
 			STAGE_MM,
 			STAGE_RCRA,
+			STAGE_RCRA_V2,
 			STAGE_I30,
 			STAGE_I33,
 			STAGE_MSM2,
+			STAGE_MSM2_V2,
 			SUITS_MENU,
 			MODULAR_MSMR,
 			MODULAR_MM,
@@ -133,9 +135,11 @@ namespace Overstrike.Data {
 				case ModType.STAGE_MSMR:
 				case ModType.STAGE_MM:
 				case ModType.STAGE_RCRA:
+				case ModType.STAGE_RCRA_V2:
 				case ModType.STAGE_I30:
 				case ModType.STAGE_I33:
 				case ModType.STAGE_MSM2:
+				case ModType.STAGE_MSM2_V2:
 					return badge_stage;
 
 				case ModType.SUITS_MENU:

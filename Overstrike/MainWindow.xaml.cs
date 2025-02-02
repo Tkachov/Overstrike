@@ -836,9 +836,11 @@ namespace Overstrike {
 						case ModEntry.ModType.STAGE_MSMR:
 						case ModEntry.ModType.STAGE_MM:
 						case ModEntry.ModType.STAGE_RCRA:
+						case ModEntry.ModType.STAGE_RCRA_V2:
 						case ModEntry.ModType.STAGE_I30:
 						case ModEntry.ModType.STAGE_I33:
 						case ModEntry.ModType.STAGE_MSM2:
+						case ModEntry.ModType.STAGE_MSM2_V2:
 							++stages;
 						break;
 

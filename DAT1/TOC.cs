@@ -568,11 +568,20 @@ namespace DAT1 {
 			protected bool _updateHeader;
 			protected byte[]? _header;
 
+			protected bool _updateTextureMeta;
+			protected byte[]? _textureMeta;
+
 			public AssetUpdater(int index) : base(index) { }
 
 			public AssetUpdater UpdateHeader(byte[]? header) {
 				_updateHeader = true;
 				_header = header;
+				return this;
+			}
+
+			public AssetUpdater UpdateTextureMeta(byte[]? textureMeta) {
+				_updateTextureMeta = true;
+				_textureMeta = textureMeta;
 				return this;
 			}
 
@@ -604,6 +613,17 @@ namespace DAT1 {
 							} else {
 								toc_i29.AssetHeadersSection.Write(header_offset, _header);
 							}
+						}
+					}
+
+					if (_updateTextureMeta) {
+						Debug.Assert(_textureMeta != null); // all textures need to have it, so we cannot overwrite it to "no meta"
+
+						var textureIndex = toc_i29.TextureAssetIdsSection.Values.BinarySearch(_assetId);
+						if (textureIndex < 0) {
+							toc_i29.AddTexture(_assetId, _textureMeta);
+						} else {
+							toc_i29.TextureMetaSection.SetTextureMeta(textureIndex, _textureMeta);
 						}
 					}
 				}
