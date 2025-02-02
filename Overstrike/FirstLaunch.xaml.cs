@@ -59,6 +59,13 @@ namespace Overstrike {
 			TryDetectGameAllDisks("MSM2 (EGS)", ":\\Program Files (x86)\\Epic Games\\Marvel's Spider-Man 2");
 			TryDetectGameAllDisks("MSM2 (EGS)", ":\\Program Files\\Epic Games\\Marvel's Spider-Man 2");
 
+			// EGS installs games to Documents?
+			try {
+				var drive = Environment.GetEnvironmentVariable("HOMEDRIVE");
+				var home = Environment.GetEnvironmentVariable("HOMEPATH");
+				TryDetectGame("MSM2 (EGS)", drive + home + "\\Documents\\marvelsspiderman2");
+			} catch {}
+
 			if (_profilesList.Count > 0) {
 				Hint.Text = _profilesList.Count + " supported game" + (_profilesList.Count > 1 ? "s" : "") + " found in usual places. Add more manually, if you want:";
 			}
