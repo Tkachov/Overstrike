@@ -453,12 +453,9 @@ namespace DAT1 {
 		public AssetHeadersSection AssetHeadersSection => Dat1.Section<AssetHeadersSection>(AssetHeadersSection.TAG);
 		public SizeEntriesSection_I29 SizesSection => Dat1.Section<SizeEntriesSection_I29>(SizeEntriesSection_I29.TAG);
 		public ArchivesMapSection_I29 ArchivesSection => Dat1.Section<ArchivesMapSection_I29>(ArchivesMapSection_I29.TAG);
-
-		/*
-		36A6C8CC = "Archive TOC Texture Asset Ids"
-		62297090 = "Archive TOC Texture Header"
-		C9FB9DDA = "Archive TOC Texture Meta"
-		*/
+		public TextureHeaderSection TextureHeaderSection => Dat1.Section<TextureHeaderSection>(TextureHeaderSection.TAG);
+		public TextureAssetIdsSection TextureAssetIdsSection => Dat1.Section<TextureAssetIdsSection>(TextureAssetIdsSection.TAG);
+		public TextureMetaSection TextureMetaSection => Dat1.Section<TextureMetaSection>(TextureMetaSection.TAG);
 
 		public override bool Load(string filename) {
 			try {
@@ -510,26 +507,22 @@ namespace DAT1 {
 			var header_offset = GetHeaderOffsetByAssetIndex(index);
 			if (header_offset == null) return null;
 			if (header_offset == -1) return null;
-			return AssetHeadersSection.Headers[(int)header_offset / 36];
+			return AssetHeadersSection.ReadHeaderAtOffset((int)header_offset);
 		}
 
-		#endregion
-		#region extract asset
-
-		public override byte[] ExtractAsset(int index) {
-			byte[] body = base.ExtractAsset(index);
-			if (body == null) return null;
-
-			var header = GetHeaderByAssetIndex(index);
-			if (header == null) {
-				return body;
+		public virtual byte[] GetTextureMetaByAssetIndex(int index) {
+			var span = GetSpanIndexByAssetIndex(index);
+			if (span != 0) {
+				return null; // HD textures don't have meta
 			}
 
-			long real_size = body.Length + header.Length;
-			byte[] bytes = new byte[real_size];
-			header.CopyTo(bytes, 0);
-			body.CopyTo(bytes, header.Length);
-			return bytes;
+			var assetId = GetAssetIdByAssetIndex(index);
+			var textureIndex = TextureAssetIdsSection.Ids.BinarySearch((ulong)assetId);
+			if (textureIndex < 0) {
+				return null; // not a texture
+			}
+
+			return TextureMetaSection.GetTextureMeta(textureIndex);
 		}
 
 		#endregion
@@ -557,6 +550,18 @@ namespace DAT1 {
 			});
 
 			return assetIndex;
+		}
+
+		public virtual void AddTexture(ulong assetId, byte[] meta) {
+			var textureIndex = TextureAssetIdsSection.Ids.BinarySearch(assetId);
+			Utils.Assert(textureIndex < 0, "AddTexture() should not be called if texture is already present");
+			textureIndex = ~textureIndex;
+
+			TextureAssetIdsSection.Ids.Insert(textureIndex, assetId);
+
+			++TextureHeaderSection.Value;
+
+			TextureMetaSection.InsertTextureMeta(textureIndex, meta);
 		}
 
 		public class AssetUpdater: AssetUpdaterBase {
@@ -592,12 +597,12 @@ namespace DAT1 {
 						} else {
 							var header_offset = toc_i29.SizesSection.Entries[_index].HeaderOffset;
 							if (header_offset == -1) {
-								var header_index = toc_i29.AssetHeadersSection.Headers.Count;
-								toc_i29.AssetHeadersSection.Headers.Add(_header);
-								toc_i29.SizesSection.Entries[_index].HeaderOffset = header_index * 36;
+								var new_header_offset = toc_i29.AssetHeadersSection.Buffer.Length;
+								toc_i29.AssetHeadersSection.Extend(_header.Length);
+								toc_i29.AssetHeadersSection.Write(new_header_offset, _header);
+								toc_i29.SizesSection.Entries[_index].HeaderOffset = new_header_offset;
 							} else {
-								var header_index = header_offset / 36;
-								toc_i29.AssetHeadersSection.Headers[header_index] = _header;
+								toc_i29.AssetHeadersSection.Write(header_offset, _header);
 							}
 						}
 					}

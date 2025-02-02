@@ -4,22 +4,12 @@
 // A copy of the that license should come with this program (LICENSE.txt). If not, see <http://www.gnu.org/licenses/>.
 
 using DAT1.Sections.Generic;
-using System.IO;
+using System.Collections.Generic;
 
 namespace DAT1.Sections.TOC {
-	public class AssetHeadersSection: ByteBufferSection {
-		public const uint TAG = 0x654BDED9; // Archive TOC Asset Header Data
+	public class TextureAssetIdsSection: UInt64ArraySection {
+		public const uint TAG = 0x36A6C8CC; // Archive TOC Texture Asset Ids
 
-		public byte[] ReadHeaderAtOffset(int offset) {
-			byte[] sizes = Read(offset + 4, 4);
-
-			using var r = new BinaryReader(new MemoryStream(sizes));
-			r.ReadByte(); // unknown
-			var pairs = r.ReadByte();
-			var extra = r.ReadUInt16();
-
-			var totalSize = 8 + pairs * 8 + extra;
-			return Read(offset, totalSize);
-		}
+		public List<ulong> Ids => Values;
 	}
 }
