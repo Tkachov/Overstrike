@@ -773,6 +773,25 @@ namespace ModdingTool {
 			}
 		}
 
+		private static void SetClipboard(string text) {
+			try {
+				Clipboard.SetText(text);
+			} catch {
+				// if failed once, try a few more times (in some cases clipboard in windows might fail to open)
+				for (int i = 0; i < 10; i++) {
+					try {
+						Clipboard.SetText(text);
+						return;
+					} catch {
+						continue;
+					}
+				}
+
+				// if reached here, it means we failed all those times
+				// TODO: angry beep or something to warn user of failed clipboard copy
+			}
+		}
+
 		#endregion
 		#region event handlers
 
@@ -1036,7 +1055,7 @@ namespace ModdingTool {
 
 		private void FoldersMenu_CopyPath_Click(object sender, RoutedEventArgs e) {
 			var path = GetSelectedFolderPath();
-			Clipboard.SetText(path);
+			SetClipboard(path);
 		}
 
 		private string GetSelectedFolderPath() {
@@ -1144,7 +1163,7 @@ namespace ModdingTool {
 				var path = asset.FullPath ?? asset.RefPath;
 				paths += $"{path}\n";
 			}
-			Clipboard.SetText(paths);
+			SetClipboard(paths);
 		}
 
 		private static void CopyRef(System.Collections.IList assets) {
@@ -1155,7 +1174,7 @@ namespace ModdingTool {
 			foreach (var asset in assets) {
 				refs += $"{(asset as Asset).RefPath}\n";
 			}
-			Clipboard.SetText(refs);
+			SetClipboard(refs);
 		}
 
 		#endregion
