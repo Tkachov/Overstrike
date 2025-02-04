@@ -50,6 +50,7 @@ namespace ModdingTool {
 			CommandBindings.Add(new CommandBinding(AssetsListContextMenu.ExtractAssetCommand, ContextMenu_ExtractAsset));
 			CommandBindings.Add(new CommandBinding(AssetsListContextMenu.ExtractAssetToStageCommand, ContextMenu_ExtractAssetToStage));
 			CommandBindings.Add(new CommandBinding(AssetsListContextMenu.ReplaceAssetCommand, ContextMenu_ReplaceAsset));
+			CommandBindings.Add(new CommandBinding(AssetsListContextMenu.ReplaceAssetsCommand, ContextMenu_ReplaceAssets));
 			CommandBindings.Add(new CommandBinding(AssetsListContextMenu.CopyPathCommand, ContextMenu_CopyPath));
 			CommandBindings.Add(new CommandBinding(AssetsListContextMenu.CopyRefCommand, ContextMenu_CopyRef));
 
@@ -1097,6 +1098,10 @@ namespace ModdingTool {
 			AssetsListContextMenuClicked("ReplaceAsset", AssetsList.SelectedItems);
 		}
 
+		private void ContextMenu_ReplaceAssets(object sender, ExecutedRoutedEventArgs e) {
+			AssetsListContextMenuClicked("ReplaceAssets", AssetsList.SelectedItems);
+		}
+
 		private void ContextMenu_CopyPath(object sender, ExecutedRoutedEventArgs e) {
 			AssetsListContextMenuClicked("CopyPath", AssetsList.SelectedItems);
 		}
@@ -1112,6 +1117,7 @@ namespace ModdingTool {
 				case "ExtractAsset": ExtractAssets(selectedAssets); break;
 				case "ExtractAssetToStage": ExtractAssetsToStage(selectedAssets); break;
 				case "ReplaceAsset": ReplaceAsset(selectedAssets); break;
+				case "ReplaceAssets": ReplaceAssets(selectedAssets); break;
 				case "CopyPath": CopyPath(selectedAssets); break;
 				case "CopyRef": CopyRef(selectedAssets); break;
 			}
@@ -1151,6 +1157,23 @@ namespace ModdingTool {
 			var asset = (Asset)assets[0];
 			var path = dialog.FileName;
 			_replacedAssets.Set(asset, path);
+		}
+
+		private void ReplaceAssets(System.Collections.IList assets) {
+			var dialog = new CommonOpenFileDialog();
+			dialog.Title = "Select file to replace assets with...";
+			dialog.Multiselect = false;
+			dialog.RestoreDirectory = true;
+			dialog.Filters.Add(new CommonFileDialogFilter("All files", "*") { ShowExtensions = true });
+
+			if (dialog.ShowDialog() != CommonFileDialogResult.Ok) {
+				return;
+			}
+
+			var path = dialog.FileName;
+			foreach (var asset in assets) {
+				_replacedAssets.Set((Asset)asset, path);
+			}
 		}
 
 		private static void CopyPath(System.Collections.IList assets) {

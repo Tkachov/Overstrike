@@ -15,6 +15,7 @@ namespace ModdingTool {
 		public static readonly RoutedUICommand ExtractAssetCommand = new("Extract Asset", "ExtractAssetCommand", typeof(AssetsListContextMenu));
 		public static readonly RoutedUICommand ExtractAssetToStageCommand = new("Extract Asset to Stage", "ExtractAssetToStageCommand", typeof(AssetsListContextMenu));
 		public static readonly RoutedUICommand ReplaceAssetCommand = new("Replace Asset", "ReplaceAssetCommand", typeof(AssetsListContextMenu));
+		public static readonly RoutedUICommand ReplaceAssetsCommand = new("Replace Assets", "ReplaceAssetsCommand", typeof(AssetsListContextMenu));
 		public static readonly RoutedUICommand CopyPathCommand = new("Copy Path", "CopyPathCommand", typeof(AssetsListContextMenu));
 		public static readonly RoutedUICommand CopyRefCommand = new("Copy Ref", "CopyRefCommand", typeof(AssetsListContextMenu));
 
@@ -22,6 +23,7 @@ namespace ModdingTool {
 		public static MenuItem ExtractAsset => GetMenuItem("AssetsListContextMenu", "ExtractAsset");
 		public static MenuItem ExtractAssetToStage => GetMenuItem("AssetsListContextMenu", "ExtractAssetToStage");
 		public static MenuItem ReplaceAsset => GetMenuItem("AssetsListContextMenu", "ReplaceAsset");
+		public static MenuItem ReplaceAssets => GetMenuItem("AssetsListContextMenu", "ReplaceAssets");
 		public static MenuItem CopyPath => GetMenuItem("AssetsListContextMenu", "CopyPath");
 		public static MenuItem CopyRef => GetMenuItem("AssetsListContextMenu", "CopyRef");
 
@@ -35,6 +37,7 @@ namespace ModdingTool {
 			SelectedItemsCount.Header = $"{selectedCount} asset{suffix} selected";
 
 			ReplaceAsset.Visibility = (selectedCount == 1 ? Visibility.Visible : Visibility.Collapsed);
+			ReplaceAssets.Visibility = (selectedCount > 1 ? Visibility.Visible : Visibility.Collapsed);
 
 			CopyPath.Header = "Copy path" + (selectedCount > 1 ? "s" : "");
 			CopyRef.Header = "Copy ref" + (selectedCount > 1 ? "s" : "");

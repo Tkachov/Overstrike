@@ -10,6 +10,7 @@
 			<MenuItem Name="ExtractAsset" Header="Extract selected..." Command="{x:Static local:AssetsListContextMenu.ExtractAssetCommand}" />
 			<MenuItem Name="ExtractAssetToStage" Header="Extract to stage..." Command="{x:Static local:AssetsListContextMenu.ExtractAssetToStageCommand}" />
 			<MenuItem Name="ReplaceAsset" Header="Replace selected..." Command="{x:Static local:AssetsListContextMenu.ReplaceAssetCommand}" />
+			<MenuItem Name="ReplaceAssets" Header="Replace all selected with the same file..." Command="{x:Static local:AssetsListContextMenu.ReplaceAssetsCommand}" />
 			<Separator/>
 			<MenuItem Name="CopyPath" Header="Copy path" Command="{x:Static local:AssetsListContextMenu.CopyPathCommand}" />
 			<MenuItem Name="CopyRef" Header="Copy ref" Command="{x:Static local:AssetsListContextMenu.CopyRefCommand}" />

@@ -43,6 +43,7 @@ public partial class SearchWindow: Window {
 		CommandBindings.Add(new CommandBinding(AssetsListContextMenu.ExtractAssetCommand, ContextMenu_ExtractAsset));
 		CommandBindings.Add(new CommandBinding(AssetsListContextMenu.ExtractAssetToStageCommand, ContextMenu_ExtractAssetToStage));
 		CommandBindings.Add(new CommandBinding(AssetsListContextMenu.ReplaceAssetCommand, ContextMenu_ReplaceAsset));
+		CommandBindings.Add(new CommandBinding(AssetsListContextMenu.ReplaceAssetsCommand, ContextMenu_ReplaceAssets));
 		CommandBindings.Add(new CommandBinding(AssetsListContextMenu.CopyPathCommand, ContextMenu_CopyPath));
 		CommandBindings.Add(new CommandBinding(AssetsListContextMenu.CopyRefCommand, ContextMenu_CopyRef));
 
@@ -143,6 +144,10 @@ public partial class SearchWindow: Window {
 
 	private void ContextMenu_ReplaceAsset(object sender, ExecutedRoutedEventArgs e) {
 		_contextMenuCallback("ReplaceAsset", GetSelectedAssets());
+	}
+
+	private void ContextMenu_ReplaceAssets(object sender, ExecutedRoutedEventArgs e) {
+		_contextMenuCallback("ReplaceAssets", GetSelectedAssets());
 	}
 
 	private void ContextMenu_CopyPath(object sender, ExecutedRoutedEventArgs e) {
