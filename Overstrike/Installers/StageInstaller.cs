@@ -219,35 +219,37 @@ namespace Overstrike.Installers {
 
 				byte[] bytes = ms.ToArray();
 
-				using var br = new BinaryReader(new MemoryStream(bytes));
-				var magic = br.ReadUInt32();
+				if (bytes.Length >= 4) {
+					using var br = new BinaryReader(new MemoryStream(bytes));
+					var magic = br.ReadUInt32();
 
-				// TODO: a class in shared for that?
-				if (magic == 0x00475453) { // STG\x00
-					var flags = br.ReadUInt32();
-					var headerSize = br.ReadUInt32();
-					var textureMetaSize = br.ReadUInt32();
-					
-					var headerData = br.ReadBytes((int)headerSize);
-					Align16(br);
+					// TODO: a class in shared for that?
+					if (magic == 0x00475453) { // STG\x00
+						var flags = br.ReadUInt32();
+						var headerSize = br.ReadUInt32();
+						var textureMetaSize = br.ReadUInt32();
 
-					var textureMetaData = br.ReadBytes((int)textureMetaSize);
-					Align16(br);
+						var headerData = br.ReadBytes((int)headerSize);
+						Align16(br);
 
-					byte[] actualBytes = br.ReadBytes((int)(bytes.Length - br.BaseStream.Position));
+						var textureMetaData = br.ReadBytes((int)textureMetaSize);
+						Align16(br);
 
-					byte[] header = null;
-					if ((flags & 0x1) != 0) { // TODO: constant
-						header = headerData;
+						byte[] actualBytes = br.ReadBytes((int)(bytes.Length - br.BaseStream.Position));
+
+						byte[] header = null;
+						if ((flags & 0x1) != 0) { // TODO: constant
+							header = headerData;
+						}
+
+						byte[] textureMeta = null;
+						if ((flags & 0x2) != 0) { // TODO: constant
+							textureMeta = textureMetaData;
+						}
+
+						_outer.OverwriteAsset(span, assetId, archiveIndexToWriteInto, archiveWriter, header, textureMeta, actualBytes);
+						return;
 					}
-
-					byte[] textureMeta = null;
-					if ((flags & 0x2) != 0) { // TODO: constant
-						textureMeta = textureMetaData;
-					}
-
-					_outer.OverwriteAsset(span, assetId, archiveIndexToWriteInto, archiveWriter, header, textureMeta, actualBytes);
-					return;
 				}
 
 				_outer.OverwriteAsset(span, assetId, archiveIndexToWriteInto, archiveWriter, null, null, bytes);
