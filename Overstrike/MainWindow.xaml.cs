@@ -1048,6 +1048,11 @@ namespace Overstrike {
 		private void ProfileGamePath_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
 			try {
 				var path = _selectedProfile.GamePath;
+
+				if (e.ChangedButton == MouseButton.Right) {
+					path = Directory.GetCurrentDirectory();
+				}
+				
 				Process.Start("explorer.exe", path);
 			} catch {}
 		}
