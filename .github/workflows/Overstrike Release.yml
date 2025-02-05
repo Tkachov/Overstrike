@@ -12,6 +12,8 @@ on:
 env:
   CSPROJ: Overstrike/Overstrike.csproj
   PUBLISH_DIR: Overstrike/bin/Release/net7.0-windows/publish/win-x64/
+  UPDATER_CSPROJ: Updater/Updater.csproj
+  UPDATER_PUBLISH_DIR: Updater/bin/Release/net7.0-windows/publish/win-x64/
 
 jobs:
   publish:
@@ -27,6 +29,12 @@ jobs:
 
       - name: Publish the project
         run: dotnet publish ${{ env.CSPROJ }} -p:PublishProfile=FolderProfile
+
+      - name: Publish the Updater project
+        run: dotnet publish ${{ env.UPDATER_CSPROJ }} -p:PublishProfile=FolderProfile
+
+      - name: Add Updater.exe
+        run: cp "${{ env.UPDATER_PUBLISH_DIR }}/Overstrike Updater.exe" "${{ env.PUBLISH_DIR }}/Check for updates.exe"
 
       - name: Add LICENSE.txt
         run: cp LICENSE.txt ${{ env.PUBLISH_DIR }}
