@@ -74,6 +74,14 @@ namespace Overstrike {
 			}
 		}
 
+		public bool Settings_CheckUpdates {
+			get => _settings.CheckUpdates;
+			set {
+				_settings.CheckUpdates = value;
+				SaveSettings();
+			}
+		}
+
 		private class LanguageItem {
 			public string Name { get; set; }
 			public string InternalName { get; set; }
@@ -106,6 +114,7 @@ namespace Overstrike {
 			MakeProfileItems();
 			FirstSwitchToProfile();
 			StartTickThread();
+			ScheduleUpdateCheck();
 
 			MSMRSuitsMenuContent.Init(AddTaskThread, SetOverlayLabels);
 			MMSuitsMenuContent.Init(AddTaskThread, SetOverlayLabels);
@@ -424,6 +433,27 @@ namespace Overstrike {
 		private void SetOverlayLabels(string header, string operation) {
 			if (header != null) OverlayHeaderLabel.Text = header;
 			if (operation != null) OverlayOperationLabel.Text = operation;
+		}
+
+		#endregion
+
+		#region update check
+
+		private Timer _updateTimer;
+
+		private void ScheduleUpdateCheck() {
+			if (!_settings.CheckUpdates) return;
+
+			_updateTimer = new Timer(OnUpdateTimer, null, 2000, Timeout.Infinite);
+		}
+
+		private void OnUpdateTimer(Object o) {
+			_updateTimer.Dispose();
+			_updateTimer = null;
+
+			try {
+				Process.Start("Check for updates.exe", "--silent");
+			} catch {}
 		}
 
 		#endregion

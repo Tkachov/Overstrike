@@ -203,7 +203,7 @@
 					<ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
 						<StackPanel>
 							<Expander Header=" Global" HorizontalAlignment="Stretch" Margin="6,4,3,0" BorderThickness="0" Padding="0,2,0,2" IsExpanded="True">
-								<Grid Height="82" Margin="-2,2,0,0">
+								<Grid Height="108" Margin="-2,2,0,0">
 									<Label Content="These settings apply to all of the profiles. Other sections apply to current profile only." Margin="0,-2,0,0" VerticalAlignment="Top" Foreground="#666" />
 									
 									<CheckBox IsChecked="{Binding Settings_CacheModsLibrary}" HorizontalAlignment="Left" Margin="4,30,0,0" VerticalAlignment="Top">
@@ -215,6 +215,12 @@
 									<CheckBox IsChecked="{Binding Settings_PreferCachedModsLibrary}" HorizontalAlignment="Left" Margin="4,56,0,0" VerticalAlignment="Top">
 										<StackPanel Orientation="Horizontal">
 											<TextBlock Text="Skip Mods Library sync if cache present" Margin="2,0,0,0" />
+										</StackPanel>
+									</CheckBox>
+
+									<CheckBox IsChecked="{Binding Settings_CheckUpdates}" HorizontalAlignment="Left" Margin="4,82,0,0" VerticalAlignment="Top">
+										<StackPanel Orientation="Horizontal">
+											<TextBlock Text="Check updates on launch" Margin="2,0,0,0" />
 										</StackPanel>
 									</CheckBox>
 								</Grid>
