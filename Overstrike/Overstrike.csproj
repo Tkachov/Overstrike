@@ -14,6 +14,8 @@
     <FileVersion>1.5.3.0</FileVersion>
 
     <Platforms>x64</Platforms>
+
+    <RepositoryUrl>https://github.com/Tkachov/Overstrike/</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <Authors>Tkachov</Authors>
+    <RepositoryUrl>https://github.com/Tkachov/Overstrike/</RepositoryUrl>
+    <PackageIcon></PackageIcon>
+    <ApplicationIcon>Properties\Resources\icon.ico</ApplicationIcon>
+    <Product>Overstrike Updater</Product>
+    <Description>Overstrike Updater</Description>
+    <Title>Overstrike Updater</Title>
+    <AssemblyName>Overstrike Updater</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Properties\Resources\icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+</Project>

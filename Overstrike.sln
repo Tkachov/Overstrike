@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LocalizationTool", "Localiz
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OverstrikeShared", "OverstrikeCore\OverstrikeShared.csproj", "{54F21113-DE19-442B-9723-DD29781D7BE1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Updater", "Updater\Updater.csproj", "{4700DE73-3310-4FD7-8A4F-834CE3D3AE54}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,14 @@ Global
 		{54F21113-DE19-442B-9723-DD29781D7BE1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{54F21113-DE19-442B-9723-DD29781D7BE1}.Release|x64.ActiveCfg = Release|Any CPU
 		{54F21113-DE19-442B-9723-DD29781D7BE1}.Release|x64.Build.0 = Release|Any CPU
+		{4700DE73-3310-4FD7-8A4F-834CE3D3AE54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4700DE73-3310-4FD7-8A4F-834CE3D3AE54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4700DE73-3310-4FD7-8A4F-834CE3D3AE54}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4700DE73-3310-4FD7-8A4F-834CE3D3AE54}.Debug|x64.Build.0 = Debug|Any CPU
+		{4700DE73-3310-4FD7-8A4F-834CE3D3AE54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4700DE73-3310-4FD7-8A4F-834CE3D3AE54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4700DE73-3310-4FD7-8A4F-834CE3D3AE54}.Release|x64.ActiveCfg = Release|Any CPU
+		{4700DE73-3310-4FD7-8A4F-834CE3D3AE54}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
