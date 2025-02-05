@@ -186,6 +186,8 @@
 								<ContextMenu>
 									<MenuItem Header="Uninstall all mods" Click="UninstallMods" />
 									<MenuItem Header="Launch the game" Click="LaunchGame" />
+									<Separator />
+									<MenuItem Header="Reset 'toc'" Click="ResetToc" />
 								</ContextMenu>
 							</Button.ContextMenu>
 						</Button>

@@ -923,6 +923,46 @@ namespace Overstrike {
 			} catch {}
 		}
 
+		private void ResetToc(object sender, RoutedEventArgs e) {
+			try {
+				MessageBoxResult result = MessageBox.Show("Are you sure you want to reset 'toc'?\nYou'd need Steam or EGS to verify files.", "Reset 'toc'", MessageBoxButton.YesNo);
+				if (result != MessageBoxResult.Yes) {
+					return;
+				}
+
+				var path = _selectedProfile.GamePath;
+				var exePath = _selectedGame.GetExecutablePath(path);
+				var tocPath = _selectedGame.GetTocPath(path);
+				var tocBakPath = tocPath + ".BAK";
+
+				try {
+					if (File.Exists(exePath)) {
+						File.Delete(exePath);
+					}
+				} catch {
+					// return early if .exe is still running, so 'toc' and 'toc.BAK' are intact
+					MessageBox.Show("Failed to reset 'toc'!\nMake sure the game isn't running and try again.", "Reset 'toc'", MessageBoxButton.OK);
+					return;
+				}
+
+				try {
+					File.Delete(tocPath);
+				} catch {}
+
+				try {
+					File.Delete(tocBakPath);
+				} catch {}
+
+				if (File.Exists(exePath) || File.Exists(tocPath) || File.Exists(tocBakPath)) {
+					// sanity check, warn that something could've been deleted though
+					MessageBox.Show("Failed to reset 'toc'!\nMake sure the game isn't running and try again.\nSome files might've been deleted.", "Reset 'toc'", MessageBoxButton.OK);
+					return;
+				}
+
+				MessageBox.Show("Old 'toc' is successfully removed! Open Steam or EGS and run the game to download the working one.\n\nIn Steam, it'll show you the missing executable warning first. When you press Play again, it'll download the missing files.", "Reset 'toc'", MessageBoxButton.OK);
+			} catch {}
+		}
+
 		private void AddMods_Click(object sender, RoutedEventArgs e) {
 			CommonOpenFileDialog dialog = new CommonOpenFileDialog();
 			dialog.Title = "Select mods to add...";
