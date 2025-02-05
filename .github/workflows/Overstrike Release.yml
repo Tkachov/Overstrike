@@ -13,7 +13,7 @@ env:
   CSPROJ: Overstrike/Overstrike.csproj
   PUBLISH_DIR: Overstrike/bin/Release/net7.0-windows/publish/win-x64/
   UPDATER_CSPROJ: Updater/Updater.csproj
-  UPDATER_PUBLISH_DIR: ../Updater/bin/Release/net7.0-windows/publish/win-x64/
+  UPDATER_PUBLISH_DIR: Updater/bin/Release/net7.0-windows/publish/win-x64/
 
 jobs:
   publish:
