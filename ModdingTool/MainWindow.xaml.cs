@@ -982,7 +982,7 @@ namespace ModdingTool {
 		private void Help_JoinDiscord_Click(object sender, RoutedEventArgs e) {
 			try {
 				Process.Start(new ProcessStartInfo() {
-					FileName = "https://discord.gg/XB4RkkvSGD",
+					FileName = "https://discord.gg/insomniacversemodding",
 					UseShellExecute = true
 				});
 			} catch {}
