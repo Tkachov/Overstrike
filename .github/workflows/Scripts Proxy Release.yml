@@ -21,6 +21,9 @@ jobs:
       - name: Checkout the repo
         uses: actions/checkout@v3
 
+      - name: Setup msbuild
+        uses: microsoft/setup-msbuild@v2
+
       - name: Setup vcpkg
         uses: lukka/run-vcpkg@v11
         with:
@@ -28,11 +31,11 @@ jobs:
           vcpkgJsonGlob: '${{ env.PROJECT_DIR }}/vcpkg.json'
           vcpkgGitCommitId: 'a42af01b72c28a8e1d7b48107b33e4f286a55ef6'
 
-      - name: Setup msbuild
-        uses: microsoft/setup-msbuild@v2
+      - name: Restore vcpkg packages
+        run: vcpkg integrate install
 
       - name: Build
-        run: msbuild '${{ env.VCXPROJ }}' /p:configuration=Release /p:platform=x64
+        run: msbuild /p:Configuration=Release /p:Platform=x64 ${{ env.VCXPROJ }}
 
       - name: Generate names by tag
         id: names
