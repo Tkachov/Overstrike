@@ -11,6 +11,7 @@ on:
 
 env:
   PROJECT_DIR: ScriptsProxy/
+  VCXPROJ: ScriptsProxy/ScriptsProxy.vcxproj
   PUBLISH_DIR: x64/Release/
 
 jobs:
@@ -20,12 +21,18 @@ jobs:
       - name: Checkout the repo
         uses: actions/checkout@v3
 
-      - name: Setup (and run?) vcpkg
+      - name: Setup vcpkg
         uses: lukka/run-vcpkg@v11
         with:
           runVcpkgInstall: true
           vcpkgJsonGlob: '${{ env.PROJECT_DIR }}/vcpkg.json'
           vcpkgGitCommitId: 'a42af01b72c28a8e1d7b48107b33e4f286a55ef6'
+
+      - name: Setup msbuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Build
+        run: msbuild '${{ env.VCXPROJ }}' /p:configuration=Release /p:platform=x64
 
       - name: Generate names by tag
         id: names
