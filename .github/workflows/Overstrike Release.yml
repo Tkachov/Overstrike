@@ -14,6 +14,9 @@ env:
   PUBLISH_DIR: Overstrike/bin/Release/net7.0-windows/publish/win-x64/
   UPDATER_CSPROJ: Updater/Updater.csproj
   UPDATER_PUBLISH_DIR: Updater/bin/Release/net7.0-windows/publish/win-x64/
+  PROXY_PROJECT_DIR: ScriptsProxy/
+  PROXY_VCXPROJ: ScriptsProxy/ScriptsProxy.vcxproj
+  PROXY_PUBLISH_DIR: ScriptsProxy/x64/Release/
 
 jobs:
   publish:
@@ -21,6 +24,22 @@ jobs:
     steps:
       - name: Checkout the repo
         uses: actions/checkout@v3
+
+      - name: Scripts Proxy - Setup msbuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Scripts Proxy - Setup vcpkg
+        uses: lukka/run-vcpkg@v11
+        with:
+          runVcpkgInstall: true
+          vcpkgJsonGlob: '${{ env.PROXY_PROJECT_DIR }}/vcpkg.json'
+          vcpkgGitCommitId: 'a42af01b72c28a8e1d7b48107b33e4f286a55ef6'
+
+      - name: Scripts Proxy - Restore vcpkg packages
+        run: vcpkg integrate install
+
+      - name: Scripts Proxy - Build
+        run: msbuild /p:Configuration=Release /p:Platform=x64 ${{ env.PROXY_VCXPROJ }}
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
@@ -32,6 +51,9 @@ jobs:
 
       - name: Publish the Updater project
         run: dotnet publish ${{ env.UPDATER_CSPROJ }} -p:PublishProfile=FolderProfile
+
+      - name: Add scripts_proxy.dll
+        run: cp "${{ env.PROXY_PUBLISH_DIR }}winmm.dll" "${{ env.PUBLISH_DIR }}scripts_proxy.dll"
 
       - name: Add Updater.exe
         run: cp "${{ env.UPDATER_PUBLISH_DIR }}Overstrike Updater.exe" "${{ env.PUBLISH_DIR }}Check for updates.exe"
