@@ -24,6 +24,10 @@ namespace Overstrike.Data {
 		// settings > suit
 		public string Settings_Suit_Language;
 
+		// settings > scripts
+		public bool Settings_Scripts_Enabled;
+		public bool Settings_Scripts_ModToc;
+
 		// suits
 		public SuitsModifications Suits;
 
@@ -36,6 +40,8 @@ namespace Overstrike.Data {
 			Mods = new List<ModEntry>();
 
 			Settings_Suit_Language = "us";
+			Settings_Scripts_Enabled = false;
+			Settings_Scripts_ModToc = false;
 
 			Suits = null;
 		}
@@ -77,6 +83,14 @@ namespace Overstrike.Data {
 					Settings_Suit_Language = (string)suit["language"];
 					if (Settings_Suit_Language == null) { throw new Exception("bad profile"); }
 				}
+
+				if (settings.ContainsKey("scripts")) {
+					var scripts = (JObject)settings["scripts"];
+					if (scripts == null) { throw new Exception("bad profile"); }
+
+					Settings_Scripts_Enabled = (bool)scripts["enabled"];
+					Settings_Scripts_ModToc = (bool)scripts["mod_toc"];
+				}
 			}
 
 			var suits = (JObject)json["suits"];
@@ -115,6 +129,10 @@ namespace Overstrike.Data {
 				j["settings"] = new JObject() {
 					["suit"] = new JObject() {
 						["language"] = Settings_Suit_Language
+					},
+					["scripts"] = new JObject() {
+						["enabled"] = Settings_Scripts_Enabled,
+						["mod_toc"] = Settings_Scripts_ModToc,
 					}
 				};
 

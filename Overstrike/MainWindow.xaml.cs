@@ -152,6 +152,8 @@ namespace Overstrike {
 			MakeModsItems();
 		}
 
+		private bool _reactToScriptSettingsChange = true;
+
 		private void SetupBanner() {
 			GradientImage.Source = _selectedGame.BannerBackground;
 			LogoImage.Source = _selectedGame.BannerLogoLeft;
@@ -162,6 +164,27 @@ namespace Overstrike {
 				MakeSuitLanguageItems();
 			} else {
 				SuitModsSettings.Visibility = Visibility.Collapsed;
+			}
+
+			if (_selectedGame.HasScriptsSettingsSection) {
+				ScriptSettings.Visibility = Visibility.Visible;
+				_reactToScriptSettingsChange = false;
+				ScriptSettings_EnableScripting.IsChecked = _selectedProfile.Settings_Scripts_Enabled;
+				ScriptSettings_ModToc.IsChecked = _selectedProfile.Settings_Scripts_ModToc;
+				ScriptSettings_ModToc.IsEnabled = _selectedProfile.Settings_Scripts_Enabled;
+				_reactToScriptSettingsChange = true;
+			} else {
+				ScriptSettings.Visibility = Visibility.Collapsed;
+			}
+
+			UpdateRunModdedButtonVisibility();
+		}
+
+		private void UpdateRunModdedButtonVisibility() {
+			if (_selectedGame.HasScriptsSettingsSection && _selectedProfile.Settings_Scripts_Enabled) {
+				RunModdedButton.Visibility = Visibility.Visible;
+			} else {
+				RunModdedButton.Visibility = Visibility.Collapsed;
 			}
 		}
 
@@ -708,6 +731,10 @@ namespace Overstrike {
 				}
 			}
 
+			if (_selectedProfile.Settings_Scripts_Enabled) {
+				modsToInstall.Insert(0, new ScriptSupportModEntry(modsToInstall)); // TODO: pass callback(s) if needed
+			}
+
 			StartInstallModsThread(modsToInstall, _selectedProfile.Game, _selectedProfile.GamePath);
 		}
 
@@ -715,6 +742,12 @@ namespace Overstrike {
 			if (ModEntry.IsTypeFamilyModular(libraryMod.Type)) {
 				ModularInstaller.AddEntriesToInstall(modsToInstall, libraryMod, profileMod);
 				return;
+			}
+
+			if (ModEntry.IsTypeFamilyScript(libraryMod.Type)) {
+				if (!_selectedProfile.Settings_Scripts_Enabled) {
+					return;
+				}
 			}
 
 			modsToInstall.Add(libraryMod);
@@ -854,6 +887,7 @@ namespace Overstrike {
 				var suits = 0;
 				var stages = 0;
 				var modulars = 0;
+				var scripts = 0;
 				var menu = 0;
 				foreach (var mod in modsToInstall) {
 					switch (mod.Type) {
@@ -883,13 +917,17 @@ namespace Overstrike {
 							++modulars;
 						break;
 
+						case ModEntry.ModType.SCRIPT_MSM2:
+							++scripts;
+						break;
+
 						case ModEntry.ModType.SUITS_MENU:
 							++menu;
 						break;
 					}
 				}
 
-				var extra = $" {version} {GetTocArchivesCount(game, gamePath)} {modsToInstall.Count} {suits} {stages} {modulars} {menu}";
+				var extra = $" {version} {GetTocArchivesCount(game, gamePath)} {modsToInstall.Count} {suits} {stages} {modulars} {scripts} {menu}";
 				stackTrace = stackTrace.Substring(0, i + 1) + extra + stackTrace.Substring(i + 1);
 			} catch {}
 		}
@@ -945,11 +983,28 @@ namespace Overstrike {
 			List<ModEntry> modsToInstall = new List<ModEntry>();
 			StartInstallModsThread(modsToInstall, _selectedProfile.Game, _selectedProfile.GamePath, true);
 		}
-		
+
 		private void LaunchGame(object sender, RoutedEventArgs e) {
+			LaunchGame(false);
+		}
+
+		private void LaunchGame(bool modded) {
 			try {
 				var path = _selectedProfile.GamePath;
-				Process.Start(_selectedGame.GetExecutablePath(path), path);
+				var arguments = "";
+
+				if (modded) {
+					if (_selectedProfile.Settings_Scripts_Enabled)
+						arguments += "-scripts ";
+					if (_selectedProfile.Settings_Scripts_ModToc)
+						arguments += "-modded ";
+				}
+
+				Process.Start(new ProcessStartInfo() {
+					WorkingDirectory = path,
+					FileName = _selectedGame.GetExecutablePath(path),
+					Arguments = arguments
+				});
 			} catch {}
 		}
 
@@ -999,9 +1054,16 @@ namespace Overstrike {
 			dialog.Multiselect = true;
 			dialog.RestoreDirectory = true;
 
-			dialog.Filters.Add(new CommonFileDialogFilter("All supported files", "*.smpcmod;*.mmpcmod;*.suit;*.stage;*.modular;*.zip;*.rar;*.7z") { ShowExtensions = true });
-			dialog.Filters.Add(new CommonFileDialogFilter("All supported mod files", "*.smpcmod;*.mmpcmod;*.suit;*.stage;*.modular") { ShowExtensions = true });
-			dialog.Filters.Add(new CommonFileDialogFilter("Archives", "*.zip;*.rar;*.7z") { ShowExtensions = true });
+			var supportedModFiles = "*.smpcmod;*.mmpcmod;*.suit;*.stage;*.modular";
+			if (_selectedProfile.Settings_Scripts_Enabled) {
+				supportedModFiles += ";*.script";
+			}
+			var archives = "*.zip;*.rar;*.7z";
+			var allSupportedFiles = supportedModFiles + ";" + archives;
+
+			dialog.Filters.Add(new CommonFileDialogFilter("All supported files", allSupportedFiles) { ShowExtensions = true });
+			dialog.Filters.Add(new CommonFileDialogFilter("All supported mod files", supportedModFiles) { ShowExtensions = true });
+			dialog.Filters.Add(new CommonFileDialogFilter("Archives", archives) { ShowExtensions = true });
 			dialog.Filters.Add(new CommonFileDialogFilter("All files", "*") { ShowExtensions = true });
 
 			if (dialog.ShowDialog() != CommonFileDialogResult.Ok) {
@@ -1174,6 +1236,26 @@ namespace Overstrike {
 			new ModularWizard(mod, this).ShowDialog();
 			SaveProfile();
 			MakeModsItems();
+		}
+
+		private void ScriptSettings_EnableScripting_Changed(object sender, RoutedEventArgs e) {
+			if (!_reactToScriptSettingsChange) return;
+			_selectedProfile.Settings_Scripts_Enabled = (bool)ScriptSettings_EnableScripting.IsChecked;
+			SaveProfile();
+
+			ScriptSettings_ModToc.IsEnabled = _selectedProfile.Settings_Scripts_Enabled;
+
+			UpdateRunModdedButtonVisibility();
+		}
+
+		private void ScriptSettings_ModToc_Changed(object sender, RoutedEventArgs e) {
+			if (!_reactToScriptSettingsChange) return;
+			_selectedProfile.Settings_Scripts_ModToc = (bool)ScriptSettings_ModToc.IsChecked;
+			SaveProfile();
+		}
+
+		private void RunModdedButton_Click(object sender, RoutedEventArgs e) {
+			LaunchGame(true);
 		}
 	}
 }

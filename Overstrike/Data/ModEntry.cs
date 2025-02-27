@@ -6,6 +6,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Media.Imaging;
 
@@ -35,6 +36,8 @@ namespace Overstrike.Data {
 			MODULAR_I30,
 			MODULAR_I33,
 			MODULAR_MSM2,
+			SCRIPT_SUPPORT,
+			SCRIPT_MSM2,
 
 			UNKNOWN
 		}
@@ -153,6 +156,9 @@ namespace Overstrike.Data {
 				case ModType.MODULAR_MSM2:
 					return badge_modular;
 
+				case ModType.SCRIPT_MSM2:
+					return badge_script;
+
 				default:
 					return null;
 			}
@@ -163,6 +169,7 @@ namespace Overstrike.Data {
 		private static BitmapImage badge_suit = null;
 		private static BitmapImage badge_stage = null;
 		private static BitmapImage badge_modular = null;
+		private static BitmapImage badge_script = null;
 
 		private static void LoadBadges() {
 			if (badge_smpc == null)
@@ -179,10 +186,30 @@ namespace Overstrike.Data {
 
 			if (badge_modular == null)
 				badge_modular = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.badge_modular);
+
+			if (badge_script == null)
+				badge_script = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.badge_script);
 		}
 
 		public static bool IsTypeFamilyModular(ModType type) {
 			return (type == ModType.MODULAR_MSMR || type == ModType.MODULAR_MM || type == ModType.MODULAR_RCRA || type == ModType.MODULAR_I30 || type == ModType.MODULAR_I33 || type == ModType.MODULAR_MSM2);
+		}
+
+		public static bool IsTypeFamilyScript(ModType type) {
+			return (type == ModType.SCRIPT_MSM2);
+		}
+	}
+
+	public class ScriptSupportModEntry: ModEntry {
+		private static readonly string SCRIPT_SUPPORT_PATH = "|.script support|";
+
+		// TODO: callback?
+		private readonly List<ModEntry> _modsList;
+
+		public List<ModEntry> Mods { get => _modsList; }
+
+		public ScriptSupportModEntry(List<ModEntry> modsList): base(".script support", SCRIPT_SUPPORT_PATH, ModType.SCRIPT_SUPPORT) {
+			_modsList = modsList;
 		}
 	}
 }

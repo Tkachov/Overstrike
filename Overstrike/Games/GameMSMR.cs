@@ -66,5 +66,6 @@ namespace Overstrike.Games {
 		}
 
 		public override bool HasSuitsSettingsSection => true;
+		public override bool HasScriptsSettingsSection => false;
 	}
 }

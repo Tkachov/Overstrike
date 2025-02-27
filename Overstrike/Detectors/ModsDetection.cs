@@ -25,8 +25,9 @@ namespace Overstrike.Detectors {
 				new SMPCModDetector(),
 				new SuitModDetector(),
 				new StageModDetector(),
+				new ScriptModDetector(),
 				new ModularModDetector(),
-				new ArchiveDetector(this)
+				new ArchiveDetector(this),
 			};
 		}
 

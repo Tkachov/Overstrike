@@ -144,7 +144,7 @@ namespace Overstrike.Installers {
 					return (innerModType == ModEntry.ModType.STAGE_I33);
 
 				case ModEntry.ModType.MODULAR_MSM2:
-					return (innerModType == ModEntry.ModType.STAGE_MSM2 || innerModType == ModEntry.ModType.STAGE_MSM2_V2);
+					return (innerModType == ModEntry.ModType.STAGE_MSM2 || innerModType == ModEntry.ModType.STAGE_MSM2_V2 || innerModType == ModEntry.ModType.SCRIPT_MSM2);
 
 				default: return false;
 			}

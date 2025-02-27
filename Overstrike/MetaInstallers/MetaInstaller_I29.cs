@@ -11,10 +11,16 @@ using Overstrike.Data;
 
 namespace Overstrike.MetaInstallers {
 	internal class MetaInstaller_I29: MetaInstallerBase {
+		private string _outTocName = "toc";
+
 		public MetaInstaller_I29(string gamePath, AppSettings settings, Profile profile): base(gamePath, settings, profile) {}
 
 		public override void Prepare() {
-			var tocPath = Path.Combine(_gamePath, "toc");
+			if (_profile.Settings_Scripts_Enabled && _profile.Settings_Scripts_ModToc) {
+				_outTocName = "tocm";
+			}
+
+			var tocPath = Path.Combine(_gamePath, _outTocName);
 			var tocBakPath = Path.Combine(_gamePath, "toc.BAK");
 
 			if (!File.Exists(tocBakPath)) {
@@ -22,7 +28,7 @@ namespace Overstrike.MetaInstallers {
 				File.Copy(tocPath, tocBakPath);
 				ErrorLogger.WriteInfo(" OK!\n");
 			} else {
-				ErrorLogger.WriteInfo("Overwriting 'toc' with 'toc.BAK'...");
+				ErrorLogger.WriteInfo($"Overwriting '{_outTocName}' with 'toc.BAK'...");
 				File.Copy(tocBakPath, tocPath, true);
 				ErrorLogger.WriteInfo(" OK!\n");
 			}
@@ -34,15 +40,61 @@ namespace Overstrike.MetaInstallers {
 				ErrorLogger.WriteInfo(" OK!\n");
 			}
 
+			SetupScripts();
+
 			ErrorLogger.WriteInfo("\n");
+		}
+
+		private void SetupScripts() {
+			var scriptsPath = Path.Combine(_gamePath, "scripts");
+			var scriptsTxtPath = Path.Combine(_gamePath, "scripts.txt");
+			var scriptsProxyPath = Path.Combine(_gamePath, "winmm.dll");
+
+			// cleanup
+
+			if (Directory.Exists(scriptsPath)) {
+				ErrorLogger.WriteInfo("Deleting 'scripts' directory...");
+				Directory.Delete(scriptsPath, true);
+				ErrorLogger.WriteInfo(" OK!\n");
+			}
+
+			if (File.Exists(scriptsTxtPath)) {
+				ErrorLogger.WriteInfo("Deleting 'scripts.txt'...");
+				File.Delete(scriptsTxtPath);
+				ErrorLogger.WriteInfo(" OK!\n");
+			}
+
+			if (File.Exists(scriptsProxyPath)) {
+				ErrorLogger.WriteInfo("Deleting 'winmm.dll'...");
+				File.Delete(scriptsProxyPath);
+				ErrorLogger.WriteInfo(" OK!\n");
+			}
+
+			//
+
+			if (!_profile.Settings_Scripts_Enabled) return;
+
+			if (!Directory.Exists(scriptsPath)) {
+				ErrorLogger.WriteInfo("Creating 'scripts' directory...");
+				Directory.CreateDirectory(scriptsPath);
+				ErrorLogger.WriteInfo(" OK!\n");
+			}
+
+			ErrorLogger.WriteInfo("Creating 'scripts.txt'...");
+			File.WriteAllText(scriptsTxtPath, "");
+			ErrorLogger.WriteInfo(" OK!\n");
+
+			ErrorLogger.WriteInfo("Creating 'winmm.dll'...");
+			File.Copy("scripts_proxy.dll", scriptsProxyPath);
+			ErrorLogger.WriteInfo(" OK!\n");
 		}
 
 		private TOC_I29 _toc;
 
 		public override void Start() {
-			ErrorLogger.WriteInfo("Loading 'toc'...");
+			ErrorLogger.WriteInfo($"Loading '{_outTocName}'...");
 
-			var tocPath = Path.Combine(_gamePath, "toc");
+			var tocPath = Path.Combine(_gamePath, _outTocName);
 			_toc = new TOC_I29();
 			_toc.Load(tocPath);
 
@@ -84,16 +136,33 @@ namespace Overstrike.MetaInstallers {
 				case ModEntry.ModType.STAGE_MSM2_V2:
 					return new StageInstaller_I29_V2(_toc, _gamePath);
 
+				case ModEntry.ModType.SCRIPT_SUPPORT:
+					return new ScriptSupportInstaller(_gamePath);
+
+				case ModEntry.ModType.SCRIPT_MSM2:
+					return new ScriptInstaller(_gamePath);
+
 				default:
 					return null;
 			}
 		}
 
 		public override void Finish() {
-			var tocPath = Path.Combine(_gamePath, "toc");
+			var tocPath = Path.Combine(_gamePath, _outTocName);
 			_toc.Save(tocPath);
 		}
 
-		public override void Uninstall() {}
+		public override void Uninstall() {
+			// even if using scripts, uninstall is cleaning the normal toc
+
+			var tocPath = Path.Combine(_gamePath, "toc");
+			var tocBakPath = Path.Combine(_gamePath, "toc.BAK");
+
+			if (File.Exists(tocBakPath)) {
+				ErrorLogger.WriteInfo($"Overwriting 'toc' with 'toc.BAK'...");
+				File.Copy(tocBakPath, tocPath, true);
+				ErrorLogger.WriteInfo(" OK!\n");
+			}
+		}
 	}
 }

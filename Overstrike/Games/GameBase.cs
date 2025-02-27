@@ -59,5 +59,6 @@ namespace Overstrike.Games {
 		public abstract BitmapImage BannerLogoRight { get; }
 
 		public abstract bool HasSuitsSettingsSection { get; }
+		public abstract bool HasScriptsSettingsSection { get; }
 	}
 }
