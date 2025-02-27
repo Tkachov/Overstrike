@@ -12,7 +12,7 @@ on:
 env:
   PROJECT_DIR: ScriptsProxy/
   VCXPROJ: ScriptsProxy/ScriptsProxy.vcxproj
-  PUBLISH_DIR: x64/Release/
+  PUBLISH_DIR: ScriptsProxy/x64/Release/
 
 jobs:
   publish:
