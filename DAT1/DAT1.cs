@@ -11,13 +11,21 @@ using System.Text;
 namespace DAT1 {
 
 	public class DAT1 {
+		private const uint MAGIC = 0x44415431;
+
 		// header
-		uint magic, unk1, size, sectionsCount;
+		uint magic, unk1, size;
+		ushort sectionsCount, unknownsCount;
 		List<uint> sectionsTags = new();
 		List<uint> sectionsSortedByOffset = new();
+		byte[] unknowns;
 
 		long stringsStartOffset;
 		byte[] strings;
+
+		public uint Magic => magic;
+		public uint TypeMagic => unk1;
+		public Encoding StringsEncoding = Encoding.ASCII;
 
 		private Dictionary<uint, byte[]> _rawSections = new();
 		public Dictionary<uint, Section> Sections = new();
@@ -36,6 +44,23 @@ namespace DAT1 {
 			return null;
 		}
 
+		public T AddSection<T>(uint tag, T section) where T: Section {
+			Sections[tag] = section;
+
+			if (!_rawSections.ContainsKey(tag)) {
+				_rawSections[tag] = new byte[0];
+				sectionsTags.Add(tag);
+				sectionsSortedByOffset.Add(tag);
+
+				sectionsCount = (ushort)_rawSections.Count;
+				ResetStringsBlock(); // all offsets are no longer actual
+			}
+
+			return section;
+		}
+
+		public bool HasSection(uint tag) => _rawSections.ContainsKey(tag);
+
 		protected DAT1() {}
 
 		public DAT1(BinaryReader r) {
@@ -48,7 +73,12 @@ namespace DAT1 {
 			magic = r.ReadUInt32();
 			unk1 = r.ReadUInt32();
 			size = r.ReadUInt32();
-			sectionsCount = r.ReadUInt32();
+			sectionsCount = r.ReadUInt16();
+			unknownsCount = r.ReadUInt16();
+
+			if (magic != MAGIC) {
+				throw new System.Exception("Not DAT1");
+			}
 
 			// read sections table
 			Dictionary<uint, uint> offsets = new();
@@ -69,6 +99,8 @@ namespace DAT1 {
 				sectionsSortedByOffset.Add(tag);
 			}
 			sectionsSortedByOffset.Sort((uint a, uint b) => (int)(offsets[a] - offsets[b]));
+
+			unknowns = r.ReadBytes(unknownsCount * 8);
 
 			stringsStartOffset = r.BaseStream.Position - dat1_start;
 			strings = r.ReadBytes((int)(minOffset + dat1_start - r.BaseStream.Position));
@@ -93,54 +125,54 @@ namespace DAT1 {
 			}
 
 			// recalculate sections offsets
-			var offset = 16 + 12 * sectionsCount + strings.Length;
-			long zeroesToWrite = 0;
-			if (offset % 4 != 0) {
-				zeroesToWrite = (4 - (offset % 4));
-				offset += zeroesToWrite;
-			}
+			long offset = 16 + 12 * sectionsCount + unknowns.Length + strings.Length;
 
 			Dictionary<uint, uint> offsets = new Dictionary<uint, uint>();
 			foreach (var tag in sectionsSortedByOffset) {
-				offsets[tag] = (uint)offset;
-				offset += bytes[tag].Length;
 				if (offset % 16 != 0)
 					offset += 16 - (offset % 16);
+
+				offsets[tag] = (uint)offset;
+				offset += bytes[tag].Length;
 			}
 
 			// write header
 			w.Write((uint)magic);
 			w.Write((uint)unk1);
 			w.Write((uint)offset);
-			w.Write((uint)sectionsCount);
+			w.Write((ushort)sectionsCount);
+			w.Write((ushort)unknownsCount);
+			sectionsTags.Sort();
 			foreach (var tag in sectionsTags) {
 				w.Write((uint)tag);
 				w.Write((uint)offsets[tag]);
 				w.Write((uint)bytes[tag].Length);
 			}
 
+			w.Write(unknowns);
+
 			w.Write(strings);
 
-			offset = 16 + 12 * sectionsCount + strings.Length;
-			for (var z = 0; z < zeroesToWrite; ++z)
-				w.Write((byte)0);
-			offset += zeroesToWrite;
+			offset = 16 + 12 * sectionsCount + unknowns.Length + strings.Length;
 			
 			foreach (var tag in sectionsSortedByOffset) {
-				w.Write(bytes[tag]);
-				offset += bytes[tag].Length;
 				if (offset % 16 != 0) {
 					var padding = 16 - (offset % 16);
-					for (int i = 0; i<padding; ++i)
+					for (int i = 0; i < padding; ++i)
 						w.Write((byte)0);
 					offset += padding;
 				}
+
+				w.Write(bytes[tag]);
+				offset += bytes[tag].Length;				
 			}
 
 			return s.ToArray();
 		}
 
 		#region strings block
+
+		public long FirstStringOffset { get => stringsStartOffset; }
 
 		public string GetStringByOffset(uint offset) {
 			if (offset < stringsStartOffset) return null;
@@ -156,7 +188,7 @@ namespace DAT1 {
 			for (i = 0; i < length; ++i)
 				bytes[i] = strings[offset - stringsStartOffset + i];
 
-			return Encoding.ASCII.GetString(bytes);
+			return StringsEncoding.GetString(bytes);
 		}
 
 		private Dictionary<uint, string> stringByOffset = null;
@@ -178,7 +210,7 @@ namespace DAT1 {
 						continue;
 					}
 
-					string s = Encoding.ASCII.GetString(strings, start, i - start);
+					string s = StringsEncoding.GetString(strings, start, i - start);
 					stringByOffset[(uint)(stringsStartOffset + start)] = s;
 					offsetByString[s] = (uint)(stringsStartOffset + start);
 					start = i + 1;
@@ -188,11 +220,13 @@ namespace DAT1 {
 			}
 		}
 
-		public uint AddString(string s) {
+		public uint AddString(string s, bool alwaysAdd = false) {
 			MakeStringsMaps();
-			
-			if (offsetByString.ContainsKey(s)) {
-				return offsetByString[s];
+
+			if (!alwaysAdd) {
+				if (offsetByString.ContainsKey(s)) {
+					return offsetByString[s];
+				}
 			}
 
 			uint offset = (uint)(stringsStartOffset + strings.Length);
@@ -202,7 +236,7 @@ namespace DAT1 {
 			var stream = new MemoryStream();
 			var w = new BinaryWriter(stream);
 			w.Write(strings);
-			w.Write(Encoding.ASCII.GetBytes(s));
+			w.Write(StringsEncoding.GetBytes(s));
 			w.Write((byte)0);
 			strings = stream.ToArray();
 
@@ -212,6 +246,21 @@ namespace DAT1 {
 		public bool HasString(string s) {
 			MakeStringsMaps();
 			return offsetByString.ContainsKey(s);
+		}
+
+		public void ResetStringsBlock() {
+			stringByOffset = null;
+			offsetByString = null;
+			strings = new byte[0];
+
+			stringsStartOffset = 16 + 12 * sectionsCount + unknowns.Length;
+		}
+
+		public void IntoRawSection(uint tag) {
+			Utils.Assert(Sections.ContainsKey(tag));
+
+			_rawSections[tag] = Sections[tag].Save();
+			Sections.Remove(tag);
 		}
 
 		#endregion

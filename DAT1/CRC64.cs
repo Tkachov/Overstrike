@@ -3,20 +3,24 @@
 // For more details, terms and conditions, see GNU General Public License.
 // A copy of the that license should come with this program (LICENSE.txt). If not, see <http://www.gnu.org/licenses/>.
 
+using System.Text;
+
 namespace DAT1 {
 	public class CRC64 {
 		public static ulong Hash(string data, bool normalize = true) {
 			if (normalize)
 				data = Utils.Normalize(data);
 
+			var bytes = Encoding.UTF8.GetBytes(data);
+
 			var v = 0xC96C5795D7870F42;
-			v = crc64(data, v);
+			v = crc64(bytes, v);
 			v = v >> 2 | 0x8000000000000000;
 
 			return v;
 		}
 
-		private static ulong crc64(string data, ulong crc) {
+		private static ulong crc64(byte[] data, ulong crc) {
 			foreach (var b in data) {
 				crc = 0xFFFFFFFFFFFFFFFF & ((crc >> 8) ^ table[0xFF & (crc ^ b)]);
 			}

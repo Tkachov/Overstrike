@@ -23,6 +23,12 @@ namespace DAT1 {
 				replaced += c;
 			}
 
+			if (replaced.StartsWith('/'))
+				replaced = replaced[1..];
+
+			if (replaced.EndsWith('/'))
+				replaced = replaced[..^1];
+
 			return replaced;
 		}
 

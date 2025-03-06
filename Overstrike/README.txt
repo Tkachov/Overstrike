@@ -61,6 +61,7 @@ have multiple copies of it for different games (unless you want to).
 	https://www.nexusmods.com/marvelsspidermanremastered/mods/4199/
 	https://www.nexusmods.com/spidermanmilesmorales/mods/577/
 	https://www.nexusmods.com/ratchetandclankriftapart/mods/1/
+	https://www.nexusmods.com/marvelsspiderman2/mods/1
 
 Once you download the archive, just extract it to a place you want.
 I'd recommend to have it in a separate folder, just so its files don't

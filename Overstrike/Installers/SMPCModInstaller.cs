@@ -70,6 +70,6 @@ namespace Overstrike.Installers {
 					.UpdateSize((uint)fileSize)
 					.Apply(_toc);
 			}
-		}		
+		}
 	}
 }

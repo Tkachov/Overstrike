@@ -1,4 +1,4 @@
-Modding Tool allows you to extract and replace assets. Packs mods to .stage.
+Modding Tool allows you to extract and replace assets. Packs mods to .stage or .modular.
 
 # About
 
@@ -6,11 +6,13 @@ Supported games:
 - Marvel's Spider-Man Remastered
 - Marvel's Spider-Man: Miles Morales
 - Ratchet & Clank: Rift Apart
+- Marvel's Spider-Man 2
 
 Nexus Mods pages:
 https://www.nexusmods.com/marvelsspidermanremastered/mods/4395
 https://www.nexusmods.com/spidermanmilesmorales/mods/613
 https://www.nexusmods.com/ratchetandclankriftapart/mods/27
+https://www.nexusmods.com/marvelsspiderman2/mods/32
 
 Shares part of the codebase with Overstrike.
 Source code is available in its Github repository:

@@ -183,7 +183,7 @@ namespace ModdingTool {
 				WriteAssets(_mainWindowReplacedAssets);
 				WriteAssets(_mainWindowAddedAssets);
 
-				{					
+				{
 					JObject j = new() {
 						["game"] = _gameId,
 						["name"] = _modName,

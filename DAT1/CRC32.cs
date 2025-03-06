@@ -3,19 +3,23 @@
 // For more details, terms and conditions, see GNU General Public License.
 // A copy of the that license should come with this program (LICENSE.txt). If not, see <http://www.gnu.org/licenses/>.
 
+using System.Text;
+
 namespace DAT1 {
 	public class CRC32 {
 		public static uint Hash(string data, bool normalize = true) {
 			if (normalize)
 				data = Utils.Normalize(data);
 
+			var bytes = Encoding.UTF8.GetBytes(data);
+
 			var v = 0xEDB88320;
-			v = crc32(data, v);
+			v = crc32(bytes, v);
 
 			return v;
 		}
 
-		private static uint crc32(string data, uint crc) {
+		private static uint crc32(byte[] data, uint crc) {
 			foreach (var b in data) {
 				crc = 0xFFFFFFFF & ((crc >> 8) ^ table[0xFF & (crc ^ b)]);
 			}

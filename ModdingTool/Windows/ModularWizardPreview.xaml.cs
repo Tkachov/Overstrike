@@ -43,7 +43,7 @@ public partial class ModularWizardPreview: ModularWizardBase {
 					var options = new JArray();
 					foreach (var option in module.Options) {
 						options.Add(new JArray() { option._iconPath, option.Name, option._path });
-					}					
+					}
 					layout.Add(new JArray() { "module", module.Name, options });
 				}
 			} else if (entry is SeparatorEntry) {

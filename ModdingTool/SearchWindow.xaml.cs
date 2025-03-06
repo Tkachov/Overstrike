@@ -72,7 +72,7 @@ public partial class SearchWindow: Window {
 		_displayedResults.Clear();
 
 		var search = Normalize(SearchTextBox.Text.Trim());
-		var words = search.Split(' ', System.StringSplitOptions.RemoveEmptyEntries);		
+		var words = search.Split(' ', System.StringSplitOptions.RemoveEmptyEntries);
 		
 		if (words.Length > 0) {
 			// search in fullpath

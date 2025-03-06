@@ -38,6 +38,8 @@ namespace Overstrike.Data {
 			MODULAR_MSM2,
 			SCRIPT_SUPPORT,
 			SCRIPT_MSM2,
+			SUIT2_MSM2,
+			SUIT_STYLE_MSM2,
 
 			UNKNOWN
 		}
@@ -135,6 +137,12 @@ namespace Overstrike.Data {
 				case ModType.SUIT_MM_V2:
 					return badge_suit;
 
+				case ModType.SUIT2_MSM2:
+					return badge_suit2;
+
+				case ModType.SUIT_STYLE_MSM2:
+					return badge_style;
+
 				case ModType.STAGE_MSMR:
 				case ModType.STAGE_MM:
 				case ModType.STAGE_RCRA:
@@ -167,6 +175,8 @@ namespace Overstrike.Data {
 		private static BitmapImage badge_smpc = null;
 		private static BitmapImage badge_mmpc = null;
 		private static BitmapImage badge_suit = null;
+		private static BitmapImage badge_suit2 = null;
+		private static BitmapImage badge_style = null;
 		private static BitmapImage badge_stage = null;
 		private static BitmapImage badge_modular = null;
 		private static BitmapImage badge_script = null;
@@ -180,6 +190,12 @@ namespace Overstrike.Data {
 
 			if (badge_suit == null)
 				badge_suit = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.badge_suit);
+
+			if (badge_suit2 == null)
+				badge_suit2 = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.badge_suit2);
+
+			if (badge_style == null)
+				badge_style = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.badge_style);
 
 			if (badge_stage == null)
 				badge_stage = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.badge_stage);

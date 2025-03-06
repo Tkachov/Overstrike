@@ -53,7 +53,9 @@ namespace Overstrike.Installers {
 
 			var detectors = new List<DetectorBase>() {
 				new SuitModDetector(),
-				new StageModDetector()
+				new StageModDetector(),
+				new ScriptModDetector(),
+				new SuitStyleModDetector()
 			};
 			var detectorsExtensions = new List<string[]>();
 			foreach (var detector in detectors) {
@@ -144,7 +146,7 @@ namespace Overstrike.Installers {
 					return (innerModType == ModEntry.ModType.STAGE_I33);
 
 				case ModEntry.ModType.MODULAR_MSM2:
-					return (innerModType == ModEntry.ModType.STAGE_MSM2 || innerModType == ModEntry.ModType.STAGE_MSM2_V2 || innerModType == ModEntry.ModType.SCRIPT_MSM2);
+					return (innerModType == ModEntry.ModType.STAGE_MSM2 || innerModType == ModEntry.ModType.STAGE_MSM2_V2 || innerModType == ModEntry.ModType.SCRIPT_MSM2 || innerModType == ModEntry.ModType.SUIT2_MSM2 || innerModType == ModEntry.ModType.SUIT_STYLE_MSM2);
 
 				default: return false;
 			}

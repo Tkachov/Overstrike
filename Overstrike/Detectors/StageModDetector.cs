@@ -33,7 +33,7 @@ namespace Overstrike.Detectors {
 									info = JObject.Parse(str);
 								}
 							}
-						} else {							
+						} else {
 							var root = GetRootFolder(entry.FullName);
 							if (root != null) {
 								int span;

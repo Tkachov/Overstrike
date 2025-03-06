@@ -310,7 +310,7 @@ namespace ModdingTool {
 				}
 			}
 
-			Dispatcher.Invoke(() => {				
+			Dispatcher.Invoke(() => {
 				OverlayOperationLabel.Text = $"-";
 			});
 
@@ -608,7 +608,7 @@ namespace ModdingTool {
 				}
 
 				var packExtras = true; // TODO: make an option to control this
-				var hasExtras = (header != null || textureMeta != null);				
+				var hasExtras = (header != null || textureMeta != null);
 				if (packExtras && hasExtras) {
 					// TODO: make a class in DAT1 for that?
 					using var ms = new MemoryStream();

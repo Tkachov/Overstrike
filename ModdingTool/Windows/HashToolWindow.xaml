@@ -47,10 +47,10 @@
 				</CheckBox>
 
 				<TextBlock Text="CRC64:" Grid.Column="3" Margin="3,9,0,0" VerticalAlignment="Top" />
-				<TextBox x:Name="Crc64TextBox" Text="" Grid.Column="4" VerticalAlignment="Top" Height="22" Padding="1" Margin="0,7,0,0" IsReadOnly="True" />
+				<TextBox x:Name="Crc64TextBox" Text="" Grid.Column="4" VerticalAlignment="Top" Height="22" Padding="1" Margin="0,7,0,0" IsReadOnly="True" IsReadOnlyCaretVisible="True" />
 
 				<TextBlock Text="CRC32:" Grid.Column="6" Margin="3,9,0,0" VerticalAlignment="Top" />
-				<TextBox x:Name="Crc32TextBox" Text="" Grid.Column="7" VerticalAlignment="Top" Height="22" Padding="1" Margin="0,7,0,0" IsReadOnly="True" />
+				<TextBox x:Name="Crc32TextBox" Text="" Grid.Column="7" VerticalAlignment="Top" Height="22" Padding="1" Margin="0,7,0,0" IsReadOnly="True" IsReadOnlyCaretVisible="True" />
 			</Grid>
 		</Grid>
 	</Border>

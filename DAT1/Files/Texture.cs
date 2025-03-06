@@ -97,4 +97,57 @@ namespace DAT1.Files {
 			raw = r.ReadBytes((int)(r.BaseStream.Length - r.BaseStream.Position));
 		}
 	}
+
+	public class Texture_I30: DAT1 {
+		public const uint MAGIC = 0x3E7886C8;
+
+		protected byte[] raw;
+
+		public Texture_I30(BinaryReader r): base() {
+			Init(r);
+			raw = r.ReadBytes((int)(r.BaseStream.Length - r.BaseStream.Position));
+		}
+
+		public TextureHeaderSection_I30 HeaderSection => Section<TextureHeaderSection_I30>(TextureHeaderSection_I30.TAG);
+
+		public byte[] GetDDS() {
+			var result = new MemoryStream();
+			var bw = new BinaryWriter(result);
+
+			WriteDDSHeader(bw, HeaderSection.sd_width, HeaderSection.sd_height, HeaderSection.sd_mipmaps);
+			bw.Write(raw);
+
+			bw.Flush();
+			result.Flush();
+			return result.ToArray();
+		}
+
+		private void WriteDDSHeader(BinaryWriter bw, uint width, uint height, uint mipmaps) {
+			bw.Write(new byte[] { 0x44, 0x44, 0x53, 0x20, 0x7C, 0x00, 0x00, 0x00, 0x07, 0x10, 0x0A, 0x00 });
+			bw.Write(height);
+			bw.Write(width);
+
+			// pitch, depth, mipmaps
+			uint pitch = (width * 32 + 7) / 8;
+			bw.Write(pitch);
+			bw.Write((uint)0);
+			bw.Write(mipmaps);
+
+			// reserved
+			for (int i = 0; i < 11; ++i)
+				bw.Write((uint)0);
+
+			// pixelformat
+			bw.Write(new byte[] { 0x20, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x44, 0x58, 0x31, 0x30, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
+			bw.Write(new byte[] { 0x08, 0x10, 0x40, 0x00 }); // DWCAPS0
+			bw.Write(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
+
+			// dxt10
+			bw.Write((uint)HeaderSection.fmt);
+			bw.Write((uint)(height > 1 ? 3 : 2));
+			bw.Write((uint)0);
+			bw.Write((uint)1);
+			bw.Write((uint)0);
+		}
+	}
 }

@@ -289,7 +289,7 @@ namespace DAT1 {
 			// insert into right place (SortAssets() is still required to fix SizesSection.Entries.Index)
 			var assetIndex = AssetIdsSection.Ids.BinarySearch((int)spanEntry.AssetIndex, (int)spanEntry.Count, assetId, null); // default comparer
 			Utils.Assert(assetIndex < 0, "AddAsset() should not be called if asset is already present");
-			assetIndex = ~assetIndex;			
+			assetIndex = ~assetIndex;
 
 			++spanEntry.Count;
 			for (int i = span + 1; i < spansSection.Entries.Count; ++i) {
@@ -579,8 +579,9 @@ namespace DAT1 {
 				return this;
 			}
 
-			public AssetUpdater UpdateTextureMeta(byte[]? textureMeta) {
+			public AssetUpdater UpdateTextureMeta(ulong assetId, byte[]? textureMeta) {
 				_updateTextureMeta = true;
+				_assetId = assetId;
 				_textureMeta = textureMeta;
 				return this;
 			}

@@ -408,3 +408,5 @@ FodyWeavers.xsd
 
 # vcpkg
 **/vcpkg_installed/*
+
+SuitTool/

@@ -111,16 +111,22 @@ namespace Overstrike.Installers {
 			archiveWriter.Write(data);
 			long fileSize = archiveWriter.BaseStream.Position - archiveOffset;
 
+			OverwriteAsset(span, assetId, archiveIndex, (uint)archiveOffset, (uint)fileSize, header, textureMeta);
+		}
+
+		protected void OverwriteAsset(byte span, ulong assetId, uint archiveIndex, uint archiveOffset, uint fileSize, byte[] header, byte[] textureMeta) {
 			int assetIndex = _toc.FindOrAddAsset(span, assetId);
 			var updater = new TOC_I29.AssetUpdater(assetIndex);
 			if (header != null) updater.UpdateHeader(header);
-			if (textureMeta != null) updater.UpdateTextureMeta(textureMeta);
+			if (textureMeta != null) updater.UpdateTextureMeta(assetId, textureMeta);
 			updater
 				.UpdateArchiveIndex(archiveIndex)
-				.UpdateArchiveOffset((uint)archiveOffset)
-				.UpdateSize((uint)fileSize)
+				.UpdateArchiveOffset(archiveOffset)
+				.UpdateSize(fileSize)
 				.Apply(_toc);
 		}
+
+		protected uint GetArchiveIndex(string filename) => _toc.FindOrAddArchive(filename, TOCBase.ArchiveAddingImpl.DEFAULT);
 
 		#endregion
 	}

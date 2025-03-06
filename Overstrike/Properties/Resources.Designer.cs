@@ -123,9 +123,29 @@ namespace Overstrike.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] badge_style {
+            get {
+                object obj = ResourceManager.GetObject("badge_style", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] badge_suit {
             get {
                 object obj = ResourceManager.GetObject("badge_suit", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] badge_suit2 {
+            get {
+                object obj = ResourceManager.GetObject("badge_suit2", resourceCulture);
                 return ((byte[])(obj));
             }
         }

@@ -141,6 +141,12 @@ namespace Overstrike.MetaInstallers {
 
 				case ModEntry.ModType.SCRIPT_MSM2:
 					return new ScriptInstaller(_gamePath);
+				
+				case ModEntry.ModType.SUIT2_MSM2:
+					return new MSM2Suit2Installer(_toc, _gamePath, _profile.Settings_Suit_Language);
+
+				case ModEntry.ModType.SUIT_STYLE_MSM2:
+					return new MSM2SuitStyleInstaller(_toc, _gamePath);
 
 				default:
 					return null;

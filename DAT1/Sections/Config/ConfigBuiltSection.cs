@@ -9,4 +9,8 @@ namespace DAT1.Sections.Config {
 	public class ConfigBuiltSection: SerializedSection {
         public const uint TAG = 0xE501186F; // Config Built
     }
+
+	public class ConfigBuiltSection_I30: SerializedSection_I30 {
+		public const uint TAG = 0xE501186F; // Config Built
+	}
 }

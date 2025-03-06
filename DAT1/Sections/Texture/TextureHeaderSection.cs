@@ -45,4 +45,43 @@ namespace DAT1.Sections.Texture {
 			return null; // TODO
 		}
 	}
+
+	public class TextureHeaderSection_I30: Section {
+		public const uint TAG = 0x4EDE3593;
+
+		public uint sd_len, hd_len;
+		public ushort hd_width, hd_height;
+		public ushort sd_width, sd_height;
+		public ushort array_size;
+		public byte planes;
+		public ushort fmt;
+		public ulong unk;
+		public byte sd_mipmaps, hd_mipmaps;
+
+		public override void Load(byte[] bytes, DAT1 container) {
+			using var r = new BinaryReader(new MemoryStream(bytes));
+			var size = bytes.Length;
+
+			sd_len = r.ReadUInt32();
+			hd_len = r.ReadUInt32();
+			hd_width = r.ReadUInt16();
+			hd_height = r.ReadUInt16();
+			sd_width = r.ReadUInt16();
+			sd_height = r.ReadUInt16();
+			array_size = r.ReadUInt16();
+			planes = r.ReadByte();
+
+			r.ReadBytes(5);
+
+			fmt = r.ReadByte();
+			unk = r.ReadByte();
+
+			sd_mipmaps = r.ReadByte();
+			hd_mipmaps = r.ReadByte();
+		}
+
+		override public byte[] Save() {
+			return null; // TODO
+		}
+	}
 }

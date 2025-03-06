@@ -8,6 +8,7 @@ using System.IO;
 using System;
 using System.Collections.Generic;
 using Overstrike.Data;
+using System.Text;
 
 namespace Overstrike.Detectors {
 	internal class SuitModDetector: DetectorBase {
@@ -18,6 +19,7 @@ namespace Overstrike.Detectors {
 		}
 
 		public override void Detect(Stream file, string path, List<ModEntry> mods, List<string> warnings) {
+			// legacy suit
 			try {
 				ModEntry.ModType detectedModType = ModEntry.ModType.UNKNOWN;
 
@@ -102,7 +104,68 @@ namespace Overstrike.Detectors {
 					var name = Path.GetFileName(shortPath);
 					mods.Add(new ModEntry(name, path, detectedModType));
 				}
-			} catch (Exception) { }
+			} catch {}
+
+			// suit 2
+			try {
+				ModEntry.ModType detectedModType = ModEntry.ModType.UNKNOWN;
+				string name = null;
+				string author = null;
+
+				var prefix = new byte[16];
+				var header = new byte[16];
+
+				file.Seek(0, SeekOrigin.Begin);
+				file.Read(prefix, 0, 16);
+
+				file.Seek(-16, SeekOrigin.End);
+				file.Read(header, 0, 16);
+
+				for (int i = 0; i < 16; ++i) {
+					header[i] ^= prefix[i];
+				}
+
+				using (var r = new BinaryReader(new MemoryStream(header))) {
+					var magic = r.ReadUInt32();
+					var size = r.ReadUInt32();
+					var version = r.ReadByte();
+					var game = r.ReadByte();
+
+					if (magic == 0x54495553) {
+						if (version == 1) {
+							switch (game) {
+								case 1: detectedModType = ModEntry.ModType.SUIT2_MSM2; break;
+								default: break;
+							}
+
+							string ReadString(Stream file) {
+								var len = file.ReadByte();
+								var buf = new byte[len];
+								file.Read(buf);
+								return Encoding.UTF8.GetString(buf);
+							}
+
+							file.Seek(-16 - size, SeekOrigin.End);
+							ReadString(file);
+							name = ReadString(file);
+							author = ReadString(file);
+						}
+					}
+				}
+
+				if (detectedModType != ModEntry.ModType.UNKNOWN) {
+					var shortPath = GetShortPath(path);
+					var modName = Path.GetFileName(shortPath);
+					if (name != null && name.Trim() != "") {
+						modName = name;
+						if (author != null && author.Trim() != "") {
+							modName += " by " + author;
+						}
+					}
+
+					mods.Add(new ModEntry(modName, path, detectedModType));
+				}
+			} catch {}
 		}
 	}
 }

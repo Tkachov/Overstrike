@@ -8,7 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace ModdingTool {
-	public partial class App: Application {		
+	public partial class App: Application {
 	}
 
 	public static class AssetsListContextMenu {

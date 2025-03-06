@@ -885,6 +885,7 @@ namespace Overstrike {
 				version = version.Replace(".", "");
 
 				var suits = 0;
+				var styles = 0;
 				var stages = 0;
 				var modulars = 0;
 				var scripts = 0;
@@ -894,7 +895,12 @@ namespace Overstrike {
 						case ModEntry.ModType.SUIT_MSMR:
 						case ModEntry.ModType.SUIT_MM:
 						case ModEntry.ModType.SUIT_MM_V2:
+						case ModEntry.ModType.SUIT2_MSM2:
 							++suits;
+						break;
+
+						case ModEntry.ModType.SUIT_STYLE_MSM2:
+							++styles;
 						break;
 
 						case ModEntry.ModType.STAGE_MSMR:
@@ -927,7 +933,7 @@ namespace Overstrike {
 					}
 				}
 
-				var extra = $" {version} {GetTocArchivesCount(game, gamePath)} {modsToInstall.Count} {suits} {stages} {modulars} {scripts} {menu}";
+				var extra = $" {version} {GetTocArchivesCount(game, gamePath)} {modsToInstall.Count} {suits} {styles} {stages} {modulars} {scripts} {menu}";
 				stackTrace = stackTrace.Substring(0, i + 1) + extra + stackTrace.Substring(i + 1);
 			} catch {}
 		}
@@ -1054,7 +1060,7 @@ namespace Overstrike {
 			dialog.Multiselect = true;
 			dialog.RestoreDirectory = true;
 
-			var supportedModFiles = "*.smpcmod;*.mmpcmod;*.suit;*.stage;*.modular";
+			var supportedModFiles = "*.smpcmod;*.mmpcmod;*.suit;*.stage;*.modular;*.suit_style";
 			if (_selectedProfile.Settings_Scripts_Enabled) {
 				supportedModFiles += ";*.script";
 			}

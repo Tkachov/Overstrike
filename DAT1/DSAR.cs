@@ -8,14 +8,19 @@ using K4os.Compression.LZ4;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace DAT1 {
 	public abstract class DSAR {
+		public const uint MAGIC = 0x52415344;
+
 		public static bool IsCompressed(FileStream fs) {
 			var r = new BinaryReader(fs);
 			uint magic = r.ReadUInt32();
-			return (magic == 0x52415344);
+			return (magic == MAGIC);
 		}
+
+		#region decompression
 
 		private class BlockHeader {
 			public uint realOffset;
@@ -54,7 +59,7 @@ namespace DAT1 {
 				archive.Read(bytes, 0, bytes.Length);
 				archive.Close();
 				return bytes;
-			}			
+			}
 
 			var r = new BinaryReader(archive);
 			archive.Seek(12, SeekOrigin.Begin);
@@ -135,5 +140,69 @@ namespace DAT1 {
 					return new byte[header.realSize];
 			}
 		}
+
+		#endregion
+
+		#region compression
+
+		public static byte[] Compress(byte[] plain) {
+			const int BLOCK_SIZE = 262144;
+			var originalSize = plain.Length;
+			var blocksCount = originalSize / BLOCK_SIZE;
+			if ((originalSize % BLOCK_SIZE) != 0) {
+				++blocksCount;
+			}
+
+			using var ms = new MemoryStream();
+			using var bw = new BinaryWriter(ms);
+
+			const uint VERSION = 0x10003;
+			bw.Write(MAGIC);
+			bw.Write(VERSION);
+			bw.Write((uint)blocksCount);
+			bw.Write((uint)(32 + blocksCount * 32));
+			bw.Write((ulong)originalSize);
+			bw.Write(Encoding.ASCII.GetBytes("PADDING*"));
+
+			for (var i = 0; i < blocksCount; ++i) {
+				bw.Write((ulong)0);
+				bw.Write((ulong)0);
+				bw.Write((uint)0);
+				bw.Write((uint)0);
+				bw.Write((byte)3);
+				for (var j = 0; j < 7; ++j) {
+					bw.Write((byte)0x55);
+				}
+			}
+
+			using var ms2 = new MemoryStream(plain);
+			using var br = new BinaryReader(ms2);
+
+			var compData = new byte[BLOCK_SIZE * 2];
+			for (var i = 0; i < blocksCount; ++i) {
+				var realOffset = br.BaseStream.Position;
+				var compOffset = bw.BaseStream.Position;
+
+				var data = br.ReadBytes(BLOCK_SIZE);
+				var realSize = data.Length;
+
+				var compSize = LZ4Codec.Encode(data, compData);
+
+				var offsetToJumpBackTo = bw.BaseStream.Position;
+				bw.Seek(32 + i * 32, SeekOrigin.Begin);
+
+				bw.Write((ulong)realOffset);
+				bw.Write((ulong)compOffset);
+				bw.Write((uint)realSize);
+				bw.Write((uint)compSize);
+
+				bw.Seek((int)offsetToJumpBackTo, SeekOrigin.Begin);
+				bw.Write(compData, 0, compSize);
+			}
+
+			return ms.ToArray();
+		}
+
+		#endregion
 	}
 }

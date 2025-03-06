@@ -24,6 +24,7 @@ namespace Overstrike.Detectors {
 			_detectors = new List<DetectorBase>() {
 				new SMPCModDetector(),
 				new SuitModDetector(),
+				new SuitStyleModDetector(),
 				new StageModDetector(),
 				new ScriptModDetector(),
 				new ModularModDetector(),

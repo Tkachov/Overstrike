@@ -37,7 +37,7 @@ namespace DAT1.Sections.TOC {
 		}
 
 		public void InsertTextureMeta(int textureIndex, byte[] meta) {
-			Debug.Assert(textureIndex >= 0 && (textureIndex + 1) * META_SIZE <= Buffer.Length);
+			Debug.Assert(textureIndex >= 0 && (textureIndex + 1) * META_SIZE <= Buffer.Length + META_SIZE);
 			Debug.Assert(meta != null && meta.Length == META_SIZE);
 
 			var offset = textureIndex * META_SIZE;
@@ -46,6 +46,7 @@ namespace DAT1.Sections.TOC {
 			ms.Write(Buffer, 0, offset);
 			ms.Write(meta);
 			ms.Write(Buffer, offset, Buffer.Length - offset);
+			Buffer = newBuffer;
 		}
 	}
 }

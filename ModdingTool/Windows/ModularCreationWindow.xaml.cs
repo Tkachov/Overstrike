@@ -103,7 +103,7 @@ public partial class ModularCreationWindow: Window {
 			return;
 		}
 		
-		if (extension == ".suit" || extension == ".stage") {
+		if (extension == ".suit" || extension == ".stage" || extension == ".suit_style") {
 			AddModule(filename);
 		}
 	}
@@ -256,8 +256,8 @@ public partial class ModularCreationWindow: Window {
 		dialog.Multiselect = true;
 		dialog.RestoreDirectory = true;
 
-		dialog.Filters.Add(new CommonFileDialogFilter("All supported files", "*.suit;*.stage;*.png") { ShowExtensions = true });
-		dialog.Filters.Add(new CommonFileDialogFilter("All supported module files", "*.suit;*.stage") { ShowExtensions = true });
+		dialog.Filters.Add(new CommonFileDialogFilter("All supported files", "*.suit;*.stage;*.suit_style;*.png") { ShowExtensions = true });
+		dialog.Filters.Add(new CommonFileDialogFilter("All supported module files", "*.suit;*.stage;*.suit_style") { ShowExtensions = true });
 		dialog.Filters.Add(new CommonFileDialogFilter("All supported icon files", "*.png") { ShowExtensions = true });
 		dialog.Filters.Add(new CommonFileDialogFilter("All files", "*") { ShowExtensions = true });
 
@@ -405,7 +405,7 @@ public partial class ModularCreationWindow: Window {
 	}
 
 	private void AddingEntriesButtonsEntry_AddSeparator_Click(object sender, RoutedEventArgs e) {
-		AddEntry(new SeparatorEntry());		
+		AddEntry(new SeparatorEntry());
 	}
 
 	private void AddEntry(LayoutEntry entry) {

@@ -156,7 +156,7 @@
 						<local:ListViewEx Grid.Row="1" Margin="4,6,4,0" BorderThickness="1" Padding="0,0,1,0"
 										  x:Name="ModsList" VirtualizingStackPanel.VirtualizationMode="Recycling"
 										  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible"
-										  SelectionMode="Extended" 
+										  SelectionMode="Extended"
 										  SelectionChanged="ModsList_SelectionChanged" MouseLeftButtonDown="ModsList_MouseLeftButtonDown" MouseMove="ModsList_MouseMove" DragEnter="ModsList_DragEnter" Drop="ModsList_Drop" AllowDrop="True" KeyUp="ModsList_KeyUp">
 							<ListView.Resources>
 								<DataTemplate DataType="{x:Type data:ModEntry}">
