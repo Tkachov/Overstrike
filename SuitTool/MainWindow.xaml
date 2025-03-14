@@ -1,0 +1,219 @@
+﻿<Window x:Class="SuitTool.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SuitTool"
+        mc:Ignorable="d"
+        Title="Suit Tool" MinWidth="700" MinHeight="436" Width="700" Height="654" WindowStartupLocation="CenterScreen" Closing="Window_Closing">
+	<Window.Resources>
+		<RoutedUICommand x:Key="NewProjectCommand" />
+		<RoutedUICommand x:Key="OpenProjectCommand" />
+		<RoutedUICommand x:Key="SaveProjectCommand" />
+		<RoutedUICommand x:Key="RefreshAssetsCommand" />
+	</Window.Resources>
+	<Window.CommandBindings>
+		<CommandBinding Command="{StaticResource NewProjectCommand}" Executed="NewProjectCommand_Executed" />
+		<CommandBinding Command="{StaticResource OpenProjectCommand}" Executed="OpenProjectCommand_Executed" />
+		<CommandBinding Command="{StaticResource SaveProjectCommand}" Executed="SaveProjectCommand_Executed" />
+		<CommandBinding Command="{StaticResource RefreshAssetsCommand}" Executed="RefreshAssetsCommand_Executed" />
+	</Window.CommandBindings>
+	<Window.InputBindings>
+		<KeyBinding Modifiers="Ctrl" Key="N" Command="{Binding Source={StaticResource NewProjectCommand}}" />
+		<KeyBinding Modifiers="Ctrl" Key="O" Command="{Binding Source={StaticResource OpenProjectCommand}}" />
+		<KeyBinding Modifiers="Ctrl" Key="S" Command="{Binding Source={StaticResource SaveProjectCommand}}" />
+		<KeyBinding Modifiers="Ctrl" Key="R" Command="{Binding Source={StaticResource RefreshAssetsCommand}}" />
+	</Window.InputBindings>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="20" />
+			<RowDefinition />
+		</Grid.RowDefinitions>
+
+		<Menu Grid.Row="0" Padding="0,0,0,0" BorderThickness="0,0,0,2" BorderBrush="#EEE" Background="Transparent">
+			<MenuItem Header="File" SubmenuOpened="File_SubmenuOpened">
+				<MenuItem x:Name="File_New" Header="New..." InputGestureText="Ctrl+N" Command="{Binding Source={StaticResource NewProjectCommand}}" />
+				<MenuItem x:Name="File_Open" Header="Open..." InputGestureText="Ctrl+O" Command="{Binding Source={StaticResource OpenProjectCommand}}" />
+				<MenuItem x:Name="File_OpenRecent" Header="Open Recent">
+					<MenuItem x:Name="File_OpenRecent1" Click="File_OpenRecentItem_Click" />
+					<MenuItem x:Name="File_OpenRecent2" Click="File_OpenRecentItem_Click" />
+					<MenuItem x:Name="File_OpenRecent3" Click="File_OpenRecentItem_Click" />
+					<MenuItem x:Name="File_OpenRecent4" Click="File_OpenRecentItem_Click" />
+					<MenuItem x:Name="File_OpenRecent5" Click="File_OpenRecentItem_Click" />
+				</MenuItem>
+				<MenuItem x:Name="File_Save" Header="Save" InputGestureText="Ctrl+S" Command="{Binding Source={StaticResource SaveProjectCommand}}" />
+			</MenuItem>
+
+			<MenuItem Header="Assets">
+				<MenuItem x:Name="Assets_Refresh" Header="Refresh" InputGestureText="Ctrl+R" Command="{Binding Source={StaticResource RefreshAssetsCommand}}" />
+				<MenuItem x:Name="Assets_ViewList" Header="Show paths..." Click="Assets_ViewList_Click" />
+			</MenuItem>
+		</Menu>
+
+		<ScrollViewer Grid.Row="1" x:Name="ContentScrollViewer" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
+			<StackPanel>
+				<Grid Height="22" Margin="10,10,10,0" VerticalAlignment="Top">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition />
+						<ColumnDefinition Width="30" />
+						<ColumnDefinition />
+					</Grid.ColumnDefinitions>
+
+					<Grid Grid.Column="0" Height="22" Margin="0,0,0,0">
+						<TextBox x:Name="ModNameTextBox" HorizontalAlignment="Stretch" Padding="1" TextChanged="ModNameTextBox_TextChanged" />
+						<TextBlock Text="Mod Name" IsHitTestVisible="False" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="3,-1,0,0" Padding="1" Foreground="DarkGray">
+							<TextBlock.Style>
+								<Style TargetType="{x:Type TextBlock}">
+									<Setter Property="Visibility" Value="Collapsed"/>
+									<Style.Triggers>
+										<DataTrigger Binding="{Binding Text, ElementName=ModNameTextBox}" Value="">
+											<Setter Property="Visibility" Value="Visible"/>
+										</DataTrigger>
+									</Style.Triggers>
+								</Style>
+							</TextBlock.Style>
+						</TextBlock>
+					</Grid>
+
+					<TextBlock Grid.Column="1" Text="by" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-1,0,0" Padding="1" />
+
+					<Grid Grid.Column="2" Height="22" Margin="0,0,0,0">
+						<TextBox x:Name="AuthorTextBox" HorizontalAlignment="Stretch" Padding="1" TextChanged="AuthorTextBox_TextChanged" />
+						<TextBlock Text="Author" IsHitTestVisible="False" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="3,-1,0,0" Padding="1" Foreground="DarkGray">
+							<TextBlock.Style>
+								<Style TargetType="{x:Type TextBlock}">
+									<Setter Property="Visibility" Value="Collapsed"/>
+									<Style.Triggers>
+										<DataTrigger Binding="{Binding Text, ElementName=AuthorTextBox}" Value="">
+											<Setter Property="Visibility" Value="Visible"/>
+										</DataTrigger>
+									</Style.Triggers>
+								</Style>
+							</TextBlock.Style>
+						</TextBlock>
+					</Grid>
+				</Grid>
+
+				<Grid Height="22" Margin="10,6,10,0" VerticalAlignment="Top">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition />
+						<ColumnDefinition />
+						<ColumnDefinition Width="150" />
+						<ColumnDefinition Width="120" />
+					</Grid.ColumnDefinitions>
+
+					<Grid Grid.Column="0" Height="22" Margin="0,0,0,0">
+						<TextBox x:Name="SuitNameTextBox" HorizontalAlignment="Stretch" Padding="1" TextChanged="SuitNameTextBox_TextChanged" />
+						<TextBlock Text="Suit Name" IsHitTestVisible="False" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="3,-1,0,0" Padding="1" Foreground="DarkGray">
+							<TextBlock.Style>
+								<Style TargetType="{x:Type TextBlock}">
+									<Setter Property="Visibility" Value="Collapsed"/>
+									<Style.Triggers>
+										<DataTrigger Binding="{Binding Text, ElementName=SuitNameTextBox}" Value="">
+											<Setter Property="Visibility" Value="Visible"/>
+										</DataTrigger>
+									</Style.Triggers>
+								</Style>
+							</TextBlock.Style>
+						</TextBlock>
+					</Grid>
+
+					<Grid Grid.Column="1" Height="22" Margin="10,0,0,0">
+						<TextBox x:Name="SuitIdTextBox" HorizontalAlignment="Stretch" Padding="1" TextChanged="SuitIdTextBox_TextChanged" />
+						<TextBlock Text="Suit ID" IsHitTestVisible="False" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="3,-1,0,0" Padding="1" Foreground="DarkGray">
+							<TextBlock.Style>
+								<Style TargetType="{x:Type TextBlock}">
+									<Setter Property="Visibility" Value="Collapsed"/>
+									<Style.Triggers>
+										<DataTrigger Binding="{Binding Text, ElementName=SuitIdTextBox}" Value="">
+											<Setter Property="Visibility" Value="Visible"/>
+										</DataTrigger>
+									</Style.Triggers>
+								</Style>
+							</TextBlock.Style>
+						</TextBlock>
+					</Grid>
+
+					<Grid Grid.Column="2" Height="22" Margin="10,0,0,0">
+						<ComboBox x:Name="HeroComboBox" VerticalAlignment="Top" SelectionChanged="HeroComboBox_SelectionChanged" />
+					</Grid>
+
+					<Grid Grid.Column="3" Height="22" Margin="10,0,0,0">
+						<Button Content="Pack" Margin="0,0,0,0" VerticalAlignment="Top" Height="22" Click="PackButton_Click" />
+					</Grid>
+				</Grid>
+
+				<Separator Margin="0,10,0,0" Background="#CCC"/>
+
+				<Label Content="Main" IsHitTestVisible="False" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,6,10,0" Padding="1" FontSize="18" />
+
+				<Grid Margin="10,6,10,0" VerticalAlignment="Top">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="160" />
+						<ColumnDefinition />
+					</Grid.ColumnDefinitions>
+
+					<StackPanel Grid.Column="0" Margin="0,0,0,0">
+						<Border BorderThickness="1" BorderBrush="#CCC" Background="#EEE">
+							<Image x:Name="MainIcon" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0" Stretch="Fill" Width="160" Height="160" />
+						</Border>
+
+						<ComboBox x:Name="MainIconComboBox" VerticalAlignment="Top" Margin="0,6,0,0" SelectionChanged="IconComboBox_SelectionChanged" SelectedValuePath="Filename" DisplayMemberPath="DisplayName" />
+					</StackPanel>
+
+					<StackPanel Grid.Column="1" Margin="10,0,0,0">
+						<Label Content="Models:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,-2,0,0" />
+
+						<Grid Margin="0,4,0,0">
+							<Label Content="Main" HorizontalAlignment="Left" Margin="0,-2,0,0" VerticalAlignment="Top" Width="65"/>
+							<ComboBox x:Name="ModelComboBox" Height="22" Margin="70,0,0,0" VerticalAlignment="Top" SelectionChanged="ModelComboBox_SelectionChanged" SelectedValuePath="Filename" DisplayMemberPath="DisplayName" />
+						</Grid>
+
+						<Grid Margin="0,4,0,0">
+							<Label Content="Mask" HorizontalAlignment="Left" Margin="0,-2,0,0" VerticalAlignment="Top" Width="65"/>
+							<ComboBox x:Name="MaskModelComboBox" Height="22" Margin="70,0,0,0" VerticalAlignment="Top" SelectionChanged="MaskModelComboBox_SelectionChanged" SelectedValuePath="Filename" DisplayMemberPath="DisplayName" />
+						</Grid>
+
+						<Label Content="Additional settings:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,20,0,0" />
+
+						<Grid Margin="0,4,0,0">
+							<Label Content="Iron legs" HorizontalAlignment="Left" Margin="0,-2,0,0" VerticalAlignment="Top" Width="65"/>
+							<ComboBox x:Name="LegsComboBox" Height="22" Margin="70,0,0,0" VerticalAlignment="Top" SelectionChanged="LegsComboBox_SelectionChanged" />
+						</Grid>
+
+						<Grid Margin="0,8,0,0">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="120" />
+								<ColumnDefinition />
+							</Grid.ColumnDefinitions>
+							
+							<CheckBox Grid.Column="0" x:Name="BlackWebsCheckbox" Checked="BlackWebsCheckbox_Changed" Unchecked="BlackWebsCheckbox_Changed" HorizontalAlignment="Left" Margin="4,0,0,0" VerticalAlignment="Top">
+								<StackPanel Orientation="Horizontal">
+									<TextBlock Text="Black webs" Margin="2,0,0,0" />
+								</StackPanel>
+							</CheckBox>
+
+							<CheckBox Grid.Column="1" x:Name="TentacleTraversalCheckbox" Checked="TentacleTraversalCheckbox_Changed" Unchecked="TentacleTraversalCheckbox_Changed" HorizontalAlignment="Left" Margin="4,0,0,0" VerticalAlignment="Top">
+								<StackPanel Orientation="Horizontal">
+									<TextBlock Text="Tentacle traversal" Margin="2,0,0,0" />
+								</StackPanel>
+							</CheckBox>
+						</Grid>
+					</StackPanel>
+				</Grid>
+
+				<Grid Margin="10,16,10,0">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="60" />
+						<ColumnDefinition Width="30" />
+					</Grid.ColumnDefinitions>
+
+					<Label Grid.Column="0" Content="Styles" IsHitTestVisible="False" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,0" Padding="1" FontSize="18" />
+					<Button Grid.Column="1" Content="+" HorizontalAlignment="Left" Margin="0,0,0,1" VerticalAlignment="Bottom" Width="22" Height="22" Click="AddStyleButton_Click" />
+				</Grid>
+
+				<StackPanel x:Name="StylesContainer" Margin="10,6,10,6" VerticalAlignment="Top" />
+			</StackPanel>
+		</ScrollViewer>
+	</Grid>
+</Window>

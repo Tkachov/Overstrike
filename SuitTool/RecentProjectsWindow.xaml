@@ -1,0 +1,68 @@
+﻿<Window x:Class="SuitTool.RecentProjectsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SuitTool"
+		xmlns:data="clr-namespace:SuitTool.Data"
+        mc:Ignorable="d"
+        Title="Suit Tool" Height="450" Width="500" MinHeight="450" MinWidth="500" WindowStartupLocation="CenterScreen">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition />
+			<RowDefinition Height="42" />
+		</Grid.RowDefinitions>
+
+		<Grid Grid.Row="0" x:Name="HasProjectsLayout" Visibility="Visible">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="42" />
+				<RowDefinition Height="28" />
+				<RowDefinition />
+			</Grid.RowDefinitions>
+
+			<Label Grid.Row="0" Content="Recent projects" HorizontalAlignment="Left" Margin="6,0,6,2" FontSize="18" VerticalAlignment="Center" />
+
+			<Grid Grid.Row="1" Height="22" Margin="10,0,10,6">
+				<TextBox x:Name="FilterTextBox" HorizontalAlignment="Stretch" Padding="1" TextChanged="FilterTextBox_TextChanged" />
+				<TextBlock Text="Search..." IsHitTestVisible="False" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="3,-1,0,0" Padding="1" Foreground="DarkGray">
+					<TextBlock.Style>
+						<Style TargetType="{x:Type TextBlock}">
+							<Setter Property="Visibility" Value="Collapsed"/>
+							<Style.Triggers>
+								<DataTrigger Binding="{Binding Text, ElementName=FilterTextBox}" Value="">
+									<Setter Property="Visibility" Value="Visible"/>
+								</DataTrigger>
+							</Style.Triggers>
+						</Style>
+					</TextBlock.Style>
+				</TextBlock>
+			</Grid>
+
+			<ListView Grid.Row="2" x:Name="ProjectsList" Margin="10,0,10,2" BorderThickness="1,1,1,1" Padding="0,0,1,0" VirtualizingStackPanel.VirtualizationMode="Recycling" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible" SelectionChanged="ProjectsList_SelectionChanged">
+				<ListView.Resources>
+					<DataTemplate DataType="{x:Type data:RecentProject}">
+						<Grid Height="49">
+							<TextBlock Text="{Binding DisplayName}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="3,6,5,0" FontSize="14" Foreground="#111" FontWeight="Medium" />
+							<TextBlock Text="{Binding DirectoryPath}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="3,0,4,5" Foreground="#BBB" />
+						</Grid>
+					</DataTemplate>
+				</ListView.Resources>
+			</ListView>
+		</Grid>
+
+		<Grid Grid.Row="0" x:Name="NoProjectsLayout" Visibility="Collapsed" Background="#F3F3F3">
+			<Label Content="No recent projects" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#444" />
+		</Grid>
+
+		<Grid Grid.Row="1" Height="22" Margin="10,10,10,10" VerticalAlignment="Top">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition />
+				<ColumnDefinition Width="6" />
+				<ColumnDefinition />
+			</Grid.ColumnDefinitions>
+
+			<Button Grid.Column="0" x:Name="OpenProject" VerticalAlignment="Top" Content="Open existing..." Height="22" Margin="0,0,0,0" Click="OpenProject_Click" />
+			<Button Grid.Column="2" x:Name="CreateProject" VerticalAlignment="Top" Content="Create new..." Height="22" Margin="0,0,0,0" Click="CreateProject_Click" />
+		</Grid>
+	</Grid>
+</Window>

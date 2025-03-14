@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Authors>Tkachov</Authors>
+    <Title>Suit Tool</Title>
+    <PlatformTarget>x64</PlatformTarget>
+    <ApplicationIcon>Properties\Resources\icon.ico</ApplicationIcon>
+    <RepositoryUrl>https://github.com/Tkachov/Overstrike/</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Properties\Resources\icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BCnEncoder.Net" Version="2.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
+    <PackageReference Include="WindowsAPICodePack-Shell" Version="1.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OverstrikeShared\OverstrikeShared.csproj" />
+  </ItemGroup>
+
+</Project>

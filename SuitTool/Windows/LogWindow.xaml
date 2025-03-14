@@ -1,0 +1,12 @@
+﻿<Window x:Class="SuitTool.Windows.LogWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SuitTool.Windows"
+        mc:Ignorable="d"
+        Title="Suit Tool — Pack Log" Height="800" Width="600">
+    <Grid>
+		<TextBox x:Name="LogTextBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Text="" FontFamily="Consolas" Padding="5" Margin="0" BorderThickness="0,1,0,0" TextWrapping="NoWrap" IsReadOnly="True" AcceptsReturn="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" />
+	</Grid>
+</Window>

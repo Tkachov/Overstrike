@@ -1,0 +1,14 @@
+﻿<Window x:Class="SuitTool.Windows.AssetPathsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SuitTool.Windows"
+        mc:Ignorable="d"
+        Title="Suit Tool — Assets" MinWidth="550" MinHeight="600" Width="550" Height="600">
+	<Grid>
+		<ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
+			<StackPanel x:Name="Contents" />
+		</ScrollViewer>
+	</Grid>
+</Window>

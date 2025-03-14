@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Updater", "Updater\Updater.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ScriptsProxy", "ScriptsProxy\ScriptsProxy.vcxproj", "{DE65E92B-4A4B-4328-A02D-A2AFD9F2DEC3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuitTool", "SuitTool\SuitTool.csproj", "{829E4E6A-B240-4E61-8DBC-ADD4864C3D62}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigConverter", "ConfigConverter\ConfigConverter.csproj", "{BFB01A2E-0F98-47F5-A3E7-8EA4641DDB23}"
 EndProject
 Global
@@ -93,6 +95,14 @@ Global
 		{DE65E92B-4A4B-4328-A02D-A2AFD9F2DEC3}.Release|Any CPU.Build.0 = Release|x64
 		{DE65E92B-4A4B-4328-A02D-A2AFD9F2DEC3}.Release|x64.ActiveCfg = Release|x64
 		{DE65E92B-4A4B-4328-A02D-A2AFD9F2DEC3}.Release|x64.Build.0 = Release|x64
+		{829E4E6A-B240-4E61-8DBC-ADD4864C3D62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{829E4E6A-B240-4E61-8DBC-ADD4864C3D62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{829E4E6A-B240-4E61-8DBC-ADD4864C3D62}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{829E4E6A-B240-4E61-8DBC-ADD4864C3D62}.Debug|x64.Build.0 = Debug|Any CPU
+		{829E4E6A-B240-4E61-8DBC-ADD4864C3D62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{829E4E6A-B240-4E61-8DBC-ADD4864C3D62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{829E4E6A-B240-4E61-8DBC-ADD4864C3D62}.Release|x64.ActiveCfg = Release|Any CPU
+		{829E4E6A-B240-4E61-8DBC-ADD4864C3D62}.Release|x64.Build.0 = Release|Any CPU
 		{BFB01A2E-0F98-47F5-A3E7-8EA4641DDB23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BFB01A2E-0F98-47F5-A3E7-8EA4641DDB23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFB01A2E-0F98-47F5-A3E7-8EA4641DDB23}.Debug|x64.ActiveCfg = Debug|Any CPU
