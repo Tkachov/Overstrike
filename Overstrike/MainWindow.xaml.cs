@@ -82,6 +82,14 @@ namespace Overstrike {
 			}
 		}
 
+		public bool Settings_OpenErrorLog {
+			get => _settings.OpenErrorLog;
+			set {
+				_settings.OpenErrorLog = value;
+				SaveSettings();
+			}
+		}
+
 		private class LanguageItem {
 			public string Name { get; set; }
 			public string InternalName { get; set; }
@@ -774,6 +782,8 @@ namespace Overstrike {
 		}
 
 		private void InstallMods(List<ModEntry> modsToInstall, string game, string gamePath, bool uninstalling) {
+			var errorOccurred = false;
+
 			try {
 				ErrorLogger.StartSession();
 				ErrorLogger.WriteInfo($"Overstrike {Assembly.GetExecutingAssembly().GetName().Version}\n");
@@ -848,7 +858,7 @@ namespace Overstrike {
 				});
 				ErrorLogger.WriteInfo("\nDone.\n");
 			} catch (Exception ex) {
-				// TODO: error = true
+				errorOccurred = true;
 
 				Dispatcher.Invoke(() => {
 					ShowStatusMessageError("Error occurred. See 'errors.log' for details.");
@@ -866,7 +876,11 @@ namespace Overstrike {
 
 			try { ErrorLogger.EndSession(); } catch {}
 
-			// TODO: if (error && settings.show error) Dispatcher => show error window
+			if (errorOccurred && Settings_OpenErrorLog) {
+				Dispatcher.Invoke(() => {
+					ShowLatestErrorLogWindow();
+				});
+			}
 		}
 
 		private MetaInstallerBase GetMetaInstaller(string game, string gamePath) {

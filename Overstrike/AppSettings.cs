@@ -12,12 +12,14 @@ namespace Overstrike {
 		public bool CacheModsLibrary;
 		public bool PreferCachedModsLibrary;
 		public bool CheckUpdates;
+		public bool OpenErrorLog;
 
 		public AppSettings() {
 			CurrentProfile = null;
 			CacheModsLibrary = true;
 			PreferCachedModsLibrary = false;
 			CheckUpdates = true;
+			OpenErrorLog = true;
 		}
 
 		public AppSettings(string file) {
@@ -27,11 +29,18 @@ namespace Overstrike {
 			CacheModsLibrary = (bool)json["cache_mods_library"];
 			PreferCachedModsLibrary = (bool)json["prefer_cached_mods_library"];
 
-			var updates_key = "check_updates";
-			if (json.ContainsKey(updates_key)) {
-				CheckUpdates = (bool)json[updates_key];
+			var updatesKey = "check_updates";
+			if (json.ContainsKey(updatesKey)) {
+				CheckUpdates = (bool)json[updatesKey];
 			} else {
 				CheckUpdates = true;
+			}
+
+			var errorKey = "open_error_log";
+			if (json.ContainsKey(errorKey)) {
+				OpenErrorLog = (bool)json[errorKey];
+			} else {
+				OpenErrorLog = true;
 			}
 		}
 
@@ -40,7 +49,8 @@ namespace Overstrike {
 				["profile"] = CurrentProfile,
 				["cache_mods_library"] = CacheModsLibrary,
 				["prefer_cached_mods_library"] = PreferCachedModsLibrary,
-				["check_updates"] = CheckUpdates
+				["check_updates"] = CheckUpdates,
+				["open_error_log"] = OpenErrorLog,
 			};
 			File.WriteAllText(file, j.ToString());
 		}
