@@ -7,7 +7,7 @@
 		xmlns:tabs="clr-namespace:Overstrike.Tabs"
 		xmlns:data="clr-namespace:Overstrike.Data"
 		mc:Ignorable="d"
-		Title="Overstrike" Height="681" Width="1020" MinWidth="1020" WindowStartupLocation="CenterScreen">
+		Title="Overstrike" Height="681" Width="1020" MinWidth="1020" WindowStartupLocation="CenterScreen" KeyUp="Window_KeyUp">
 	<Window.Resources>
 		<ItemsPanelTemplate x:Key="ThumbnailListTemplate">
 			<WrapPanel Orientation="Horizontal" />

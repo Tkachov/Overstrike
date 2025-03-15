@@ -1,0 +1,22 @@
+﻿<Window x:Class="Overstrike.Windows.ErrorLogWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:local="clr-namespace:Overstrike.Windows"
+		mc:Ignorable="d"
+		Title="Overstrike — Error Log" WindowStartupLocation="CenterScreen" Height="600" Width="800" KeyUp="Window_KeyUp">
+	<Grid Background="#EEE">
+		<Grid.RowDefinitions>
+			<RowDefinition />
+			<RowDefinition Height="26" />
+		</Grid.RowDefinitions>
+		
+		<TextBox Grid.Row="0" x:Name="LogTextBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Text="" FontFamily="Consolas" Padding="5" Margin="4" BorderThickness="1" TextWrapping="NoWrap" IsReadOnly="True" AcceptsReturn="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" />
+
+		<Grid Grid.Row="1">
+			<Button Margin="4,0,4,4" Grid.Row="2" Content="Copy" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120" Height="22" Click="CopyButton_Click" />
+			<Button Margin="4,0,4,4" Grid.Row="2" Content="OK" VerticalAlignment="Top" HorizontalAlignment="Right" Width="120" Height="22" Click="CloseButton_Click" />
+		</Grid>
+	</Grid>
+</Window>

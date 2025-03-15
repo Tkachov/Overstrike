@@ -848,6 +848,8 @@ namespace Overstrike {
 				});
 				ErrorLogger.WriteInfo("\nDone.\n");
 			} catch (Exception ex) {
+				// TODO: error = true
+
 				Dispatcher.Invoke(() => {
 					ShowStatusMessageError("Error occurred. See 'errors.log' for details.");
 				});
@@ -863,6 +865,8 @@ namespace Overstrike {
 			}
 
 			try { ErrorLogger.EndSession(); } catch {}
+
+			// TODO: if (error && settings.show error) Dispatcher => show error window
 		}
 
 		private MetaInstallerBase GetMetaInstaller(string game, string gamePath) {
@@ -969,6 +973,14 @@ namespace Overstrike {
 			} catch {}
 
 			return 0;
+		}
+
+		private void ShowLatestErrorLogWindow(bool copyErrorToClipboard = false) {
+			var w = new ErrorLogWindow();
+			if (copyErrorToClipboard) {
+				w.CopyErrorText();
+			}
+			w.ShowDialog();
 		}
 
 		private void RefreshButton_Click(object sender, RoutedEventArgs e) {
@@ -1145,6 +1157,14 @@ namespace Overstrike {
 			} catch {}
 
 			return null;
+		}
+
+		private void Window_KeyUp(object sender, KeyEventArgs e) {
+			if (e.Key == Key.PrintScreen || e.SystemKey == Key.PrintScreen) {
+				if (_statusMessageErrorShown) {
+					ShowLatestErrorLogWindow(true);
+				}
+			}
 		}
 
 		private void ModsList_KeyUp(object sender, KeyEventArgs e) {
