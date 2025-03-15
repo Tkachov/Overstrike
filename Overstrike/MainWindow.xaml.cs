@@ -104,6 +104,8 @@ namespace Overstrike {
 		public MainWindow(AppSettings settings, List<Profile> profiles, List<ModEntry> mods) {
 			InitializeComponent();
 
+			DetectWinmm();
+
 			_settings = settings;
 			_profiles = profiles;
 			_mods = mods;
@@ -480,6 +482,18 @@ namespace Overstrike {
 		}
 
 		#endregion
+
+		private void DetectWinmm() {
+			try {
+				var scriptsProxyName = "winmm.dll";
+				var exeDir = Path.GetDirectoryName(Environment.ProcessPath);
+				var scriptsProxy = Path.Combine(exeDir, scriptsProxyName);
+
+				if (File.Exists(scriptsProxy)) {
+					MessageBox.Show($"'{scriptsProxyName}' found in Overstrike folder!\nBecause of this, mods installation WILL FAIL!\n\nClose Overstrike and move its files to another folder.", "Warning", MessageBoxButton.OK, MessageBoxImage.Error);
+				}
+			} catch {}
+		}
 
 		#region Drag and Drop
 
