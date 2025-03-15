@@ -21,17 +21,18 @@ namespace Overstrike.MetaInstallers {
 			}
 
 			var tocPath = Path.Combine(_gamePath, _outTocName);
+			var origTocPath = Path.Combine(_gamePath, "toc");
 			var tocBakPath = Path.Combine(_gamePath, "toc.BAK");
 
 			if (!File.Exists(tocBakPath)) {
 				ErrorLogger.WriteInfo("Creating 'toc.BAK'...");
-				File.Copy(tocPath, tocBakPath);
-				ErrorLogger.WriteInfo(" OK!\n");
-			} else {
-				ErrorLogger.WriteInfo($"Overwriting '{_outTocName}' with 'toc.BAK'...");
-				File.Copy(tocBakPath, tocPath, true);
+				File.Copy(origTocPath, tocBakPath);
 				ErrorLogger.WriteInfo(" OK!\n");
 			}
+
+			ErrorLogger.WriteInfo($"Overwriting '{_outTocName}' with 'toc.BAK'...");
+			File.Copy(tocBakPath, tocPath, true);
+			ErrorLogger.WriteInfo(" OK!\n");
 
 			var modsPath = Path.Combine(_gamePath, "d", "mods");
 			if (!Directory.Exists(modsPath)) {
@@ -167,6 +168,16 @@ namespace Overstrike.MetaInstallers {
 			if (File.Exists(tocBakPath)) {
 				ErrorLogger.WriteInfo($"Overwriting 'toc' with 'toc.BAK'...");
 				File.Copy(tocBakPath, tocPath, true);
+				ErrorLogger.WriteInfo(" OK!\n");
+			}
+
+			// remove scripts proxy
+
+			var scriptsProxyPath = Path.Combine(_gamePath, "winmm.dll");
+
+			if (File.Exists(scriptsProxyPath)) {
+				ErrorLogger.WriteInfo("Deleting 'winmm.dll'...");
+				File.Delete(scriptsProxyPath);
 				ErrorLogger.WriteInfo(" OK!\n");
 			}
 		}

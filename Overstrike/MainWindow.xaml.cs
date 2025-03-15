@@ -1025,6 +1025,7 @@ namespace Overstrike {
 				var exePath = _selectedGame.GetExecutablePath(path);
 				var tocPath = _selectedGame.GetTocPath(path);
 				var tocBakPath = tocPath + ".BAK";
+				var tocmPath = tocPath + "m";
 
 				try {
 					if (File.Exists(exePath)) {
@@ -1044,7 +1045,11 @@ namespace Overstrike {
 					File.Delete(tocBakPath);
 				} catch {}
 
-				if (File.Exists(exePath) || File.Exists(tocPath) || File.Exists(tocBakPath)) {
+				try {
+					File.Delete(tocmPath);
+				} catch {}
+
+				if (File.Exists(exePath) || File.Exists(tocPath) || File.Exists(tocBakPath) || File.Exists(tocmPath)) {
 					// sanity check, warn that something could've been deleted though
 					MessageBox.Show("Failed to reset 'toc'!\nMake sure the game isn't running and try again.\nSome files might've been deleted.", "Reset 'toc'", MessageBoxButton.OK);
 					return;
