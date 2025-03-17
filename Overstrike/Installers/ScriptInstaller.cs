@@ -162,10 +162,94 @@ namespace Overstrike.Installers {
 			return allDependenciesMet;
 		}
 
+		#region version
+
 		private static bool MatchesVersionRule(string version, string rule) {
 			if (rule == "*") return true;
-			return (version == rule); // TODO: more complex rules
+			if (version == rule) return true;
+
+			try {
+				var v = new Version(version);
+
+				var subrules = rule.Split(',');
+				foreach (var subrule in subrules) {
+					var trimmed = subrule.Trim();
+					
+					if (trimmed[0] == '=') {
+						var offset = 1;
+						if (trimmed[1] == '=') {
+							offset = 2;
+						}
+
+						var other = new Version(trimmed[offset..].Trim());
+						if (!v.IsTheSameAs(other)) {
+							return false;
+						}
+					}
+
+					if (trimmed[0] == '>') {
+						var offset = 1;
+						var allowEqual = false;
+						if (trimmed[1] == '=') {
+							offset = 2;
+							allowEqual = true;
+						}
+
+						var other = new Version(trimmed[offset..].Trim());
+						var matches = (v.IsNewerThan(other) || (allowEqual && v.IsTheSameAs(other)));
+						if (!matches) {
+							return false;
+						}
+					}
+
+					if (trimmed[0] == '<') {
+						var offset = 1;
+						var allowEqual = false;
+						if (trimmed[1] == '=') {
+							offset = 2;
+							allowEqual = true;
+						}
+
+						var other = new Version(trimmed[offset..].Trim());
+						var matches = (!v.IsNewerThan(other) || (allowEqual && v.IsTheSameAs(other)));
+						if (!matches) {
+							return false;
+						}
+					}
+				}
+			} catch {
+				return false;
+			}
+
+			return true;
 		}
+
+		private class Version {
+			public int major, minor, patch;
+
+			public Version(string version) {
+				var parts = version.Split('.');
+				major = int.Parse(parts[0]);
+				minor = int.Parse(parts[1]);
+				patch = int.Parse(parts[2]);
+			}
+
+			public bool IsNewerThan(Version another) { // >
+				if (major > another.major) return true;
+				if (major < another.major) return false;
+
+				if (minor > another.minor) return true;
+				if (minor < another.minor) return false;
+
+				return (patch > another.patch);
+			}
+
+			public bool IsTheSameAs(Version another) { // ==
+				return (major == another.major && minor == another.minor && patch == another.patch);
+			}
+		}
+
+		#endregion
 
 		private static void TopologicalSort(ref List<ScriptDefinition> scriptDefinitions) {
 			var circularDependencyDetected = false;
