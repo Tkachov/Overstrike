@@ -19,6 +19,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -881,6 +882,12 @@ namespace Overstrike {
 					ShowLatestErrorLogWindow();
 				});
 			}
+
+			if (!errorOccurred) {
+				try {
+					UpdateTocSha(_selectedGame.GetTocPath(gamePath));
+				} catch {}
+			}
 		}
 
 		private MetaInstallerBase GetMetaInstaller(string game, string gamePath) {
@@ -995,6 +1002,14 @@ namespace Overstrike {
 				w.CopyErrorText();
 			}
 			w.ShowDialog();
+		}
+
+		private void UpdateTocSha(string tocPath) {	
+			using var f = File.OpenRead(tocPath);
+			var sha = Convert.ToHexString(SHA1.HashData(f)).ToUpper();
+
+			var shaFilePath = tocPath + ".sha1";
+			File.WriteAllText(shaFilePath, sha);
 		}
 
 		private void RefreshButton_Click(object sender, RoutedEventArgs e) {
