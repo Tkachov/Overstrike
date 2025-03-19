@@ -731,8 +731,11 @@ namespace Overstrike {
 
 		private void InstallModsButton_Click(object sender, RoutedEventArgs e) {
 			ApplyModsStateToProfile();
+			StartCollectModsThread();
+		}
 
-			Dictionary<string, ModEntry> availableMods = new Dictionary<string, ModEntry>();
+		private void StartCollectModsThread() {
+			Dictionary<string, ModEntry> availableMods = new();
 			foreach (var mod in _mods) {
 				availableMods.Add(mod.Path, mod);
 			}
@@ -740,11 +743,28 @@ namespace Overstrike {
 				availableMods.Add(_suitsMenuEntry.Path, _suitsMenuEntry);
 			}
 
-			List<ModEntry> modsToInstall = new List<ModEntry>();
-			foreach (var mod in _selectedProfile.Mods) {
+			var thread = new Thread(() => CollectModsToInstall(_selectedProfile, availableMods));
+			_taskThreads.Add(thread);
+			thread.Start();
+		}
+
+		private void CollectModsToInstall(Profile profile, Dictionary<string, ModEntry> availableMods) {
+			Dispatcher.Invoke(() => {
+				OverlayHeaderLabel.Text = "Collecting mods to install...";
+				OverlayOperationLabel.Text = "";
+			});
+
+			var modsToInstall = new List<ModEntry>();
+			var ndx = 0;
+			foreach (var mod in profile.Mods) {
+				++ndx;
 				if (!mod.Install) continue;
 				if (!availableMods.ContainsKey(mod.Path)) continue; // TODO: should not happen?
-				
+
+				Dispatcher.Invoke(() => {
+					OverlayOperationLabel.Text = $"{ndx}/{profile.Mods.Count}: '{availableMods[mod.Path].Name}'...";
+				});
+
 				try {
 					AddEntriesToInstall(modsToInstall, availableMods[mod.Path], mod);
 				} catch (Exception ex) {
@@ -754,11 +774,13 @@ namespace Overstrike {
 				}
 			}
 
-			if (_selectedProfile.Settings_Scripts_Enabled) {
+			if (profile.Settings_Scripts_Enabled) {
 				modsToInstall.Insert(0, new ScriptSupportModEntry(modsToInstall)); // TODO: pass callback(s) if needed
 			}
 
-			StartInstallModsThread(modsToInstall, _selectedProfile.Game, _selectedProfile.GamePath);
+			Dispatcher.Invoke(() => {
+				StartInstallModsThread(modsToInstall, profile.Game, profile.GamePath);
+			});
 		}
 
 		private void AddEntriesToInstall(List<ModEntry> modsToInstall, ModEntry libraryMod, ModEntry profileMod) {
