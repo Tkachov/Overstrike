@@ -32,6 +32,7 @@ namespace Overstrike.MetaInstallers {
 			}
 
 			ErrorLogger.WriteInfo($"Overwriting '{_outTocName}' with 'toc.BAK'...");
+			RemoveReadOnlyAttribute(tocPath);
 			File.Copy(tocBakPath, tocPath, true);
 			ErrorLogger.WriteInfo(" OK!\n");
 
@@ -162,17 +163,19 @@ namespace Overstrike.MetaInstallers {
 
 		public override void Finish() {
 			var tocPath = Path.Combine(_gamePath, _outTocName);
+			RemoveReadOnlyAttribute(tocPath);
 			_toc.Save(tocPath);
 		}
 
 		public override void Uninstall() {
-			// even if using scripts, uninstall is cleaning the normal toc
+			// even if installing to tocm, uninstall is cleaning the normal toc
 
 			var tocPath = Path.Combine(_gamePath, "toc");
 			var tocBakPath = Path.Combine(_gamePath, "toc.BAK");
 
 			if (File.Exists(tocBakPath)) {
 				ErrorLogger.WriteInfo($"Overwriting 'toc' with 'toc.BAK'...");
+				RemoveReadOnlyAttribute(tocPath);
 				File.Copy(tocBakPath, tocPath, true);
 				ErrorLogger.WriteInfo(" OK!\n");
 			}

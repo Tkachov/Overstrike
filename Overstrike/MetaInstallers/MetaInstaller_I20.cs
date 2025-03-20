@@ -25,6 +25,7 @@ namespace Overstrike.MetaInstallers {
 				ErrorLogger.WriteInfo(" OK!\n");
 			} else {
 				ErrorLogger.WriteInfo("Overwriting 'toc' with 'toc.BAK'...");
+				RemoveReadOnlyAttribute(tocPath);
 				File.Copy(tocBakPath, tocPath, true);
 				ErrorLogger.WriteInfo(" OK!\n");
 			}
@@ -125,6 +126,7 @@ namespace Overstrike.MetaInstallers {
 			CacheSuitsConfig(); // if there was no Suits Menu "mod" passed to Install(), we still want to cache the state
 
 			var tocPath = Path.Combine(_gamePath, "asset_archive", "toc");
+			RemoveReadOnlyAttribute(tocPath);
 			_toc.Save(tocPath);
 		}
 

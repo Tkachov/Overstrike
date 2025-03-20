@@ -4,6 +4,8 @@
 // A copy of the that license should come with this program (LICENSE.txt). If not, see <http://www.gnu.org/licenses/>.
 
 using Overstrike.Data;
+using Overstrike.Utils;
+using System.IO;
 
 namespace Overstrike.MetaInstallers {
 	internal abstract class MetaInstallerBase {
@@ -23,5 +25,20 @@ namespace Overstrike.MetaInstallers {
 		public abstract void Finish();
 
 		public abstract void Uninstall(); // alternative to Start->(Install N times)->Finish
+
+		protected static void RemoveReadOnlyAttribute(string path) {
+			try {
+				if (File.Exists(path)) {
+					var attributes = File.GetAttributes(path);
+					if ((attributes & FileAttributes.ReadOnly) != 0) {
+						attributes &= ~FileAttributes.ReadOnly;
+						File.SetAttributes(path, attributes);
+					}
+				}
+			} catch {
+				ErrorLogger.WriteInfo($"Failed to remove read-only attribute from '{Path.GetFileName(path)}'!\n");
+				throw;
+			}
+		}
 	}
 }
