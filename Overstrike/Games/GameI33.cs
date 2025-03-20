@@ -35,6 +35,10 @@ namespace Overstrike.Games {
 			return new MetaInstaller_I29(gamePath, settings, profile);
 		}
 
+		public override string GetTocHashFriendlyName(string sha1) {
+			return null;
+		}
+
 		//
 
 		private BitmapImage _back;

@@ -731,7 +731,77 @@ namespace Overstrike {
 
 		private void InstallModsButton_Click(object sender, RoutedEventArgs e) {
 			ApplyModsStateToProfile();
-			StartCollectModsThread();
+			PrepareToInstallMods();
+		}
+
+		private void PrepareToInstallMods() {
+			var gamePath = _selectedProfile.GamePath;
+			var tocPath = _selectedGame.GetTocPath(gamePath);
+			var shaFilePath = tocPath + ".sha1";
+
+			var thread = new Thread(() => CheckTocSha(tocPath, shaFilePath));
+			_taskThreads.Add(thread);
+			thread.Start();
+		}
+
+		private void CheckTocSha(string tocPath, string shaFilePath) {
+			Dispatcher.Invoke(() => {
+				OverlayHeaderLabel.Text = "Checking 'toc'...";
+				OverlayOperationLabel.Text = "";
+			});
+
+			bool Check() {
+				if (!File.Exists(shaFilePath)) {
+					return false; // failed to check, proceed as before when there was no file
+				}
+
+				var currentSha = GetFileSha(tocPath);
+
+				var rememberedSha = File.ReadAllText(shaFilePath);
+				if (rememberedSha.Length < currentSha.Length) {
+					return false; // failed to check, proceed as if there was no file
+				}
+
+				rememberedSha = rememberedSha[..currentSha.Length];
+				if (currentSha.Equals(rememberedSha, StringComparison.OrdinalIgnoreCase)) {
+					return false; // check successful, nothing needs to be done
+				}
+
+				// hash differs, so 'toc' changed
+				// see if there's 'toc.BAK' and what's its hash
+				// if it's absent or has the same hash, nothing to suggest
+				// but if it has different, this could be due to auto-update, and this is where dialog is needed
+
+				var tocBakPath = tocPath + ".BAK";
+				if (!File.Exists(tocBakPath)) {
+					return false;
+				}
+
+				var backupSha = GetFileSha(tocBakPath);
+				if (currentSha.Equals(backupSha, StringComparison.OrdinalIgnoreCase)) {
+					return false; // 'toc.BAK' has the same contents, so no sense suggesting user to choose which one to use
+				}
+				
+				var cancelled = false;
+				Dispatcher.Invoke(() => {
+					var w = new TocMismatchDialog(tocPath, currentSha, tocBakPath, backupSha, _selectedGame);
+					cancelled = !(bool)w.ShowDialog();
+				});
+
+				return cancelled;
+			}
+
+			var cancelled = Check();
+			if (cancelled) {
+				return;
+			}
+
+			Dispatcher.Invoke(StartCollectModsThread);
+		}
+
+		private static string GetFileSha(string fn) {
+			using var f = File.OpenRead(fn);
+			return Convert.ToHexString(SHA1.HashData(f)).ToUpper();
 		}
 
 		private void StartCollectModsThread() {
@@ -1026,10 +1096,8 @@ namespace Overstrike {
 			w.ShowDialog();
 		}
 
-		private void UpdateTocSha(string tocPath) {	
-			using var f = File.OpenRead(tocPath);
-			var sha = Convert.ToHexString(SHA1.HashData(f)).ToUpper();
-
+		private void UpdateTocSha(string tocPath) {
+			var sha = GetFileSha(tocPath);
 			var shaFilePath = tocPath + ".sha1";
 			File.WriteAllText(shaFilePath, sha);
 		}

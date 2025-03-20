@@ -52,6 +52,8 @@ namespace Overstrike.Games {
 
 		public abstract MetaInstallerBase GetMetaInstaller(string gamePath, AppSettings settings, Profile profile);
 
+		public abstract string GetTocHashFriendlyName(string sha1);
+
 		//
 
 		public abstract BitmapImage BannerBackground { get; }

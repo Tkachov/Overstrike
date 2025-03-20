@@ -5,6 +5,7 @@
 
 using Overstrike.Data;
 using Overstrike.MetaInstallers;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Media.Imaging;
 
@@ -33,6 +34,22 @@ namespace Overstrike.Games {
 
 		public override MetaInstallerBase GetMetaInstaller(string gamePath, AppSettings settings, Profile profile) {
 			return new MetaInstaller_I29(gamePath, settings, profile);
+		}
+
+		private static Dictionary<string, string> _knownHashes = new () {
+			{ "318F4345F3A1E8604F2ABDB4B3D266EE82CBCC32", "v1.130.0.0" },
+			{ "7067DADB2153D0B3B7F3F1635CB7EB970E250F3D", "v1.202.0.0" },
+			{ "5D9171696FA00566C3F4F9FC7563BD53F8896B03", "v1.205.0.0" },
+			{ "E0537352A31E3CB3287CA348EB007E63030E4963", "v1.212.1.0" },
+			{ "A5B63A78D4D043493233E2B5279CE63E7755A51D", "v1.218.0.0" },
+			{ "9CEAC6760A571F9DC230D70014640910165D538E", "v1.305.0.0" }, // same as v1.307.0.0
+			{ "EA88E03938A958DE6989DAE6FD7693F489B59162", "v1.312.0.0" },
+		};
+
+		public override string GetTocHashFriendlyName(string sha1) {
+			string result = null;
+			_knownHashes.TryGetValue(sha1.ToUpper(), out result);
+			return result;
 		}
 
 		//
