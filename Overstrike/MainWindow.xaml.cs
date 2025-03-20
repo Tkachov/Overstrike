@@ -755,7 +755,7 @@ namespace Overstrike {
 					return false; // failed to check, proceed as before when there was no file
 				}
 
-				var currentSha = GetFileSha(tocPath);
+				var currentSha = Hashes.GetFileSha1(tocPath);
 
 				var rememberedSha = File.ReadAllText(shaFilePath);
 				if (rememberedSha.Length < currentSha.Length) {
@@ -777,7 +777,7 @@ namespace Overstrike {
 					return false;
 				}
 
-				var backupSha = GetFileSha(tocBakPath);
+				var backupSha = Hashes.GetFileSha1(tocBakPath);
 				if (currentSha.Equals(backupSha, StringComparison.OrdinalIgnoreCase)) {
 					return false; // 'toc.BAK' has the same contents, so no sense suggesting user to choose which one to use
 				}
@@ -797,11 +797,6 @@ namespace Overstrike {
 			}
 
 			Dispatcher.Invoke(StartCollectModsThread);
-		}
-
-		private static string GetFileSha(string fn) {
-			using var f = File.OpenRead(fn);
-			return Convert.ToHexString(SHA1.HashData(f)).ToUpper();
 		}
 
 		private void StartCollectModsThread() {
@@ -1097,7 +1092,7 @@ namespace Overstrike {
 		}
 
 		private void UpdateTocSha(string tocPath) {
-			var sha = GetFileSha(tocPath);
+			var sha = Hashes.GetFileSha1(tocPath);
 			var shaFilePath = tocPath + ".sha1";
 			File.WriteAllText(shaFilePath, sha);
 		}

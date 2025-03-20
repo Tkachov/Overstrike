@@ -8,6 +8,7 @@ using System.IO;
 using Overstrike.Installers;
 using Overstrike.Utils;
 using Overstrike.Data;
+using Overstrike.Games;
 
 namespace Overstrike.MetaInstallers {
 	internal class MetaInstaller_I29: MetaInstallerBase {
@@ -105,6 +106,11 @@ namespace Overstrike.MetaInstallers {
 		}
 
 		private void LogTocSanityCheck() {
+			var sha = Hashes.GetFileSha1(Path.Combine(_gamePath, _outTocName));
+			var friendlyName = GameBase.GetGame(_profile.Game).GetTocHashFriendlyName(sha);
+			var friendlyNameSuffix = (string.IsNullOrEmpty(friendlyName) ? "" : $" ({friendlyName})");
+			ErrorLogger.WriteInfo($"[i] SHA-1: {sha[..7].ToUpper()}{friendlyNameSuffix}\n");
+
 			ErrorLogger.WriteInfo($"[i] {_toc.ArchivesSection.Values.Count} archives\n");
 
 			bool hasMods = false;
