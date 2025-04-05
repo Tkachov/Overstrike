@@ -127,6 +127,8 @@ namespace Overstrike {
 
 			if (command == "create-profile" && arguments.Length >= 3) return Command_CreateProfile(arguments[1], arguments[2]);
 			else if (command == "delete-profile" && arguments.Length >= 2) return Command_DeleteProfile(arguments[1]);
+			else if (command == "add-mod" && arguments.Length >= 2) return Command_AddMod(arguments[1]);
+			else if (command == "delete-mod" && arguments.Length >= 2) return Command_DeleteMod(arguments[1]);
 
 			return -1;
 		}
@@ -154,6 +156,36 @@ namespace Overstrike {
 			var path = Path.Combine(cwd, "Profiles");
 			var filename = Path.Combine(path, profileName + ".json");
 
+			if (!File.Exists(filename)) {
+				return 1;
+			}
+
+			try {
+				File.Delete(filename);
+			} catch {
+				return 2;
+			}
+
+			return 0;
+		}
+
+		private int Command_AddMod(string fileName) { // assuming file is in the library folder already
+			var cwd = Directory.GetCurrentDirectory();
+			var path = Path.Combine(cwd, "Mods Library");
+			var warnings = new List<string>();
+			var filenames = new List<string>() { fileName };
+
+			try {
+				var detection = Settings.CacheModsLibrary ? new ModsDetectionCached() : new ModsDetection();
+				detection.DetectInFiles(path, filenames, Mods, warnings);
+			} catch {
+				return 1;
+			}
+
+			return (Mods.Count > 0 ? 0 : 2);
+		}
+
+		private static int Command_DeleteMod(string filename) {
 			if (!File.Exists(filename)) {
 				return 1;
 			}
