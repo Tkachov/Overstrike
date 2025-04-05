@@ -5,6 +5,7 @@
 
 using Overstrike.Data;
 using Overstrike.Detectors;
+using Overstrike.Games;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,6 +25,14 @@ namespace Overstrike {
 			CreateSubdirectories();
 			ReadSettings();
 			LoadProfiles();
+
+			if (e.Args.Length != 0) {
+				var exitCode = HandleCommands(e.Args);
+				if (exitCode != -1) {
+					Shutdown(exitCode);
+					return;
+				}
+			}
 			
 			ShutdownMode = ShutdownMode.OnExplicitShutdown;
 			if (Profiles.Count == 0) {
@@ -110,6 +119,55 @@ namespace Overstrike {
 				LoadProfile(file);
 			}
 		}
+
+		#region CLI
+
+		private int HandleCommands(string[] arguments) {
+			var command = arguments[0];
+
+			if (command == "create-profile" && arguments.Length >= 3) return Command_CreateProfile(arguments[1], arguments[2]);
+			else if (command == "delete-profile" && arguments.Length >= 2) return Command_DeleteProfile(arguments[1]);
+
+			return -1;
+		}
+
+		private static int Command_CreateProfile(string profileName, string gameFolder) {
+			var detectedGame = GameBase.DetectGameInstallation(gameFolder);
+			if (detectedGame == null) {
+				return 1;
+			}
+
+			try {
+				var p = new Profile(profileName, detectedGame, gameFolder);
+				if (!p.Save()) {
+					return 2;
+				}
+			} catch {
+				return 2;
+			}
+
+			return 0;
+		}
+
+		private static int Command_DeleteProfile(string profileName) {
+			var cwd = Directory.GetCurrentDirectory();
+			var path = Path.Combine(cwd, "Profiles");
+			var filename = Path.Combine(path, profileName + ".json");
+
+			if (!File.Exists(filename)) {
+				return 1;
+			}
+
+			try {
+				File.Delete(filename);
+			} catch {
+				return 2;
+			}
+
+			return 0;
+		}
+
+		#endregion
 
 		private void LoadProfile(string file) {
 			var basename = Path.GetFileName(file);
