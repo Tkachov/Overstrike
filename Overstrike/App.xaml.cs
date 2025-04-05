@@ -129,6 +129,8 @@ namespace Overstrike {
 			else if (command == "delete-profile" && arguments.Length >= 2) return Command_DeleteProfile(arguments[1]);
 			else if (command == "add-mod" && arguments.Length >= 2) return Command_AddMod(arguments[1]);
 			else if (command == "delete-mod" && arguments.Length >= 2) return Command_DeleteMod(arguments[1]);
+			else if (command == "enable-mod" && arguments.Length >= 3) return Command_EnableMod(arguments[1], arguments[2]);
+			else if (command == "disable-mod" && arguments.Length >= 3) return Command_DisableMod(arguments[1], arguments[2]);
 
 			return -1;
 		}
@@ -170,8 +172,7 @@ namespace Overstrike {
 		}
 
 		private int Command_AddMod(string fileName) { // assuming file is in the library folder already
-			var cwd = Directory.GetCurrentDirectory();
-			var path = Path.Combine(cwd, "Mods Library");
+			var path = GetLibraryFolder();
 			var warnings = new List<string>();
 			var filenames = new List<string>() { fileName };
 
@@ -197,6 +198,58 @@ namespace Overstrike {
 			}
 
 			return 0;
+		}
+
+		private int Command_EnableMod(string profileName, string fileName) {
+			return ChangeModInstallInProfile(profileName, fileName, true);
+		}
+
+		private int Command_DisableMod(string profileName, string fileName) {
+			return ChangeModInstallInProfile(profileName, fileName, false);
+		}
+
+		private int ChangeModInstallInProfile(string profileName, string fileName, bool newValue) {
+			var profile = FindProfileByName(Profiles, profileName);
+			if (profile == null) {
+				return 1;
+			}
+
+			var path = GetLibraryFolder();
+			var relName = Path.GetRelativePath(path, fileName);
+			var found = false;
+			foreach (var mod in profile.Mods) {
+				if (mod.Path == relName) {
+					found = true;
+					mod.Install = newValue;
+					break;
+				}
+			}
+
+			if (!found) {
+				return 2;
+			}
+
+			try {
+				profile.Save();
+			} catch {
+				return 3;
+			}
+
+			return 0;
+		}
+
+		private static string GetLibraryFolder() {
+			var cwd = Directory.GetCurrentDirectory();
+			return Path.Combine(cwd, "Mods Library");
+		}
+
+		private static Profile FindProfileByName(List<Profile> profiles, string profileName) {
+			foreach (var profile in profiles) {
+				if (profile.Name == profileName)
+					return profile;
+			}
+
+			return null;
 		}
 
 		#endregion
