@@ -6,6 +6,7 @@
 using Overstrike.Data;
 using Overstrike.Detectors;
 using Overstrike.Games;
+using Overstrike.MetaInstallers;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -131,6 +132,8 @@ namespace Overstrike {
 			else if (command == "delete-mod" && arguments.Length >= 2) return Command_DeleteMod(arguments[1]);
 			else if (command == "enable-mod" && arguments.Length >= 3) return Command_EnableMod(arguments[1], arguments[2]);
 			else if (command == "disable-mod" && arguments.Length >= 3) return Command_DisableMod(arguments[1], arguments[2]);
+			else if (command == "install-mods" && arguments.Length >= 2) return Command_InstallMods(arguments[1]);
+			else if (command == "uninstall-mods" && arguments.Length >= 2) return Command_UninstallMods(arguments[1]);
 
 			return -1;
 		}
@@ -238,6 +241,75 @@ namespace Overstrike {
 			return 0;
 		}
 
+		private int Command_InstallMods(string profileName) {
+			return RunProfileModsInstallation(profileName, true);
+		}
+
+		private int Command_UninstallMods(string profileName) {
+			return RunProfileModsInstallation(profileName, false);
+		}
+
+		private int RunProfileModsInstallation(string profileName, bool install) {
+			var profile = FindProfileByName(Profiles, profileName);
+			if (profile == null) {
+				return 1;
+			}
+
+			var error = false;
+			List<ModEntry> modsToInstall = new();
+
+			if (install) {
+				try {
+					var syncModsLibrary = true;
+					if (Settings.PreferCachedModsLibrary && ModsDetectionCached.CacheFileExists()) {
+						syncModsLibrary = false;
+					}
+
+					if (syncModsLibrary) {
+						DetectMods(false);
+					} else {
+						LoadModsFromCache();
+					}
+				} catch {
+					return 2;
+				}
+
+				var builder1 = new ModCollectingThreadBuilder(profile, Mods);
+				builder1.OnException = (string s, Exception ex) => {
+					error = true;
+				};
+				builder1.OnSuccess = (List<ModEntry> result) => {
+					modsToInstall = result;
+				};
+
+				var thread1 = builder1.Build();
+				thread1.Start();
+				thread1.Join();
+
+				if (error) {
+					return 3;
+				}
+			}
+
+			var builder2 = new ModInstallingThreadBuilder(Settings, profile, modsToInstall, !install);
+			builder2.OnErrorOccurred_BeforeWritingTrace = () => {
+				error = true;
+			};
+			builder2.OnErrorOccurred_AfterTraceSaved = () => {
+				error = true;
+			};
+
+			var thread2 = builder2.Build();
+			thread2.Start();
+			thread2.Join();
+
+			if (error) {
+				return 4;
+			}
+
+			return 0;
+		}
+
 		private static string GetLibraryFolder() {
 			var cwd = Directory.GetCurrentDirectory();
 			return Path.Combine(cwd, "Mods Library");
@@ -273,7 +345,7 @@ namespace Overstrike {
 			return Profiles;
 		}
 
-		private void DetectMods() {
+		private void DetectMods(bool showWarnings = true) {
 			var cwd = Directory.GetCurrentDirectory();
 			var path = Path.Combine(cwd, "Mods Library");
 			var warnings = new List<string>();
@@ -282,7 +354,8 @@ namespace Overstrike {
 			_detection.Detect(path, Mods, warnings);
 			_detection = null;
 
-			ShowModsDetectionWarnings(warnings);
+			if (showWarnings)
+				ShowModsDetectionWarnings(warnings);
 		}
 
 		private void DetectModsInFiles(List<string> filenames) {
@@ -360,7 +433,7 @@ namespace Overstrike {
 		// threads
 
 		private bool RunDetectionAndShowSplash() {
-			Thread detectionThread = new(DetectMods);
+			Thread detectionThread = new(() => DetectMods(true));
 			return RunDetectionAndShowSplash(detectionThread);
 		}
 

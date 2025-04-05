@@ -3,7 +3,6 @@
 // For more details, terms and conditions, see GNU General Public License.
 // A copy of the that license should come with this program (LICENSE.txt). If not, see <http://www.gnu.org/licenses/>.
 
-using DAT1;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Overstrike.Data;
 using Overstrike.Games;
@@ -18,8 +17,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
-using System.Security.Cryptography;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -800,94 +797,41 @@ namespace Overstrike {
 		}
 
 		private void StartCollectModsThread() {
-			Dictionary<string, ModEntry> availableMods = new();
-			foreach (var mod in _mods) {
-				availableMods.Add(mod.Path, mod);
-			}
-			if (_selectedGameHasSuitsMenu && _suitsMenuEntry != null) {
-				availableMods.Add(_suitsMenuEntry.Path, _suitsMenuEntry);
-			}
+			var builder = new ModCollectingThreadBuilder(_selectedProfile, _mods);
 
-			var thread = new Thread(() => CollectModsToInstall(_selectedProfile, availableMods));
-			_taskThreads.Add(thread);
-			thread.Start();
-		}
-
-		private void CollectModsToInstall(Profile profile, Dictionary<string, ModEntry> availableMods) {
-			Dispatcher.Invoke(() => {
-				OverlayHeaderLabel.Text = "Collecting mods to install...";
-				OverlayOperationLabel.Text = "";
-			});
-
-			var modsToInstall = new List<ModEntry>();
-			var ndx = 0;
-			foreach (var mod in profile.Mods) {
-				++ndx;
-				if (!mod.Install) continue;
-				if (!availableMods.ContainsKey(mod.Path)) continue; // TODO: should not happen?
-
+			builder.OnStart = () => {
 				Dispatcher.Invoke(() => {
-					OverlayOperationLabel.Text = $"{ndx}/{profile.Mods.Count}: '{availableMods[mod.Path].Name}'...";
+					OverlayHeaderLabel.Text = "Collecting mods to install...";
+					OverlayOperationLabel.Text = "";
 				});
+			};
 
-				try {
-					AddEntriesToInstall(modsToInstall, availableMods[mod.Path], mod);
-				} catch (Exception ex) {
-					var message = $"There was an error processing '{availableMods[mod.Path].Name}' mod.\nPress Ctrl+C to copy this message.\n\n{ex}";
-					MessageBoxResult result = MessageBox.Show(message, "Error", MessageBoxButton.OK);
-					return;
-				}
-			}
+			builder.OnOperationStart = (int ndx, int count, string modName) => {
+				Dispatcher.Invoke(() => {
+					OverlayOperationLabel.Text = $"{ndx}/{count}: '{modName}'...";
+				});
+			};
 
-			if (profile.Settings_Scripts_Enabled) {
-				modsToInstall.Insert(0, new ScriptSupportModEntry(modsToInstall)); // TODO: pass callback(s) if needed
-			}
+			builder.OnException = (string modName, Exception ex) => {
+				var message = $"There was an error processing '{modName}' mod.\nPress Ctrl+C to copy this message.\n\n{ex}";
+				MessageBoxResult result = MessageBox.Show(message, "Error", MessageBoxButton.OK);
+			};
 
-			Dispatcher.Invoke(() => {
-				StartInstallModsThread(modsToInstall, profile.Game, profile.GamePath);
-			});
-		}
+			builder.OnSuccess = (List<ModEntry> modsToInstall) => {
+				Dispatcher.Invoke(() => {
+					StartInstallModsThread(modsToInstall);
+				});
+			};
 
-		private void AddEntriesToInstall(List<ModEntry> modsToInstall, ModEntry libraryMod, ModEntry profileMod) {
-			if (ModEntry.IsTypeFamilyModular(libraryMod.Type)) {
-				ModularInstaller.AddEntriesToInstall(modsToInstall, libraryMod, profileMod);
-				return;
-			}
-
-			if (ModEntry.IsTypeFamilyScript(libraryMod.Type)) {
-				if (!_selectedProfile.Settings_Scripts_Enabled) {
-					return;
-				}
-			}
-
-			modsToInstall.Add(libraryMod);
-		}
-
-		private void StartInstallModsThread(List<ModEntry> modsToInstall, string game, string gamePath, bool uninstalling = false) {
-			Thread thread = new Thread(() => InstallMods(modsToInstall, game, gamePath, uninstalling));
+			var thread = builder.Build();
 			_taskThreads.Add(thread);
 			thread.Start();
 		}
 
-		private void InstallMods(List<ModEntry> modsToInstall, string game, string gamePath, bool uninstalling) {
-			var errorOccurred = false;
+		private void StartInstallModsThread(List<ModEntry> modsToInstall, bool uninstalling = false) {
+			var builder = new ModInstallingThreadBuilder(_settings, _selectedProfile, modsToInstall, uninstalling);
 
-			try {
-				ErrorLogger.StartSession();
-				ErrorLogger.WriteInfo($"Overstrike {Assembly.GetExecutingAssembly().GetName().Version}\n");
-				ErrorLogger.WriteInfo(uninstalling ? $"Uninstalling mods at {DateTime.Now}\n" : $"Installing {modsToInstall.Count} mods at {DateTime.Now}\n");
-				ErrorLogger.WriteInfo($"{game} located at {gamePath}\n");
-				ErrorLogger.WriteInfo("\n");
-
-				if (!uninstalling && modsToInstall.Count > 0) {
-					ErrorLogger.WriteInfo("Mods to be installed:\n");
-					foreach (var mod in modsToInstall) {
-						ErrorLogger.WriteInfo($"- {mod.Name}\n");
-					}
-					ErrorLogger.WriteInfo("\n");
-				}
-
-				var operationsCount = modsToInstall.Count;
+			builder.OnOperationsStarted = (int operationsCount) => {
 				Dispatcher.Invoke(() => {
 					if (uninstalling)
 						OverlayHeaderLabel.Text = "Uninstalling mods...";
@@ -895,41 +839,26 @@ namespace Overstrike {
 						OverlayHeaderLabel.Text = "Installing mods (0/" + operationsCount + " done)...";
 					OverlayOperationLabel.Text = "Loading 'toc.BAK'...";
 				});
+			};
 
-				var installer = GetMetaInstaller(game, gamePath);
-				installer.Prepare();
+			builder.OnOperationStarts = (int index, int operationsCount, string modName) => {
+				Dispatcher.Invoke(() => {
+					OverlayHeaderLabel.Text = "Installing mods (" + index + "/" + operationsCount + " done)...";
+					OverlayOperationLabel.Text = "Installing '" + modName + "'...";
+				});
+			};
 
-				if (modsToInstall.Count > 0) {
-					installer.Start();
+			builder.OnOperationsFinalizing = (int index, int operationsCount) => {
+				Dispatcher.Invoke(() => {
+					if (uninstalling)
+						OverlayHeaderLabel.Text = "Uninstalling mods...";
+					else
+						OverlayHeaderLabel.Text = "Installing mods (" + index + "/" + operationsCount + " done)...";
+					OverlayOperationLabel.Text = "Saving 'toc'...";
+				});
+			};
 
-					var index = 0;
-					foreach (var mod in modsToInstall) {
-						ErrorLogger.WriteInfo($"Installing '{mod.Name}'...");
-						Dispatcher.Invoke(() => {
-							OverlayHeaderLabel.Text = "Installing mods (" + index + "/" + operationsCount + " done)...";
-							OverlayOperationLabel.Text = "Installing '" + mod.Name + "'...";
-						});
-
-						installer.Install(mod, index++);
-						ErrorLogger.WriteInfo(" OK!\n");
-					}
-
-					ErrorLogger.WriteInfo($"Saving 'toc'...");
-					Dispatcher.Invoke(() => {
-						if (uninstalling)
-							OverlayHeaderLabel.Text = "Uninstalling mods...";
-						else
-							OverlayHeaderLabel.Text = "Installing mods (" + index + "/" + operationsCount + " done)...";
-						OverlayOperationLabel.Text = "Saving 'toc'...";
-					});
-
-					installer.Finish();
-					ErrorLogger.WriteInfo(" OK!\n");
-				}
-
-				if (uninstalling)
-					installer.Uninstall();
-
+			builder.OnOperationsFinished = (int operationsCount) => {
 				Dispatcher.Invoke(() => {
 					if (uninstalling)
 						ShowStatusMessage("Done! Mods uninstalled.");
@@ -944,41 +873,25 @@ namespace Overstrike {
 						}
 					}
 				});
-				ErrorLogger.WriteInfo("\nDone.\n");
-			} catch (Exception ex) {
-				errorOccurred = true;
+			};
 
+			builder.OnErrorOccurred_BeforeWritingTrace = () => {
 				Dispatcher.Invoke(() => {
 					ShowStatusMessageError("Error occurred. See 'errors.log' for details.");
 				});
+			};
 
-				ErrorLogger.WriteError("\n\nError occurred:\n");
-				
-				var stackTrace = $"{ex}\n";
-				EnrichStackTrace(ref stackTrace, modsToInstall, game, gamePath);
-				ErrorLogger.WriteError(stackTrace);
+			builder.OnErrorOccurred_AfterTraceSaved = () => {
+				if (Settings_OpenErrorLog) {
+					Dispatcher.Invoke(() => {
+						ShowLatestErrorLogWindow();
+					});
+				}
+			};
 
-				ErrorLogger.WriteError($"{new StackTrace()}\n");
-				ErrorLogger.WriteError("\n");
-			}
-
-			try { ErrorLogger.EndSession(); } catch {}
-
-			if (errorOccurred && Settings_OpenErrorLog) {
-				Dispatcher.Invoke(() => {
-					ShowLatestErrorLogWindow();
-				});
-			}
-
-			if (!errorOccurred) {
-				try {
-					UpdateTocSha(_selectedGame.GetTocPath(gamePath));
-				} catch {}
-			}
-		}
-
-		private MetaInstallerBase GetMetaInstaller(string game, string gamePath) {
-			return _selectedGame.GetMetaInstaller(gamePath, _settings, _selectedProfile);
+			var thread = builder.Build();
+			_taskThreads.Add(thread);
+			thread.Start();
 		}
 
 		private void ShowStatusMessage(string text) {
@@ -1002,99 +915,12 @@ namespace Overstrike {
 			BeginStoryboard((System.Windows.Media.Animation.Storyboard)this.FindResource(name));
 		}
 
-		private void EnrichStackTrace(ref string stackTrace, List<ModEntry> modsToInstall, string game, string gamePath) {
-			try {
-				var i = stackTrace.IndexOf("InstallMods");
-				i = stackTrace.IndexOf(")", i);
-
-				var version = $"{Assembly.GetExecutingAssembly().GetName().Version}";
-				version = version.Replace(".", "");
-
-				var suits = 0;
-				var styles = 0;
-				var stages = 0;
-				var modulars = 0;
-				var scripts = 0;
-				var menu = 0;
-				foreach (var mod in modsToInstall) {
-					switch (mod.Type) {
-						case ModEntry.ModType.SUIT_MSMR:
-						case ModEntry.ModType.SUIT_MM:
-						case ModEntry.ModType.SUIT_MM_V2:
-						case ModEntry.ModType.SUIT2_MSM2:
-							++suits;
-						break;
-
-						case ModEntry.ModType.SUIT_STYLE_MSM2:
-							++styles;
-						break;
-
-						case ModEntry.ModType.STAGE_MSMR:
-						case ModEntry.ModType.STAGE_MM:
-						case ModEntry.ModType.STAGE_RCRA:
-						case ModEntry.ModType.STAGE_RCRA_V2:
-						case ModEntry.ModType.STAGE_I30:
-						case ModEntry.ModType.STAGE_I33:
-						case ModEntry.ModType.STAGE_MSM2:
-						case ModEntry.ModType.STAGE_MSM2_V2:
-							++stages;
-						break;
-
-						case ModEntry.ModType.MODULAR_MSMR:
-						case ModEntry.ModType.MODULAR_MM:
-						case ModEntry.ModType.MODULAR_RCRA:
-						case ModEntry.ModType.MODULAR_I30:
-						case ModEntry.ModType.MODULAR_I33:
-						case ModEntry.ModType.MODULAR_MSM2:
-							++modulars;
-						break;
-
-						case ModEntry.ModType.SCRIPT_MSM2:
-							++scripts;
-						break;
-
-						case ModEntry.ModType.SUITS_MENU:
-							++menu;
-						break;
-					}
-				}
-
-				var extra = $" {version} {GetTocArchivesCount(game, gamePath)} {modsToInstall.Count} {suits} {styles} {stages} {modulars} {scripts} {menu}";
-				stackTrace = stackTrace.Substring(0, i + 1) + extra + stackTrace.Substring(i + 1);
-			} catch {}
-		}
-
-		private int GetTocArchivesCount(string gameId, string gamePath) {
-			try {
-				var game = GameBase.GetGame(gameId);
-				var tocPath = game.GetTocPath(gamePath);
-
-				if (gameId == GameMSMR.ID || gameId == GameMM.ID) {
-					var toc = new TOC_I20();
-					toc.Load(tocPath);
-					return toc.ArchivesSection.Values.Count;
-				} else {
-					var toc = new TOC_I29();
-					toc.Load(tocPath);
-					return toc.ArchivesSection.Values.Count;
-				}
-			} catch {}
-
-			return 0;
-		}
-
 		private void ShowLatestErrorLogWindow(bool copyErrorToClipboard = false) {
 			var w = new ErrorLogWindow();
 			if (copyErrorToClipboard) {
 				w.CopyErrorText();
 			}
 			w.ShowDialog();
-		}
-
-		private void UpdateTocSha(string tocPath) {
-			var sha = Hashes.GetFileSha1(tocPath);
-			var shaFilePath = tocPath + ".sha1";
-			File.WriteAllText(shaFilePath, sha);
 		}
 
 		private void RefreshButton_Click(object sender, RoutedEventArgs e) {
@@ -1127,7 +953,7 @@ namespace Overstrike {
 
 		private void UninstallMods(object sender, RoutedEventArgs e) {
 			List<ModEntry> modsToInstall = new List<ModEntry>();
-			StartInstallModsThread(modsToInstall, _selectedProfile.Game, _selectedProfile.GamePath, true);
+			StartInstallModsThread(modsToInstall, true);
 		}
 
 		private void LaunchGame(object sender, RoutedEventArgs e) {
