@@ -27,26 +27,11 @@
 		DEBUG(" - %s found at %p", #n, n); \
 	}
 
-#define SCAN_REF(pt, t, n) \
-	t n = nullptr; \
-	void Init_ ## n() { \
-		auto n ## _res = Scan::Internal::ScanModule(utils::GetGameExecutable().c_str(), pt); \
-		if (!n ## _res.found) { FATAL("%s not found!", #n); return; } \
-		int32_t offset; \
-		std::memcpy(&offset, n ## _res.store, sizeof(offset)); \
-		n = (t)(n ## _res.loc + 7 + offset); \
-		DEBUG(" - %s found at %p", #n, n); \
-	}
-
 #pragma region SM2_Patterns
 // SM2 just had to be quirky so it has its own unique patterns :)
 SCAN(
 	"89 4C 24 ?? 55 56 41 56 48 83 EC 70",
 	void, native_ParseArgs_SM2, (int argc, char** argv)
-);
-SCAN_REF(
-	"48 89 05 ** ** ** ** 48 83 C4 70 41 5E",
-	const char**, native_TOC_SM2
 );
 #pragma endregion
 
@@ -54,10 +39,6 @@ SCAN_REF(
 SCAN(
 	"40 53 56 41 57 48 83 EC 50 48 8B F2",
 	void, native_ParseArgs_Other, (int argc, char** argv)
-);
-SCAN_REF(
-	"48 89 05 ** ** ** ** 48 83 C4 50",
-	const char**, native_TOC_Other
 );
 #pragma endregion
 
@@ -84,10 +65,22 @@ void InjectSelectedScripts(const char* folder = "./scripts") {
 
 	HANDLE proc = GetCurrentProcess();
 	INFO("Injecting scripts from %s", folder);
+	
 	std::ifstream selected_scripts("scripts.txt");
+	if (!selected_scripts.good()) {
+		MessageBoxA(NULL, "Attempting to inject scripts but no 'scripts.txt' found! Re-install mods through Overstrike!", "WARNING!", MB_OK);
+		return;
+	}
+	
 	for (std::string line; std::getline(selected_scripts, line); ) {
 		INFO("Loading script %s", line.c_str());
 		HMODULE mod = LoadScript(line.c_str());
+
+		if (!mod) {
+			MessageBoxA(NULL, "Error loading script! Re-install mods through Overstrike!", line.c_str(), MB_OK);
+			continue;
+		}
+
 		Script s;
 		s.mod = mod;
 		s.name = line;
@@ -110,48 +103,33 @@ void InjectSelectedScripts(const char* folder = "./scripts") {
 
 // Pointers to be assigned depending on the running game
 void* native_ParseArgs = nullptr;
-const char** native_TOC = nullptr;
 
 MAKE_HOOK(void, ParseArgs, (int argc, char** argv), {
 	ParseArgs_Call(argc, argv);
+	
+	bool inject_scripts = false;
+
 	for (int i = 0; i < argc; i++) {
 		DEBUG("CMD Arg: %s", argv[i]);
-		if (strcmp(argv[i], "-modded") == 0) {
-			DEBUG("Using modded toc");
-
-			// SM2/RCRA use toc, SMR and MM use asset_archive/toc
-			// We check for what the current TOC path is so we know 
-			// which tocm path to use
-
-			if (*native_TOC[0] == 'a') {
-				*native_TOC = "asset_archive/tocm";
-			}
-			else {
-				*native_TOC = "tocm";
-			}
-		}
 		if (strcmp(argv[i], "-console") == 0) {
 			utils::create_console();
 		}
 		if (strcmp(argv[i], "-scripts") == 0) {
-			InjectSelectedScripts();
+			inject_scripts = true;
 		}
 	}
-	DEBUG("TOC: %s %p", *native_TOC, native_TOC);
-	});
+
+	if (inject_scripts) {
+		InjectSelectedScripts();
+	}
+});
 
 bool InitOther() {
 	Init_native_ParseArgs_Other();
 	if (!native_ParseArgs_Other) return false;
 
 	DEBUG("Running on SMR / MM / RCRA");
-	Init_native_TOC_Other();
-	if (!native_TOC_Other) {
-		FATAL("Running on SMR / MM / RCRA but failed to find TOC path!");
-		return false;
-	}
 	native_ParseArgs = native_ParseArgs_Other;
-	native_TOC = native_TOC_Other;
 	return true;
 }
 
@@ -160,13 +138,7 @@ bool InitSM2() {
 	if (!native_ParseArgs_SM2) return false;
 
 	DEBUG("Running on SM2");
-	Init_native_TOC_SM2();
-	if (!native_TOC_SM2) {
-		FATAL("Running on SM2 but failed to find TOC path!");
-		return false;
-	}
 	native_ParseArgs = native_ParseArgs_SM2;
-	native_TOC = native_TOC_SM2;
 	return true;
 }
 
@@ -195,7 +167,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 		}
 
 		// Most likely not running in any supported game
-		if (!native_TOC || !native_ParseArgs) {
+		if (!native_ParseArgs) {
 			return TRUE;
 		}
 
