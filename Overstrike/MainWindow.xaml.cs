@@ -178,8 +178,6 @@ namespace Overstrike {
 				ScriptSettings.Visibility = Visibility.Visible;
 				_reactToScriptSettingsChange = false;
 				ScriptSettings_EnableScripting.IsChecked = _selectedProfile.Settings_Scripts_Enabled;
-				ScriptSettings_ModToc.IsChecked = _selectedProfile.Settings_Scripts_ModToc;
-				ScriptSettings_ModToc.IsEnabled = _selectedProfile.Settings_Scripts_Enabled;
 				_reactToScriptSettingsChange = true;
 			} else {
 				ScriptSettings.Visibility = Visibility.Collapsed;
@@ -968,8 +966,6 @@ namespace Overstrike {
 				if (modded) {
 					if (_selectedProfile.Settings_Scripts_Enabled)
 						arguments += "-scripts ";
-					if (_selectedProfile.Settings_Scripts_ModToc)
-						arguments += "-modded ";
 				}
 
 				Process.Start(new ProcessStartInfo() {
@@ -991,7 +987,6 @@ namespace Overstrike {
 				var exePath = _selectedGame.GetExecutablePath(path);
 				var tocPath = _selectedGame.GetTocPath(path);
 				var tocBakPath = tocPath + ".BAK";
-				var tocmPath = tocPath + "m";
 
 				try {
 					if (File.Exists(exePath)) {
@@ -1011,11 +1006,7 @@ namespace Overstrike {
 					File.Delete(tocBakPath);
 				} catch {}
 
-				try {
-					File.Delete(tocmPath);
-				} catch {}
-
-				if (File.Exists(exePath) || File.Exists(tocPath) || File.Exists(tocBakPath) || File.Exists(tocmPath)) {
+				if (File.Exists(exePath) || File.Exists(tocPath) || File.Exists(tocBakPath)) {
 					// sanity check, warn that something could've been deleted though
 					MessageBox.Show("Failed to reset 'toc'!\nMake sure the game isn't running and try again.\nSome files might've been deleted.", "Reset 'toc'", MessageBoxButton.OK);
 					return;
@@ -1228,15 +1219,7 @@ namespace Overstrike {
 			_selectedProfile.Settings_Scripts_Enabled = (bool)ScriptSettings_EnableScripting.IsChecked;
 			SaveProfile();
 
-			ScriptSettings_ModToc.IsEnabled = _selectedProfile.Settings_Scripts_Enabled;
-
 			UpdateRunModdedButtonVisibility();
-		}
-
-		private void ScriptSettings_ModToc_Changed(object sender, RoutedEventArgs e) {
-			if (!_reactToScriptSettingsChange) return;
-			_selectedProfile.Settings_Scripts_ModToc = (bool)ScriptSettings_ModToc.IsChecked;
-			SaveProfile();
 		}
 
 		private void RunModdedButton_Click(object sender, RoutedEventArgs e) {

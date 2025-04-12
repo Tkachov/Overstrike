@@ -38,6 +38,7 @@ Supported mod formats:
 - .suit
 - .stage
 - .modular
+- .script
 
 Supported archives formats:
 - .7z

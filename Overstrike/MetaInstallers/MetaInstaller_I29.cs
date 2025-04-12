@@ -17,10 +17,6 @@ namespace Overstrike.MetaInstallers {
 		public MetaInstaller_I29(string gamePath, AppSettings settings, Profile profile): base(gamePath, settings, profile) {}
 
 		public override void Prepare() {
-			if (_profile.Settings_Scripts_Enabled && _profile.Settings_Scripts_ModToc) {
-				_outTocName = "tocm";
-			}
-
 			var tocPath = Path.Combine(_gamePath, _outTocName);
 			var origTocPath = Path.Combine(_gamePath, "toc");
 			var tocBakPath = Path.Combine(_gamePath, "toc.BAK");
@@ -168,8 +164,6 @@ namespace Overstrike.MetaInstallers {
 		}
 
 		public override void Uninstall() {
-			// even if installing to tocm, uninstall is cleaning the normal toc
-
 			var tocPath = Path.Combine(_gamePath, "toc");
 			var tocBakPath = Path.Combine(_gamePath, "toc.BAK");
 
