@@ -134,6 +134,7 @@ namespace Overstrike {
 			else if (command == "disable-mod" && arguments.Length >= 3) return Command_DisableMod(arguments[1], arguments[2]);
 			else if (command == "install-mods" && arguments.Length >= 2) return Command_InstallMods(arguments[1]);
 			else if (command == "uninstall-mods" && arguments.Length >= 2) return Command_UninstallMods(arguments[1]);
+			else if (command == "test-mod" && arguments.Length >= 2) return Command_TestMod(arguments[1], arguments.Length >= 3 ? arguments[2] : null);
 
 			return -1;
 		}
@@ -322,6 +323,88 @@ namespace Overstrike {
 			}
 
 			return null;
+		}
+
+		private int Command_TestMod(string fileName, string optionalProfileName) {
+			var profile = FindProfileByName(Profiles, optionalProfileName ?? Settings.CurrentProfile);
+			if (profile == null) {
+				return 1;
+			}
+
+			// detect mods in filename
+
+			var path = Path.GetDirectoryName(fileName);
+			var warnings = new List<string>();
+			var filenames = new List<string>() { fileName };
+
+			try {
+				var detection = Settings.CacheModsLibrary ? new ModsDetectionCached() : new ModsDetection();
+				detection.DetectInFiles(path, filenames, Mods, warnings);
+			} catch {
+				return 2;
+			}
+
+			if (Mods.Count == 0) {
+				return 2;
+			}
+
+			// make test profile based on given profile
+
+			var testProfile = MakeTestProfile(profile);
+			var basename = Path.GetFileName(fileName);
+			foreach (var mod in Mods) {
+				mod.Path = mod.Path.Replace(basename, fileName);
+				testProfile.Mods.Add(new ModEntry(mod.Path, true, null));
+			}
+
+			// install detected mods
+
+			var error = false;
+			List<ModEntry> modsToInstall = new();
+
+			var builder1 = new ModCollectingThreadBuilder(testProfile, Mods);
+			builder1.OnException = (string s, Exception ex) => {
+				error = true;
+			};
+			builder1.OnSuccess = (List<ModEntry> result) => {
+				modsToInstall = result;
+			};
+
+			var thread1 = builder1.Build();
+			thread1.Start();
+			thread1.Join();
+
+			if (error) {
+				return 3;
+			}
+
+			var builder2 = new ModInstallingThreadBuilder(Settings, testProfile, modsToInstall);
+			builder2.OnErrorOccurred_BeforeWritingTrace = () => {
+				error = true;
+			};
+			builder2.OnErrorOccurred_AfterTraceSaved = () => {
+				error = true;
+			};
+
+			var thread2 = builder2.Build();
+			thread2.Start();
+			thread2.Join();
+
+			if (error) {
+				return 4;
+			}
+
+			return 0;
+		}
+
+		private Profile MakeTestProfile(Profile baseProfile) {
+			var profile = new Profile("test?", baseProfile.Game, baseProfile.GamePath);
+
+			profile.Mods = new List<ModEntry>();
+			profile.Settings_Suit_Language = baseProfile.Settings_Suit_Language;
+			profile.Settings_Scripts_Enabled = baseProfile.Settings_Scripts_Enabled;
+
+			return profile;
 		}
 
 		#endregion
