@@ -29,6 +29,10 @@ namespace ModdingTool {
 		private List<Game> _games = new();
 		private ObservableCollection<AssetReplace> _assets = new();
 
+		private static string _rememberedModName = null;
+		private static string _rememberedAuthor = null;
+		private static string _rememberedGameId = null;
+
 		class Game {
 			public string Name { get; set; }
 			public string Id;
@@ -47,9 +51,11 @@ namespace ModdingTool {
 
 		public PackStageWindow(Dictionary<Asset, string> replacedAssets, Dictionary<Asset, string> addedAssets, TOCBase toc) {
 			InitializeComponent();
+			
+			MakeGamesSelector(toc);
 			_initializing = false;
 
-			MakeGamesSelector(toc);
+			RestoreRememberedValues();
 
 			_mainWindowReplacedAssets = replacedAssets;
 			_mainWindowAddedAssets = addedAssets;
@@ -106,6 +112,31 @@ namespace ModdingTool {
 			AssetsList.ItemsSource = _assets;
 		}
 
+		private void RestoreRememberedValues() {
+			if (_rememberedAuthor == null) {
+				try {
+					_rememberedAuthor = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+					var i = _rememberedAuthor.IndexOf('\\');
+					if (i != -1)
+						_rememberedAuthor = _rememberedAuthor[(i + 1)..];
+				} catch {}
+			}
+
+			if (_rememberedAuthor != null)
+				AuthorTextBox.Text = _rememberedAuthor;
+
+			if (_rememberedModName != null)
+				NameTextBox.Text = _rememberedModName;
+
+			if (_rememberedGameId != null)
+				foreach (var game in _games) {
+					if (game.Id == _rememberedGameId) {
+						GameComboBox.SelectedItem = game;
+						break;
+					}
+				}
+		}
+
 		private void RefreshButton() {
 			var isEmpty = (string s) => { return (s == null || s == ""); };
 
@@ -118,18 +149,21 @@ namespace ModdingTool {
 		private void NameTextBox_TextChanged(object sender, TextChangedEventArgs e) {
 			if (_initializing) return;
 			_modName = NameTextBox.Text;
+			_rememberedModName = _modName;
 			RefreshButton();
 		}
 
 		private void AuthorTextBox_TextChanged(object sender, TextChangedEventArgs e) {
 			if (_initializing) return;
 			_author = AuthorTextBox.Text;
+			_rememberedAuthor = _author;
 			RefreshButton();
 		}
 
 		private void GameComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
 			if (_initializing) return;
 			_gameId = ((Game)GameComboBox.SelectedItem).Id;
+			_rememberedGameId = _gameId;
 		}
 
 		private void AssetsList_KeyUp(object sender, KeyEventArgs e) {
