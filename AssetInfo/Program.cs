@@ -47,9 +47,9 @@ void RegisterKnownSections() {
 	}
 
 	Register(typeof(ActorBuiltSection), "Actor Built");
+	Register(typeof(ActorPriusBuiltSection), "Actor Prius Built");
 	Register(typeof(ActorReferencesSection), "Actor Asset Refs");
 	RegisterName(0x364A6C7C, "Actor Object Built");
-	RegisterName(0x135832C8, "Actor Prius Built");
 	RegisterName(0x6D4301EF, "Actor Prius Built Data");
 }
 
@@ -253,12 +253,32 @@ static class SectionExtensions {
 	}
 
 	public static void PrintLongSectionDescription(this ActorReferencesSection section, DAT1.DAT1 asset) {
-		var refs = asset.Section<ActorReferencesSection>(ActorReferencesSection.TAG).Entries;
+		var refs = section.Entries;
 
 		Console.WriteLine("Actor Asset Refs");
+		Console.WriteLine($"    {refs.Count} refs:");
 		foreach (var reference in refs) {
 			var path = asset.GetStringByOffset(reference.AssetPathStringOffset);
 			Console.WriteLine($"    {reference.ExtensionHash:X8} {reference.AssetId:X16} \"{path}\"");
+		}
+		Console.WriteLine("");
+	}
+
+	public static string GetShortSectionDescription(this ActorPriusBuiltSection section, DAT1.DAT1 asset) {
+		return $"Actor Prius Built, {section.Values.Count} entries";
+	}
+
+	public static void PrintLongSectionDescription(this ActorPriusBuiltSection section, DAT1.DAT1 asset) {
+		var entries = section.Values;
+
+		Console.WriteLine("Actor Prius Built");
+		Console.WriteLine($"    {entries.Count} entries:");
+		for (var i = 0; i < entries.Count; ++i) {
+			var entry = entries[i];
+			var path = asset.GetStringByOffset(entry.StringOffset);
+
+			Console.WriteLine($"    - {i,3}: {entry.Unknown0:X16} {entry.StringHash:X8} \"{path}\"");
+			Console.WriteLine($"           offset={entry.Offset} size={entry.Size} unk16={entry.Unknown16:X8} unk28={entry.Unknown28:X8}");
 		}
 		Console.WriteLine("");
 	}
