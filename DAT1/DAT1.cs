@@ -61,6 +61,12 @@ namespace DAT1 {
 
 		public bool HasSection(uint tag) => _rawSections.ContainsKey(tag);
 
+		public List<uint> GetSectionTags() => sectionsTags;
+
+		public byte[] GetUnknowns() => unknowns;
+
+		public byte[] GetRawSection(uint tag) => (_rawSections.ContainsKey(tag) ? _rawSections[tag] : null);
+
 		protected DAT1() {}
 
 		public DAT1(BinaryReader r) {
