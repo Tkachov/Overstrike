@@ -30,6 +30,8 @@ namespace DAT1 {
 		private Dictionary<uint, byte[]> _rawSections = new();
 		public Dictionary<uint, Section> Sections = new();
 
+		public Dictionary<uint, uint> OriginalSectionsOffsets = new();
+
 		public T Section<T>(uint tag) where T: Section, new() {
 			if (Sections.ContainsKey(tag)) {
 				return (T)Sections[tag];
@@ -115,6 +117,7 @@ namespace DAT1 {
 			foreach (uint tag in sectionsTags) {
 				r.BaseStream.Position = offsets[tag] + dat1_start;
 				_rawSections[tag] = r.ReadBytes((int)sizes[tag]);
+				OriginalSectionsOffsets[tag] = offsets[tag];
 			}
 		}
 

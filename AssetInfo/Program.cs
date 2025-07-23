@@ -270,6 +270,7 @@ static class SectionExtensions {
 
 	public static void PrintLongSectionDescription(this ActorPriusBuiltSection section, DAT1.DAT1 asset) {
 		var entries = section.Values;
+		var priusData = asset.Section<ActorPriusBuiltDataSection>(ActorPriusBuiltDataSection.TAG);
 
 		Console.WriteLine("Actor Prius Built");
 		Console.WriteLine($"    {entries.Count} entries:");
@@ -279,7 +280,11 @@ static class SectionExtensions {
 
 			Console.WriteLine($"    - {i,3}: {entry.Unknown0:X16} {entry.StringHash:X8} \"{path}\"");
 			Console.WriteLine($"           offset={entry.Offset} size={entry.Size} unk16={entry.Unknown16:X8} unk28={entry.Unknown28:X8}");
+			if (entry.Size > 0) {
+				var json = priusData.GetData(asset, (int)entry.Offset, (int)entry.Size);
+				Console.WriteLine($"           data={json}");
+			}
+			Console.WriteLine("    ");
 		}
-		Console.WriteLine("");
 	}
 }
