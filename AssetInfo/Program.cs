@@ -1,5 +1,7 @@
 ﻿using DAT1.Sections;
+using DAT1.Sections.Conduit;
 using DAT1.Sections.Config;
+using DAT1.Sections.Generic;
 using DAT1.Sections.Localization;
 using OverstrikeShared.STG;
 using System.Reflection;
@@ -51,6 +53,9 @@ void RegisterKnownSections() {
 	Register(typeof(ActorReferencesSection), "Actor Asset Refs");
 	Register(typeof(ActorObjectBuiltSection), "Actor Object Built");
 	RegisterName(0x6D4301EF, "Actor Prius Built Data");
+
+	Register(typeof(ConduitBuiltSection), "Conduit Built");
+	Register(typeof(ConduitReferencesSection), "Conduit Asset Refs");
 }
 
 void Main(string input) {
@@ -144,6 +149,7 @@ void PrintAsset(STG asset) {
 	var assetType = $"Unknown {asset.Dat1.TypeMagic:X8}";
 	switch (asset.Dat1.TypeMagic) {
 		case 0x521BEEB8: assetType = "Actor"; break;
+		case 0x35F7AFA5: assetType = "Conduit"; break;
 	}
 
 	Console.WriteLine(assetType);
@@ -252,18 +258,6 @@ static class SectionExtensions {
 		return $"Actor Asset Refs, {section.Entries.Count} refs";
 	}
 
-	public static void PrintLongSectionDescription(this ActorReferencesSection section, DAT1.DAT1 asset) {
-		var refs = section.Entries;
-
-		Console.WriteLine("Actor Asset Refs");
-		Console.WriteLine($"    {refs.Count} refs:");
-		foreach (var reference in refs) {
-			var path = asset.GetStringByOffset(reference.AssetPathStringOffset);
-			Console.WriteLine($"    {reference.ExtensionHash:X8} {reference.AssetId:X16} \"{path}\"");
-		}
-		Console.WriteLine("");
-	}
-
 	public static string GetShortSectionDescription(this ActorPriusBuiltSection section, DAT1.DAT1 asset) {
 		return $"Actor Prius Built, {section.Values.Count} entries";
 	}
@@ -314,5 +308,33 @@ static class SectionExtensions {
 			}
 			Console.WriteLine("    ");
 		}
+	}
+
+	public static string GetShortSectionDescription(this ConduitBuiltSection section, DAT1.DAT1 asset) {
+		return $"Conduit Built";
+	}
+
+	public static void PrintLongSectionDescription(this SerializedSection_I30 section, DAT1.DAT1 asset) {
+		Console.WriteLine(GetShortSectionDescription(section, asset));
+		Console.WriteLine($"    data = {section.Data}");
+		Console.WriteLine("    ");
+	}
+
+	public static string GetShortSectionDescription(this ConduitReferencesSection section, DAT1.DAT1 asset) {
+		return $"Conduit Asset Refs, {section.Entries.Count} refs";
+	}
+
+	public static void PrintLongSectionDescription(this ReferencesSection section, DAT1.DAT1 asset) {
+		var refs = section.Entries;
+
+		var shortDescription = GetShortSectionDescription(section, asset);
+		shortDescription = shortDescription.Substring(0, shortDescription.LastIndexOf(','));
+		Console.WriteLine(shortDescription);
+		Console.WriteLine($"    {refs.Count} refs:");
+		foreach (var reference in refs) {
+			var path = asset.GetStringByOffset(reference.AssetPathStringOffset);
+			Console.WriteLine($"    {reference.ExtensionHash:X8} {reference.AssetId:X16} \"{path}\"");
+		}
+		Console.WriteLine("");
 	}
 }
