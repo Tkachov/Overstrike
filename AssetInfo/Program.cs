@@ -49,7 +49,7 @@ void RegisterKnownSections() {
 	Register(typeof(ActorBuiltSection), "Actor Built");
 	Register(typeof(ActorPriusBuiltSection), "Actor Prius Built");
 	Register(typeof(ActorReferencesSection), "Actor Asset Refs");
-	RegisterName(0x364A6C7C, "Actor Object Built");
+	Register(typeof(ActorObjectBuiltSection), "Actor Object Built");
 	RegisterName(0x6D4301EF, "Actor Prius Built Data");
 }
 
@@ -283,6 +283,34 @@ static class SectionExtensions {
 			if (entry.Size > 0) {
 				var json = priusData.GetData(asset, (int)entry.Offset, (int)entry.Size);
 				Console.WriteLine($"           data={json}");
+			}
+			Console.WriteLine("    ");
+		}
+	}
+
+	public static void PrintLongSectionDescription(this ActorObjectBuiltSection section, DAT1.DAT1 asset) {
+		Console.WriteLine("Actor Object Built");
+		Console.WriteLine($"    matrix:");
+		for (var row = 0; row < 4; ++row) {
+			Console.WriteLine($"    | {section.Matrix[row, 0],10} {section.Matrix[row, 1],10} {section.Matrix[row, 2],10} {section.Matrix[row, 3],10} |");
+		}
+		Console.WriteLine("    ");
+		Console.WriteLine($"    zeroes = {Convert.ToHexString(section.Zeroes64)}");
+		Console.WriteLine($"    type = {section.Type:X8}");
+		Console.WriteLine($"    zeroes = {Convert.ToHexString(section.Zeroes96)}");
+		Console.WriteLine($"    X, Y, Z = ({section.X}, {section.Y}, {section.Z})");
+		Console.WriteLine($"    section size = {section.SectionSize} (real size = {asset.GetRawSection(ActorObjectBuiltSection.TAG).Length})");
+		Console.WriteLine("    ");
+
+		var unknownBytes = section.Raw;
+		if (unknownBytes.Length > 0) {
+			Console.WriteLine($"    other {unknownBytes.Length} bytes:");
+			for (var i = 0; i < unknownBytes.Length; i += 16) {
+				var byteStr = $"{Convert.ToHexString(unknownBytes, i, 4)}";
+				if (i + 4 < unknownBytes.Length) byteStr += $" {Convert.ToHexString(unknownBytes, i + 4, 4)}";
+				if (i + 8 < unknownBytes.Length) byteStr += $" {Convert.ToHexString(unknownBytes, i + 8, 4)}";
+				if (i + 12 < unknownBytes.Length) byteStr += $" {Convert.ToHexString(unknownBytes, i + 12, 4)}";
+				Console.WriteLine($"    {byteStr}");
 			}
 			Console.WriteLine("    ");
 		}
