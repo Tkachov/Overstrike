@@ -57,6 +57,7 @@ void RegisterKnownSections() {
 	Register(typeof(ConduitBuiltSection), "Conduit Built");
 	Register(typeof(ConduitReferencesSection), "Conduit Asset Refs");
 
+	Register(typeof(ZoneHibernateObjectsSection), "Zone Hibernate Objects");
 	Register(typeof(ZoneHibernateLightNamesSection), "Zone Hibernate Light Names");
 	Register(typeof(ZoneHibernateModelAssetsSection), "Zone Hibernate Model Assets");
 	Register(typeof(ZoneHibernateVFXAssetsSection), "Zone Hibernate VFX Assets");
@@ -287,6 +288,20 @@ static class SectionExtensions {
 		}
 	}
 
+	private static void PrintBytes(byte[] bytes, string indent, string headerPrefix, string headerSuffix) {
+		if (bytes.Length > 0) {
+			Console.WriteLine($"{indent}{headerPrefix}{bytes.Length}{headerSuffix}:");
+			for (var i = 0; i < bytes.Length; i += 16) {
+				var byteStr = $"{Convert.ToHexString(bytes, i, 4)}";
+				if (i + 4 < bytes.Length) byteStr += $" {Convert.ToHexString(bytes, i + 4, 4)}";
+				if (i + 8 < bytes.Length) byteStr += $" {Convert.ToHexString(bytes, i + 8, 4)}";
+				if (i + 12 < bytes.Length) byteStr += $" {Convert.ToHexString(bytes, i + 12, 4)}";
+				Console.WriteLine($"{indent}{byteStr}");
+			}
+			Console.WriteLine(indent);
+		}
+	}
+
 	public static void PrintLongSectionDescription(this ActorObjectBuiltSection section, DAT1.DAT1 asset) {
 		Console.WriteLine("Actor Object Built");
 		Console.WriteLine($"    matrix:");
@@ -301,18 +316,7 @@ static class SectionExtensions {
 		Console.WriteLine($"    section size = {section.SectionSize} (real size = {asset.GetRawSection(ActorObjectBuiltSection.TAG).Length})");
 		Console.WriteLine("    ");
 
-		var unknownBytes = section.Raw;
-		if (unknownBytes.Length > 0) {
-			Console.WriteLine($"    other {unknownBytes.Length} bytes:");
-			for (var i = 0; i < unknownBytes.Length; i += 16) {
-				var byteStr = $"{Convert.ToHexString(unknownBytes, i, 4)}";
-				if (i + 4 < unknownBytes.Length) byteStr += $" {Convert.ToHexString(unknownBytes, i + 4, 4)}";
-				if (i + 8 < unknownBytes.Length) byteStr += $" {Convert.ToHexString(unknownBytes, i + 8, 4)}";
-				if (i + 12 < unknownBytes.Length) byteStr += $" {Convert.ToHexString(unknownBytes, i + 12, 4)}";
-				Console.WriteLine($"    {byteStr}");
-			}
-			Console.WriteLine("    ");
-		}
+		PrintBytes(section.Raw, "    ", "other ", " bytes");
 	}
 
 	public static string GetShortSectionDescription(this ConduitBuiltSection section, DAT1.DAT1 asset) {
@@ -379,5 +383,59 @@ static class SectionExtensions {
 
 	public static void PrintLongSectionDescription(this ZoneHibernateVFXAssetsSection section, DAT1.DAT1 asset) {
 		PrintLongSectionDescription_StringOffsets(section, asset);
+	}
+
+	public static string GetShortSectionDescription(this ZoneHibernateObjectsSection section, DAT1.DAT1 asset) {
+		return $"Zone Hibernate Objects";
+	}
+
+	public static void PrintLongSectionDescription(this ZoneHibernateObjectsSection section, DAT1.DAT1 asset) {
+		void PrintGroups(ref List<ZoneHibernateObjectsSection.ZoneHibernateObjectsGroup> list, string name) {
+			if (list.Count == 0) return;
+
+			Console.WriteLine($"    {list.Count} {name}:");
+			foreach (var e in list) {
+				Console.WriteLine($"        - {e.A:X8} {e.B:X8} {e.C:X8} {e.D:X8} {e.Flags:X8} {e.Count} {e.FirstItemIndex} {e.Count2}");
+			}
+			Console.WriteLine("    ");
+		}
+
+		void PrintItems(ref List<ZoneHibernateObjectsSection.ZoneHibernateObjectsItem> list, string name) {
+			if (list.Count == 0) return;
+
+			Console.WriteLine($"    {list.Count} {name}:");
+			foreach (var e in list) {
+				Console.WriteLine($"        - {e.A:X8} {e.B:X8} {e.C:X8} {e.D:X8} {e.E:X8} {e.F:X8} {e.G:X8} {e.H:X8} {e.I:X8} {e.J:X8}");
+			}
+			Console.WriteLine("    ");
+		}
+
+		Console.WriteLine("Zone Hibernate Objects");
+		Console.WriteLine($"    models:");
+		Console.WriteLine($"        {section.ModelsHeader.A:X8} {section.ModelsHeader.B:X8} {section.ModelsHeader.C:X8} {section.ModelsHeader.D:X8}");
+		Console.WriteLine($"        offset1 = {section.ModelsHeader.Offset1:X8}, groups = {section.ModelsHeader.GroupsCount}");
+		Console.WriteLine($"        offset2 = {section.ModelsHeader.Offset2:X8}, items = {section.ModelsHeader.ItemsCount}");
+		Console.WriteLine($"    VFX:");
+		Console.WriteLine($"        {section.VfxHeader.A:X8} {section.VfxHeader.B:X8} {section.VfxHeader.C:X8} {section.VfxHeader.D:X8}");
+		Console.WriteLine($"        offset1 = {section.VfxHeader.Offset1:X8}, groups = {section.VfxHeader.GroupsCount}");
+		Console.WriteLine($"        offset2 = {section.VfxHeader.Offset2:X8}, items = {section.VfxHeader.ItemsCount}");
+		Console.WriteLine($"    lights:");
+		Console.WriteLine($"        {section.LightsHeader.A:X8} {section.LightsHeader.B:X8} {section.LightsHeader.C:X8} {section.LightsHeader.D:X8}");
+		Console.WriteLine($"        offset1 = {section.LightsHeader.Offset1:X8}, groups = {section.LightsHeader.GroupsCount}");
+		Console.WriteLine($"        offset2 = {section.LightsHeader.Offset2:X8}, items = {section.LightsHeader.ItemsCount}");
+		Console.WriteLine("    ");
+		Console.WriteLine($"    some offset = {section.OffsetToPayload:X8}, some count = {section.UnknownCount}");
+		Console.WriteLine("    ");
+
+		PrintBytes(section.Raw, "    ", "", " bytes");
+
+		PrintGroups(ref section.ModelGroups, "model groups");
+		PrintItems(ref section.ModelItems, "model items");
+
+		PrintGroups(ref section.VfxGroups, "VFX groups");
+		PrintItems(ref section.VfxItems, "VFX items");
+
+		PrintGroups(ref section.LightGroups, "light groups");
+		PrintItems(ref section.LightItems, "light items");
 	}
 }
