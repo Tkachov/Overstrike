@@ -6,7 +6,7 @@
 using DAT1.Sections.Generic;
 using System.IO;
 
-namespace DAT1.Sections.Localization {
+namespace DAT1.Sections.Actor {
 	public class ActorPriusBuiltSection: ArraySection<ActorPriusBuiltSection.Entry> {
 		public const uint TAG = 0x135832C8; // Actor Prius Built
 

@@ -7,7 +7,7 @@ using DAT1.Sections.Generic;
 using Newtonsoft.Json.Linq;
 using System;
 
-namespace DAT1.Sections.Localization {
+namespace DAT1.Sections.Actor {
 	public class ActorPriusBuiltDataSection: Sections.UnknownSection {
 		public const uint TAG = 0x6D4301EF; // Actor Prius Built Data
 

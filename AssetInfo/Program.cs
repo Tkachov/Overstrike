@@ -1,8 +1,8 @@
 ﻿using DAT1.Sections;
+using DAT1.Sections.Actor;
 using DAT1.Sections.Conduit;
-using DAT1.Sections.Config;
 using DAT1.Sections.Generic;
-using DAT1.Sections.Localization;
+using DAT1.Sections.HibernateZone;
 using OverstrikeShared.STG;
 using System.Reflection;
 
@@ -56,6 +56,10 @@ void RegisterKnownSections() {
 
 	Register(typeof(ConduitBuiltSection), "Conduit Built");
 	Register(typeof(ConduitReferencesSection), "Conduit Asset Refs");
+
+	Register(typeof(ZoneHibernateLightNamesSection), "Zone Hibernate Light Names");
+	Register(typeof(ZoneHibernateModelAssetsSection), "Zone Hibernate Model Assets");
+	Register(typeof(ZoneHibernateVFXAssetsSection), "Zone Hibernate VFX Assets");
 }
 
 void Main(string input) {
@@ -150,6 +154,7 @@ void PrintAsset(STG asset) {
 	switch (asset.Dat1.TypeMagic) {
 		case 0x521BEEB8: assetType = "Actor"; break;
 		case 0x35F7AFA5: assetType = "Conduit"; break;
+		case 0xA23BC2E8: assetType = "HibernateZone"; break;
 	}
 
 	Console.WriteLine(assetType);
@@ -336,5 +341,43 @@ static class SectionExtensions {
 			Console.WriteLine($"    {reference.ExtensionHash:X8} {reference.AssetId:X16} \"{path}\"");
 		}
 		Console.WriteLine("");
+	}
+
+	private static void PrintLongSectionDescription_StringOffsets(this UInt32ArraySection section, DAT1.DAT1 asset) {
+		var items = section.Values;
+
+		var shortDescription = GetShortSectionDescription(section, asset);
+		shortDescription = shortDescription.Substring(0, shortDescription.LastIndexOf(','));
+		Console.WriteLine(shortDescription);
+		Console.WriteLine($"    {items.Count} items:");
+		foreach (var offset in items) {
+			var path = asset.GetStringByOffset(offset);
+			Console.WriteLine($"    \"{path}\"");
+		}
+		Console.WriteLine("");
+	}
+
+	public static string GetShortSectionDescription(this ZoneHibernateLightNamesSection section, DAT1.DAT1 asset) {
+		return $"Zone Hibernate Light Names, {section.Values.Count} items";
+	}
+
+	public static void PrintLongSectionDescription(this ZoneHibernateLightNamesSection section, DAT1.DAT1 asset) {
+		PrintLongSectionDescription_StringOffsets(section, asset);
+	}
+
+	public static string GetShortSectionDescription(this ZoneHibernateModelAssetsSection section, DAT1.DAT1 asset) {
+		return $"Zone Hibernate Model Assets, {section.Values.Count} items";
+	}
+
+	public static void PrintLongSectionDescription(this ZoneHibernateModelAssetsSection section, DAT1.DAT1 asset) {
+		PrintLongSectionDescription_StringOffsets(section, asset);
+	}
+
+	public static string GetShortSectionDescription(this ZoneHibernateVFXAssetsSection section, DAT1.DAT1 asset) {
+		return $"Zone Hibernate VFX Assets, {section.Values.Count} items";
+	}
+
+	public static void PrintLongSectionDescription(this ZoneHibernateVFXAssetsSection section, DAT1.DAT1 asset) {
+		PrintLongSectionDescription_StringOffsets(section, asset);
 	}
 }

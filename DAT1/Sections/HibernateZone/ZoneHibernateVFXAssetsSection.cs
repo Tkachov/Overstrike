@@ -5,10 +5,8 @@
 
 using DAT1.Sections.Generic;
 
-namespace DAT1.Sections.Actor {
-	public class ActorBuiltSection: SingleUInt32Section {
-		public const uint TAG = 0x32FAC8E0; // Actor Built
-
-		public uint StringOffset => Value;
+namespace DAT1.Sections.HibernateZone {
+	public class ZoneHibernateVFXAssetsSection: UInt32ArraySection {
+		public const uint TAG = 0x0FC34398; // Zone Hibernate VFX Assets
 	}
 }

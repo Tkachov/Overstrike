@@ -6,7 +6,7 @@
 using System;
 using System.IO;
 
-namespace DAT1.Sections.Localization {
+namespace DAT1.Sections.Actor {
 	public class ActorObjectBuiltSection: Section {
 		public const uint TAG = 0x364A6C7C; // Actor Object Built
 

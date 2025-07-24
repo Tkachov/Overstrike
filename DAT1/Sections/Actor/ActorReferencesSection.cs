@@ -5,7 +5,7 @@
 
 using DAT1.Sections.Generic;
 
-namespace DAT1.Sections.Config {
+namespace DAT1.Sections.Actor {
 	public class ActorReferencesSection: ReferencesSection {
 		public const uint TAG = 0x3AB204B9; // Actor Asset Refs
 	}
