@@ -22,7 +22,7 @@ if (args.Length == 0) {
 
 var input = args[0];
 Dictionary<uint, KnownSectionsRegistryEntry> SectionsRegistry = new();
-List<uint> SectionsToSkipLongDescriptionFor = new() { LevelLinkNamesSection.TAG, LevelZoneNamesSection.TAG, LevelRegionNamesSection.TAG };
+List<uint> SectionsToSkipLongDescriptionFor = new() { LevelLinkNamesSection.TAG, LevelZoneNamesSection.TAG, LevelRegionNamesSection.TAG, LevelRegionsBuiltSection.TAG, LevelZonesBuiltSection.TAG };
 
 try {
 	RegisterKnownSections();
@@ -64,6 +64,7 @@ void RegisterKnownSections() {
 	Register(typeof(ZoneHibernateModelAssetsSection), "Zone Hibernate Model Assets");
 	Register(typeof(ZoneHibernateVFXAssetsSection), "Zone Hibernate VFX Assets");
 
+	Register(typeof(LevelBuiltSection), "Level Built");
 	Register(typeof(LevelLinkNamesSection), "Level Link Names");
 	Register(typeof(LevelZoneNamesSection), "Level Zone Names");
 	Register(typeof(LevelZonesBuiltSection), "Level Zones Built");
@@ -531,5 +532,11 @@ static class SectionExtensions {
 				Console.WriteLine("    ");
 			}
 		}
+	}
+
+	public static void PrintLongSectionDescription(this LevelBuiltSection section, DAT1.DAT1 asset) {
+		Console.WriteLine("Level Built");
+		Console.WriteLine($"    {section.Unk1:X16}  {section.A}  regions={section.RegionsCount}  {section.C}  {section.D}  zones={section.ZonesCount}  links={section.LinksCount}  {section.G}  {section.H}");
+		Console.WriteLine("    ");
 	}
 }
