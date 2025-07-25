@@ -22,7 +22,7 @@ if (args.Length == 0) {
 
 var input = args[0];
 Dictionary<uint, KnownSectionsRegistryEntry> SectionsRegistry = new();
-List<uint> SectionsToSkipLongDescriptionFor = new() { LevelLinkNamesSection.TAG, LevelZoneNamesSection.TAG, LevelRegionNamesSection.TAG, LevelRegionsBuiltSection.TAG, LevelZonesBuiltSection.TAG, LevelUnknownBuiltSection.TAG, LevelSomeIndexesSection.TAG };
+List<uint> SectionsToSkipLongDescriptionFor = new() { LevelLinkNamesSection.TAG, LevelZoneNamesSection.TAG, LevelRegionNamesSection.TAG, LevelRegionsBuiltSection.TAG, LevelZonesBuiltSection.TAG, LevelUnknownBuiltSection.TAG, LevelSomeIndexesSection.TAG, LevelRandomListSection.TAG };
 
 try {
 	RegisterKnownSections();
@@ -73,6 +73,7 @@ void RegisterKnownSections() {
 	Register(typeof(LevelUnknownBuiltSection), "\"unknown\" list");
 	Register(typeof(LevelUnknownDataSection), "\"unknown\" serialized data");
 	Register(typeof(LevelSomeIndexesSection), "\"some\" indexes");
+	Register(typeof(LevelRandomListSection), "\"random\" list");
 }
 
 void Main(string input) {
@@ -539,7 +540,7 @@ static class SectionExtensions {
 
 	public static void PrintLongSectionDescription(this LevelBuiltSection section, DAT1.DAT1 asset) {
 		Console.WriteLine("Level Built");
-		Console.WriteLine($"    {section.Unk1:X16}  {section.A}  regions={section.RegionsCount}  \"some\"={section.SomeCount}  {section.D}  zones={section.ZonesCount}  links={section.LinksCount}  \"unknowns\"={section.UnknownsCount}  {section.H}");
+		Console.WriteLine($"    {section.Unk1:X16}  {section.A}  regions={section.RegionsCount}  \"some\"={section.SomeCount}  \"random\"={section.RandomCount}  zones={section.ZonesCount}  links={section.LinksCount}  \"unknowns\"={section.UnknownsCount}  {section.H}");
 		Console.WriteLine("    ");
 	}
 
@@ -580,5 +581,20 @@ static class SectionExtensions {
 			Console.WriteLine($"    - {offset}");
 		}
 		Console.WriteLine("");
+	}
+
+	public static string GetShortSectionDescription(this LevelRandomListSection section, DAT1.DAT1 asset) {
+		return $"\"random\" list, {section.Values.Count} entries";
+	}
+
+	public static void PrintLongSectionDescription(this LevelRandomListSection section, DAT1.DAT1 asset) {
+		var entries = section.Values;
+
+		Console.WriteLine("\"random\" list");
+		Console.WriteLine($"    {entries.Count} entries:");
+		for (var i = 0; i < entries.Count; ++i) {
+			var entry = entries[i];
+			Console.WriteLine($"    - {i,3}: {entry.Flags1:X8} {entry.Zero} {entry.Flags2:X8} {entry.D,4} {entry.E,4} {entry.F,4}");
+		}
 	}
 }

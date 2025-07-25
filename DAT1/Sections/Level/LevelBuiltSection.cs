@@ -10,7 +10,7 @@ namespace DAT1.Sections.Level {
 		public const uint TAG = 0x7CA7267D; // Level Built
 
 		public ulong Unk1;
-		public uint A, RegionsCount, SomeCount, D, ZonesCount, LinksCount, UnknownsCount, H;
+		public uint A, RegionsCount, SomeCount, RandomCount, ZonesCount, LinksCount, UnknownsCount, H;
 
 		override public void Load(byte[] bytes, DAT1 container) {
 			using var r = new BinaryReader(new MemoryStream(bytes));
@@ -19,7 +19,7 @@ namespace DAT1.Sections.Level {
 			A = r.ReadUInt32();
 			RegionsCount = r.ReadUInt32();
 			SomeCount = r.ReadUInt32();
-			D = r.ReadUInt32();
+			RandomCount = r.ReadUInt32();
 			ZonesCount = r.ReadUInt32();
 			LinksCount = r.ReadUInt32();
 			UnknownsCount = r.ReadUInt32();
@@ -34,7 +34,7 @@ namespace DAT1.Sections.Level {
 			w.Write(A);
 			w.Write(RegionsCount);
 			w.Write(SomeCount);
-			w.Write(D);
+			w.Write(RandomCount);
 			w.Write(ZonesCount);
 			w.Write(LinksCount);
 			w.Write(UnknownsCount);
