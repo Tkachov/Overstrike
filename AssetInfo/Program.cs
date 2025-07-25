@@ -3,6 +3,7 @@ using DAT1.Sections.Actor;
 using DAT1.Sections.Conduit;
 using DAT1.Sections.Generic;
 using DAT1.Sections.HibernateZone;
+using DAT1.Sections.Level;
 using OverstrikeShared.STG;
 using System.Reflection;
 
@@ -21,6 +22,7 @@ if (args.Length == 0) {
 
 var input = args[0];
 Dictionary<uint, KnownSectionsRegistryEntry> SectionsRegistry = new();
+List<uint> SectionsToSkipLongDescriptionFor = new() { LevelLinkNamesSection.TAG };
 
 try {
 	RegisterKnownSections();
@@ -61,6 +63,8 @@ void RegisterKnownSections() {
 	Register(typeof(ZoneHibernateLightNamesSection), "Zone Hibernate Light Names");
 	Register(typeof(ZoneHibernateModelAssetsSection), "Zone Hibernate Model Assets");
 	Register(typeof(ZoneHibernateVFXAssetsSection), "Zone Hibernate VFX Assets");
+
+	Register(typeof(LevelLinkNamesSection), "Level Link Names");
 }
 
 void Main(string input) {
@@ -156,6 +160,7 @@ void PrintAsset(STG asset) {
 		case 0x521BEEB8: assetType = "Actor"; break;
 		case 0x35F7AFA5: assetType = "Conduit"; break;
 		case 0xA23BC2E8: assetType = "HibernateZone"; break;
+		case 0xD3188EE5: assetType = "Level"; break;
 	}
 
 	Console.WriteLine(assetType);
@@ -172,6 +177,8 @@ void PrintAsset(STG asset) {
 	Console.WriteLine($"    ");
 
 	foreach (var tag in tags) {
+		if (SectionsToSkipLongDescriptionFor.Contains(tag)) continue;
+
 		PrintLongSectionDescription(tag, asset.Dat1);
 	}
 }
@@ -437,5 +444,13 @@ static class SectionExtensions {
 
 		PrintGroups(ref section.LightGroups, "light groups");
 		PrintItems(ref section.LightItems, "light items");
+	}
+
+	public static string GetShortSectionDescription(this LevelLinkNamesSection section, DAT1.DAT1 asset) {
+		return $"Level Link Names, {section.Values.Count} items";
+	}
+
+	public static void PrintLongSectionDescription(this LevelLinkNamesSection section, DAT1.DAT1 asset) {
+		PrintLongSectionDescription_StringOffsets(section, asset);
 	}
 }
