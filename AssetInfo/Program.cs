@@ -22,7 +22,7 @@ if (args.Length == 0) {
 
 var input = args[0];
 Dictionary<uint, KnownSectionsRegistryEntry> SectionsRegistry = new();
-List<uint> SectionsToSkipLongDescriptionFor = new() { LevelLinkNamesSection.TAG, LevelZoneNamesSection.TAG, LevelRegionNamesSection.TAG, LevelRegionsBuiltSection.TAG, LevelZonesBuiltSection.TAG, LevelUnknownBuiltSection.TAG };
+List<uint> SectionsToSkipLongDescriptionFor = new() { LevelLinkNamesSection.TAG, LevelZoneNamesSection.TAG, LevelRegionNamesSection.TAG, LevelRegionsBuiltSection.TAG, LevelZonesBuiltSection.TAG, LevelUnknownBuiltSection.TAG, LevelSomeIndexesSection.TAG };
 
 try {
 	RegisterKnownSections();
@@ -72,6 +72,7 @@ void RegisterKnownSections() {
 	Register(typeof(LevelRegionsBuiltSection), "Level Regions Built");
 	Register(typeof(LevelUnknownBuiltSection), "\"unknown\" list");
 	Register(typeof(LevelUnknownDataSection), "\"unknown\" serialized data");
+	Register(typeof(LevelSomeIndexesSection), "\"some\" indexes");
 }
 
 void Main(string input) {
@@ -538,7 +539,7 @@ static class SectionExtensions {
 
 	public static void PrintLongSectionDescription(this LevelBuiltSection section, DAT1.DAT1 asset) {
 		Console.WriteLine("Level Built");
-		Console.WriteLine($"    {section.Unk1:X16}  {section.A}  regions={section.RegionsCount}  {section.C}  {section.D}  zones={section.ZonesCount}  links={section.LinksCount}  \"unknowns\"={section.UnknownsCount}  {section.H}");
+		Console.WriteLine($"    {section.Unk1:X16}  {section.A}  regions={section.RegionsCount}  \"some\"={section.SomeCount}  {section.D}  zones={section.ZonesCount}  links={section.LinksCount}  \"unknowns\"={section.UnknownsCount}  {section.H}");
 		Console.WriteLine("    ");
 	}
 
@@ -564,5 +565,20 @@ static class SectionExtensions {
 			}
 			Console.WriteLine("    ");
 		}
+	}
+
+	public static string GetShortSectionDescription(this LevelSomeIndexesSection section, DAT1.DAT1 asset) {
+		return $"\"some\" indexes, {section.Values.Count} items";
+	}
+
+	public static void PrintLongSectionDescription(this LevelSomeIndexesSection section, DAT1.DAT1 asset) {
+		var items = section.Values;
+
+		Console.WriteLine("\"some\" indexes");
+		Console.WriteLine($"    {items.Count} items:");
+		foreach (var offset in items) {
+			Console.WriteLine($"    - {offset}");
+		}
+		Console.WriteLine("");
 	}
 }
