@@ -22,7 +22,7 @@ if (args.Length == 0) {
 
 var input = args[0];
 Dictionary<uint, KnownSectionsRegistryEntry> SectionsRegistry = new();
-List<uint> SectionsToSkipLongDescriptionFor = new() { LevelLinkNamesSection.TAG };
+List<uint> SectionsToSkipLongDescriptionFor = new() { LevelLinkNamesSection.TAG, LevelZoneNamesSection.TAG };
 
 try {
 	RegisterKnownSections();
@@ -65,6 +65,7 @@ void RegisterKnownSections() {
 	Register(typeof(ZoneHibernateVFXAssetsSection), "Zone Hibernate VFX Assets");
 
 	Register(typeof(LevelLinkNamesSection), "Level Link Names");
+	Register(typeof(LevelZoneNamesSection), "Level Zone Names");
 }
 
 void Main(string input) {
@@ -451,6 +452,14 @@ static class SectionExtensions {
 	}
 
 	public static void PrintLongSectionDescription(this LevelLinkNamesSection section, DAT1.DAT1 asset) {
+		PrintLongSectionDescription_StringOffsets(section, asset);
+	}
+
+	public static string GetShortSectionDescription(this LevelZoneNamesSection section, DAT1.DAT1 asset) {
+		return $"Level Zone Names, {section.Values.Count} items";
+	}
+
+	public static void PrintLongSectionDescription(this LevelZoneNamesSection section, DAT1.DAT1 asset) {
 		PrintLongSectionDescription_StringOffsets(section, asset);
 	}
 }
