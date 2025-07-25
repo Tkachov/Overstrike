@@ -1,4 +1,5 @@
-﻿using DAT1.Sections;
+﻿using DAT1;
+using DAT1.Sections;
 using DAT1.Sections.Actor;
 using DAT1.Sections.Conduit;
 using DAT1.Sections.Generic;
@@ -22,7 +23,9 @@ if (args.Length == 0) {
 
 var input = args[0];
 Dictionary<uint, KnownSectionsRegistryEntry> SectionsRegistry = new();
-List<uint> SectionsToSkipLongDescriptionFor = new() { LevelLinkNamesSection.TAG, LevelZoneNamesSection.TAG, LevelRegionNamesSection.TAG, LevelRegionsBuiltSection.TAG, LevelZonesBuiltSection.TAG, LevelUnknownBuiltSection.TAG, LevelSomeIndexesSection.TAG, LevelRandomListSection.TAG };
+List<uint> SectionsToSkipLongDescriptionFor = new() {
+	LevelLinkNamesSection.TAG, LevelZoneNamesSection.TAG, LevelRegionNamesSection.TAG, LevelRegionsBuiltSection.TAG, LevelZonesBuiltSection.TAG, 
+	LevelUnknownBuiltSection.TAG, LevelSomeIndexesSection.TAG, LevelRandomListSection.TAG, LevelLinkDataSection.TAG };
 
 try {
 	RegisterKnownSections();
@@ -74,6 +77,7 @@ void RegisterKnownSections() {
 	Register(typeof(LevelUnknownDataSection), "\"unknown\" serialized data");
 	Register(typeof(LevelSomeIndexesSection), "\"some\" indexes");
 	Register(typeof(LevelRandomListSection), "\"random\" list");
+	Register(typeof(LevelLinkDataSection), "Link data");
 }
 
 void Main(string input) {
@@ -596,5 +600,30 @@ static class SectionExtensions {
 			var entry = entries[i];
 			Console.WriteLine($"    - {i,3}: {entry.Flags1:X8} {entry.Zero} {entry.Flags2:X8} {entry.D,4} {entry.E,4} {entry.F,4}");
 		}
+		Console.WriteLine("");
+	}
+
+	public static string GetShortSectionDescription(this LevelLinkDataSection section, DAT1.DAT1 asset) {
+		return $"Link data, {section.Values.Count} entries";
+	}
+
+	public static void PrintLongSectionDescription(this LevelLinkDataSection section, DAT1.DAT1 asset) {
+		var entries = section.Values;
+		var names = asset.Section<LevelLinkNamesSection>(LevelLinkNamesSection.TAG);
+
+		Console.WriteLine("Link data");
+		Console.WriteLine($"    {entries.Count} entries:");
+		for (var i = 0; i < entries.Count; ++i) {
+			var entry = entries[i];
+
+			var index = (int)entry.NameIndex;
+			var offset = names.Values[index];
+			var path = asset.GetStringByOffset(offset);
+
+			Console.WriteLine($"    - {i,4}: {entry.A:X16} {entry.B:X16} {entry.C:X16}\t({entry.H,12}, {entry.I,12}, {entry.J,12})");
+			Console.WriteLine($"     #{entry.NameIndex,4} {entry.Index2} {entry.NameHash:X8} \"{path}\"");
+			Console.WriteLine($"    ");
+		}
+		Console.WriteLine("");
 	}
 }
