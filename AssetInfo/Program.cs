@@ -22,7 +22,7 @@ if (args.Length == 0) {
 
 var input = args[0];
 Dictionary<uint, KnownSectionsRegistryEntry> SectionsRegistry = new();
-List<uint> SectionsToSkipLongDescriptionFor = new() { LevelLinkNamesSection.TAG, LevelZoneNamesSection.TAG };
+List<uint> SectionsToSkipLongDescriptionFor = new() { LevelLinkNamesSection.TAG, LevelZoneNamesSection.TAG, LevelRegionNamesSection.TAG };
 
 try {
 	RegisterKnownSections();
@@ -66,6 +66,7 @@ void RegisterKnownSections() {
 
 	Register(typeof(LevelLinkNamesSection), "Level Link Names");
 	Register(typeof(LevelZoneNamesSection), "Level Zone Names");
+	Register(typeof(LevelRegionNamesSection), "Level Region Names");
 }
 
 void Main(string input) {
@@ -460,6 +461,14 @@ static class SectionExtensions {
 	}
 
 	public static void PrintLongSectionDescription(this LevelZoneNamesSection section, DAT1.DAT1 asset) {
+		PrintLongSectionDescription_StringOffsets(section, asset);
+	}
+
+	public static string GetShortSectionDescription(this LevelRegionNamesSection section, DAT1.DAT1 asset) {
+		return $"Level Region Names, {section.Values.Count} items";
+	}
+
+	public static void PrintLongSectionDescription(this LevelRegionNamesSection section, DAT1.DAT1 asset) {
 		PrintLongSectionDescription_StringOffsets(section, asset);
 	}
 }
