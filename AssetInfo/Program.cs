@@ -67,6 +67,7 @@ void RegisterKnownSections() {
 	Register(typeof(LevelLinkNamesSection), "Level Link Names");
 	Register(typeof(LevelZoneNamesSection), "Level Zone Names");
 	Register(typeof(LevelRegionNamesSection), "Level Region Names");
+	Register(typeof(LevelRegionsBuiltSection), "Level Regions Built");
 }
 
 void Main(string input) {
@@ -470,5 +471,38 @@ static class SectionExtensions {
 
 	public static void PrintLongSectionDescription(this LevelRegionNamesSection section, DAT1.DAT1 asset) {
 		PrintLongSectionDescription_StringOffsets(section, asset);
+	}
+
+	public static string GetShortSectionDescription(this LevelRegionsBuiltSection section, DAT1.DAT1 asset) {
+		return $"Level Regions Built, {section.Values.Count} entries";
+	}
+
+	public static void PrintLongSectionDescription(this LevelRegionsBuiltSection section, DAT1.DAT1 asset) {
+		var entries = section.Values;
+		var names = asset.Section<LevelRegionNamesSection>(LevelRegionNamesSection.TAG);
+
+		var veryLong = false;
+
+		Console.WriteLine("Level Regions Built");
+		Console.WriteLine($"    {entries.Count} entries:");
+		for (var i = 0; i < entries.Count; ++i) {
+			var entry = entries[i];
+
+			if (veryLong) {
+				var offset = names.Values[i];
+				var path = asset.GetStringByOffset(offset);
+				if (path.Length > 64) path = path.Substring(0, 60) + "...";
+				Console.WriteLine($"    - {i,4}: {entry.NameHash:X16} \"{path}\"");
+			}
+
+			var childrenStr = $"{entry.FirstChildRegionIndex}..{entry.ChildRegionsCount}";
+			childrenStr += " ";
+			while (childrenStr.Length < 12) childrenStr += " ";
+			Console.WriteLine($"     #{entry.Index,4}  parent={entry.ParentRegionIndex,-4}  children={childrenStr}{entry.Unk1,2} {entry.Unk2,4},  {entry.Index1,5} {entry.Count1,4},  {entry.Index2,5} {entry.Count2,3},  {entry.Index3,4} {entry.Count3,4},  {entry.Unk3,4} {entry.Unk4,4}");
+
+			if (veryLong) {
+				Console.WriteLine("    ");
+			}
+		}
 	}
 }
