@@ -25,7 +25,7 @@ var input = args[0];
 Dictionary<uint, KnownSectionsRegistryEntry> SectionsRegistry = new();
 List<uint> SectionsToSkipLongDescriptionFor = new() {
 	LevelLinkNamesSection.TAG, LevelZoneNamesSection.TAG, LevelRegionNamesSection.TAG, LevelRegionsBuiltSection.TAG, LevelZonesBuiltSection.TAG, 
-	LevelUnknownBuiltSection.TAG, LevelSomeIndexesSection.TAG, LevelRandomListSection.TAG, LevelLinkDataSection.TAG };
+	LevelUnknownBuiltSection.TAG, LevelSomeIndexesSection.TAG, LevelRandomListSection.TAG, LevelLinkDataSection.TAG, LevelZoneIndexesSection.TAG };
 
 try {
 	RegisterKnownSections();
@@ -78,6 +78,7 @@ void RegisterKnownSections() {
 	Register(typeof(LevelSomeIndexesSection), "\"some\" indexes");
 	Register(typeof(LevelRandomListSection), "\"random\" list");
 	Register(typeof(LevelLinkDataSection), "Link data");
+	Register(typeof(LevelZoneIndexesSection), "zone indexes");
 }
 
 void Main(string input) {
@@ -623,6 +624,21 @@ static class SectionExtensions {
 			Console.WriteLine($"    - {i,4}: {entry.A:X16} {entry.B:X16} {entry.C:X16}\t({entry.H,12}, {entry.I,12}, {entry.J,12})");
 			Console.WriteLine($"     #{entry.NameIndex,4} {entry.Index2} {entry.NameHash:X8} \"{path}\"");
 			Console.WriteLine($"    ");
+		}
+		Console.WriteLine("");
+	}
+
+	public static string GetShortSectionDescription(this LevelZoneIndexesSection section, DAT1.DAT1 asset) {
+		return $"zone indexes, {section.Values.Count} items";
+	}
+
+	public static void PrintLongSectionDescription(this LevelZoneIndexesSection section, DAT1.DAT1 asset) {
+		var items = section.Values;
+
+		Console.WriteLine("zone indexes");
+		Console.WriteLine($"    {items.Count} items:");
+		foreach (var index in items) {
+			Console.WriteLine($"    - {index}");
 		}
 		Console.WriteLine("");
 	}
