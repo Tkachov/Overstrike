@@ -5,6 +5,7 @@ using DAT1.Sections.Conduit;
 using DAT1.Sections.Generic;
 using DAT1.Sections.HibernateZone;
 using DAT1.Sections.Level;
+using DAT1.Sections.Soundbank;
 using OverstrikeShared.STG;
 using System.Reflection;
 
@@ -85,6 +86,12 @@ void RegisterKnownSections() {
 	Register(typeof(LevelValuesSection), "values");
 	Register(typeof(LevelZoneIndexesGroupsSection), "zone indexes groups");
 	Register(typeof(LevelUnknownSection), "unknown");
+
+	Register(typeof(SoundbankBuiltSection), "Sound Bank Built");
+	Register(typeof(SoundbankInfoSection), "Sound Bank Info");
+	Register(typeof(SoundbankStringsSection), "Sound Bank Strings");
+	Register(typeof(SoundbankStreamLookupSection), "Sound Bank Stream Lookup");
+	Register(typeof(SoundbankWwiseBnkSection), ".soundbank Wwise .bnk");
 }
 
 void Main(string input) {
@@ -181,6 +188,7 @@ void PrintAsset(STG asset) {
 		case 0x35F7AFA5: assetType = "Conduit"; break;
 		case 0xA23BC2E8: assetType = "HibernateZone"; break;
 		case 0xD3188EE5: assetType = "Level"; break;
+		case 0x66350FBB: assetType = "Sound Bank"; break;
 	}
 
 	Console.WriteLine(assetType);
@@ -708,6 +716,68 @@ static class SectionExtensions {
 		for (var i = 0; i < entries.Count; ++i) {
 			var entry = entries[i];
 			Console.WriteLine($"    - {i,4}: {entry.A:X8} {entry.B:X8} {entry.C:X8}");
+		}
+		Console.WriteLine("");
+	}
+
+	public static void PrintLongSectionDescription(this SoundbankBuiltSection section, DAT1.DAT1 asset) {
+		Console.WriteLine("Sound Bank Built");
+		Console.WriteLine($"    bank_id = {section.BankId:X8}  bnk_size = {section.BnkSize}");
+		Console.WriteLine($"    {section.A:X8}  {section.B:X8}  {section.C:X8}  {section.D:X8}");
+		Console.WriteLine($"    {section.E:X8}  {section.F:X8}  {section.G:X8}  {section.H:X8}");
+		Console.WriteLine($"    {section.I:X8}  {section.J:X8}  {section.K:X8}  {section.L:X8}");
+		Console.WriteLine($"    {section.M:X8}  {section.N:X8}");
+		Console.WriteLine("    ");
+	}
+
+	public static string GetShortSectionDescription(this SoundbankInfoSection section, DAT1.DAT1 asset) {
+		return $"Sound Bank Info, {section.Values.Count} events";
+	}
+
+	public static void PrintLongSectionDescription(this SoundbankInfoSection section, DAT1.DAT1 asset) {
+		var events = section.Values;
+		var strings = asset.Section<SoundbankStringsSection>(SoundbankStringsSection.TAG);
+
+		Console.WriteLine("Sound Bank Info");
+		Console.WriteLine($"    {events.Count} events:");
+		for (var i = 0; i < events.Count; ++i) {
+			var ev = events[i];
+			var s = strings.Strings[i + 1];
+			var h = SoundbankInfoSection.FNV1(s);
+			var suffix = "";
+			if (h == ev.EventId) suffix = $"\"{s}\"";
+			Console.WriteLine($"    - {i,4}: {ev.EventId:X8} {suffix}");
+			Console.WriteLine($"            {ev.Small,-4}  {ev.Flags:X4} {ev.Zero} {ev.Flags2:X4}  {ev.A,-5} {ev.B,-5}");
+		}
+		Console.WriteLine("");
+	}
+
+	public static string GetShortSectionDescription(this SoundbankStringsSection section, DAT1.DAT1 asset) {
+		return $"Sound Bank Strings, {section.Strings.Count} strings";
+	}
+
+	public static void PrintLongSectionDescription(this SoundbankStringsSection section, DAT1.DAT1 asset) {
+		Console.WriteLine("Sound Bank Strings");
+		Console.WriteLine($"    {section.Strings.Count} strings:");
+		for (var i = 0; i < section.Strings.Count; ++i) {
+			var entry = section.Strings[i];
+			Console.WriteLine($"    - {i,4}: \"{entry}\"");
+		}
+		Console.WriteLine("");
+	}
+
+	public static string GetShortSectionDescription(this SoundbankStreamLookupSection section, DAT1.DAT1 asset) {
+		return $"Sound Bank Stream Lookup, {section.Values.Count} pairs";
+	}
+
+	public static void PrintLongSectionDescription(this SoundbankStreamLookupSection section, DAT1.DAT1 asset) {
+		var entries = section.Values;
+
+		Console.WriteLine("Sound Bank Stream Lookup");
+		Console.WriteLine($"    {entries.Count} pairs:");
+		for (var i = 0; i < entries.Count; ++i) {
+			var entry = entries[i];
+			Console.WriteLine($"    - {i,4}: {entry.SourceId:X8} {entry.EventId:X8}");
 		}
 		Console.WriteLine("");
 	}
