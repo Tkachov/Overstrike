@@ -82,6 +82,7 @@ void RegisterKnownSections() {
 	Register(typeof(LevelLinkDataSection), "Link data");
 	Register(typeof(LevelZoneIndexesSection), "zone indexes");
 	Register(typeof(LevelEmbeddedZonesSection), "embedded zones");
+	Register(typeof(LevelValuesSection), "values");
 }
 
 void Main(string input) {
@@ -658,6 +659,21 @@ static class SectionExtensions {
 		for (var i = 0; i < entries.Count; ++i) {
 			var entry = entries[i];
 			Console.WriteLine($"    - {i,4}: {entry.ZoneId:X16} {entry.A:X8} {entry.B:X8}");
+		}
+		Console.WriteLine("");
+	}
+
+	public static string GetShortSectionDescription(this LevelValuesSection section, DAT1.DAT1 asset) {
+		return $"values, {section.Values.Count} items";
+	}
+
+	public static void PrintLongSectionDescription(this LevelValuesSection section, DAT1.DAT1 asset) {
+		var items = section.Values;
+
+		Console.WriteLine("values");
+		Console.WriteLine($"    {items.Count} items:");
+		foreach (var value in items) {
+			Console.WriteLine($"    - {value:X8}");
 		}
 		Console.WriteLine("");
 	}
