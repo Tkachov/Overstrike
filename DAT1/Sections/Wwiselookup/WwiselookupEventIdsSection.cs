@@ -7,6 +7,6 @@ using DAT1.Sections.Generic;
 
 namespace DAT1.Sections.Wwiselookup {
 	public class WwiselookupEventIdsSection: UInt32ArraySection {
-		public const uint TAG = 0x7F9A96AA;
+		public const uint TAG = 0x7F9A96AA; // Wwise Lookup Elems Data
 	}
 }

@@ -8,7 +8,7 @@ using System.IO;
 
 namespace DAT1.Sections.Wwiselookup {
 	public class WwiselookupAssetsSection: ArraySection<WwiselookupAssetsSection.Entry> {
-		public const uint TAG = 0x52B343E8;
+		public const uint TAG = 0x52B343E8; // Wwise Lookup Banks Data
 
 		public class Entry {
 			public ulong AssetId;
