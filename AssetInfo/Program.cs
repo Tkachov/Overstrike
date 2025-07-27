@@ -6,6 +6,7 @@ using DAT1.Sections.Generic;
 using DAT1.Sections.HibernateZone;
 using DAT1.Sections.Level;
 using DAT1.Sections.Soundbank;
+using DAT1.Sections.Wwiselookup;
 using OverstrikeShared.STG;
 using System.Reflection;
 
@@ -27,7 +28,8 @@ Dictionary<uint, KnownSectionsRegistryEntry> SectionsRegistry = new();
 List<uint> SectionsToSkipLongDescriptionFor = new() {
 	LevelLinkNamesSection.TAG, LevelZoneNamesSection.TAG, LevelRegionNamesSection.TAG, LevelRegionsBuiltSection.TAG, LevelZonesBuiltSection.TAG, 
 	LevelUnknownBuiltSection.TAG, LevelSomeIndexesSection.TAG, LevelRandomListSection.TAG, LevelLinkDataSection.TAG, LevelZoneIndexesSection.TAG,
-	LevelEmbeddedZonesSection.TAG, LevelValuesSection.TAG, LevelZoneIndexesGroupsSection.TAG, LevelUnknownSection.TAG
+	LevelEmbeddedZonesSection.TAG, LevelValuesSection.TAG, LevelZoneIndexesGroupsSection.TAG, LevelUnknownSection.TAG,
+	WwiselookupAssetsSection.TAG, WwiselookupEventIdsSection.TAG, WwiselookupEventsSection.TAG
 };
 
 try {
@@ -92,6 +94,10 @@ void RegisterKnownSections() {
 	Register(typeof(SoundbankStringsSection), "Sound Bank Strings");
 	Register(typeof(SoundbankStreamLookupSection), "Sound Bank Stream Lookup");
 	Register(typeof(SoundbankWwiseBnkSection), ".soundbank Wwise .bnk");
+
+	Register(typeof(WwiselookupAssetsSection), ".wwiselookup assets");
+	Register(typeof(WwiselookupEventIdsSection), ".wwiselookup event ids");
+	Register(typeof(WwiselookupEventsSection), ".wwiselookup events");
 }
 
 void Main(string input) {
@@ -189,6 +195,7 @@ void PrintAsset(STG asset) {
 		case 0xA23BC2E8: assetType = "HibernateZone"; break;
 		case 0xD3188EE5: assetType = "Level"; break;
 		case 0x66350FBB: assetType = "Sound Bank"; break;
+		case 0x3ECEF00C: assetType = "Wwise Lookup"; break;
 	}
 
 	Console.WriteLine(assetType);
@@ -780,5 +787,57 @@ static class SectionExtensions {
 			Console.WriteLine($"    - {i,4}: {entry.SourceId:X8} {entry.EventId:X8}");
 		}
 		Console.WriteLine("");
+	}
+
+	public static string GetShortSectionDescription(this WwiselookupAssetsSection section, DAT1.DAT1 asset) {
+		return $".wwiselookup assets, {section.Values.Count} entries";
+	}
+
+	public static void PrintLongSectionDescription(this WwiselookupAssetsSection section, DAT1.DAT1 asset) {
+		var entries = section.Values;
+
+		Console.WriteLine(".wwiselookup assets");
+		Console.WriteLine($"    {entries.Count} entries:");
+		for (var i = 0; i < entries.Count; ++i) {
+			var entry = entries[i];
+			var path = asset.GetStringByOffset(entry.StringOffset);
+			Console.WriteLine($"    - {i,4}: {entry.AssetId:X16} \"{path}\"");
+
+			// asset name = $"sound/banks/{path}.soundbank"
+			// bnk fnv1 = FNV1(path)
+		}
+		Console.WriteLine("");
+	}
+
+	public static string GetShortSectionDescription(this WwiselookupEventIdsSection section, DAT1.DAT1 asset) {
+		return $".wwiselookup event ids, {section.Values.Count} events";
+	}
+
+	public static void PrintLongSectionDescription(this WwiselookupEventIdsSection section, DAT1.DAT1 asset) {
+		Console.WriteLine(".wwiselookup event ids");
+		Console.WriteLine($"    {section.Values.Count} events:");
+		for (var i = 0; i < section.Values.Count; ++i) {
+			Console.WriteLine($"    - {i,6}: {section.Values[i]:X8}");
+		}
+		Console.WriteLine("");
+	}
+
+	public static string GetShortSectionDescription(this WwiselookupEventsSection section, DAT1.DAT1 asset) {
+		return $".wwiselookup events, {section.Values.Count} events";
+	}
+
+	public static void PrintLongSectionDescription(this WwiselookupEventsSection section, DAT1.DAT1 asset) {
+		var entries = section.Values;
+		var events = asset.Section<WwiselookupEventIdsSection>(WwiselookupEventIdsSection.TAG);
+
+		Console.WriteLine(".wwiselookup events");
+		Console.WriteLine($"    {entries.Count} events:");
+		for (var i = 0; i < entries.Count; ++i) {
+			var entry = entries[i];
+
+			Console.WriteLine($"    - {i,6}: fnv1={events.Values[i]:X8} name=\"{asset.GetStringByOffset(entry.NameStringOffset)}\""); // name is only up to 63 chars, which is why its FNV1 sometimes doesn't match actual value
+			Console.WriteLine($"              {entry.Flags:X8} {entry.SoundbankAssetId:X16} {entry.AssetId:X16} {entry.IndexOfNextEntry,6}");
+			Console.WriteLine("");
+		}
 	}
 }
