@@ -409,3 +409,4 @@ FodyWeavers.xsd
 
 # vcpkg
 **/vcpkg_installed/*
+AssetInfo/Properties/launchSettings.json
