@@ -474,6 +474,8 @@ namespace DAT1 {
 				Dat1 = new DAT1(new BinaryReader(new MemoryStream(bytes)));
 				AssetArchivePath = Path.GetDirectoryName(filename);
 
+				DetermineSectionsTypeDynamically();
+
 				return true;
 			} catch (Exception) {
 				return false;
@@ -491,6 +493,27 @@ namespace DAT1 {
 			w.Write(bytes);
 
 			return true;
+		}
+
+		private void DetermineSectionsTypeDynamically() {
+			// i29 and i30 'toc' use different format of AssetHeadersSection, despite the same tag
+
+			// this might not be the most reliable way to tell these apart, but it should suffice
+			var isRCRA = false;
+			var archivesCount = GetArchivesCount();
+			for (uint i = 0; i < archivesCount; ++i) {
+				var name = GetArchiveFilename(i);
+				if (name.Contains("sargasso")) {
+					isRCRA = true;
+					break;
+				}
+			}
+
+			if (isRCRA) {
+				Dat1.Section<AssetHeadersSection_I29>(AssetHeadersSection.TAG);
+			} else {
+				Dat1.Section<AssetHeadersSection_I30>(AssetHeadersSection.TAG);
+			}
 		}
 
 		#region assets

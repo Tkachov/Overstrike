@@ -10,12 +10,24 @@ namespace DAT1.Sections.TOC {
 	public class AssetHeadersSection: ByteBufferSection {
 		public const uint TAG = 0x654BDED9; // Archive TOC Asset Header Data
 
-		public byte[] ReadHeaderAtOffset(int offset) {
-			// TODO: this doesn't work for RCRA, where all headers are 36 bytes and don't follow this MSM2 structure
-			// (thus, extraction of assets into STG with Modding Tool is currently broken for RCRA)
-			// as both seem to have the same "i29" format of toc/sections, there needs to be a way to reliably determine
-			// whether it's RCRA or not
+		public virtual byte[] ReadHeaderAtOffset(int offset) {
+			// class can't be abstract because DAT1.Section<> method tries to instantiate it
+			// instead, derived class should be instantiated in TOC_I29.DetermineSectionsTypeDynamically()
+			Utils.Assert(false, "AssetHeadersSection.ReadHeaderAtOffset() is used instead of override from derived class");
+			return null;
+		}
+	}
 
+	public class AssetHeadersSection_I29: AssetHeadersSection {
+		public const uint TAG = 0x654BDED9; // Archive TOC Asset Header Data
+
+		public override byte[] ReadHeaderAtOffset(int offset) {
+			return Read(offset, 36);
+		}
+	}
+
+	public class AssetHeadersSection_I30: AssetHeadersSection {
+		public override byte[] ReadHeaderAtOffset(int offset) {
 			byte[] sizes = Read(offset + 4, 4);
 
 			using var r = new BinaryReader(new MemoryStream(sizes));

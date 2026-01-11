@@ -202,6 +202,10 @@ namespace OverstrikeShared.STG {
 		protected void SetRaw(byte[] raw) {
 			_raw = raw;
 		}
+
+		public void ClearDat1() { // prevent additional .Save(), so original _raw gets saved and not repacked one
+			_dat1 = null;
+		}
 	}
 
 	public class AssetHeaderHelper {

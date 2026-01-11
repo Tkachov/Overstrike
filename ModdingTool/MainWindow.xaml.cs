@@ -597,48 +597,13 @@ namespace ModdingTool {
 
 		private void ExtractAsset(Asset asset, string path) {
 			try {
-				var bytes = _toc.GetAssetBytes(asset.Span, asset.Id);
-				byte[] header = null;
-				byte[] textureMeta = null;
+				var file = new OverstrikeShared.STG.STG();
+				file.Load(_toc, asset.Span, asset.Id);
 
-				if (_toc is TOC_I29 toc_i29) {
-					var index = _toc.FindAssetIndex(asset.Span, asset.Id);
-					header = toc_i29.GetHeaderByAssetIndex(index);
-					textureMeta = toc_i29.GetTextureMetaByAssetIndex(index);
-				}
-
-				var packExtras = true; // TODO: make an option to control this
-				var hasExtras = (header != null || textureMeta != null);
-				if (packExtras && hasExtras) {
-					// TODO: make a class in DAT1 for that?
-					using var ms = new MemoryStream();
-					using var w = new BinaryWriter(ms);
-					w.Write(0x00475453); // STG\x00
-
-					uint flags = 0;
-					if (header != null) flags |= 0x1; // TODO: constant
-					if (textureMeta != null) flags |= 0x2; // TODO: constant
-					w.Write(flags);
-
-					w.Write((header == null ? 0 : header.Length));
-					w.Write((textureMeta == null ? 0 : textureMeta.Length)); // TODO: specifically do uint32 writing here
-					
-					if (header != null) {
-						w.Write(header);
-						Align16(w);
-					}
-
-					if (textureMeta != null) {
-						w.Write(textureMeta);
-						Align16(w);
-					}
-
-					w.Write(bytes);
-
-					File.WriteAllBytes(path, ms.ToArray());
-				} else {
-					File.WriteAllBytes(path, bytes);
-				}
+				// TODO: make an option that controls whether to save extras?
+				file.ClearDat1(); // prevent repacking
+				var bytes = file.Save();
+				File.WriteAllBytes(path, bytes);
 			} catch {} // TODO: notify user of failure somehow
 
 			static void Align16(BinaryWriter w) {
