@@ -89,23 +89,30 @@ namespace Overstrike.Tabs {
 		protected bool _wasReset = false;
 
 		protected Profile _tocProfile = null;
-		protected TOC_I20 _toc = null;
-		protected TOC_I20 toc {
+		protected dynamic _toc = null;
+		protected dynamic toc {
 			get {
 				if (_toc == null) {
 					try {
 						var selectedGame = GameBase.GetGame(_selectedProfile.Game);
 						var tocPath = selectedGame.GetTocPath(_selectedProfile.GamePath);
-
-						var toc = new TOC_I20();
-						toc.Load(tocPath);
-						_toc = toc;
+						_toc = LoadToc(tocPath);
 						_tocProfile = _selectedProfile;
 					} catch {}
 				}
 
 				return _toc;
 			}
+		}
+
+		protected virtual dynamic LoadToc(string tocPath) {
+			var toc = new TOC_I20();
+			toc.Load(tocPath);
+			return toc;
+		}
+
+		protected virtual dynamic LoadTexture(dynamic toc, string path) {
+			return new Texture_I20(toc.GetAssetReader(path));
 		}
 
 		protected DAT1.Files.Localization _cachedLocalization;
@@ -271,7 +278,7 @@ namespace Overstrike.Tabs {
 
 			if (needToReloadConfig) {
 				// load config and put it to cache
-				var loadedConfig = LoadConfig(toc);
+				var loadedConfig = LoadConfigInternal(toc);
 				if (loadedConfig != null) {
 					cache.SetConfig(path, loadedConfig);
 				}
@@ -335,6 +342,10 @@ namespace Overstrike.Tabs {
 			} catch {}
 
 			return null;
+		}
+
+		protected virtual JObject LoadConfigInternal(dynamic toc) {
+			return LoadConfig((TOC_I20)toc);
 		}
 
 		private static long GetTocTimestamp(Profile profile) {
@@ -544,7 +555,7 @@ namespace Overstrike.Tabs {
 				return;
 
 			try {
-				Texture_I20 texture = new Texture_I20(toc.GetAssetReader(path));
+				var texture = LoadTexture(toc, path);
 				var dds = texture.GetDDS();
 				_iconsOrigs[path] = Utils.Imaging.DdsToBitmap(dds);
 			} catch {}
@@ -556,10 +567,10 @@ namespace Overstrike.Tabs {
 			return "%" + locstring_key + "%";
 		}
 
-		#endregion
-		#region - making observable items
+        #endregion
+        #region - making observable items
 
-		private void MakeDisplayedSuits() {
+        protected virtual void MakeDisplayedSuits() {
 			_displayedSuits.Clear();
 			foreach (var suit in _customizedSuits) {
 				if (suit.MarkedToDelete && !_showDeleted) continue;
