@@ -22,7 +22,34 @@ namespace Overstrike.Installers {
 			_language = "";
 		}
 
-		private string _id;
+		
+			public static readonly Dictionary<string, byte> LANGUAGES = new() {
+			//{"en", 0},
+			{"us", 8},
+            {"da", 24},
+            {"nl", 32},
+            {"fi", 40},
+            {"fr", 48},
+            {"de", 56},
+            {"it", 64},
+            {"jp", 72},
+            {"ko", 80},
+            {"no", 88},
+            {"pl", 96},
+            {"pt", 104},
+            {"ru", 112},
+            {"es", 120},
+            {"sv", 128},
+            {"br", 144},
+            {"ar", 152},
+            {"la", 168},
+            {"zh", 184},
+            {"cs", 200},
+            {"hu", 208},
+            {"el", 216},
+        };
+
+        private string _id;
 		private string _displayName;
 		private string _icon;
 
