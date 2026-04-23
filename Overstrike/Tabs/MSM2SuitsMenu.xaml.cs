@@ -173,7 +173,7 @@ namespace Overstrike.Tabs
 			{
 				if (suit.MarkedToDelete && !_showDeleted) continue;
 
-				bool isMilesSuit = suit.SuitId.Contains("_miles_", StringComparison.OrdinalIgnoreCase)
+				bool isMilesSuit = suit.SuitId.Contains("miles", StringComparison.OrdinalIgnoreCase)
 					|| suit.SuitId.Equals("SUIT_TAURIN", StringComparison.OrdinalIgnoreCase)
 					|| suit.SuitId.Equals("SUIT_PANTHER", StringComparison.OrdinalIgnoreCase);
 				bool showThisSuit = (_activeCharacter == MSM2Character.Miles) ? isMilesSuit : !isMilesSuit;
