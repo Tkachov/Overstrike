@@ -24,6 +24,7 @@ namespace Overstrike.Tabs
 	public partial class MSM2SuitsMenu : SuitsMenuBase
 	{
 		private MSM2Character _activeCharacter = MSM2Character.Peter;
+		private Dictionary<string, MSM2Character> _suitToCharacter = new();
 
 		public MSM2SuitsMenu()
 		{
@@ -73,32 +74,7 @@ namespace Overstrike.Tabs
 				const ulong SYSTEM_PROGRESSION_CONFIG_AID = 0x9C9C72A303FCFA30;
 				var config = new Config_I30(toc.GetAssetReader(SYSTEM_PROGRESSION_CONFIG_AID));
 				var root = config.ContentSection.Data;
-
-				var suits = (JArray)root["SuitList"]["Suits"];
-				var normalized = new JArray();
-				foreach (var suit in suits) {
-					var icon = "";
-					if (suit["Icon"] != null) {
-						icon = (string)suit["Icon"]["AssetPath"];
-					}
-
-					if (toc.FindFirstAssetIndexByPath(icon) == -1) {
-						if (suit["VariantGroup"] != null && suit["VariantGroup"]["Icon"] != null && suit["VariantGroup"]["Icon"]["AssetPath"] != null) {
-							icon = (string)suit["VariantGroup"]["Icon"]["AssetPath"];
-						}
-					}
-
-					normalized.Add(new JObject() {
-						["Name"] = suit["Name"],
-						["DisplayName"] = suit["DisplayName"],
-						["PreviewImage"] = icon,
-						["GivesItems"] = suit["Item"] != null
-							? new JObject() { ["Item"] = suit["Item"] }
-							: null
-					});
-				}
-
-				return new JObject() { ["suits"] = normalized };
+				return new JObject() { ["suits"] = root["SuitList"]["Suits"] };
 			} catch {}
 
 			return null;
@@ -106,6 +82,58 @@ namespace Overstrike.Tabs
 
 		protected override JObject LoadConfigInternal(dynamic toc) {
 			return LoadConfig_MSM2(toc);
+		}
+
+		protected override void LoadConfigSuits(JObject config) {
+			_configSuits.Clear();
+			_suitToCharacter.Clear();
+			foreach (var suit in config["suits"]) {
+				var icon = "";
+				if (suit["Icon"] != null) {
+					icon = (string)suit["Icon"]["AssetPath"];
+				}
+
+				if (toc.FindFirstAssetIndexByPath(icon) == -1) {
+					if (suit["VariantGroup"] != null && suit["VariantGroup"]["Icon"] != null && suit["VariantGroup"]["Icon"]["AssetPath"] != null) {
+						icon = (string)suit["VariantGroup"]["Icon"]["AssetPath"];
+					}
+				}
+
+				var name = (string)suit["Name"];
+				var displayName = (string)suit["DisplayName"];
+				var loadout = (string)suit["Item"];
+
+				icon = DAT1.Utils.Normalize(icon ?? "");
+				loadout = DAT1.Utils.Normalize(loadout);
+
+				RememberIcon(icon);
+				RememberLoadout(loadout);
+
+				LoadIcon(icon);
+
+				var suitInfo = new SuitSlot() {
+					SuitId = name,
+					Name = GetFriendlySuitName(displayName),
+					Icon = null,
+					BigIcon = null,
+					IconPath = icon,
+					BigIconPath = null,
+					LoadoutPath = loadout,
+					MarkedToDelete = false
+				};
+				_configSuits.Add(suitInfo);
+				_suitToCharacter.Add(name, DetermineSuitCharacter(loadout));
+			}
+		}
+
+		private MSM2Character DetermineSuitCharacter(string loadout) {
+			try {
+				var config = new Config_I30(toc.GetAssetReader(loadout));
+				var root = config.ContentSection.Data;
+				return ((string)root["ValidCharacters"][0] == "kSpiderManPeter" ? MSM2Character.Peter : MSM2Character.Miles);
+			} catch {}
+
+			return MSM2Character.Peter;
 		}
 
 		// Character tab handlers
@@ -147,22 +175,17 @@ namespace Overstrike.Tabs
 			_displayedSuits.Clear();
 			foreach (var suit in _customizedSuits)
 			{
+				if (_suitToCharacter[suit.SuitId] != _activeCharacter) continue;
 				if (suit.MarkedToDelete && !_showDeleted) continue;
-
-				bool isMilesSuit = suit.SuitId.Contains("miles", StringComparison.OrdinalIgnoreCase)
-					|| suit.SuitId.Equals("SUIT_TAURIN", StringComparison.OrdinalIgnoreCase)
-					|| suit.SuitId.Equals("SUIT_PANTHER", StringComparison.OrdinalIgnoreCase);
-				bool showThisSuit = (_activeCharacter == MSM2Character.Miles) ? isMilesSuit : !isMilesSuit;
-				if (!showThisSuit) continue;
 
 				_displayedSuits.Add(new SuitSlot()
 				{
 					SuitId = suit.SuitId,
 					Name = suit.Name,
 					Icon = GetIcon(suit.IconPath),
-					BigIcon = GetIcon(suit.BigIconPath),
+					BigIcon = null,
 					IconPath = suit.IconPath,
-					BigIconPath = suit.BigIconPath,
+					BigIconPath = null,
 					LoadoutPath = suit.LoadoutPath,
 					MarkedToDelete = suit.MarkedToDelete
 				});

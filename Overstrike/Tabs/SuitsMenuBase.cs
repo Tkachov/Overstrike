@@ -382,7 +382,7 @@ namespace Overstrike.Tabs {
 			// don't clear the observable collections here and do it in corresponding methods (which are called through Dispatcher)
 		}
 
-		private void LoadConfigSuits(JObject config) {
+		protected virtual void LoadConfigSuits(JObject config) {
 			_configSuits.Clear();
 			foreach (var suit in config["suits"]) {
 				string bigIcon = "";
