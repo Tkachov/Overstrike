@@ -77,10 +77,21 @@ namespace Overstrike.Tabs
 				var suits = (JArray)root["SuitList"]["Suits"];
 				var normalized = new JArray();
 				foreach (var suit in suits) {
+					var icon = "";
+					if (suit["Icon"] != null) {
+						icon = (string)suit["Icon"]["AssetPath"];
+					}
+
+					if (toc.FindFirstAssetIndexByPath(icon) == -1) {
+						if (suit["VariantGroup"] != null && suit["VariantGroup"]["Icon"] != null && suit["VariantGroup"]["Icon"]["AssetPath"] != null) {
+							icon = (string)suit["VariantGroup"]["Icon"]["AssetPath"];
+						}
+					}
+
 					normalized.Add(new JObject() {
 						["Name"] = suit["Name"],
 						["DisplayName"] = suit["DisplayName"],
-						["PreviewImage"] = suit["Icon"]?["AssetPath"] ?? "",
+						["PreviewImage"] = icon,
 						["GivesItems"] = suit["Item"] != null
 							? new JObject() { ["Item"] = suit["Item"] }
 							: null
