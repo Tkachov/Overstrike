@@ -49,7 +49,7 @@
 						</Border>
 						<ControlTemplate.Triggers>
 							<Trigger Property="IsMouseOver" Value="True">
-								<Setter Property="BorderBrush" Value="#c0141e" TargetName="border" />
+								<Setter Property="BorderBrush" Value="#4DC9FE" TargetName="border" />
 								<Setter Property="Foreground" Value="White" />
 							</Trigger>
 						</ControlTemplate.Triggers>
@@ -83,10 +83,10 @@
 						</Border>
 						<ControlTemplate.Triggers>
 							<Trigger Property="IsSelected" Value="true">
-								<Setter Property="Background" TargetName="Bd" Value="#c0141e" />
+								<Setter Property="Background" TargetName="Bd" Value="#4DC9FE" />
 							</Trigger>
 							<Trigger Property="IsEnabled" Value="false">
-								<Setter Property="Background" TargetName="Bd" Value="#c0141e" />
+								<Setter Property="Background" TargetName="Bd" Value="#4DC9FE" />
 							</Trigger>
 						</ControlTemplate.Triggers>
 					</ControlTemplate>
@@ -133,15 +133,15 @@
 				</Grid>
 
 				<!-- Suits grid -->
-				<ListView Grid.Row="1" BorderThickness="0" Margin="0,0,0,-1" VirtualizingStackPanel.VirtualizationMode="Recycling" x:Name="_SuitsSlots" Background="#500"
+				<ListView Grid.Row="1" BorderThickness="0" Margin="0,0,0,-1" VirtualizingStackPanel.VirtualizationMode="Recycling" x:Name="_SuitsSlots" Background="#061437"
 					ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible"
 					ItemsPanel="{StaticResource ThumbnailListTemplate}" ItemContainerStyle="{StaticResource NotemanagerContainerStyle}" AllowDrop="True" SelectionMode="Single" SelectionChanged="SuitsSlots_SelectionChanged" MouseLeftButtonDown="SuitsSlots_MouseLeftButtonDown" MouseMove="SuitsSlots_MouseMove" DragEnter="SuitsSlots_DragEnter" Drop="SuitsSlots_Drop" KeyUp="SuitsSlots_KeyUp">
 					<ListView.Resources>
 						<DataTemplate DataType="{x:Type local:SuitSlot}">
 							<Border Margin="11,19,11,19">
-								<Border Width="116" BorderThickness="1,1,1,1" BorderBrush="#EE1122">
+								<Border Width="85" BorderThickness="1,1,1,1" BorderBrush="#6AC0D5">
 									<Grid>
-										<Image Source="{Binding Icon}" VerticalAlignment="Bottom" HorizontalAlignment="Center" Opacity="{Binding DisplayOpacity}" Stretch="Fill" Width="116" Height="80" />
+										<Image Source="{Binding Icon}" VerticalAlignment="Bottom" HorizontalAlignment="Center" Opacity="{Binding DisplayOpacity}" Stretch="Fill" Width="116" Height="100" />
 									</Grid>
 								</Border>
 							</Border>
