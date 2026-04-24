@@ -339,5 +339,15 @@ namespace Overstrike.Properties {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] suit_missing_msm2 {
+            get {
+                object obj = ResourceManager.GetObject("suit_missing_msm2", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

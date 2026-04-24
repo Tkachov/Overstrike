@@ -678,7 +678,7 @@ namespace Overstrike.Tabs {
 			return name;
 		}
 
-		protected BitmapSource GetIcon(string path) { // can only be called from UI thread since it creates the BitmapSource objects
+		protected virtual BitmapSource GetIcon(string path) { // can only be called from UI thread since it creates the BitmapSource objects
 			if (_iconsOrigs.ContainsKey(path) && _iconsOrigs[path] != null && (!_icons.ContainsKey(path) || _icons[path] == null))
 				_icons[path] = Utils.Imaging.ConvertToBitmapImage(_iconsOrigs[path]);
 

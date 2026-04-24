@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 
 namespace Overstrike.Tabs
 {
@@ -194,6 +195,19 @@ namespace Overstrike.Tabs
 
 			SuitsSlots.ItemsSource = _displayedSuits;
 			SelectSuitWithId(selectedId);
+		}
+
+		protected override BitmapSource GetIcon(string path) {
+			if (_iconsOrigs.ContainsKey(path) && _iconsOrigs[path] != null && (!_icons.ContainsKey(path) || _icons[path] == null))
+				_icons[path] = Utils.Imaging.ConvertToBitmapImage(_iconsOrigs[path]);
+
+			if (_icons.ContainsKey(path) && _icons[path] != null)
+				return _icons[path];
+
+			if (_placeholderImage == null)
+				_placeholderImage = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.suit_missing_msm2);
+
+			return _placeholderImage;
 		}
 
 	}

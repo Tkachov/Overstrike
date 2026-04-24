@@ -107,7 +107,7 @@
 
 		<Grid HorizontalAlignment="Stretch" Grid.Column="1">
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="710" />
+				<ColumnDefinition Width="610" />
 				<ColumnDefinition Width="294" />
 			</Grid.ColumnDefinitions>
 
@@ -138,10 +138,10 @@
 					ItemsPanel="{StaticResource ThumbnailListTemplate}" ItemContainerStyle="{StaticResource NotemanagerContainerStyle}" AllowDrop="True" SelectionMode="Single" SelectionChanged="SuitsSlots_SelectionChanged" MouseLeftButtonDown="SuitsSlots_MouseLeftButtonDown" MouseMove="SuitsSlots_MouseMove" DragEnter="SuitsSlots_DragEnter" Drop="SuitsSlots_Drop" KeyUp="SuitsSlots_KeyUp">
 					<ListView.Resources>
 						<DataTemplate DataType="{x:Type local:SuitSlot}">
-							<Border Margin="11,19,11,19">
-								<Border Width="85" BorderThickness="1,1,1,1" BorderBrush="#6AC0D5">
-									<Grid>
-										<Image Source="{Binding Icon}" VerticalAlignment="Bottom" HorizontalAlignment="Center" Opacity="{Binding DisplayOpacity}" Stretch="Fill" Width="116" Height="100" />
+							<Border Margin="11,8,11,7">
+								<Border Width="112" Height="153" BorderThickness="4,4,4,4" BorderBrush="#6AC0D5">
+									<Grid ClipToBounds="True">
+										<Image Source="{Binding Icon}" VerticalAlignment="Top" HorizontalAlignment="Left" Opacity="{Binding DisplayOpacity}" Stretch="Fill" Margin="-21,-1,0,0" Width="149" Height="154" />
 									</Grid>
 								</Border>
 							</Border>
