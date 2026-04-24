@@ -165,8 +165,8 @@
 						<ComboBox.ItemTemplate>
 							<DataTemplate>
 								<Grid>
-									<Image Source="{Binding Icon}" HorizontalAlignment="Left" Stretch="Fill"  Width="23" Height="16" />
-									<TextBlock Text="{Binding Name}" HorizontalAlignment="Left" Margin="30,0,0,0" />
+									<Image Source="{Binding Icon}" HorizontalAlignment="Left" Stretch="Fill"  Width="16" Height="16" />
+									<TextBlock Text="{Binding Name}" HorizontalAlignment="Left" Margin="23,0,0,0" />
 								</Grid>
 							</DataTemplate>
 						</ComboBox.ItemTemplate>
