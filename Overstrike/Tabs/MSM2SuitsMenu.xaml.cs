@@ -68,21 +68,16 @@ namespace Overstrike.Tabs
 			}
 		}
 
-		// MSM2 uses SuitList.Suits instead of TechWebLists
-		protected override JObject LoadConfigInternal(dynamic toc)
-		{
-			try
-			{
+		public static JObject LoadConfig_MSM2(TOC_I29 toc) {
+			try {
 				const ulong SYSTEM_PROGRESSION_CONFIG_AID = 0x9C9C72A303FCFA30;
-				var config = new Config_I30(toc.GetAssetReader((byte)0, SYSTEM_PROGRESSION_CONFIG_AID));
+				var config = new Config_I30(toc.GetAssetReader(SYSTEM_PROGRESSION_CONFIG_AID));
 				var root = config.ContentSection.Data;
 
 				var suits = (JArray)root["SuitList"]["Suits"];
 				var normalized = new JArray();
-				foreach (var suit in suits)
-				{
-					normalized.Add(new JObject()
-					{
+				foreach (var suit in suits) {
+					normalized.Add(new JObject() {
 						["Name"] = suit["Name"],
 						["DisplayName"] = suit["DisplayName"],
 						["PreviewImage"] = suit["Icon"]?["AssetPath"] ?? "",
@@ -93,44 +88,13 @@ namespace Overstrike.Tabs
 				}
 
 				return new JObject() { ["suits"] = normalized };
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.ToString(), "LoadConfigInternal failed");
-			}
+			} catch {}
 
 			return null;
 		}
 
-		// Called by MetaInstaller_I29 after mods install to cache config
-		public static JObject LoadConfigForCache(TOC_I29 toc)
-		{
-			try
-			{
-				const ulong SYSTEM_PROGRESSION_CONFIG_AID = 0x9C9C72A303FCFA30;
-				var config = new Config_I30(toc.GetAssetReader((byte)0, SYSTEM_PROGRESSION_CONFIG_AID));
-				var root = config.ContentSection.Data;
-
-				var suits = (JArray)root["SuitList"]["Suits"];
-				var normalized = new JArray();
-				foreach (var suit in suits)
-				{
-					normalized.Add(new JObject()
-					{
-						["Name"] = suit["Name"],
-						["DisplayName"] = suit["DisplayName"],
-						["PreviewImage"] = suit["Icon"]?["AssetPath"] ?? "",
-						["GivesItems"] = suit["Item"] != null
-							? new JObject() { ["Item"] = suit["Item"] }
-							: null
-					});
-				}
-
-				return new JObject() { ["suits"] = normalized };
-			}
-			catch { }
-
-			return null;
+		protected override JObject LoadConfigInternal(dynamic toc) {
+			return LoadConfig_MSM2(toc);
 		}
 
 		// Character tab handlers

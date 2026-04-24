@@ -209,7 +209,7 @@ namespace Overstrike.MetaInstallers {
 
 			ErrorLogger.WriteInfo("Caching suits config...");
 			var cache = ((App)App.Current).SuitsCache;
-			var loadedConfig = MSM2SuitsMenu.LoadConfigForCache(toc);
+			var loadedConfig = MSM2SuitsMenu.LoadConfig_MSM2(toc);
 			if (loadedConfig != null) {
 				cache.SetConfig(SuitsCache.NormalizePath(_gamePath), loadedConfig);
 			}
