@@ -44,13 +44,13 @@
 			<Setter Property="Template">
 				<Setter.Value>
 					<ControlTemplate TargetType="Button">
-						<Border Name="border" Background="#400" BorderThickness="0,0,0,2" BorderBrush="Transparent">
+						<Border Name="border" Background="#032338" BorderThickness="2,2,0,2" BorderBrush="#032338">
 							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
 						</Border>
 						<ControlTemplate.Triggers>
 							<Trigger Property="IsMouseOver" Value="True">
-								<Setter Property="BorderBrush" Value="#4DC9FE" TargetName="border" />
-								<Setter Property="Foreground" Value="White" />
+								<Setter Property="BorderBrush" Value="#3CCCF7" TargetName="border" />
+								<Setter Property="Foreground" Value="#62F7F8" />
 							</Trigger>
 						</ControlTemplate.Triggers>
 					</ControlTemplate>
@@ -61,13 +61,13 @@
 		<Style x:Key="CharacterTabActiveStyle" TargetType="Button">
 			<Setter Property="OverridesDefaultStyle" Value="True" />
 			<Setter Property="Height" Value="28" />
-			<Setter Property="Foreground" Value="White" />
-			<Setter Property="FontWeight" Value="Bold" />
+			<Setter Property="Foreground" Value="#62F7F8" />
+			<Setter Property="FontWeight" Value="SemiBold" />
 			<Setter Property="Cursor" Value="Hand" />
 			<Setter Property="Template">
 				<Setter.Value>
 					<ControlTemplate TargetType="Button">
-						<Border Name="border" Background="#500" BorderThickness="0,0,0,2" BorderBrush="#c0141e">
+						<Border Name="border" Background="#389ED5" BorderThickness="2,2,0,2" BorderBrush="#3CCCF7">
 							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
 						</Border>
 					</ControlTemplate>
@@ -83,10 +83,10 @@
 						</Border>
 						<ControlTemplate.Triggers>
 							<Trigger Property="IsSelected" Value="true">
-								<Setter Property="Background" TargetName="Bd" Value="#4DC9FE" />
+								<Setter Property="Background" TargetName="Bd" Value="#61EFF0" />
 							</Trigger>
 							<Trigger Property="IsEnabled" Value="false">
-								<Setter Property="Background" TargetName="Bd" Value="#4DC9FE" />
+								<Setter Property="Background" TargetName="Bd" Value="#61EFF0" />
 							</Trigger>
 						</ControlTemplate.Triggers>
 					</ControlTemplate>
@@ -97,8 +97,8 @@
 		</Style>
 	</UserControl.Resources>
 
-	<Border BorderThickness="0,1,0,0" BorderBrush="#700" Margin="-2,-1,-2,-2">
-		<Grid Background="#300">
+	<Border BorderThickness="0,1,0,0" BorderBrush="#06132F" Margin="-2,-1,-2,-2">
+		<Grid Background="#000B1F">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition/>
 			<ColumnDefinition Width="1004" />
@@ -107,7 +107,7 @@
 
 		<Grid HorizontalAlignment="Stretch" Grid.Column="1">
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="610" />
+				<ColumnDefinition Width="710" />
 				<ColumnDefinition Width="294" />
 			</Grid.ColumnDefinitions>
 
@@ -119,29 +119,25 @@
 				</Grid.RowDefinitions>
 
 				<!-- Character tab bar -->
-				<Grid Grid.Row="0" Background="#400">
+				<Grid Grid.Row="0" Background="#000B1F">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="*" />
 						<ColumnDefinition Width="*" />
 					</Grid.ColumnDefinitions>
-					<Button x:Name="_PeterTabButton" Grid.Column="0" Content="Peter Parker"
-						Style="{StaticResource CharacterTabActiveStyle}"
-						Click="PeterTabButton_Click" />
-					<Button x:Name="_MilesTabButton" Grid.Column="1" Content="Miles Morales"
-						Style="{StaticResource CharacterTabStyle}"
-						Click="MilesTabButton_Click" />
+					<Button x:Name="_PeterTabButton" Grid.Column="0" Content="PETER" Style="{StaticResource CharacterTabActiveStyle}" Click="PeterTabButton_Click" />
+					<Button x:Name="_MilesTabButton" Grid.Column="1" Content="MILES" Style="{StaticResource CharacterTabStyle}" Click="MilesTabButton_Click" />
 				</Grid>
 
 				<!-- Suits grid -->
-				<ListView Grid.Row="1" BorderThickness="0" Margin="0,0,0,-1" VirtualizingStackPanel.VirtualizationMode="Recycling" x:Name="_SuitsSlots" Background="#061437"
+				<ListView Grid.Row="1" BorderThickness="0" Margin="0,0,0,-1" VirtualizingStackPanel.VirtualizationMode="Recycling" x:Name="_SuitsSlots" Background="#06132F"
 					ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible"
-					ItemsPanel="{StaticResource ThumbnailListTemplate}" ItemContainerStyle="{StaticResource NotemanagerContainerStyle}" AllowDrop="True" SelectionMode="Single" SelectionChanged="SuitsSlots_SelectionChanged" MouseLeftButtonDown="SuitsSlots_MouseLeftButtonDown" MouseMove="SuitsSlots_MouseMove" DragEnter="SuitsSlots_DragEnter" Drop="SuitsSlots_Drop" KeyUp="SuitsSlots_KeyUp">
+					ItemsPanel="{StaticResource ThumbnailListTemplate}" ItemContainerStyle="{StaticResource NotemanagerContainerStyle}" AllowDrop="True" SelectionMode="Single" Padding="77,7,77,0" SelectionChanged="SuitsSlots_SelectionChanged" MouseLeftButtonDown="SuitsSlots_MouseLeftButtonDown" MouseMove="SuitsSlots_MouseMove" DragEnter="SuitsSlots_DragEnter" Drop="SuitsSlots_Drop" KeyUp="SuitsSlots_KeyUp">
 					<ListView.Resources>
 						<DataTemplate DataType="{x:Type local:SuitSlot}">
 							<Border Margin="11,8,11,7">
-								<Border Width="112" Height="153" BorderThickness="4,4,4,4" BorderBrush="#6AC0D5">
+								<Border Width="112" Height="153" BorderThickness="3,3,3,3" BorderBrush="#61EFF0">
 									<Grid ClipToBounds="True">
-										<Image Source="{Binding Icon}" VerticalAlignment="Top" HorizontalAlignment="Left" Opacity="{Binding DisplayOpacity}" Stretch="Fill" Margin="-21,-1,0,0" Width="149" Height="154" />
+										<Image Source="{Binding Icon}" VerticalAlignment="Top" HorizontalAlignment="Left" Opacity="{Binding DisplayOpacity}" Stretch="Fill" Margin="-20,0,0,0" Width="149" Height="154" />
 									</Grid>
 								</Border>
 							</Border>
