@@ -9,6 +9,7 @@ using Overstrike.Installers;
 using Overstrike.Utils;
 using Overstrike.Data;
 using Overstrike.Games;
+using Overstrike.Tabs;
 
 namespace Overstrike.MetaInstallers {
 	internal class MetaInstaller_I29: MetaInstallerBase {
@@ -89,6 +90,7 @@ namespace Overstrike.MetaInstallers {
 		}
 
 		private TOC_I29 _toc;
+		private bool _cachedSuitsConfig;
 
 		public override void Start() {
 			ErrorLogger.WriteInfo($"Loading '{_outTocName}'...");
@@ -96,6 +98,7 @@ namespace Overstrike.MetaInstallers {
 			var tocPath = Path.Combine(_gamePath, _outTocName);
 			_toc = new TOC_I29();
 			_toc.Load(tocPath);
+			_cachedSuitsConfig = false;
 
 			ErrorLogger.WriteInfo(" OK!\n");
 			LogTocSanityCheck();
@@ -152,18 +155,26 @@ namespace Overstrike.MetaInstallers {
 				case ModEntry.ModType.SUIT_STYLE_MSM2:
 					return new MSM2SuitStyleInstaller(_toc, _gamePath);
 
+				case ModEntry.ModType.SUITS_MENU:
+					CacheSuitsConfig();
+					return new SuitsMenuInstaller_MSM2(_toc, _gamePath, _profile.Suits);
+
 				default:
 					return null;
 			}
 		}
 
 		public override void Finish() {
+			CacheSuitsConfig();
+
 			var tocPath = Path.Combine(_gamePath, _outTocName);
 			RemoveReadOnlyAttribute(tocPath);
 			_toc.Save(tocPath);
 		}
 
 		public override void Uninstall() {
+			CacheSuitsConfig();
+
 			var tocPath = Path.Combine(_gamePath, "toc");
 			var tocBakPath = Path.Combine(_gamePath, "toc.BAK");
 
@@ -183,6 +194,28 @@ namespace Overstrike.MetaInstallers {
 				File.Delete(scriptsProxyPath);
 				ErrorLogger.WriteInfo(" OK!\n");
 			}
+		}
+		private void CacheSuitsConfig() {
+			if (_cachedSuitsConfig) return;
+
+			var toc = _toc;
+			if (_toc == null) {
+				ErrorLogger.WriteInfo("Suits config caching: Loading 'toc'...");
+				var tocPath = Path.Combine(_gamePath, _outTocName);
+				toc = new TOC_I29();
+				toc.Load(tocPath);
+				ErrorLogger.WriteInfo(" OK!\n");
+			}
+
+			ErrorLogger.WriteInfo("Caching suits config...");
+			var cache = ((App)App.Current).SuitsCache;
+			var loadedConfig = MSM2SuitsMenu.LoadConfig_MSM2(toc);
+			if (loadedConfig != null) {
+				cache.SetConfig(SuitsCache.NormalizePath(_gamePath), loadedConfig);
+			}
+			ErrorLogger.WriteInfo(" OK!\n");
+
+			_cachedSuitsConfig = true;
 		}
 	}
 }

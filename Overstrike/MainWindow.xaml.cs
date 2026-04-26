@@ -33,7 +33,7 @@ namespace Overstrike {
 		private Profile _selectedProfile;
 
 		private GameBase _selectedGame => GameBase.GetGame(_selectedProfile.Game);
-		private bool _selectedGameHasSuitsMenu => (_selectedProfile.Game == GameMSMR.ID || _selectedProfile.Game == GameMM.ID);
+		private bool _selectedGameHasSuitsMenu => (_selectedProfile.Game == GameMSMR.ID || _selectedProfile.Game == GameMM.ID || _selectedProfile.Game == GameMSM2.ID);
 
 		private class ProfileItem {
 			public string Text { get; set; }
@@ -107,6 +107,11 @@ namespace Overstrike {
 			set { MMSuitsMenuContent.ShowDeleted = value; }
 		}
 
+		public bool MSM2SuitsMenuContent_ShowDeleted {
+			get => MSM2SuitsMenuContent.ShowDeleted;
+			set { MSM2SuitsMenuContent.ShowDeleted = value; }
+		}
+
 		public MainWindow(AppSettings settings, List<Profile> profiles, List<ModEntry> mods) {
 			InitializeComponent();
 
@@ -126,6 +131,7 @@ namespace Overstrike {
 
 			MSMRSuitsMenuContent.Init(AddTaskThread, SetOverlayLabels);
 			MMSuitsMenuContent.Init(AddTaskThread, SetOverlayLabels);
+			MSM2SuitsMenuContent.Init(AddTaskThread, SetOverlayLabels);
 
 			DataContext = this;
 		}
@@ -197,9 +203,11 @@ namespace Overstrike {
 		private void UpdateSuitMenuTabs() {
 			MSMRSuitsMenuContent.SetProfile(_selectedProfile);
 			MMSuitsMenuContent.SetProfile(_selectedProfile);
+			MSM2SuitsMenuContent.SetProfile(_selectedProfile);
 
 			MSMRSuitsMenuTab.Visibility = (_selectedProfile.Game == GameMSMR.ID ? Visibility.Visible : Visibility.Collapsed);
 			MMSuitsMenuTab.Visibility = (_selectedProfile.Game == GameMM.ID ? Visibility.Visible : Visibility.Collapsed);
+			MSM2SuitsMenuTab.Visibility = (_selectedProfile.Game == GameMSM2.ID ? Visibility.Visible : Visibility.Collapsed);
 
 			// if currently open tab is no longer available (while switching between profiles), go to the first one
 			// if it's available, "reopen" (since profile changed)
@@ -215,6 +223,12 @@ namespace Overstrike {
 					MainTabs.SelectedIndex = 0;
 				} else {
 					MMSuitsMenuContent.Reopen();
+				}
+			} else if (MainTabs.SelectedItem == MSM2SuitsMenuTab) {
+				if (MSM2SuitsMenuTab.Visibility != Visibility.Visible) {
+					MainTabs.SelectedIndex = 0;
+				} else {
+					MSM2SuitsMenuContent.Reopen();
 				}
 			}
 		}
@@ -255,6 +269,7 @@ namespace Overstrike {
 			Dictionary<string, byte>.KeyCollection gameLanguages = null;
 			if (_selectedProfile.Game == GameMSMR.ID) gameLanguages = MSMRSuitInstaller.LANGUAGES.Keys;
 			else if (_selectedProfile.Game == GameMM.ID) gameLanguages = MMSuit1Installer.LANGUAGES.Keys;
+			else if (_selectedProfile.Game == GameMSM2.ID) gameLanguages = MSM2Suit2Installer.LANGUAGES.Keys;
 			if (gameLanguages != null) {
 				foreach (var lang in gameLanguages) {
 					_suitLanguageItems.Add(new LanguageItem() { Name = USERFRIENDLY_LANGUAGE_NAMES[lang], InternalName = lang });
@@ -451,6 +466,8 @@ namespace Overstrike {
 					MSMRSuitsMenuContent.TickInvoke();
 				} else if (MainTabs.SelectedItem == MMSuitsMenuTab) {
 					MMSuitsMenuContent.TickInvoke();
+				} else if (MainTabs.SelectedItem == MSM2SuitsMenuTab) {
+					MSM2SuitsMenuContent.TickInvoke();
 				}
 			});
 		}
@@ -866,8 +883,10 @@ namespace Overstrike {
 					if (_selectedGameHasSuitsMenu) {
 						if (_selectedProfile.Game == GameMSMR.ID) {
 							MSMRSuitsMenuContent.RequestReload();
-						} else {
+						} else if (_selectedProfile.Game == GameMM.ID) {
 							MMSuitsMenuContent.RequestReload();
+						} else if (_selectedProfile.Game == GameMSM2.ID) {
+							MSM2SuitsMenuContent.RequestReload();
 						}
 					}
 				});
@@ -1171,6 +1190,8 @@ namespace Overstrike {
 					MSMRSuitsMenuContent.OnOpen();
 				} else if (MainTabs.SelectedItem == MMSuitsMenuTab) {
 					MMSuitsMenuContent.OnOpen();
+				} else if (MainTabs.SelectedItem == MSM2SuitsMenuTab) {
+					MSM2SuitsMenuContent.OnOpen();
 				}
 			}
 		}

@@ -203,6 +203,9 @@
 				<TabItem Header="Suits Menu" x:Name="MMSuitsMenuTab">
 					<tabs:MMSuitsMenu x:Name="MMSuitsMenuContent" />
 				</TabItem>
+				<TabItem Header="Suits Menu" x:Name="MSM2SuitsMenuTab">
+					<tabs:MSM2SuitsMenu x:Name="MSM2SuitsMenuContent" />
+				</TabItem>
 				<TabItem Header="Settings">
 					<ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
 						<StackPanel>

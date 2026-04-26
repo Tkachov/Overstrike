@@ -28,7 +28,7 @@ namespace Overstrike.MetaInstallers {
 				_availableMods.Add(mod.Path, mod);
 			}
 
-			var selectedGameHasSuitsMenu = (_selectedProfile.Game == GameMSMR.ID || _selectedProfile.Game == GameMM.ID);
+			var selectedGameHasSuitsMenu = (_selectedProfile.Game == GameMSMR.ID || _selectedProfile.Game == GameMM.ID || _selectedProfile.Game == GameMSM2.ID);
 			if (selectedGameHasSuitsMenu) {
 				var path = ModEntry.SUITS_MENU_PATH;
 				var stub = new ModEntry("Suits Menu", path, ModEntry.ModType.SUITS_MENU);

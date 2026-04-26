@@ -11,7 +11,6 @@ using Overstrike.Games;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Threading;
@@ -89,23 +88,30 @@ namespace Overstrike.Tabs {
 		protected bool _wasReset = false;
 
 		protected Profile _tocProfile = null;
-		protected TOC_I20 _toc = null;
-		protected TOC_I20 toc {
+		protected dynamic _toc = null;
+		protected dynamic toc {
 			get {
 				if (_toc == null) {
 					try {
 						var selectedGame = GameBase.GetGame(_selectedProfile.Game);
 						var tocPath = selectedGame.GetTocPath(_selectedProfile.GamePath);
-
-						var toc = new TOC_I20();
-						toc.Load(tocPath);
-						_toc = toc;
+						_toc = LoadToc(tocPath);
 						_tocProfile = _selectedProfile;
 					} catch {}
 				}
 
 				return _toc;
 			}
+		}
+
+		protected virtual dynamic LoadToc(string tocPath) {
+			var toc = new TOC_I20();
+			toc.Load(tocPath);
+			return toc;
+		}
+
+		protected virtual dynamic LoadTexture(dynamic toc, string path) {
+			return new Texture_I20(toc.GetAssetReader(path));
 		}
 
 		protected DAT1.Files.Localization _cachedLocalization;
@@ -271,7 +277,7 @@ namespace Overstrike.Tabs {
 
 			if (needToReloadConfig) {
 				// load config and put it to cache
-				var loadedConfig = LoadConfig(toc);
+				var loadedConfig = LoadConfigInternal(toc);
 				if (loadedConfig != null) {
 					cache.SetConfig(path, loadedConfig);
 				}
@@ -337,6 +343,10 @@ namespace Overstrike.Tabs {
 			return null;
 		}
 
+		protected virtual JObject LoadConfigInternal(dynamic toc) {
+			return LoadConfig((TOC_I20)toc);
+		}
+
 		private static long GetTocTimestamp(Profile profile) {
 			var selectedGame = GameBase.GetGame(profile.Game);
 			var tocPath = selectedGame.GetTocPath(profile.GamePath);
@@ -371,7 +381,7 @@ namespace Overstrike.Tabs {
 			// don't clear the observable collections here and do it in corresponding methods (which are called through Dispatcher)
 		}
 
-		private void LoadConfigSuits(JObject config) {
+		protected virtual void LoadConfigSuits(JObject config) {
 			_configSuits.Clear();
 			foreach (var suit in config["suits"]) {
 				string bigIcon = "";
@@ -544,7 +554,7 @@ namespace Overstrike.Tabs {
 				return;
 
 			try {
-				Texture_I20 texture = new Texture_I20(toc.GetAssetReader(path));
+				var texture = LoadTexture(toc, path);
 				var dds = texture.GetDDS();
 				_iconsOrigs[path] = Utils.Imaging.DdsToBitmap(dds);
 			} catch {}
@@ -559,7 +569,7 @@ namespace Overstrike.Tabs {
 		#endregion
 		#region - making observable items
 
-		private void MakeDisplayedSuits() {
+		protected virtual void MakeDisplayedSuits() {
 			_displayedSuits.Clear();
 			foreach (var suit in _customizedSuits) {
 				if (suit.MarkedToDelete && !_showDeleted) continue;
@@ -618,7 +628,7 @@ namespace Overstrike.Tabs {
 						"Items": [
 							{"Item": "configs/VanityBodyType/VanityBody_SpiderMan.config"},
 							{"Item": "configs/VanityHED/VanityHEDSpiderMan1.config"},
-							{"Item": "configs/VanityTOR1/VanityTOR1aSpiderMan1.config"}          <--- we need this
+							{"Item": "configs/VanityTOR1/VanityTOR1aSpiderMan1.config"}		  <--- we need this
 						]
 					},
 					"Name": "Spider-Man White Spider Suit"
@@ -636,7 +646,7 @@ namespace Overstrike.Tabs {
 					/*
 					"ModelList": {
 						"Model": {
-							"AssetPath": "characters/hero/hero_spiderman/hero_spiderman_body.model",     <--- this
+							"AssetPath": "characters/hero/hero_spiderman/hero_spiderman_body.model",	 <--- this
 							"Autoload": false
 						},
 						"BodyType": "kAll"
@@ -667,7 +677,7 @@ namespace Overstrike.Tabs {
 			return name;
 		}
 
-		protected BitmapSource GetIcon(string path) { // can only be called from UI thread since it creates the BitmapSource objects
+		protected virtual BitmapSource GetIcon(string path) { // can only be called from UI thread since it creates the BitmapSource objects
 			if (_iconsOrigs.ContainsKey(path) && _iconsOrigs[path] != null && (!_icons.ContainsKey(path) || _icons[path] == null))
 				_icons[path] = Utils.Imaging.ConvertToBitmapImage(_iconsOrigs[path]);
 
