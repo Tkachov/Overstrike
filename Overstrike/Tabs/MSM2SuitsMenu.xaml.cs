@@ -113,7 +113,7 @@ namespace Overstrike.Tabs
 
 				var suitInfo = new SuitSlot() {
 					SuitId = name,
-					Name = GetFriendlySuitName(displayName),
+					Name = displayName, // TODO: support .localization and showing translated name instead of its key
 					Icon = null,
 					BigIcon = null,
 					IconPath = icon,
