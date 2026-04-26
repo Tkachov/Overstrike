@@ -11,6 +11,7 @@
 		<ItemsPanelTemplate x:Key="ThumbnailListTemplate">
 			<WrapPanel Orientation="Horizontal" />
 		</ItemsPanelTemplate>
+		
 		<Style x:Key="SeparatorButtonStyle" TargetType="Button">
 			<Setter Property="OverridesDefaultStyle" Value="True" />
 			<Setter Property="Margin" Value="0,0,0,0" />
@@ -34,7 +35,7 @@
 				</Setter.Value>
 			</Setter>
 		</Style>
-		<!-- Character tab button style (inactive) -->
+		
 		<Style x:Key="CharacterTabStyle" TargetType="Button">
 			<Setter Property="OverridesDefaultStyle" Value="True" />
 			<Setter Property="Height" Value="28" />
@@ -57,7 +58,7 @@
 				</Setter.Value>
 			</Setter>
 		</Style>
-		<!-- Character tab button style (active) -->
+		
 		<Style x:Key="CharacterTabActiveStyle" TargetType="Button">
 			<Setter Property="OverridesDefaultStyle" Value="True" />
 			<Setter Property="Height" Value="28" />
@@ -74,6 +75,7 @@
 				</Setter.Value>
 			</Setter>
 		</Style>
+		
 		<Style TargetType="{x:Type ListViewItem}" x:Key="NotemanagerContainerStyle">
 			<Setter Property="Template">
 				<Setter.Value>
@@ -111,14 +113,12 @@
 				<ColumnDefinition Width="294" />
 			</Grid.ColumnDefinitions>
 
-			<!-- Left panel: character tabs + suits list -->
 			<Grid Grid.Column="0">
 				<Grid.RowDefinitions>
 					<RowDefinition Height="28" />
 					<RowDefinition Height="*" />
 				</Grid.RowDefinitions>
-
-				<!-- Character tab bar -->
+				
 				<Grid Grid.Row="0" Background="#000B1F">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="*" />
@@ -128,7 +128,6 @@
 					<Button x:Name="_MilesTabButton" Grid.Column="1" Content="MILES" Style="{StaticResource CharacterTabStyle}" Click="MilesTabButton_Click" />
 				</Grid>
 
-				<!-- Suits grid -->
 				<ListView Grid.Row="1" BorderThickness="0" Margin="0,0,0,-1" VirtualizingStackPanel.VirtualizationMode="Recycling" x:Name="_SuitsSlots" Background="#06132F"
 					ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible"
 					ItemsPanel="{StaticResource ThumbnailListTemplate}" ItemContainerStyle="{StaticResource NotemanagerContainerStyle}" AllowDrop="True" SelectionMode="Single" Padding="77,7,77,0" SelectionChanged="SuitsSlots_SelectionChanged" MouseLeftButtonDown="SuitsSlots_MouseLeftButtonDown" MouseMove="SuitsSlots_MouseMove" DragEnter="SuitsSlots_DragEnter" Drop="SuitsSlots_Drop" KeyUp="SuitsSlots_KeyUp">
@@ -146,7 +145,6 @@
 				</ListView>
 			</Grid>
 
-			<!-- Right panel: suit details -->
 			<Grid Background="#FFF" HorizontalAlignment="Stretch" Grid.Column="1">
 				<TextBlock x:Name="_SuitName" Text="SUIT NAME" Margin="9,7,5,0" VerticalAlignment="Top" FontWeight="Bold"/>
 

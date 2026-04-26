@@ -11,7 +11,6 @@ using Overstrike.Games;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Threading;
@@ -567,10 +566,10 @@ namespace Overstrike.Tabs {
 			return "%" + locstring_key + "%";
 		}
 
-        #endregion
-        #region - making observable items
+		#endregion
+		#region - making observable items
 
-        protected virtual void MakeDisplayedSuits() {
+		protected virtual void MakeDisplayedSuits() {
 			_displayedSuits.Clear();
 			foreach (var suit in _customizedSuits) {
 				if (suit.MarkedToDelete && !_showDeleted) continue;
@@ -629,7 +628,7 @@ namespace Overstrike.Tabs {
 						"Items": [
 							{"Item": "configs/VanityBodyType/VanityBody_SpiderMan.config"},
 							{"Item": "configs/VanityHED/VanityHEDSpiderMan1.config"},
-							{"Item": "configs/VanityTOR1/VanityTOR1aSpiderMan1.config"}          <--- we need this
+							{"Item": "configs/VanityTOR1/VanityTOR1aSpiderMan1.config"}		  <--- we need this
 						]
 					},
 					"Name": "Spider-Man White Spider Suit"
@@ -647,7 +646,7 @@ namespace Overstrike.Tabs {
 					/*
 					"ModelList": {
 						"Model": {
-							"AssetPath": "characters/hero/hero_spiderman/hero_spiderman_body.model",     <--- this
+							"AssetPath": "characters/hero/hero_spiderman/hero_spiderman_body.model",	 <--- this
 							"Autoload": false
 						},
 						"BodyType": "kAll"

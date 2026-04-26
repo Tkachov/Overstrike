@@ -7,27 +7,14 @@ using DAT1;
 using DAT1.Files;
 using Newtonsoft.Json.Linq;
 using Overstrike.Installers;
-using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
-namespace Overstrike.Tabs
-{
-	public enum MSM2Character
-	{
-		Peter,
-		Miles
-	}
-
-	public partial class MSM2SuitsMenu : SuitsMenuBase
-	{
-		private MSM2Character _activeCharacter = MSM2Character.Peter;
-		private Dictionary<string, MSM2Character> _suitToCharacter = new();
-
-		public MSM2SuitsMenu()
-		{
+namespace Overstrike.Tabs {
+	public partial class MSM2SuitsMenu : SuitsMenuBase {
+		public MSM2SuitsMenu() {
 			InitializeComponent();
 			SuitsSlots.ItemContainerGenerator.StatusChanged += SuitsSlots_ItemGeneratorStatusChanged;
 		}
@@ -37,7 +24,7 @@ namespace Overstrike.Tabs
 		protected override Grid NotModified { get => _NotModified; }
 		protected override TextBlock SuitName { get => _SuitName; }
 		protected override Grid SuitInfo { get => _SuitInfo; }
-		protected override System.Windows.Controls.Image BigIcon { get => null; }
+		protected override Image BigIcon { get => null; }
 		protected override ComboBox SuitLoadoutComboBox { get => _SuitLoadoutComboBox; }
 		protected override ComboBox SuitIconComboBox { get => _SuitIconComboBox; }
 		protected override ComboBox SuitBigIconComboBox { get => null; }
@@ -48,26 +35,39 @@ namespace Overstrike.Tabs
 		protected override bool HasBigIcons { get => false; }
 		protected override Dictionary<string, byte> LANGUAGES { get => MSM2Suit2Installer.LANGUAGES; }
 
-		// Use TOC_I29 instead of TOC_I20
-		protected override dynamic LoadToc(string tocPath)
-		{
+		#region data classes
+
+		enum MSM2Character {
+			Peter,
+			Miles
+		}
+
+		#endregion
+
+		#region state
+
+		private MSM2Character _activeCharacter = MSM2Character.Peter;
+		private Dictionary<string, MSM2Character> _suitToCharacter = new();
+
+		protected override dynamic LoadToc(string tocPath) {
 			var toc = new TOC_I29();
 			toc.Load(tocPath);
 			return toc;
 		}
 
-		// Use Texture_I30 instead of Texture_I20
-		protected override dynamic LoadTexture(dynamic toc, string path)
-		{
-			try
-			{
+		protected override dynamic LoadTexture(dynamic toc, string path) {
+			try {
 				return new Texture_I30(toc.GetAssetReader(path));
-			}
-			catch
-			{
+			} catch {
 				return null;
 			}
 		}
+
+		#endregion
+
+		#region loading
+
+		#region - thread logic
 
 		public static JObject LoadConfig_MSM2(TOC_I29 toc) {
 			try {
@@ -75,7 +75,7 @@ namespace Overstrike.Tabs
 				var config = new Config_I30(toc.GetAssetReader(SYSTEM_PROGRESSION_CONFIG_AID));
 				var root = config.ContentSection.Data;
 				return new JObject() { ["suits"] = root["SuitList"]["Suits"] };
-			} catch {}
+			} catch { }
 
 			return null;
 		}
@@ -83,6 +83,9 @@ namespace Overstrike.Tabs
 		protected override JObject LoadConfigInternal(dynamic toc) {
 			return LoadConfig_MSM2(toc);
 		}
+
+		#endregion
+		#region - filling state
 
 		protected override void LoadConfigSuits(JObject config) {
 			_configSuits.Clear();
@@ -126,60 +129,34 @@ namespace Overstrike.Tabs
 			}
 		}
 
+		//
+
 		private MSM2Character DetermineSuitCharacter(string loadout) {
 			try {
 				var config = new Config_I30(toc.GetAssetReader(loadout));
 				var root = config.ContentSection.Data;
 				return ((string)root["ValidCharacters"][0] == "kSpiderManPeter" ? MSM2Character.Peter : MSM2Character.Miles);
-			} catch {}
+			} catch { }
 
 			return MSM2Character.Peter;
 		}
 
-		// Character tab handlers
+		#endregion
+		#region - making observable items
 
-		private void PeterTabButton_Click(object sender, RoutedEventArgs e)
-		{
-			SetActiveCharacter(MSM2Character.Peter);
-		}
-
-		private void MilesTabButton_Click(object sender, RoutedEventArgs e)
-		{
-			SetActiveCharacter(MSM2Character.Miles);
-		}
-
-		private void SetActiveCharacter(MSM2Character character)
-		{
-			if (_activeCharacter == character) return;
-			_activeCharacter = character;
-			UpdateTabStyles();
-			RefreshDisplayedSuits();
-		}
-		protected override void MakeDisplayedSuits()
-		{
+		protected override void MakeDisplayedSuits() {
 			RefreshDisplayedSuits();
 		}
 
-		private void UpdateTabStyles()
-		{
-			var activeStyle = (Style)FindResource("CharacterTabActiveStyle");
-			var inactiveStyle = (Style)FindResource("CharacterTabStyle");
-			_PeterTabButton.Style = _activeCharacter == MSM2Character.Peter ? activeStyle : inactiveStyle;
-			_MilesTabButton.Style = _activeCharacter == MSM2Character.Miles ? activeStyle : inactiveStyle;
-		}
-
-		private void RefreshDisplayedSuits()
-		{
+		private void RefreshDisplayedSuits() {
 			var selectedId = GetCurrentlySelectedSuitId();
 
 			_displayedSuits.Clear();
-			foreach (var suit in _customizedSuits)
-			{
+			foreach (var suit in _customizedSuits) {
 				if (_suitToCharacter[suit.SuitId] != _activeCharacter) continue;
 				if (suit.MarkedToDelete && !_showDeleted) continue;
 
-				_displayedSuits.Add(new SuitSlot()
-				{
+				_displayedSuits.Add(new SuitSlot() {
 					SuitId = suit.SuitId,
 					Name = suit.Name,
 					Icon = GetIcon(suit.IconPath),
@@ -195,6 +172,8 @@ namespace Overstrike.Tabs
 			SelectSuitWithId(selectedId);
 		}
 
+		//
+
 		protected override BitmapSource GetIcon(string path) {
 			if (_iconsOrigs.ContainsKey(path) && _iconsOrigs[path] != null && (!_icons.ContainsKey(path) || _icons[path] == null))
 				_icons[path] = Utils.Imaging.ConvertToBitmapImage(_iconsOrigs[path]);
@@ -208,5 +187,34 @@ namespace Overstrike.Tabs
 			return _placeholderImage;
 		}
 
+		#endregion
+
+		#endregion
+
+		#region event handlers
+
+		private void PeterTabButton_Click(object sender, RoutedEventArgs e) {
+			SetActiveCharacter(MSM2Character.Peter);
+		}
+
+		private void MilesTabButton_Click(object sender, RoutedEventArgs e) {
+			SetActiveCharacter(MSM2Character.Miles);
+		}
+
+		private void SetActiveCharacter(MSM2Character character) {
+			if (_activeCharacter == character) return;
+			_activeCharacter = character;
+			UpdateTabStyles();
+			RefreshDisplayedSuits();
+		}
+
+		private void UpdateTabStyles() {
+			var activeStyle = (Style)FindResource("CharacterTabActiveStyle");
+			var inactiveStyle = (Style)FindResource("CharacterTabStyle");
+			_PeterTabButton.Style = _activeCharacter == MSM2Character.Peter ? activeStyle : inactiveStyle;
+			_MilesTabButton.Style = _activeCharacter == MSM2Character.Miles ? activeStyle : inactiveStyle;
+		}
+
+		#endregion
 	}
 }
