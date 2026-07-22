@@ -131,7 +131,7 @@ namespace Overstrike.Installers {
 		private static bool ModTypeMatchesModularType(ModEntry.ModType innerModType, ModEntry.ModType modularType) {
 			switch (modularType) {
 				case ModEntry.ModType.MODULAR_MSMR:
-					return (innerModType == ModEntry.ModType.SUIT_MSMR || innerModType == ModEntry.ModType.STAGE_MSMR);
+					return (innerModType == ModEntry.ModType.SUIT_MSMR || innerModType == ModEntry.ModType.STAGE_MSMR || innerModType == ModEntry.ModType.SCRIPT_MSMR);
 
 				case ModEntry.ModType.MODULAR_MM:
 					return (innerModType == ModEntry.ModType.SUIT_MM || innerModType == ModEntry.ModType.SUIT_MM_V2 || innerModType == ModEntry.ModType.STAGE_MM);

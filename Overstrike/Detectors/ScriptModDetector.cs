@@ -52,6 +52,7 @@ namespace Overstrike.Detectors {
 					string g = (string)info["game"];
 					if (g != null && g.Trim() != "") {
 						if (g == GameMSM2.ID) type = ModEntry.ModType.SCRIPT_MSM2;
+						else if (g == GameMSMR.ID) type = ModEntry.ModType.SCRIPT_MSMR;
 					}
 				}
 

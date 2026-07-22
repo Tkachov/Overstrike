@@ -37,6 +37,7 @@ namespace Overstrike.Data {
 			MODULAR_I33,
 			MODULAR_MSM2,
 			SCRIPT_SUPPORT,
+			SCRIPT_MSMR,
 			SCRIPT_MSM2,
 			SUIT2_MSM2,
 			SUIT_STYLE_MSM2,
@@ -164,6 +165,7 @@ namespace Overstrike.Data {
 				case ModType.MODULAR_MSM2:
 					return badge_modular;
 
+				case ModType.SCRIPT_MSMR:
 				case ModType.SCRIPT_MSM2:
 					return badge_script;
 
@@ -212,7 +214,7 @@ namespace Overstrike.Data {
 		}
 
 		public static bool IsTypeFamilyScript(ModType type) {
-			return (type == ModType.SCRIPT_MSM2);
+			return (type == ModType.SCRIPT_MSMR || type == ModType.SCRIPT_MSM2);
 		}
 	}
 

@@ -40,5 +40,49 @@ namespace Overstrike.MetaInstallers {
 				throw;
 			}
 		}
+
+		protected void SetupScripts() {
+			var scriptsPath = Path.Combine(_gamePath, "scripts");
+			var scriptsTxtPath = Path.Combine(_gamePath, "scripts.txt");
+			var scriptsProxyPath = Path.Combine(_gamePath, "winmm.dll");
+
+			// cleanup
+
+			if (Directory.Exists(scriptsPath)) {
+				ErrorLogger.WriteInfo("Deleting 'scripts' directory...");
+				Directory.Delete(scriptsPath, true);
+				ErrorLogger.WriteInfo(" OK!\n");
+			}
+
+			if (File.Exists(scriptsTxtPath)) {
+				ErrorLogger.WriteInfo("Deleting 'scripts.txt'...");
+				File.Delete(scriptsTxtPath);
+				ErrorLogger.WriteInfo(" OK!\n");
+			}
+
+			if (File.Exists(scriptsProxyPath)) {
+				ErrorLogger.WriteInfo("Deleting 'winmm.dll'...");
+				File.Delete(scriptsProxyPath);
+				ErrorLogger.WriteInfo(" OK!\n");
+			}
+
+			//
+
+			if (!_profile.Settings_Scripts_Enabled) return;
+
+			if (!Directory.Exists(scriptsPath)) {
+				ErrorLogger.WriteInfo("Creating 'scripts' directory...");
+				Directory.CreateDirectory(scriptsPath);
+				ErrorLogger.WriteInfo(" OK!\n");
+			}
+
+			ErrorLogger.WriteInfo("Creating 'scripts.txt'...");
+			File.WriteAllText(scriptsTxtPath, "");
+			ErrorLogger.WriteInfo(" OK!\n");
+
+			ErrorLogger.WriteInfo("Creating 'winmm.dll'...");
+			File.Copy("scripts_proxy.dll", scriptsProxyPath);
+			ErrorLogger.WriteInfo(" OK!\n");
+		}
 	}
 }

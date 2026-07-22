@@ -31,7 +31,7 @@ namespace Overstrike.Games {
 		}
 
 		public override bool IsCompatible(ModEntry mod) {
-			return (mod.Type == ModEntry.ModType.SMPC || mod.Type == ModEntry.ModType.SUIT_MSMR || mod.Type == ModEntry.ModType.STAGE_MSMR || mod.Type == ModEntry.ModType.SUITS_MENU || mod.Type == ModEntry.ModType.MODULAR_MSMR);
+			return (mod.Type == ModEntry.ModType.SMPC || mod.Type == ModEntry.ModType.SUIT_MSMR || mod.Type == ModEntry.ModType.STAGE_MSMR || mod.Type == ModEntry.ModType.SUITS_MENU || mod.Type == ModEntry.ModType.MODULAR_MSMR || mod.Type == ModEntry.ModType.SCRIPT_MSMR);
 		}
 
 		public override MetaInstallerBase GetMetaInstaller(string gamePath, AppSettings settings, Profile profile) {
@@ -70,6 +70,6 @@ namespace Overstrike.Games {
 		}
 
 		public override bool HasSuitsSettingsSection => true;
-		public override bool HasScriptsSettingsSection => false;
+		public override bool HasScriptsSettingsSection => true;
 	}
 }

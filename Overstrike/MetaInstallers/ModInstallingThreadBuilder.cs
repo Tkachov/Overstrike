@@ -171,6 +171,7 @@ namespace Overstrike.MetaInstallers {
 							++modulars;
 							break;
 
+						case ModEntry.ModType.SCRIPT_MSMR:
 						case ModEntry.ModType.SCRIPT_MSM2:
 							++scripts;
 							break;

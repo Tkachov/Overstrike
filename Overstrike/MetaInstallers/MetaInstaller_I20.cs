@@ -44,6 +44,8 @@ namespace Overstrike.MetaInstallers {
 				ErrorLogger.WriteInfo(" OK!\n");
 			}
 
+			SetupScripts();
+
 			ErrorLogger.WriteInfo("\n");
 		}
 
@@ -116,6 +118,12 @@ namespace Overstrike.MetaInstallers {
 				case ModEntry.ModType.SUITS_MENU:
 					CacheSuitsConfig(); // "mod" of this type is meant to be the very last in the list, so we cache the config state before we apply our changes
 					return new SuitsMenuInstaller(_toc, _gamePath, _profile.Suits);
+
+				case ModEntry.ModType.SCRIPT_SUPPORT:
+					return new ScriptSupportInstaller(_gamePath);
+
+				case ModEntry.ModType.SCRIPT_MSMR:
+					return new ScriptInstaller(_gamePath);
 
 				default:
 					return null;
