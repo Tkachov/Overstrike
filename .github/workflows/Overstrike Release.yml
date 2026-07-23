@@ -33,7 +33,7 @@ jobs:
         with:
           runVcpkgInstall: true
           vcpkgJsonGlob: '${{ env.PROXY_PROJECT_DIR }}/vcpkg.json'
-          vcpkgGitCommitId: 'a42af01b72c28a8e1d7b48107b33e4f286a55ef6'
+          vcpkgGitCommitId: 'e861f04798ca54fa70ff906b5e43e5fc99b7f406'
         env:
           VCPKG_BINARY_SOURCES: default,readwrite
 
