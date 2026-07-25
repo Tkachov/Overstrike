@@ -1,4 +1,4 @@
-﻿// Overstrike -- an open-source mod manager for PC ports of Insomniac Games' games.
+// Overstrike -- an open-source mod manager for PC ports of Insomniac Games' games.
 // This program is free software, and can be redistributed and/or modified by you. It is provided 'as-is', without any warranty.
 // For more details, terms and conditions, see GNU General Public License.
 // A copy of the that license should come with this program (LICENSE.txt). If not, see <http://www.gnu.org/licenses/>.
@@ -48,7 +48,7 @@ namespace Overstrike.Utils {
 				if (entry.Key.Equals(fullpath, StringComparison.OrdinalIgnoreCase)) {
 					var file = new MemoryStream();
 					using (var entryStream = entry.OpenEntryStream()) {
-						entryStream.CopyTo(file);
+						entryStream.CopyTo(file, 1024 * 1024);
 					}
 					file.Seek(0, SeekOrigin.Begin);
 
@@ -79,10 +79,9 @@ namespace Overstrike.Utils {
 		public static byte[] GetZippedFileBytes(ZipArchive zip, string filename) {
 			var zipEntry = GetZipEntryByFullName(zip, filename);
 			using var stream = zipEntry.Open();
-			var file = new MemoryStream();
-			stream.CopyTo(file);
-			file.Seek(0, SeekOrigin.Begin);
-			return file.ToArray();
+			var file = new MemoryStream(zipEntry.Length > 0 ? (int)zipEntry.Length : 4096);
+			stream.CopyTo(file, 1024 * 1024);
+			return file.GetBuffer().AsSpan(0, (int)file.Length).ToArray();
 		}
 	}
 }

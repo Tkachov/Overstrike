@@ -1,4 +1,4 @@
-﻿// Overstrike -- an open-source mod manager for PC ports of Insomniac Games' games.
+// Overstrike -- an open-source mod manager for PC ports of Insomniac Games' games.
 // This program is free software, and can be redistributed and/or modified by you. It is provided 'as-is', without any warranty.
 // For more details, terms and conditions, see GNU General Public License.
 // A copy of the that license should come with this program (LICENSE.txt). If not, see <http://www.gnu.org/licenses/>.
@@ -70,7 +70,7 @@ namespace Overstrike.Installers {
 
 		protected void OverwriteAsset(byte span, ulong assetId, uint archiveIndex, BinaryWriter archiveWriter, Stream data) {
 			long archiveOffset = archiveWriter.BaseStream.Position;
-			data.CopyTo(archiveWriter.BaseStream);
+			data.CopyTo(archiveWriter.BaseStream, 1024 * 1024);
 			long fileSize = archiveWriter.BaseStream.Position - archiveOffset;
 
 			AddOrUpdateAssetEntry(span, assetId, archiveIndex, (uint)archiveOffset, (uint)fileSize);
@@ -93,7 +93,7 @@ namespace Overstrike.Installers {
 			if (withHeader) data.Read(header, 0, 36);
 
 			long archiveOffset = archiveWriter.BaseStream.Position;
-			data.CopyTo(archiveWriter.BaseStream);
+			data.CopyTo(archiveWriter.BaseStream, 1024 * 1024);
 			long fileSize = archiveWriter.BaseStream.Position - archiveOffset;
 
 			int assetIndex = _toc.FindOrAddAsset(span, assetId);

@@ -1,9 +1,8 @@
-﻿// Overstrike -- an open-source mod manager for PC ports of Insomniac Games' games.
+// Overstrike -- an open-source mod manager for PC ports of Insomniac Games' games.
 // This program is free software, and can be redistributed and/or modified by you. It is provided 'as-is', without any warranty.
 // For more details, terms and conditions, see GNU General Public License.
 // A copy of the that license should come with this program (LICENSE.txt). If not, see <http://www.gnu.org/licenses/>.
 
-using Ionic.Crc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Overstrike.Data;
@@ -87,7 +86,7 @@ namespace Overstrike.Detectors {
 					if (entry.Key.EndsWith("." + extension, StringComparison.OrdinalIgnoreCase)) {
 						using var file = new MemoryStream();
 						using (var entryStream = entry.OpenEntryStream()) {
-							entryStream.CopyTo(file);
+							entryStream.CopyTo(file, 1024 * 1024);
 						}
 						file.Seek(0, SeekOrigin.Begin);
 
@@ -337,6 +336,7 @@ namespace Overstrike.Detectors {
 			public List<ModEntry> ProducedEntries;
 
 			private const int FIRST_PIECE_LENGTH = 4096;
+			private const int READ_BUFFER_SIZE = 1024 * 1024;
 
 			public static uint CalculateChecksum1(FileStream stream) {
 				long len = stream.Length;
@@ -349,18 +349,20 @@ namespace Overstrike.Detectors {
 				stream.Position = 0;
 				stream.Read(buffer);
 				stream.Position = oldPosition;
-				return Crc32.Compute(buffer);
+				return BitConverter.ToUInt32(System.IO.Hashing.Crc32.Hash(buffer));
 			}
 
 			public static int CalculateChecksum2(FileStream stream) {
 				var oldPosition = stream.Position;
 				stream.Position = 0;
-
-				var c = new CRC32();
-				var r = c.GetCrc32(stream);
-
+				var crc = new System.IO.Hashing.Crc32();
+				byte[] buffer = new byte[READ_BUFFER_SIZE];
+				int bytesRead;
+				while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0) {
+					crc.Append(buffer.AsSpan(0, bytesRead));
+				}
 				stream.Position = oldPosition;
-				return r;
+				return (int)BitConverter.ToUInt32(crc.GetCurrentHash());
 			}
 		}
 	}
