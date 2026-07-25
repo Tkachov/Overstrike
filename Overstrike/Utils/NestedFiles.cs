@@ -48,7 +48,7 @@ namespace Overstrike.Utils {
 				if (entry.Key.Equals(fullpath, StringComparison.OrdinalIgnoreCase)) {
 					var file = new MemoryStream();
 					using (var entryStream = entry.OpenEntryStream()) {
-						entryStream.CopyTo(file);
+						entryStream.CopyTo(file, 1024 * 1024);
 					}
 					file.Seek(0, SeekOrigin.Begin);
 
@@ -79,10 +79,9 @@ namespace Overstrike.Utils {
 		public static byte[] GetZippedFileBytes(ZipArchive zip, string filename) {
 			var zipEntry = GetZipEntryByFullName(zip, filename);
 			using var stream = zipEntry.Open();
-			var file = new MemoryStream();
-			stream.CopyTo(file);
-			file.Seek(0, SeekOrigin.Begin);
-			return file.ToArray();
+			var file = new MemoryStream(zipEntry.Length > 0 ? (int)zipEntry.Length : 4096);
+			stream.CopyTo(file, 1024 * 1024);
+			return file.GetBuffer().AsSpan(0, (int)file.Length).ToArray();
 		}
 	}
 }

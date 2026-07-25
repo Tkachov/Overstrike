@@ -98,10 +98,10 @@ namespace Overstrike.Installers {
 			var suitArchiveIndex = GetArchiveIndex("Suits\\" + id);
 			var assets = GetEntryByFullName(zip, id + "/" + id);
 
-			using (var f = new FileStream(suitArchivePath, FileMode.Create, FileAccess.Write, FileShare.None)) {
+			using (var f = new FileStream(suitArchivePath, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize: 1024 * 1024)) {
 				using (var w = new BinaryWriter(f)) {
 					using (var stream = assets.Open()) {
-						stream.CopyTo(w.BaseStream);
+						stream.CopyTo(w.BaseStream, 1024 * 1024);
 					}
 				}
 			}

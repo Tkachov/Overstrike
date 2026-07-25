@@ -70,7 +70,7 @@ namespace Overstrike.Installers {
 
 		protected void OverwriteAsset(byte span, ulong assetId, uint archiveIndex, BinaryWriter archiveWriter, Stream data) {
 			long archiveOffset = archiveWriter.BaseStream.Position;
-			data.CopyTo(archiveWriter.BaseStream);
+			data.CopyTo(archiveWriter.BaseStream, 1024 * 1024);
 			long fileSize = archiveWriter.BaseStream.Position - archiveOffset;
 
 			AddOrUpdateAssetEntry(span, assetId, archiveIndex, (uint)archiveOffset, (uint)fileSize);
@@ -93,7 +93,7 @@ namespace Overstrike.Installers {
 			if (withHeader) data.Read(header, 0, 36);
 
 			long archiveOffset = archiveWriter.BaseStream.Position;
-			data.CopyTo(archiveWriter.BaseStream);
+			data.CopyTo(archiveWriter.BaseStream, 1024 * 1024);
 			long fileSize = archiveWriter.BaseStream.Position - archiveOffset;
 
 			int assetIndex = _toc.FindOrAddAsset(span, assetId);

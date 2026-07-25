@@ -220,10 +220,10 @@ namespace Overstrike.Installers {
 			var archivePath = Path.GetRelativePath(_gamePath, modPath);
 			var archiveIndex = GetArchiveIndex(archivePath);
 			
-			using (var f = new FileStream(modPath, FileMode.Create, FileAccess.Write, FileShare.None)) {
+			using (var f = new FileStream(modPath, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize: 1024 * 1024)) {
 				using var w = new BinaryWriter(f);
 				file.Position = 0;
-				file.CopyTo(w.BaseStream);
+				file.CopyTo(w.BaseStream, 1024 * 1024);
 			}
 
 			foreach (var asset in assets) {

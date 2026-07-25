@@ -23,7 +23,7 @@ namespace Overstrike.Installers {
 		public void Work(string modPath, string relativeModPath) {
 			var newArchiveIndex = CreateArchive(relativeModPath);
 
-			using (var f = new FileStream(modPath, FileMode.Create, FileAccess.Write, FileShare.None)) {
+			using (var f = new FileStream(modPath, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize: 1024 * 1024)) {
 				using (var w = new BinaryWriter(f)) {
 					using (ZipArchive zip = ReadStageFile()) {
 						PrepWork(zip);

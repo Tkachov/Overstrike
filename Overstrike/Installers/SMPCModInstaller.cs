@@ -48,7 +48,7 @@ namespace Overstrike.Installers {
 
 			long archiveOffset = modArchiveFile.BaseStream.Position;
 			using (var stream = asset.Open()) {
-				stream.CopyTo(modArchiveFile.BaseStream);
+				stream.CopyTo(modArchiveFile.BaseStream, 1024 * 1024);
 			}
 			long fileSize = modArchiveFile.BaseStream.Position - archiveOffset;
 
