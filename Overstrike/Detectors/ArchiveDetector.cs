@@ -23,7 +23,7 @@ namespace Overstrike.Detectors {
 
 		public override void Detect(Stream file, string path, List<ModEntry> mods, List<string> warnings) {
 			try {
-				using var archive = ArchiveFactory.Open(file);
+				using var archive = ArchiveFactory.OpenArchive(file);
 				_detection.Detect(archive, path, mods, warnings);
 			} catch (Exception) { }
 		}

@@ -28,7 +28,7 @@ namespace Overstrike.Utils {
 				string basefile = path.Substring(0, index);
 				string rest = path.Substring(index + 2);
 
-				using (var archive = ArchiveFactory.Open(File.OpenRead(basefile))) {
+				using (var archive = ArchiveFactory.OpenArchive(File.OpenRead(basefile))) {
 					return GetNestedFile(archive, rest);
 				}
 			}
@@ -55,7 +55,7 @@ namespace Overstrike.Utils {
 					if (index == -1) {
 						return file;
 					} else {
-						using (var archive2 = ArchiveFactory.Open(file)) {
+						using (var archive2 = ArchiveFactory.OpenArchive(file)) {
 							return GetNestedFile(archive2, path.Substring(index + 2));
 						}
 					}
