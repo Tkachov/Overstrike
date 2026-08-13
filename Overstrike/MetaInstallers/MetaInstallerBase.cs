@@ -28,13 +28,7 @@ namespace Overstrike.MetaInstallers {
 
 		protected static void RemoveReadOnlyAttribute(string path) {
 			try {
-				if (File.Exists(path)) {
-					var attributes = File.GetAttributes(path);
-					if ((attributes & FileAttributes.ReadOnly) != 0) {
-						attributes &= ~FileAttributes.ReadOnly;
-						File.SetAttributes(path, attributes);
-					}
-				}
+				Utils.FileAccess.RemoveReadOnlyAttribute(path, true);
 			} catch {
 				ErrorLogger.WriteInfo($"Failed to remove read-only attribute from '{Path.GetFileName(path)}'!\n");
 				throw;

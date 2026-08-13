@@ -335,7 +335,7 @@ namespace Overstrike.Installers {
 				var path = Path.Combine(scriptsPath, entry.FullName);
 				try { Directory.CreateDirectory(Path.GetDirectoryName(path)); } catch {}
 
-				using var f = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize: 1024 * 1024);
+				using var f = new FileStream(path, FileMode.Create, System.IO.FileAccess.Write, FileShare.None, bufferSize: 1024 * 1024);
 				using var data = entry.Open();		
 				data.CopyTo(f, 1024 * 1024);
 			}
