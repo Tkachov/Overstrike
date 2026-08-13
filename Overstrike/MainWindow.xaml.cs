@@ -767,6 +767,10 @@ namespace Overstrike {
 					return false; // failed to check, proceed as before when there was no file
 				}
 
+				if (!File.Exists(tocPath)) {
+					return false; // 'toc' is missing, nothing to check (fail later with message in 'errors.log')
+				}
+
 				var currentSha = Hashes.GetFileSha1(tocPath);
 
 				var rememberedSha = File.ReadAllText(shaFilePath);
