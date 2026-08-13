@@ -748,6 +748,48 @@ namespace Overstrike {
 
 		private void PrepareToInstallMods() {
 			var gamePath = _selectedProfile.GamePath;
+			var exePath = _selectedGame.GetExecutablePath(gamePath);
+
+			var thread = new Thread(() => CheckGameIsRunning(exePath));
+			_taskThreads.Add(thread);
+			thread.Start();
+		}
+
+		private void CheckGameIsRunning(string exePath) {
+			Dispatcher.Invoke(() => {
+				OverlayHeaderLabel.Text = "Checking if game is running...";
+				OverlayOperationLabel.Text = "";
+			});
+
+			Process runningProcess = null;
+			try {
+				var processes = Process.GetProcesses();
+				foreach (Process process in processes) {
+					try {
+						var module = process.MainModule;
+						if (module != null) {
+							if (module.FileName == exePath) {
+								runningProcess = process;
+								break;
+							}
+						}
+					} catch {}
+				}
+			} catch {}
+
+			if (runningProcess != null) {
+				var module = runningProcess.MainModule;
+				var gameName = (module != null ? module.FileVersionInfo.ProductName : "");
+				var gamePath = (module != null ? module.FileVersionInfo.FileName : "");
+				var message = $"It seems the game is running!\nMods installation will most likely fail unless you close the game.\n\n{gameName}\n{gamePath}";
+				MessageBox.Show(message, "Warning", MessageBoxButton.OK);
+			}
+
+			Dispatcher.Invoke(StartCheckTocShaThread);
+		}
+
+		private void StartCheckTocShaThread() {
+			var gamePath = _selectedProfile.GamePath;
 			var tocPath = _selectedGame.GetTocPath(gamePath);
 			var shaFilePath = tocPath + ".sha1";
 
