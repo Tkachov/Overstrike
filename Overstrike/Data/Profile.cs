@@ -4,6 +4,7 @@
 // A copy of the that license should come with this program (LICENSE.txt). If not, see <http://www.gnu.org/licenses/>.
 
 using Newtonsoft.Json.Linq;
+using Overstrike;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,6 +28,12 @@ namespace Overstrike.Data {
 		// settings > scripts
 		public bool Settings_Scripts_Enabled;
 
+		// settings > suit_menu
+		public bool Settings_SuitMenu_AllowCrossCharacterSuitModels;
+		public bool Settings_SuitMenu_EnableSpiderArms;
+		public bool Settings_SuitMenu_EnableChangeModel;
+		public bool Settings_SuitMenu_EnableStoryProgressionOverride;
+
 		// suits
 		public SuitsModifications Suits;
 
@@ -40,11 +47,15 @@ namespace Overstrike.Data {
 
 			Settings_Suit_Language = "us";
 			Settings_Scripts_Enabled = false;
+			Settings_SuitMenu_AllowCrossCharacterSuitModels = false;
+			Settings_SuitMenu_EnableSpiderArms = false;
+			Settings_SuitMenu_EnableChangeModel = false;
+			Settings_SuitMenu_EnableStoryProgressionOverride = false;
 
 			Suits = null;
 		}
 
-		public Profile(string filename): this() {
+		public Profile(string filename, AppSettings legacySettings = null): this() {
 			FullPath = filename;
 			Name = Path.GetFileName(filename).Replace(".json", "");
 
@@ -75,6 +86,7 @@ namespace Overstrike.Data {
 			}
 
 			var settings = (JObject)json["settings"];
+			JObject suitMenu = null;
 			if (settings != null) {
 				var suit = (JObject)settings["suit"];
 				if (suit != null) {
@@ -88,6 +100,23 @@ namespace Overstrike.Data {
 
 					Settings_Scripts_Enabled = (bool)scripts["enabled"];
 				}
+
+				suitMenu = (JObject)settings["suit_menu"];
+				if (suitMenu != null) {
+					Settings_SuitMenu_AllowCrossCharacterSuitModels = (bool?)suitMenu["allow_cross_character_suit_models"] ?? false;
+					Settings_SuitMenu_EnableSpiderArms = (bool?)suitMenu["enable_spider_arms"] ?? false;
+					Settings_SuitMenu_EnableChangeModel = (bool?)suitMenu["enable_change_model"] ?? false;
+					Settings_SuitMenu_EnableStoryProgressionOverride = (bool?)suitMenu["enable_story_progression_override"] ?? false;
+				}
+			}
+
+			// No "suit_menu" section yet: either an old profile predating per-profile Suit Menu
+			// settings, or a fresh one with no settings block at all. Migrate the app-wide values
+			// this profile would have used before, instead of silently defaulting to disabled.
+			if (suitMenu == null && legacySettings != null) {
+				Settings_SuitMenu_AllowCrossCharacterSuitModels = legacySettings.Legacy_AllowCrossCharacterSuitModels ?? false;
+				Settings_SuitMenu_EnableSpiderArms = legacySettings.Legacy_EnableSuitMenuSpiderArms ?? false;
+				Settings_SuitMenu_EnableChangeModel = legacySettings.Legacy_EnableSuitMenuChangeModel ?? false;
 			}
 
 			var suits = (JObject)json["suits"];
@@ -129,6 +158,12 @@ namespace Overstrike.Data {
 					},
 					["scripts"] = new JObject() {
 						["enabled"] = Settings_Scripts_Enabled,
+					},
+					["suit_menu"] = new JObject() {
+						["allow_cross_character_suit_models"] = Settings_SuitMenu_AllowCrossCharacterSuitModels,
+						["enable_spider_arms"] = Settings_SuitMenu_EnableSpiderArms,
+						["enable_change_model"] = Settings_SuitMenu_EnableChangeModel,
+						["enable_story_progression_override"] = Settings_SuitMenu_EnableStoryProgressionOverride,
 					}
 				};
 

@@ -14,6 +14,13 @@ namespace Overstrike {
 		public bool CheckUpdates;
 		public bool OpenErrorLog;
 
+		// Suit Menu settings used to live here before they moved to per-profile storage (see
+		// Data/Profile.cs). Kept read-only and unsaved so a profile with no "suit_menu" section yet
+		// can migrate its previous app-wide value once instead of silently resetting to disabled.
+		public bool? Legacy_AllowCrossCharacterSuitModels;
+		public bool? Legacy_EnableSuitMenuSpiderArms;
+		public bool? Legacy_EnableSuitMenuChangeModel;
+
 		public AppSettings() {
 			CurrentProfile = null;
 			CacheModsLibrary = true;
@@ -42,6 +49,10 @@ namespace Overstrike {
 			} else {
 				OpenErrorLog = true;
 			}
+
+			Legacy_AllowCrossCharacterSuitModels = (bool?)json["allow_cross_character_suit_models"];
+			Legacy_EnableSuitMenuSpiderArms = (bool?)json["enable_suit_menu_spider_arms"];
+			Legacy_EnableSuitMenuChangeModel = (bool?)json["enable_suit_menu_change_model"];
 		}
 
 		public void Save(string file) {

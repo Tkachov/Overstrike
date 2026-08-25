@@ -416,7 +416,7 @@ namespace Overstrike {
 			}
 
 			try {
-				var p = new Profile(file);
+				var p = new Profile(file, Settings);
 				if (p != null) {
 					Profiles.Add(p);
 				}
