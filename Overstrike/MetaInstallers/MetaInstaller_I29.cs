@@ -113,7 +113,13 @@ namespace Overstrike.MetaInstallers {
 
 				case ModEntry.ModType.SUITS_MENU:
 					CacheSuitsConfig();
-					return new SuitsMenuInstaller_MSM2(_toc, _gamePath, _profile.Suits);
+					return new SuitsMenuInstaller_MSM2(
+						_toc,
+						_gamePath,
+						_profile.Suits,
+						_profile.Settings_SuitMenu_AllowCrossCharacterSuitModels,
+						_profile.Settings_SuitMenu_EnableChangeModel
+					);
 
 				default:
 					return null;

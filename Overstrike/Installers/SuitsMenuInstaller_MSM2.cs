@@ -16,16 +16,22 @@ namespace Overstrike.Installers {
 		private const string GENERATED_ARCHIVES_MANIFEST = "overstrike_suitmenu_generated.txt";
 
 		private SuitsModifications _modifications;
+		private readonly bool _allowCrossCharacterSuitModels;
+		private readonly bool _enableChangeModel;
 		private readonly HashSet<string> _generatedArchives = new(System.StringComparer.OrdinalIgnoreCase);
+		private readonly Dictionary<string, SuitModelPaths> _modelPathsCache = new(System.StringComparer.OrdinalIgnoreCase);
 		private readonly Dictionary<string, MSM2SuitCharacter?> _suitCharacterCache = new(System.StringComparer.OrdinalIgnoreCase);
 		private readonly HashSet<string> _warningSet = new(System.StringComparer.Ordinal);
 
-		public SuitsMenuInstaller_MSM2(TOC_I29 toc, string gamePath, SuitsModifications suits): base(toc, gamePath) {
+		public SuitsMenuInstaller_MSM2(TOC_I29 toc, string gamePath, SuitsModifications suits, bool allowCrossCharacterSuitModels, bool enableChangeModel): base(toc, gamePath) {
 			_modifications = suits;
+			_allowCrossCharacterSuitModels = allowCrossCharacterSuitModels;
+			_enableChangeModel = enableChangeModel;
 		}
 
 		public override void Install(ModEntry mod, int index) {
 			_mod = mod;
+			_modelPathsCache.Clear();
 			_suitCharacterCache.Clear();
 			_warningSet.Clear();
 			CleanGeneratedArchives();
@@ -55,6 +61,7 @@ namespace Overstrike.Installers {
 				deletedSuits.Add(suit, true);
 			}
 
+			var forceRequests = new List<SuitModelRequest>();
 			var modify = _modifications.Modifications;
 			foreach (var suit in oldSuits) {
 				var name = (string)suit["Name"];
@@ -72,6 +79,20 @@ namespace Overstrike.Installers {
 
 					if (changes.ContainsKey("model")) {
 						suit["Item"] = (string)changes["model"];
+					}
+
+					// "Change Suit Model": force this slot's body geometry from another suit
+					// only when every affected asset can remain isolated to this slot.
+					if (_enableChangeModel && changes.ContainsKey("force_model")) {
+						var sourceItem = (string)changes["force_model"];
+						if (!string.IsNullOrEmpty(sourceItem)) {
+							if (!MSM2CutsceneSuits.IsEligible(name)) {
+								Warn($"Change Suit Model: '{name}' isn't shown in a forced cutscene; skipped.");
+							} else {
+								var forceMask = !changes.ContainsKey("force_mask") || (bool)changes["force_mask"];
+								forceRequests.Add(new SuitModelRequest(name, (string)suit["Item"], sourceItem, forceMask));
+							}
+						}
 					}
 				}
 			}
@@ -121,6 +142,7 @@ namespace Overstrike.Installers {
 
 			var configBytes = config.Save();
 			var configHeader = PrepareSuitsMenuHeader(SYSTEM_PROGRESSION_CONFIG_AID, configBytes.Length);
+			ApplyForcedSuitModels(forceRequests, oldSuits);
 			WriteSuitsMenuArchive(SYSTEM_PROGRESSION_CONFIG_AID, configBytes, configHeader);
 		}
 
