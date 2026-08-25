@@ -26,6 +26,7 @@ namespace Overstrike.Data {
 
 		// settings > scripts
 		public bool Settings_Scripts_Enabled;
+		public bool Settings_Scripts_CommandLine;
 
 		// suits
 		public SuitsModifications Suits;
@@ -40,6 +41,7 @@ namespace Overstrike.Data {
 
 			Settings_Suit_Language = "us";
 			Settings_Scripts_Enabled = false;
+			Settings_Scripts_CommandLine = true;
 
 			Suits = null;
 		}
@@ -87,6 +89,11 @@ namespace Overstrike.Data {
 					if (scripts == null) { throw new Exception("bad profile"); }
 
 					Settings_Scripts_Enabled = (bool)scripts["enabled"];
+					if (scripts.ContainsKey("commandline")) {
+						Settings_Scripts_CommandLine = (bool)scripts["commandline"];
+					} else {
+						Settings_Scripts_CommandLine = true;
+					}
 				}
 			}
 
@@ -129,6 +136,7 @@ namespace Overstrike.Data {
 					},
 					["scripts"] = new JObject() {
 						["enabled"] = Settings_Scripts_Enabled,
+						["commandline"] = Settings_Scripts_CommandLine,
 					}
 				};
 

@@ -403,6 +403,7 @@ namespace Overstrike {
 			profile.Mods = new List<ModEntry>();
 			profile.Settings_Suit_Language = baseProfile.Settings_Suit_Language;
 			profile.Settings_Scripts_Enabled = baseProfile.Settings_Scripts_Enabled;
+			profile.Settings_Scripts_CommandLine = baseProfile.Settings_Scripts_CommandLine;
 
 			return profile;
 		}

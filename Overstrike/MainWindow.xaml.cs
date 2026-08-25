@@ -184,6 +184,8 @@ namespace Overstrike {
 				ScriptSettings.Visibility = Visibility.Visible;
 				_reactToScriptSettingsChange = false;
 				ScriptSettings_EnableScripting.IsChecked = _selectedProfile.Settings_Scripts_Enabled;
+				ScriptSettings_CommandLine.IsChecked = _selectedProfile.Settings_Scripts_CommandLine;
+				ScriptSettings_CommandLine.IsEnabled = _selectedProfile.Settings_Scripts_Enabled;
 				_reactToScriptSettingsChange = true;
 			} else {
 				ScriptSettings.Visibility = Visibility.Collapsed;
@@ -1283,10 +1285,24 @@ namespace Overstrike {
 
 		private void ScriptSettings_EnableScripting_Changed(object sender, RoutedEventArgs e) {
 			if (!_reactToScriptSettingsChange) return;
-			_selectedProfile.Settings_Scripts_Enabled = (bool)ScriptSettings_EnableScripting.IsChecked;
+			var enabled = (bool)ScriptSettings_EnableScripting.IsChecked;
+			_selectedProfile.Settings_Scripts_Enabled = enabled;
+			if (enabled) {
+				_selectedProfile.Settings_Scripts_CommandLine = true;
+				_reactToScriptSettingsChange = false;
+				ScriptSettings_CommandLine.IsChecked = true;
+				_reactToScriptSettingsChange = true;
+			}
+			ScriptSettings_CommandLine.IsEnabled = enabled;
 			SaveProfile();
 
 			UpdateRunModdedButtonVisibility();
+		}
+
+		private void ScriptSettings_CommandLine_Changed(object sender, RoutedEventArgs e) {
+			if (!_reactToScriptSettingsChange) return;
+			_selectedProfile.Settings_Scripts_CommandLine = (bool)ScriptSettings_CommandLine.IsChecked;
+			SaveProfile();
 		}
 
 		private void RunModdedButton_Click(object sender, RoutedEventArgs e) {
