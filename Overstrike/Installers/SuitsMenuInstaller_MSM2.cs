@@ -19,6 +19,7 @@ namespace Overstrike.Installers {
 		private readonly bool _allowCrossCharacterSuitModels;
 		private readonly bool _enableSpiderArms;
 		private readonly bool _enableChangeModel;
+		private readonly bool _enableStoryProgressionOverride;
 		private readonly HashSet<string> _generatedArchives = new(System.StringComparer.OrdinalIgnoreCase);
 		private readonly Dictionary<string, SuitModelPaths> _modelPathsCache = new(System.StringComparer.OrdinalIgnoreCase);
 		private readonly Dictionary<string, MSM2SuitCharacter?> _suitCharacterCache = new(System.StringComparer.OrdinalIgnoreCase);
@@ -32,11 +33,12 @@ namespace Overstrike.Installers {
 			"hero_spiderman_iw_legs"
 		};
 
-		public SuitsMenuInstaller_MSM2(TOC_I29 toc, string gamePath, SuitsModifications suits, bool allowCrossCharacterSuitModels, bool enableSpiderArms, bool enableChangeModel): base(toc, gamePath) {
+		public SuitsMenuInstaller_MSM2(TOC_I29 toc, string gamePath, SuitsModifications suits, bool allowCrossCharacterSuitModels, bool enableSpiderArms, bool enableChangeModel, bool enableStoryProgressionOverride): base(toc, gamePath) {
 			_modifications = suits;
 			_allowCrossCharacterSuitModels = allowCrossCharacterSuitModels;
 			_enableSpiderArms = enableSpiderArms;
 			_enableChangeModel = enableChangeModel;
+			_enableStoryProgressionOverride = enableStoryProgressionOverride;
 		}
 
 		public override void Install(ModEntry mod, int index) {
@@ -80,6 +82,10 @@ namespace Overstrike.Installers {
 
 				if (modify.ContainsKey(name)) {
 					var changes = modify[name];
+
+					if (_enableStoryProgressionOverride && MSM2CutsceneSuits.IsEligible(name) && (bool?)changes["ignore_story_progression"] == true) {
+						IgnoreStorySuitProgression(suit);
+					}
 
 					if (changes.ContainsKey("small_icon")) {
 						var icon = (string)changes["small_icon"];
@@ -167,6 +173,37 @@ namespace Overstrike.Installers {
 			ApplyForcedSuitModels(forceRequests, oldSuits);
 			ApplyForcedSpiderArms(spiderArmsRequests, oldSuits);
 			WriteSuitsMenuArchive(SYSTEM_PROGRESSION_CONFIG_AID, configBytes, configHeader);
+		}
+
+		private static void IgnoreStorySuitProgression(JObject suit) {
+			suit["Hidden"] = false;
+			if (suit["MissionUnlocked"] != null) {
+				suit["MissionUnlocked"] = "GP_A1_SANDMAN";
+			}
+			if (suit["ObjectiveUnlocked"] != null) {
+				suit["ObjectiveUnlocked"] = "GP_A1_SANDMAN";
+			}
+			if (suit["ScriptedRequirement"] != null) {
+				suit["ScriptedRequirement"] = "";
+			}
+			if (suit["HideAfterMissionName"] != null) {
+				suit["HideAfterMissionName"] = "";
+			}
+			if (suit["HideAfterMissionObjectiveName"] != null) {
+				suit["HideAfterMissionObjectiveName"] = "";
+			}
+			if (suit["HideSuitAfterMissionObjective"] != null) {
+				suit["HideSuitAfterMissionObjective"] = false;
+			}
+
+			if (suit["PlayMoreMsgData"] is JObject playMoreMsgData) {
+				if (playMoreMsgData["MissionOnCompleteStopMsg"] != null) {
+					playMoreMsgData["MissionOnCompleteStopMsg"] = "GP_A1_SANDMAN";
+				}
+				if (playMoreMsgData["ObjectiveOnCompleteStopMsg"] != null) {
+					playMoreMsgData["ObjectiveOnCompleteStopMsg"] = "GP_A1_SANDMAN";
+				}
+			}
 		}
 
 		private void Warn(string message) {
