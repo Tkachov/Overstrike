@@ -150,6 +150,9 @@ namespace Overstrike.MetaInstallers {
 				File.Delete(scriptsProxyPath);
 				ErrorLogger.WriteInfo(" OK!\n");
 			}
+
+			var commandlineTxtPath = Path.Combine(_gamePath, "commandline.txt");
+			RemoveScriptsFromCommandLine(commandlineTxtPath);
 		}
 		private void CacheSuitsConfig() {
 			if (_cachedSuitsConfig) return;
