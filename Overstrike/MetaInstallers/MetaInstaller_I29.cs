@@ -118,6 +118,7 @@ namespace Overstrike.MetaInstallers {
 						_gamePath,
 						_profile.Suits,
 						_profile.Settings_SuitMenu_AllowCrossCharacterSuitModels,
+						_profile.Settings_SuitMenu_EnableSpiderArms,
 						_profile.Settings_SuitMenu_EnableChangeModel
 					);
 

@@ -17,15 +17,25 @@ namespace Overstrike.Installers {
 
 		private SuitsModifications _modifications;
 		private readonly bool _allowCrossCharacterSuitModels;
+		private readonly bool _enableSpiderArms;
 		private readonly bool _enableChangeModel;
 		private readonly HashSet<string> _generatedArchives = new(System.StringComparer.OrdinalIgnoreCase);
 		private readonly Dictionary<string, SuitModelPaths> _modelPathsCache = new(System.StringComparer.OrdinalIgnoreCase);
 		private readonly Dictionary<string, MSM2SuitCharacter?> _suitCharacterCache = new(System.StringComparer.OrdinalIgnoreCase);
 		private readonly HashSet<string> _warningSet = new(System.StringComparer.Ordinal);
+		private static readonly HashSet<string> SPIDER_ARMS_MODELS = new(System.StringComparer.Ordinal) {
+			"hero_spiderman_advanced_legs",
+			"hero_spiderman_momoko_legs",
+			"hero_spiderman_superior_legs",
+			"hero_spiderman_itsvnoir_legs",
+			"hero_spiderman_ironspider_legs",
+			"hero_spiderman_iw_legs"
+		};
 
-		public SuitsMenuInstaller_MSM2(TOC_I29 toc, string gamePath, SuitsModifications suits, bool allowCrossCharacterSuitModels, bool enableChangeModel): base(toc, gamePath) {
+		public SuitsMenuInstaller_MSM2(TOC_I29 toc, string gamePath, SuitsModifications suits, bool allowCrossCharacterSuitModels, bool enableSpiderArms, bool enableChangeModel): base(toc, gamePath) {
 			_modifications = suits;
 			_allowCrossCharacterSuitModels = allowCrossCharacterSuitModels;
+			_enableSpiderArms = enableSpiderArms;
 			_enableChangeModel = enableChangeModel;
 		}
 
@@ -62,6 +72,7 @@ namespace Overstrike.Installers {
 			}
 
 			var forceRequests = new List<SuitModelRequest>();
+			var spiderArmsRequests = new List<SpiderArmsRequest>();
 			var modify = _modifications.Modifications;
 			foreach (var suit in oldSuits) {
 				var name = (string)suit["Name"];
@@ -91,6 +102,17 @@ namespace Overstrike.Installers {
 							} else {
 								var forceMask = !changes.ContainsKey("force_mask") || (bool)changes["force_mask"];
 								forceRequests.Add(new SuitModelRequest(name, (string)suit["Item"], sourceItem, forceMask));
+							}
+						}
+					}
+
+					if (_enableSpiderArms && changes.ContainsKey("force_arms")) {
+						var armsModel = (string?)changes["force_arms"];
+						if (!string.IsNullOrEmpty(armsModel)) {
+							if (MSM2SpiderArmsBlockedSuits.IsBlocked(name)) {
+								Warn($"Spider-Arms: '{name}'s suit power replaces the arms with symbiote tendrils; skipped.");
+							} else {
+								spiderArmsRequests.Add(new SpiderArmsRequest(name, (string)suit["Item"], armsModel));
 							}
 						}
 					}
@@ -143,6 +165,7 @@ namespace Overstrike.Installers {
 			var configBytes = config.Save();
 			var configHeader = PrepareSuitsMenuHeader(SYSTEM_PROGRESSION_CONFIG_AID, configBytes.Length);
 			ApplyForcedSuitModels(forceRequests, oldSuits);
+			ApplyForcedSpiderArms(spiderArmsRequests, oldSuits);
 			WriteSuitsMenuArchive(SYSTEM_PROGRESSION_CONFIG_AID, configBytes, configHeader);
 		}
 
