@@ -88,6 +88,46 @@ namespace Overstrike {
 			}
 		}
 
+		public bool Settings_AllowCrossCharacterSuitModels {
+			get => _selectedProfile.Settings_SuitMenu_AllowCrossCharacterSuitModels;
+			set {
+				if (_selectedProfile.Settings_SuitMenu_AllowCrossCharacterSuitModels == value) return;
+				_selectedProfile.Settings_SuitMenu_AllowCrossCharacterSuitModels = value;
+				MSM2SuitsMenuContent.AllowCrossCharacterSuitModels = value;
+				SaveProfile();
+			}
+		}
+
+		public bool Settings_EnableSuitMenuSpiderArms {
+			get => _selectedProfile.Settings_SuitMenu_EnableSpiderArms;
+			set {
+				if (_selectedProfile.Settings_SuitMenu_EnableSpiderArms == value) return;
+				_selectedProfile.Settings_SuitMenu_EnableSpiderArms = value;
+				MSM2SuitsMenuContent.EnableSpiderArms = value;
+				SaveProfile();
+			}
+		}
+
+		public bool Settings_EnableSuitMenuChangeModel {
+			get => _selectedProfile.Settings_SuitMenu_EnableChangeModel;
+			set {
+				if (_selectedProfile.Settings_SuitMenu_EnableChangeModel == value) return;
+				_selectedProfile.Settings_SuitMenu_EnableChangeModel = value;
+				MSM2SuitsMenuContent.EnableChangeModel = value;
+				SaveProfile();
+			}
+		}
+
+		public bool Settings_EnableSuitMenuStoryProgressionOverride {
+			get => _selectedProfile.Settings_SuitMenu_EnableStoryProgressionOverride;
+			set {
+				if (_selectedProfile.Settings_SuitMenu_EnableStoryProgressionOverride == value) return;
+				_selectedProfile.Settings_SuitMenu_EnableStoryProgressionOverride = value;
+				MSM2SuitsMenuContent.EnableStoryProgressionOverride = value;
+				SaveProfile();
+			}
+		}
+
 		private class LanguageItem {
 			public string Name { get; set; }
 			public string InternalName { get; set; }
@@ -162,8 +202,21 @@ namespace Overstrike {
 			SetupBanner();
 			ProfileGamePath.Content = profile.GamePath;
 
+			UpdateSuitMenuSettings();
 			UpdateSuitMenuTabs();
 			MakeModsItems();
+		}
+
+		private void UpdateSuitMenuSettings() {
+			MSM2SuitsMenuContent.AllowCrossCharacterSuitModels = _selectedProfile.Settings_SuitMenu_AllowCrossCharacterSuitModels;
+			MSM2SuitsMenuContent.EnableSpiderArms = _selectedProfile.Settings_SuitMenu_EnableSpiderArms;
+			MSM2SuitsMenuContent.EnableChangeModel = _selectedProfile.Settings_SuitMenu_EnableChangeModel;
+			MSM2SuitsMenuContent.EnableStoryProgressionOverride = _selectedProfile.Settings_SuitMenu_EnableStoryProgressionOverride;
+
+			SuitMenuCrossCharacterCheckBox.GetBindingExpression(CheckBox.IsCheckedProperty)?.UpdateTarget();
+			SuitMenuSpiderArmsCheckBox.GetBindingExpression(CheckBox.IsCheckedProperty)?.UpdateTarget();
+			SuitMenuChangeModelCheckBox.GetBindingExpression(CheckBox.IsCheckedProperty)?.UpdateTarget();
+			SuitMenuStoryProgressionCheckBox.GetBindingExpression(CheckBox.IsCheckedProperty)?.UpdateTarget();
 		}
 
 		private bool _reactToScriptSettingsChange = true;
@@ -189,6 +242,8 @@ namespace Overstrike {
 				ScriptSettings.Visibility = Visibility.Collapsed;
 			}
 
+			MSM2SuitMenuSettings.Visibility = (_selectedProfile.Game == GameMSM2.ID ? Visibility.Visible : Visibility.Collapsed);
+
 			UpdateRunModdedButtonVisibility();
 		}
 
@@ -200,10 +255,91 @@ namespace Overstrike {
 			}
 		}
 
+		private void SuitMenuCrossCharacterInfo_Click(object sender, RoutedEventArgs e) {
+			ShowSuitMenuCrossCharacterInfo();
+		}
+
+		private static void ShowSuitMenuCrossCharacterInfo() {
+			MessageBox.Show(
+				"THIS IS AN EXPERIMENTAL FEATURE.\n\n" +
+				"Allows a Peter suit model to be used on a Miles slot, and vice versa. The characters use different rigs and attachments, so this may look wrong or cause bugs.\n\n" +
+				"BACKUP YOUR SAVE.",
+				"Peter and Miles model swaps",
+				MessageBoxButton.OK,
+				MessageBoxImage.Information);
+		}
+
+		private void SuitMenuChangeModelInfo_Click(object sender, RoutedEventArgs e) {
+			ShowSuitMenuChangeModelInfo();
+		}
+
+		private static void ShowSuitMenuChangeModelInfo() {
+			MessageBox.Show(
+				"THIS IS AN EXPERIMENTAL FEATURE.\n\n" +
+				"Forces the body (and optionally the mask) of the six suits shown in forced story cutscenes -- Advanced Suit 2.0, Black Suit, Symbiote Suit, Anti-Venom Suit, Miles' Updated Suit and Evolved Suit -- to use another suit's geometry instead. Because this edits suit model data, a bug can make suits disappear, show as locked, or interfere with suit progression in your save.\n\n" +
+				"BACKUP YOUR SAVE.",
+				"Change Suit Model",
+				MessageBoxButton.OK,
+				MessageBoxImage.Information);
+		}
+
+		private void SuitMenuSpiderArmsInfo_Click(object sender, RoutedEventArgs e) {
+			ShowSuitMenuSpiderArmsInfo();
+		}
+
+		private static void ShowSuitMenuSpiderArmsInfo() {
+			MessageBox.Show(
+				"THIS IS AN EXPERIMENTAL FEATURE.\n\n" +
+				"Changes each selected Peter suit's in-game reward loadout to force a different Spider-Arms model. Because this edits suit data, a bug can make suits disappear, show as locked, or interfere with suit progression in your save.\n\n" +
+				"BACKUP YOUR SAVE.",
+				"Spider-Arms model swaps",
+				MessageBoxButton.OK,
+				MessageBoxImage.Information);
+		}
+
+		private void SuitMenuStoryProgressionInfo_Click(object sender, RoutedEventArgs e) {
+			ShowSuitMenuStoryProgressionInfo();
+		}
+
+		private static void ShowSuitMenuStoryProgressionInfo() {
+			MessageBox.Show(
+				"THIS IS AN EXPERIMENTAL FEATURE.\n\n" +
+				"Adds an Ignore Story Suit Progression checkbox to the six main story suits. This is intended as a recovery option for progression bugs that cause story progress to be lost or make one of these suits unavailable. For a marked suit, reinstalling mods makes its menu card available from the Sandman mission onward, removes its mission and objective unlock requirements, and prevents later story objectives from hiding the card. It does not restore story completion or change abilities, gadgets, suit powers, or variant level and currency requirements. Because this edits suit progression data, a bug can make suits disappear, show as locked, or interfere with suit progression in your save.\n\n" +
+				"BACKUP YOUR SAVE.",
+				"Story suit progression override",
+				MessageBoxButton.OK,
+				MessageBoxImage.Information);
+		}
+
+		private static bool WasEnabledByUser(object sender) => sender is CheckBox checkbox && checkbox.IsChecked == true;
+
+		private void SuitMenuCrossCharacterToggle_Click(object sender, RoutedEventArgs e) {
+			if (!WasEnabledByUser(sender)) return;
+			ShowSuitMenuCrossCharacterInfo();
+		}
+
+		private void SuitMenuStoryProgressionToggle_Click(object sender, RoutedEventArgs e) {
+			if (!WasEnabledByUser(sender)) return;
+			ShowSuitMenuStoryProgressionInfo();
+		}
+
+		private void SuitMenuSpiderArmsToggle_Click(object sender, RoutedEventArgs e) {
+			if (!WasEnabledByUser(sender)) return;
+			ShowSuitMenuSpiderArmsInfo();
+		}
+
+		private void SuitMenuChangeModelToggle_Click(object sender, RoutedEventArgs e) {
+			if (!WasEnabledByUser(sender)) return;
+			ShowSuitMenuChangeModelInfo();
+		}
+
 		private void UpdateSuitMenuTabs() {
 			MSMRSuitsMenuContent.SetProfile(_selectedProfile);
 			MMSuitsMenuContent.SetProfile(_selectedProfile);
 			MSM2SuitsMenuContent.SetProfile(_selectedProfile);
+			if (_selectedProfile.Game == GameMSM2.ID) {
+				MSM2SuitsMenuContent.RefreshLocalizedNamesAsync();
+			}
 
 			MSMRSuitsMenuTab.Visibility = (_selectedProfile.Game == GameMSMR.ID ? Visibility.Visible : Visibility.Collapsed);
 			MMSuitsMenuTab.Visibility = (_selectedProfile.Game == GameMM.ID ? Visibility.Visible : Visibility.Collapsed);
@@ -301,6 +437,10 @@ namespace Overstrike {
 			LanguageItem item = (LanguageItem)e.AddedItems[0];
 			_selectedProfile.Settings_Suit_Language = item.InternalName;
 			SaveProfile();
+
+			if (_selectedProfile.Game == GameMSM2.ID) {
+				MSM2SuitsMenuContent.RefreshLocalizedNamesAsync();
+			}
 		}
 
 		private void UpdateSelectedProfileItem() {
@@ -935,6 +1075,19 @@ namespace Overstrike {
 							MSM2SuitsMenuContent.RequestReload();
 						}
 					}
+				});
+			};
+
+			builder.OnWarnings = (List<string> warnings) => {
+				Dispatcher.Invoke(() => {
+					var message = string.Join("\n\n", warnings);
+					var counted = (warnings.Count == 1 ? "1 warning needs" : $"{warnings.Count} warnings need");
+					MessageBox.Show(
+						$"Mods were installed, but {counted} attention:\n\n{message}",
+						"Installation warnings",
+						MessageBoxButton.OK,
+						MessageBoxImage.Warning
+					);
 				});
 			};
 

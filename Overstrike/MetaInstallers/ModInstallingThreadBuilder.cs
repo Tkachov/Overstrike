@@ -27,6 +27,7 @@ namespace Overstrike.MetaInstallers {
 		internal Action<int, int, string>? OnOperationStarts;
 		internal Action<int, int>? OnOperationsFinalizing;
 		internal Action<int>? OnOperationsFinished;
+		internal Action<List<string>>? OnWarnings;
 		internal Action? OnErrorOccurred_BeforeWritingTrace;
 		internal Action? OnErrorOccurred_AfterTraceSaved;
 		
@@ -92,6 +93,10 @@ namespace Overstrike.MetaInstallers {
 					installer.Uninstall();
 
 				OnOperationsFinished?.Invoke(operationsCount);
+				var warnings = ErrorLogger.GetWarnings();
+				if (warnings.Count > 0) {
+					OnWarnings?.Invoke(warnings);
+				}
 				ErrorLogger.WriteInfo("\nDone.\n");
 			} catch (Exception ex) {
 				errorOccurred = true;
