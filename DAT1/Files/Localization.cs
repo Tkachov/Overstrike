@@ -50,7 +50,7 @@ namespace DAT1.Files {
 			if (key_offset == -1) return null;
 
 			int index = KeysOffsetsSection.Values.IndexOf((uint)key_offset);
-			if (index == -1) return null;
+			if (index == -1 || index >= ValuesOffsetsSection.Values.Count) return null;
 
 			uint value_offset = ValuesOffsetsSection.Values[index];
 			return ValuesDataSection.GetStringByOffset(value_offset);
