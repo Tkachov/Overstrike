@@ -12,8 +12,12 @@ using System.Collections.Generic;
 using System.IO;
 
 namespace Overstrike.Installers {
-	internal class SuitsMenuInstaller_MSM2: InstallerBase_I29 {
+	internal partial class SuitsMenuInstaller_MSM2: InstallerBase_I29 {
+		private const string GENERATED_ARCHIVES_MANIFEST = "overstrike_suitmenu_generated.txt";
+
 		private SuitsModifications _modifications;
+		private readonly HashSet<string> _generatedArchives = new(System.StringComparer.OrdinalIgnoreCase);
+		private readonly HashSet<string> _warningSet = new(System.StringComparer.Ordinal);
 
 		public SuitsMenuInstaller_MSM2(TOC_I29 toc, string gamePath, SuitsModifications suits): base(toc, gamePath) {
 			_modifications = suits;
@@ -21,6 +25,8 @@ namespace Overstrike.Installers {
 
 		public override void Install(ModEntry mod, int index) {
 			_mod = mod;
+			_warningSet.Clear();
+			CleanGeneratedArchives();
 
 			const ulong SYSTEM_PROGRESSION_CONFIG_AID = 0x9C9C72A303FCFA30; // configs/system/system_progression.config
 			var config = new Config_I30(_toc.GetAssetReader((byte)0, SYSTEM_PROGRESSION_CONFIG_AID));
@@ -120,18 +126,15 @@ namespace Overstrike.Installers {
 
 			// save
 
-			var modsPath = Path.Combine(_gamePath, "d", "mods");
-			var archivePath = Path.Combine(modsPath, "suits_menu");
-			var archiveIndex = GetArchiveIndex(Path.GetRelativePath(_gamePath, archivePath));
-
 			var configBytes = config.Save();
-			File.WriteAllBytes(archivePath, configBytes);
+			var configHeader = PrepareSuitsMenuHeader(SYSTEM_PROGRESSION_CONFIG_AID, configBytes.Length);
+			WriteSuitsMenuArchive(SYSTEM_PROGRESSION_CONFIG_AID, configBytes, configHeader);
+		}
 
-			OverwriteAsset(
-				0, SYSTEM_PROGRESSION_CONFIG_AID,
-				archiveIndex, 0, (uint)configBytes.Length,
-				null, null
-			);
+		private void Warn(string message) {
+			if (_warningSet.Add(message)) {
+				ErrorLogger.WriteWarning(message);
+			}
 		}
 	}
 }

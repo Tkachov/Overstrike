@@ -3,6 +3,7 @@
 // For more details, terms and conditions, see GNU General Public License.
 // A copy of the that license should come with this program (LICENSE.txt). If not, see <http://www.gnu.org/licenses/>.
 
+using System.Collections.Generic;
 using System.IO;
 
 namespace Overstrike.Utils {
@@ -11,11 +12,24 @@ namespace Overstrike.Utils {
 
 		private static StreamWriter _log = null;
 		private static string _cachedContent = "";
+		private static List<string> _warnings = new();
 
 		public static void StartSession() {
 			_cachedContent = "";
+			_warnings.Clear();
 			WriteSeparator();
 		}
+
+		// Warnings don't fail an installation, but callers can surface them to the
+		// user instead of silently accepting a partial result.
+		public static void WriteWarning(string warning) {
+			try {
+				_warnings.Add(warning);
+				WriteInfo($"[!] {warning}\n");
+			} catch {}
+		}
+
+		public static List<string> GetWarnings() => new(_warnings);
 
 		public static void WriteInfo(string info) {
 			try {
@@ -53,6 +67,16 @@ namespace Overstrike.Utils {
 		public static void EndSession() {
 			try {
 				WriteSeparator();
+
+				// A warning is actionable even when installation otherwise succeeds. Persist
+				// the buffered session so the MessageBox is not the only record of it.
+				if (_log == null && _warnings.Count > 0) {
+					_log = File.AppendText(LOG_FILENAME);
+					if (_cachedContent != "") {
+						_log.Write(_cachedContent);
+						_cachedContent = "";
+					}
+				}
 
 				if (_log != null) {
 					_log.Flush();
