@@ -17,6 +17,7 @@ namespace Overstrike.Installers {
 
 		private SuitsModifications _modifications;
 		private readonly HashSet<string> _generatedArchives = new(System.StringComparer.OrdinalIgnoreCase);
+		private readonly Dictionary<string, MSM2SuitCharacter?> _suitCharacterCache = new(System.StringComparer.OrdinalIgnoreCase);
 		private readonly HashSet<string> _warningSet = new(System.StringComparer.Ordinal);
 
 		public SuitsMenuInstaller_MSM2(TOC_I29 toc, string gamePath, SuitsModifications suits): base(toc, gamePath) {
@@ -25,6 +26,7 @@ namespace Overstrike.Installers {
 
 		public override void Install(ModEntry mod, int index) {
 			_mod = mod;
+			_suitCharacterCache.Clear();
 			_warningSet.Clear();
 			CleanGeneratedArchives();
 
@@ -53,18 +55,10 @@ namespace Overstrike.Installers {
 				deletedSuits.Add(suit, true);
 			}
 
-			var newSuits = new List<JObject>();
 			var modify = _modifications.Modifications;
 			foreach (var suit in oldSuits) {
 				var name = (string)suit["Name"];
-
-				// Only modify Hidden for vanilla suits (those that already have the field)
-				// or for suits being deleted. Don't touch mod-added suits' Hidden field.
-				if (deletedSuits.ContainsKey(name)) {
-					suit["Hidden"] = true;
-				} else if (suit["Hidden"] != null) {
-					suit["Hidden"] = false;
-				}
+				if (deletedSuits.ContainsKey(name)) continue;
 
 				if (modify.ContainsKey(name)) {
 					var changes = modify[name];
@@ -80,11 +74,16 @@ namespace Overstrike.Installers {
 						suit["Item"] = (string)changes["model"];
 					}
 				}
-
-				newSuits.Add(suit);
 			}
 
-			// reorder (push deleted suits to end)
+			var newSuits = BuildMenuSuitList(oldSuits, deletedSuits);
+			if (newSuits.Count == 0) {
+				ErrorLogger.WriteInfo("Bad user preferences: can't have 0 suits!");
+				throw new System.Exception();
+			}
+			ValidateMenuSuitCharacters(newSuits);
+
+			// reorder
 
 			var suitsOrder = new Dictionary<string, int>();
 			var order = _modifications.SuitsOrder;
@@ -100,12 +99,6 @@ namespace Overstrike.Installers {
 			newSuits.Sort((a, b) => {
 				var aname = (string)a["Name"];
 				var bname = (string)b["Name"];
-				var aDeleted = deletedSuits.ContainsKey(aname);
-				var bDeleted = deletedSuits.ContainsKey(bname);
-
-				// push deleted suits to end
-				if (aDeleted != bDeleted) return aDeleted ? 1 : -1;
-
 				var ai = suitsOrder.ContainsKey(aname) ? suitsOrder[aname] : newSuits.Count;
 				var bi = suitsOrder.ContainsKey(bname) ? suitsOrder[bname] : newSuits.Count;
 				if (ai != bi) return ai - bi;
@@ -135,6 +128,50 @@ namespace Overstrike.Installers {
 			if (_warningSet.Add(message)) {
 				ErrorLogger.WriteWarning(message);
 			}
+		}
+
+		private static List<JObject> BuildMenuSuitList(List<JObject> processedSuits, Dictionary<string, bool> deletedSuits) {
+			var menuSuits = new List<JObject>();
+			foreach (var suit in processedSuits) {
+				var name = (string?)suit["Name"];
+				if (string.IsNullOrEmpty(name) || deletedSuits.ContainsKey(name)) continue;
+
+				// Preserve the existing Suit Menu behavior for visible vanilla suits: show their
+				// cards even when the base progression entry starts as Hidden.
+				if (suit["Hidden"] != null) {
+					suit["Hidden"] = false;
+				}
+				menuSuits.Add(suit);
+			}
+			return menuSuits;
+		}
+
+		private void ValidateMenuSuitCharacters(List<JObject> menuSuits) {
+			var hasPeter = false;
+			var hasMiles = false;
+			foreach (var suit in menuSuits) {
+				var character = ResolveSuitCharacter((string?)suit["Item"] ?? "");
+				if (character == MSM2SuitCharacter.Peter) {
+					hasPeter = true;
+				}
+				if (character == MSM2SuitCharacter.Miles) {
+					hasMiles = true;
+				}
+				if (hasPeter && hasMiles) return;
+			}
+
+			ErrorLogger.WriteInfo("Bad user preferences: MSM2 Suit Menu needs at least one verified Peter suit and one verified Miles suit.\n");
+			throw new InvalidDataException("MSM2 Suit Menu has no verified visible suit for one of its characters");
+		}
+
+		private MSM2SuitCharacter? ResolveSuitCharacter(string rewardLoadoutPath) {
+			if (string.IsNullOrEmpty(rewardLoadoutPath)) return null;
+			rewardLoadoutPath = DAT1.Utils.Normalize(rewardLoadoutPath);
+			if (_suitCharacterCache.TryGetValue(rewardLoadoutPath, out var cached)) return cached;
+
+			var result = MSM2SuitCharacterResolver.TryResolve(_toc, rewardLoadoutPath);
+			_suitCharacterCache[rewardLoadoutPath] = result;
+			return result;
 		}
 	}
 }
