@@ -141,18 +141,7 @@ namespace Overstrike.MetaInstallers {
 				ErrorLogger.WriteInfo(" OK!\n");
 			}
 
-			// remove scripts proxy
-
-			var scriptsProxyPath = Path.Combine(_gamePath, "winmm.dll");
-
-			if (File.Exists(scriptsProxyPath)) {
-				ErrorLogger.WriteInfo("Deleting 'winmm.dll'...");
-				File.Delete(scriptsProxyPath);
-				ErrorLogger.WriteInfo(" OK!\n");
-			}
-
-			var commandlineTxtPath = Path.Combine(_gamePath, "commandline.txt");
-			RemoveScriptsFromCommandLine(commandlineTxtPath);
+			RemoveScriptsProxy();
 		}
 		private void CacheSuitsConfig() {
 			if (_cachedSuitsConfig) return;

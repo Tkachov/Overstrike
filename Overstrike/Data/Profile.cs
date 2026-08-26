@@ -41,7 +41,7 @@ namespace Overstrike.Data {
 
 			Settings_Suit_Language = "us";
 			Settings_Scripts_Enabled = false;
-			Settings_Scripts_CommandLine = true;
+			Settings_Scripts_CommandLine = false;
 
 			Suits = null;
 		}
@@ -92,7 +92,7 @@ namespace Overstrike.Data {
 					if (scripts.ContainsKey("commandline")) {
 						Settings_Scripts_CommandLine = (bool)scripts["commandline"];
 					} else {
-						Settings_Scripts_CommandLine = true;
+						Settings_Scripts_CommandLine = false;
 					}
 				}
 			}
