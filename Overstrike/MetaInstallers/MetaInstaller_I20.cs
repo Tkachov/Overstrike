@@ -140,6 +140,8 @@ namespace Overstrike.MetaInstallers {
 
 		public override void Uninstall() {
 			CacheSuitsConfig(); // cache the state of clean config
+
+			RemoveScriptsProxy();
 		}
 
 		//

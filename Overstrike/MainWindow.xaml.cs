@@ -237,6 +237,8 @@ namespace Overstrike {
 				ScriptSettings.Visibility = Visibility.Visible;
 				_reactToScriptSettingsChange = false;
 				ScriptSettings_EnableScripting.IsChecked = _selectedProfile.Settings_Scripts_Enabled;
+				ScriptSettings_CommandLine.IsChecked = _selectedProfile.Settings_Scripts_CommandLine;
+				ScriptSettings_CommandLine.IsEnabled = _selectedProfile.Settings_Scripts_Enabled;
 				_reactToScriptSettingsChange = true;
 			} else {
 				ScriptSettings.Visibility = Visibility.Collapsed;
@@ -1182,8 +1184,9 @@ namespace Overstrike {
 				var arguments = "";
 
 				if (modded) {
-					if (_selectedProfile.Settings_Scripts_Enabled)
+					if (_selectedProfile.Settings_Scripts_Enabled && !ScriptsAlreadyInCommandLine(path)) {
 						arguments += "-scripts ";
+					}
 				}
 
 				Process.Start(new ProcessStartInfo() {
@@ -1192,6 +1195,23 @@ namespace Overstrike {
 					Arguments = arguments
 				});
 			} catch {}
+		}
+
+		private bool ScriptsAlreadyInCommandLine(string gamePath) {
+			if (!_selectedProfile.Settings_Scripts_CommandLine) return false;
+
+			var commandlineTxtPath = Path.Combine(gamePath, "commandline.txt");
+			if (!File.Exists(commandlineTxtPath)) return false;
+
+			try {
+				var text = File.ReadAllText(commandlineTxtPath);
+				var tokens = text.Split(new[] { ' ', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+				foreach (var token in tokens) {
+					if (token.Equals("-scripts", StringComparison.OrdinalIgnoreCase)) return true;
+				}
+			} catch {}
+
+			return false;
 		}
 
 		private void ResetToc(object sender, RoutedEventArgs e) {
@@ -1436,10 +1456,18 @@ namespace Overstrike {
 
 		private void ScriptSettings_EnableScripting_Changed(object sender, RoutedEventArgs e) {
 			if (!_reactToScriptSettingsChange) return;
-			_selectedProfile.Settings_Scripts_Enabled = (bool)ScriptSettings_EnableScripting.IsChecked;
+			var enabled = (bool)ScriptSettings_EnableScripting.IsChecked;
+			_selectedProfile.Settings_Scripts_Enabled = enabled;
+			ScriptSettings_CommandLine.IsEnabled = enabled;
 			SaveProfile();
 
 			UpdateRunModdedButtonVisibility();
+		}
+
+		private void ScriptSettings_CommandLine_Changed(object sender, RoutedEventArgs e) {
+			if (!_reactToScriptSettingsChange) return;
+			_selectedProfile.Settings_Scripts_CommandLine = (bool)ScriptSettings_CommandLine.IsChecked;
+			SaveProfile();
 		}
 
 		private void RunModdedButton_Click(object sender, RoutedEventArgs e) {

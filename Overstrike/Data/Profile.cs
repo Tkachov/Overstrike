@@ -27,6 +27,7 @@ namespace Overstrike.Data {
 
 		// settings > scripts
 		public bool Settings_Scripts_Enabled;
+		public bool Settings_Scripts_CommandLine;
 
 		// settings > suit_menu
 		public bool Settings_SuitMenu_AllowCrossCharacterSuitModels;
@@ -47,6 +48,7 @@ namespace Overstrike.Data {
 
 			Settings_Suit_Language = "us";
 			Settings_Scripts_Enabled = false;
+			Settings_Scripts_CommandLine = false;
 			Settings_SuitMenu_AllowCrossCharacterSuitModels = false;
 			Settings_SuitMenu_EnableSpiderArms = false;
 			Settings_SuitMenu_EnableChangeModel = false;
@@ -99,6 +101,11 @@ namespace Overstrike.Data {
 					if (scripts == null) { throw new Exception("bad profile"); }
 
 					Settings_Scripts_Enabled = (bool)scripts["enabled"];
+					if (scripts.ContainsKey("commandline")) {
+						Settings_Scripts_CommandLine = (bool)scripts["commandline"];
+					} else {
+						Settings_Scripts_CommandLine = false;
+					}
 				}
 
 				suitMenu = (JObject)settings["suit_menu"];
@@ -158,6 +165,7 @@ namespace Overstrike.Data {
 					},
 					["scripts"] = new JObject() {
 						["enabled"] = Settings_Scripts_Enabled,
+						["commandline"] = Settings_Scripts_CommandLine,
 					},
 					["suit_menu"] = new JObject() {
 						["allow_cross_character_suit_models"] = Settings_SuitMenu_AllowCrossCharacterSuitModels,
