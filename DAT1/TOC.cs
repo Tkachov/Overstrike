@@ -628,8 +628,10 @@ namespace DAT1 {
 						if (_header == null) {
 							toc_i29.SizesSection.Entries[_index].HeaderOffset = -1;
 						} else {
+							// only overwrite the existing header if it has the same length
 							var header_offset = toc_i29.SizesSection.Entries[_index].HeaderOffset;
-							if (header_offset == -1) {
+							var existingHeader = (header_offset == -1 ? null : toc_i29.GetHeaderByAssetIndex(_index));
+							if (existingHeader == null || existingHeader.Length != _header.Length) {
 								var new_header_offset = toc_i29.AssetHeadersSection.Buffer.Length;
 								toc_i29.AssetHeadersSection.Extend(_header.Length);
 								toc_i29.AssetHeadersSection.Write(new_header_offset, _header);

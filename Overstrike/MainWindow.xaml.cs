@@ -88,6 +88,15 @@ namespace Overstrike {
 			}
 		}
 
+		public bool Settings_AllowCrossCharacterSuitModels {
+			get => _selectedProfile.Settings_Suit_AllowCrossCharacterSuitModels;
+			set {
+				if (_selectedProfile.Settings_Suit_AllowCrossCharacterSuitModels == value) return;
+				_selectedProfile.Settings_Suit_AllowCrossCharacterSuitModels = value;
+				SaveProfile();
+			}
+		}
+
 		private class LanguageItem {
 			public string Name { get; set; }
 			public string InternalName { get; set; }
@@ -191,6 +200,8 @@ namespace Overstrike {
 				ScriptSettings.Visibility = Visibility.Collapsed;
 			}
 
+			SuitMenuCrossCharacterCheckBox.Visibility = (_selectedProfile.Game == GameMSM2.ID ? Visibility.Visible : Visibility.Collapsed);
+
 			UpdateRunModdedButtonVisibility();
 		}
 
@@ -203,6 +214,7 @@ namespace Overstrike {
 		}
 
 		private void UpdateSuitMenuTabs() {
+			SuitMenuCrossCharacterCheckBox.IsChecked = _selectedProfile.Settings_Suit_AllowCrossCharacterSuitModels;
 			MSMRSuitsMenuContent.SetProfile(_selectedProfile);
 			MMSuitsMenuContent.SetProfile(_selectedProfile);
 			MSM2SuitsMenuContent.SetProfile(_selectedProfile);
@@ -303,6 +315,10 @@ namespace Overstrike {
 			LanguageItem item = (LanguageItem)e.AddedItems[0];
 			_selectedProfile.Settings_Suit_Language = item.InternalName;
 			SaveProfile();
+
+			if (_selectedProfile.Game == GameMSM2.ID) {
+				MSM2SuitsMenuContent.RequestReload();
+			}
 		}
 
 		private void UpdateSelectedProfileItem() {

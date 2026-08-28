@@ -64,6 +64,7 @@ namespace Overstrike.Tabs {
 		protected class LoadoutItem {
 			public string Name { get; set; }
 			public string Path;
+			public bool IsEnabled { get; set; } = true;
 		}
 
 		protected class IconItem {
@@ -157,7 +158,6 @@ namespace Overstrike.Tabs {
 		protected ObservableCollection<SuitSlot> _displayedSuits = new();
 
 		protected ObservableCollection<LoadoutItem> _loadouts = new();
-
 		protected ObservableCollection<IconItem> _iconItems = new();
 		protected ObservableCollection<IconItem> _bigIconItems = new();
 
@@ -193,7 +193,7 @@ namespace Overstrike.Tabs {
 			OnOpen();
 		}
 
-		public void OnOpen() {
+		public virtual void OnOpen() {
 			SuitDeselected();
 
 			if (_loaded) {
@@ -441,6 +441,17 @@ namespace Overstrike.Tabs {
 			}
 		}
 
+		protected virtual SuitSlot CloneSuit(SuitSlot suit) => new SuitSlot() {
+			SuitId = suit.SuitId,
+			Name = suit.Name,
+			Icon = suit.Icon,
+			BigIcon = suit.BigIcon,
+			IconPath = suit.IconPath,
+			BigIconPath = suit.BigIconPath,
+			LoadoutPath = suit.LoadoutPath,
+			MarkedToDelete = suit.MarkedToDelete
+		};
+
 		private void MakeCustomizedSuits() {
 			_customizedSuits.Clear();
 
@@ -463,16 +474,9 @@ namespace Overstrike.Tabs {
 			}
 
 			foreach (var suit in _configSuits) {
-				_customizedSuits.Add(new SuitSlot() {
-					SuitId = suit.SuitId,
-					Name = suit.Name,
-					Icon = suit.Icon,
-					BigIcon = suit.BigIcon,
-					IconPath = suit.IconPath,
-					BigIconPath = suit.BigIconPath,
-					LoadoutPath = suit.LoadoutPath,
-					MarkedToDelete = suit.MarkedToDelete || deletedSuits.ContainsKey(suit.SuitId)
-				});
+				var customizedSuit = CloneSuit(suit);
+				customizedSuit.MarkedToDelete = suit.MarkedToDelete || deletedSuits.ContainsKey(suit.SuitId);
+				_customizedSuits.Add(customizedSuit);
 			}
 
 			_customizedSuits.Sort((a, b) => {
@@ -512,8 +516,12 @@ namespace Overstrike.Tabs {
 					suit.LoadoutPath = (string)changes["model"];
 					RememberLoadout(suit.LoadoutPath);
 				}
+
+				LoadSuitChanges(suit, changes);
 			}
 		}
+
+		protected virtual void LoadSuitChanges(SuitSlot suit, JObject changes) {}
 
 		//
 
@@ -574,22 +582,16 @@ namespace Overstrike.Tabs {
 			foreach (var suit in _customizedSuits) {
 				if (suit.MarkedToDelete && !_showDeleted) continue;
 
-				_displayedSuits.Add(new SuitSlot() {
-					SuitId = suit.SuitId,
-					Name = suit.Name,
-					Icon = GetIcon(suit.IconPath),
-					BigIcon = GetIcon(suit.BigIconPath),
-					IconPath = suit.IconPath,
-					BigIconPath = suit.BigIconPath,
-					LoadoutPath = suit.LoadoutPath,
-					MarkedToDelete = suit.MarkedToDelete
-				});
+				var displayedSuit = CloneSuit(suit);
+				displayedSuit.Icon = GetIcon(suit.IconPath);
+				displayedSuit.BigIcon = GetIcon(suit.BigIconPath);
+				_displayedSuits.Add(displayedSuit);
 			}
 
 			SuitsSlots.ItemsSource = _displayedSuits;
 		}
 
-		private void MakeLoadouts() {
+		protected void MakeLoadouts() {
 			_loadouts.Clear();
 			foreach (var path in _loadoutsPaths) {
 				_loadouts.Add(new LoadoutItem() { Path = path, Name = GetFriendlyLoadoutName(path) });
@@ -615,7 +617,7 @@ namespace Overstrike.Tabs {
 
 		//
 
-		protected string GetFriendlyLoadoutName(string path) {
+		protected virtual string GetFriendlyLoadoutName(string path) {
 			try {
 				var config = new Config(toc.GetAssetReader(path));
 
@@ -754,7 +756,10 @@ namespace Overstrike.Tabs {
 			}
 
 			ToggleSuitDeleteButton.Content = data.MarkedToDelete ? "Restore" : "Delete";
+			OnSuitSelected(data);
 		}
+
+		protected virtual void OnSuitSelected(SuitSlot data) {}
 
 		private bool _reactToItemGeneratorStatusChange = false;
 
@@ -866,7 +871,11 @@ namespace Overstrike.Tabs {
 					break;
 				}
 			}
+
+			OnSuitLoadoutChanged(selectedSuit);
 		}
+
+		protected virtual void OnSuitLoadoutChanged(SuitSlot selectedSuit) {}
 
 		protected void SuitIconComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
 			if (e.AddedItems.Count <= 0) return;
@@ -934,16 +943,7 @@ namespace Overstrike.Tabs {
 				// fill customizedSuits with the exact copy of configSuits -- that is what "reset" / "no changes at all" means
 				_customizedSuits.Clear();
 				foreach (var suit in _configSuits) {
-					_customizedSuits.Add(new SuitSlot() {
-						SuitId = suit.SuitId,
-						Name = suit.Name,
-						Icon = suit.Icon,
-						BigIcon = suit.BigIcon,
-						IconPath = suit.IconPath,
-						BigIconPath = suit.BigIconPath,
-						LoadoutPath = suit.LoadoutPath,
-						MarkedToDelete = suit.MarkedToDelete
-					});
+					_customizedSuits.Add(CloneSuit(suit));
 				}
 
 				MakeDisplayedSuits();
@@ -997,6 +997,10 @@ namespace Overstrike.Tabs {
 						changes["model"] = suit.LoadoutPath;
 						suitHasChanges = true;
 					}
+
+
+					SaveSuitChanges(originalSuit, suit, changes);
+					suitHasChanges = changes.Count > 0;
 				}
 
 				if (suitHasChanges) modify.Add(suit.SuitId, changes);
@@ -1005,6 +1009,8 @@ namespace Overstrike.Tabs {
 			_selectedProfile.Suits = new SuitsModifications(deleted, order, modify);
 			_selectedProfile.Save();
 		}
+
+		protected virtual void SaveSuitChanges(SuitSlot originalSuit, SuitSlot suit, JObject changes) {}
 
 		#endregion
 		#region drag and drop

@@ -12,15 +12,29 @@ using System.Collections.Generic;
 using System.IO;
 
 namespace Overstrike.Installers {
-	internal class SuitsMenuInstaller_MSM2: InstallerBase_I29 {
+	internal partial class SuitsMenuInstaller_MSM2: InstallerBase_I29 {
 		private SuitsModifications _modifications;
+		private readonly bool _allowCrossCharacterSuitModels;
+		private readonly Dictionary<string, SuitModelPaths> _modelPathsCache = new(System.StringComparer.OrdinalIgnoreCase);
+		private readonly Dictionary<string, MSM2Character?> _suitCharacterCache = new(System.StringComparer.OrdinalIgnoreCase);
+		private static readonly HashSet<string> SPIDER_ARMS_MODELS = new(System.StringComparer.Ordinal) {
+			"hero_spiderman_advanced_legs",
+			"hero_spiderman_momoko_legs",
+			"hero_spiderman_superior_legs",
+			"hero_spiderman_itsvnoir_legs",
+			"hero_spiderman_ironspider_legs",
+			"hero_spiderman_iw_legs"
+		};
 
-		public SuitsMenuInstaller_MSM2(TOC_I29 toc, string gamePath, SuitsModifications suits): base(toc, gamePath) {
+		public SuitsMenuInstaller_MSM2(TOC_I29 toc, string gamePath, SuitsModifications suits, bool allowCrossCharacterSuitModels): base(toc, gamePath) {
 			_modifications = suits;
+			_allowCrossCharacterSuitModels = allowCrossCharacterSuitModels;
 		}
 
 		public override void Install(ModEntry mod, int index) {
 			_mod = mod;
+			_modelPathsCache.Clear();
+			_suitCharacterCache.Clear();
 
 			const ulong SYSTEM_PROGRESSION_CONFIG_AID = 0x9C9C72A303FCFA30; // configs/system/system_progression.config
 			var config = new Config_I30(_toc.GetAssetReader((byte)0, SYSTEM_PROGRESSION_CONFIG_AID));
@@ -47,21 +61,19 @@ namespace Overstrike.Installers {
 				deletedSuits.Add(suit, true);
 			}
 
-			var newSuits = new List<JObject>();
+			var forceRequests = new List<SuitModelRequest>();
+			var spiderArmsRequests = new List<SpiderArmsRequest>();
 			var modify = _modifications.Modifications;
 			foreach (var suit in oldSuits) {
 				var name = (string)suit["Name"];
-
-				// Only modify Hidden for vanilla suits (those that already have the field)
-				// or for suits being deleted. Don't touch mod-added suits' Hidden field.
-				if (deletedSuits.ContainsKey(name)) {
-					suit["Hidden"] = true;
-				} else if (suit["Hidden"] != null) {
-					suit["Hidden"] = false;
-				}
+				if (deletedSuits.ContainsKey(name)) continue;
 
 				if (modify.ContainsKey(name)) {
 					var changes = modify[name];
+
+					if (MSM2CutsceneSuits.IsEligible(name) && (bool?)changes["ignore_story_progression"] == true) {
+						IgnoreStorySuitProgression(suit);
+					}
 
 					if (changes.ContainsKey("small_icon")) {
 						var icon = (string)changes["small_icon"];
@@ -71,14 +83,29 @@ namespace Overstrike.Installers {
 					}
 
 					if (changes.ContainsKey("model")) {
-						suit["Item"] = (string)changes["model"];
+						var sourceItem = (string)changes["model"];
+						if (!string.IsNullOrEmpty(sourceItem)) {
+							forceRequests.Add(new SuitModelRequest(name, (string)suit["Item"], sourceItem));
+						}
+					}
+
+					if (changes.ContainsKey("force_arms")) {
+						var armsModel = (string?)changes["force_arms"];
+						if (!string.IsNullOrEmpty(armsModel)) {
+							spiderArmsRequests.Add(new SpiderArmsRequest(name, (string)suit["Item"], armsModel));
+						}
 					}
 				}
-
-				newSuits.Add(suit);
 			}
 
-			// reorder (push deleted suits to end)
+			var newSuits = BuildMenuSuitList(oldSuits, deletedSuits);
+			if (newSuits.Count == 0) {
+				ErrorLogger.WriteInfo("Bad user preferences: can't have 0 suits!");
+				throw new System.Exception();
+			}
+			ValidateMenuSuitCharacters(newSuits);
+
+			// reorder
 
 			var suitsOrder = new Dictionary<string, int>();
 			var order = _modifications.SuitsOrder;
@@ -94,12 +121,6 @@ namespace Overstrike.Installers {
 			newSuits.Sort((a, b) => {
 				var aname = (string)a["Name"];
 				var bname = (string)b["Name"];
-				var aDeleted = deletedSuits.ContainsKey(aname);
-				var bDeleted = deletedSuits.ContainsKey(bname);
-
-				// push deleted suits to end
-				if (aDeleted != bDeleted) return aDeleted ? 1 : -1;
-
 				var ai = suitsOrder.ContainsKey(aname) ? suitsOrder[aname] : newSuits.Count;
 				var bi = suitsOrder.ContainsKey(bname) ? suitsOrder[bname] : newSuits.Count;
 				if (ai != bi) return ai - bi;
@@ -120,18 +141,86 @@ namespace Overstrike.Installers {
 
 			// save
 
-			var modsPath = Path.Combine(_gamePath, "d", "mods");
-			var archivePath = Path.Combine(modsPath, "suits_menu");
-			var archiveIndex = GetArchiveIndex(Path.GetRelativePath(_gamePath, archivePath));
-
 			var configBytes = config.Save();
-			File.WriteAllBytes(archivePath, configBytes);
+			var configHeader = PrepareConfigHeader(SYSTEM_PROGRESSION_CONFIG_AID, configBytes.Length, "system_progression.config");
+			ApplyForcedSuitModels(forceRequests);
+			var rewardConfigs = ApplyForcedSpiderArms(spiderArmsRequests);
+			WriteSuitsMenuArchive(SYSTEM_PROGRESSION_CONFIG_AID, configBytes, configHeader, rewardConfigs);
+		}
 
-			OverwriteAsset(
-				0, SYSTEM_PROGRESSION_CONFIG_AID,
-				archiveIndex, 0, (uint)configBytes.Length,
-				null, null
-			);
+		private static void IgnoreStorySuitProgression(JObject suit) {
+			suit["Hidden"] = false;
+			if (suit["MissionUnlocked"] != null) {
+				suit["MissionUnlocked"] = "GP_A1_SANDMAN";
+			}
+			if (suit["ObjectiveUnlocked"] != null) {
+				suit["ObjectiveUnlocked"] = "GP_A1_SANDMAN";
+			}
+			if (suit["ScriptedRequirement"] != null) {
+				suit["ScriptedRequirement"] = "";
+			}
+			if (suit["HideAfterMissionName"] != null) {
+				suit["HideAfterMissionName"] = "";
+			}
+			if (suit["HideAfterMissionObjectiveName"] != null) {
+				suit["HideAfterMissionObjectiveName"] = "";
+			}
+			if (suit["HideSuitAfterMissionObjective"] != null) {
+				suit["HideSuitAfterMissionObjective"] = false;
+			}
+
+			if (suit["PlayMoreMsgData"] is JObject playMoreMsgData) {
+				if (playMoreMsgData["MissionOnCompleteStopMsg"] != null) {
+					playMoreMsgData["MissionOnCompleteStopMsg"] = "GP_A1_SANDMAN";
+				}
+				if (playMoreMsgData["ObjectiveOnCompleteStopMsg"] != null) {
+					playMoreMsgData["ObjectiveOnCompleteStopMsg"] = "GP_A1_SANDMAN";
+				}
+			}
+		}
+
+		private static List<JObject> BuildMenuSuitList(List<JObject> processedSuits, Dictionary<string, bool> deletedSuits) {
+			var menuSuits = new List<JObject>();
+			foreach (var suit in processedSuits) {
+				var name = (string?)suit["Name"];
+				if (string.IsNullOrEmpty(name) || deletedSuits.ContainsKey(name)) continue;
+
+				// Preserve the existing Suit Menu behavior for visible vanilla suits: show their
+				// cards even when the base progression entry starts as Hidden.
+				if (suit["Hidden"] != null) {
+					suit["Hidden"] = false;
+				}
+				menuSuits.Add(suit);
+			}
+			return menuSuits;
+		}
+
+		private void ValidateMenuSuitCharacters(List<JObject> menuSuits) {
+			var hasPeter = false;
+			var hasMiles = false;
+			foreach (var suit in menuSuits) {
+				var character = ResolveSuitCharacter((string?)suit["Item"] ?? "");
+				if (character == MSM2Character.Peter) {
+					hasPeter = true;
+				}
+				if (character == MSM2Character.Miles) {
+					hasMiles = true;
+				}
+				if (hasPeter && hasMiles) return;
+			}
+
+			ErrorLogger.WriteInfo("Bad user preferences: MSM2 Suit Menu needs at least one verified Peter suit and one verified Miles suit.\n");
+			throw new InvalidDataException("MSM2 Suit Menu has no verified visible suit for one of its characters");
+		}
+
+		private MSM2Character? ResolveSuitCharacter(string rewardLoadoutPath) {
+			if (string.IsNullOrEmpty(rewardLoadoutPath)) return null;
+			rewardLoadoutPath = DAT1.Utils.Normalize(rewardLoadoutPath);
+			if (_suitCharacterCache.TryGetValue(rewardLoadoutPath, out var cached)) return cached;
+
+			var result = MSM2SuitCharacterResolver.TryResolve(_toc, rewardLoadoutPath);
+			_suitCharacterCache[rewardLoadoutPath] = result;
+			return result;
 		}
 	}
 }

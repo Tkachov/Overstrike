@@ -23,6 +23,7 @@ namespace Overstrike.Data {
 
 		// settings > suit
 		public string Settings_Suit_Language;
+		public bool Settings_Suit_AllowCrossCharacterSuitModels;
 
 		// settings > scripts
 		public bool Settings_Scripts_Enabled;
@@ -40,6 +41,7 @@ namespace Overstrike.Data {
 			Mods = new List<ModEntry>();
 
 			Settings_Suit_Language = "us";
+			Settings_Suit_AllowCrossCharacterSuitModels = false;
 			Settings_Scripts_Enabled = false;
 			Settings_Scripts_CommandLine = false;
 
@@ -82,6 +84,7 @@ namespace Overstrike.Data {
 				if (suit != null) {
 					Settings_Suit_Language = (string)suit["language"];
 					if (Settings_Suit_Language == null) { throw new Exception("bad profile"); }
+					Settings_Suit_AllowCrossCharacterSuitModels = (bool?)suit["allow_cross_character_suit_models"] ?? false;
 				}
 
 				if (settings.ContainsKey("scripts")) {
@@ -132,7 +135,8 @@ namespace Overstrike.Data {
 
 				j["settings"] = new JObject() {
 					["suit"] = new JObject() {
-						["language"] = Settings_Suit_Language
+						["language"] = Settings_Suit_Language,
+						["allow_cross_character_suit_models"] = Settings_Suit_AllowCrossCharacterSuitModels
 					},
 					["scripts"] = new JObject() {
 						["enabled"] = Settings_Scripts_Enabled,

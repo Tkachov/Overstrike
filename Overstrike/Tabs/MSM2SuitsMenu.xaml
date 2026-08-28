@@ -146,52 +146,71 @@
 			</Grid>
 
 			<Grid Background="#FFF" HorizontalAlignment="Stretch" Grid.Column="1">
-				<TextBlock x:Name="_SuitName" Text="SUIT NAME" Margin="9,7,5,0" VerticalAlignment="Top" FontWeight="Bold"/>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="34" />
+					<RowDefinition Height="*" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="34" />
+				</Grid.RowDefinitions>
 
-				<Grid x:Name="_SuitInfo" Margin="-1,-1,0,0">
-					<Label Content="Model:" HorizontalAlignment="Left" Margin="5,30,0,0" VerticalAlignment="Top" Width="65"/>
-					<ComboBox x:Name="_SuitLoadoutComboBox" Margin="80,32,6,0" VerticalAlignment="Top" SelectionChanged="SuitLoadoutComboBox_SelectionChanged">
-						<ComboBox.ItemTemplate>
-							<DataTemplate>
-								<TextBlock Text="{Binding Name}"  />
-							</DataTemplate>
-						</ComboBox.ItemTemplate>
-					</ComboBox>
-
-					<Label Content="Icon:" HorizontalAlignment="Left" Margin="5,56,0,0" VerticalAlignment="Top" Width="65"/>
-					<ComboBox x:Name="_SuitIconComboBox" VerticalAlignment="Top" Margin="80,58,6,0" SelectionChanged="SuitIconComboBox_SelectionChanged">
-						<ComboBox.ItemTemplate>
-							<DataTemplate>
-								<Grid>
-									<Image Source="{Binding Icon}" HorizontalAlignment="Left" Stretch="Fill"  Width="16" Height="16" />
-									<TextBlock Text="{Binding Name}" HorizontalAlignment="Left" Margin="23,0,0,0" />
-								</Grid>
-							</DataTemplate>
-						</ComboBox.ItemTemplate>
-					</ComboBox>
-
-					<Button x:Name="_ToggleSuitDeleteButton" Content="Delete" HorizontalAlignment="Left" Margin="10,89,0,0" VerticalAlignment="Top" Width="70" Height="22" Click="ToggleSuitDeleteButton_Click" />
-				</Grid>
-
-				<Border VerticalAlignment="Bottom" Margin="6,0,6,34" BorderThickness="0,0,0,1" BorderBrush="#CCC">
-					<Grid Margin="-5,0,-1,0">
-						<CheckBox IsChecked="{Binding Path=MSM2SuitsMenuContent_ShowDeleted}" HorizontalAlignment="Left" Margin="4,0,0,7" VerticalAlignment="Top">
-							<StackPanel Orientation="Horizontal">
-								<TextBlock Text="Show deleted" Margin="2,0,0,0" />
-							</StackPanel>
-						</CheckBox>
-					</Grid>
+				<Border Grid.Row="0" BorderThickness="0,0,0,1" BorderBrush="#DDD">
+					<TextBlock x:Name="_SuitName" Text="SUIT NAME" Margin="9,0,5,0" VerticalAlignment="Center" FontWeight="Bold" TextTrimming="CharacterEllipsis" />
 				</Border>
 
-				<Grid x:Name="_NotModified" VerticalAlignment="Bottom" Margin="1,0,5,5" Visibility="Collapsed">
-					<Label x:Name="_NotModifiedStatusLabel" Content="No unsaved changes" HorizontalAlignment="Left" Margin="0,0,0,-1" VerticalAlignment="Bottom"/>
+				<Grid x:Name="_SuitInfo" Grid.Row="1">
+					<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="6,8,6,8">
+						<StackPanel>
+							<Grid Margin="0,0,0,8">
+								<Label Content="Suit:" Padding="0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" />
+								<ComboBox x:Name="_SuitLoadoutComboBox" Margin="65,0,0,0" SelectionChanged="SuitLoadoutComboBox_SelectionChanged">
+									<ComboBox.ItemContainerStyle>
+										<Style TargetType="{x:Type ComboBoxItem}"><Setter Property="IsEnabled" Value="{Binding IsEnabled}" /></Style>
+									</ComboBox.ItemContainerStyle>
+									<ComboBox.ItemTemplate><DataTemplate><TextBlock Text="{Binding Name}" /></DataTemplate></ComboBox.ItemTemplate>
+								</ComboBox>
+							</Grid>
 
+							<Grid Margin="0,0,0,8">
+								<Label Content="Icon:" Padding="0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" />
+								<ComboBox x:Name="_SuitIconComboBox" Margin="65,0,0,0" SelectionChanged="SuitIconComboBox_SelectionChanged">
+									<ComboBox.ItemTemplate>
+										<DataTemplate><Grid><Image Source="{Binding Icon}" HorizontalAlignment="Left" Stretch="Fill" Width="16" Height="16" /><TextBlock Text="{Binding Name}" HorizontalAlignment="Left" Margin="23,0,0,0" /></Grid></DataTemplate>
+									</ComboBox.ItemTemplate>
+								</ComboBox>
+							</Grid>
+
+							<StackPanel x:Name="_SuitSpiderArmsPanel" Margin="0,0,0,8" Visibility="Collapsed">
+								<Grid>
+									<Label Content="Arms:" Padding="0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" />
+									<ComboBox x:Name="_SuitSpiderArmsComboBox" Margin="65,0,0,0" SelectionChanged="SuitSpiderArmsComboBox_SelectionChanged">
+										<ComboBox.ItemTemplate><DataTemplate><TextBlock Text="{Binding Name}" /></DataTemplate></ComboBox.ItemTemplate>
+									</ComboBox>
+								</Grid>
+								<TextBlock x:Name="_SuitSpiderArmsRageWarning" Text="Spider-Arms changes do not apply during Rage Mode. They only appear while the Symbiote Suit slot is selected in-game." TextWrapping="Wrap" Foreground="#666" FontSize="10.5" Margin="65,5,0,0" Visibility="Collapsed" />
+							</StackPanel>
+
+							<CheckBox x:Name="_SuitAlwaysUnlockCheckBox" Margin="0,0,0,8" Visibility="Collapsed" Checked="SuitAlwaysUnlockCheckBox_Changed" Unchecked="SuitAlwaysUnlockCheckBox_Changed">
+								<TextBlock Text="Always unlock" Margin="2,0,0,0" />
+							</CheckBox>
+
+							<Button x:Name="_ToggleSuitDeleteButton" Content="Delete" HorizontalAlignment="Left" MinWidth="70" Padding="10,2" Click="ToggleSuitDeleteButton_Click" />
+						</StackPanel>
+					</ScrollViewer>
+				</Grid>
+
+				<Border Grid.Row="2" Margin="6,0,6,0" Padding="0,7" BorderThickness="0,1,0,1" BorderBrush="#DDD">
+					<CheckBox IsChecked="{Binding Path=MSM2SuitsMenuContent_ShowDeleted}" HorizontalAlignment="Left">
+						<TextBlock Text="Show deleted" Margin="2,0,0,0" />
+					</CheckBox>
+				</Border>
+
+				<Grid x:Name="_NotModified" Grid.Row="3" Margin="1,0,5,5" Visibility="Collapsed">
+					<Label x:Name="_NotModifiedStatusLabel" Content="No unsaved changes" HorizontalAlignment="Left" Margin="0,0,0,-1" VerticalAlignment="Bottom" />
 					<Button x:Name="_ResetButton" Content="Reset" HorizontalAlignment="Right" Margin="0,0,1,1" VerticalAlignment="Bottom" Width="120" Height="22" Click="ResetButtonClicked" />
 				</Grid>
 
-				<Grid x:Name="_Modified" VerticalAlignment="Bottom" Margin="1,0,5,5">
+				<Grid x:Name="_Modified" Grid.Row="3" Margin="1,0,5,5">
 					<Label Content="There are unsaved changes!" HorizontalAlignment="Left" Margin="0,0,0,-1" VerticalAlignment="Bottom" FontWeight="Bold" />
-
 					<Button Content="Undo" HorizontalAlignment="Right" Margin="0,0,62,1" VerticalAlignment="Bottom" Width="55" Height="22" Click="UndoChangesButtonClicked" />
 					<Button Content="Save" HorizontalAlignment="Right" Margin="0,0,1,1" VerticalAlignment="Bottom" Width="55" Height="22" Click="SaveChangesButtonClicked" />
 				</Grid>
