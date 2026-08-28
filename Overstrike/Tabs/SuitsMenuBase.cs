@@ -452,9 +452,6 @@ namespace Overstrike.Tabs {
 			MarkedToDelete = suit.MarkedToDelete
 		};
 
-		protected virtual void LoadSuitChanges(SuitSlot suit, JObject changes) {}
-		protected virtual void SaveSuitChanges(SuitSlot originalSuit, SuitSlot suit, JObject changes) {}
-
 		private void MakeCustomizedSuits() {
 			_customizedSuits.Clear();
 
@@ -520,10 +517,11 @@ namespace Overstrike.Tabs {
 					RememberLoadout(suit.LoadoutPath);
 				}
 
-
 				LoadSuitChanges(suit, changes);
 			}
 		}
+
+		protected virtual void LoadSuitChanges(SuitSlot suit, JObject changes) {}
 
 		//
 
@@ -1011,6 +1009,8 @@ namespace Overstrike.Tabs {
 			_selectedProfile.Suits = new SuitsModifications(deleted, order, modify);
 			_selectedProfile.Save();
 		}
+
+		protected virtual void SaveSuitChanges(SuitSlot originalSuit, SuitSlot suit, JObject changes) {}
 
 		#endregion
 		#region drag and drop

@@ -16,7 +16,7 @@ namespace Overstrike.Installers {
 		private SuitsModifications _modifications;
 		private readonly bool _allowCrossCharacterSuitModels;
 		private readonly Dictionary<string, SuitModelPaths> _modelPathsCache = new(System.StringComparer.OrdinalIgnoreCase);
-		private readonly Dictionary<string, MSM2SuitCharacter?> _suitCharacterCache = new(System.StringComparer.OrdinalIgnoreCase);
+		private readonly Dictionary<string, MSM2Character?> _suitCharacterCache = new(System.StringComparer.OrdinalIgnoreCase);
 		private static readonly HashSet<string> SPIDER_ARMS_MODELS = new(System.StringComparer.Ordinal) {
 			"hero_spiderman_advanced_legs",
 			"hero_spiderman_momoko_legs",
@@ -202,10 +202,10 @@ namespace Overstrike.Installers {
 			var hasMiles = false;
 			foreach (var suit in menuSuits) {
 				var character = ResolveSuitCharacter((string?)suit["Item"] ?? "");
-				if (character == MSM2SuitCharacter.Peter) {
+				if (character == MSM2Character.Peter) {
 					hasPeter = true;
 				}
-				if (character == MSM2SuitCharacter.Miles) {
+				if (character == MSM2Character.Miles) {
 					hasMiles = true;
 				}
 				if (hasPeter && hasMiles) return;
@@ -215,7 +215,7 @@ namespace Overstrike.Installers {
 			throw new InvalidDataException("MSM2 Suit Menu has no verified visible suit for one of its characters");
 		}
 
-		private MSM2SuitCharacter? ResolveSuitCharacter(string rewardLoadoutPath) {
+		private MSM2Character? ResolveSuitCharacter(string rewardLoadoutPath) {
 			if (string.IsNullOrEmpty(rewardLoadoutPath)) return null;
 			rewardLoadoutPath = DAT1.Utils.Normalize(rewardLoadoutPath);
 			if (_suitCharacterCache.TryGetValue(rewardLoadoutPath, out var cached)) return cached;

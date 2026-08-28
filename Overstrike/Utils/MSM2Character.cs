@@ -9,7 +9,7 @@ using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
 namespace Overstrike.Utils {
-	internal enum MSM2SuitCharacter {
+	internal enum MSM2Character {
 		Peter,
 		Miles
 	}
@@ -40,16 +40,16 @@ namespace Overstrike.Utils {
 	}
 
 	internal static class MSM2SuitCharacterResolver {
-		public static MSM2SuitCharacter? FromGameValue(string? value) {
+		public static MSM2Character? FromGameValue(string? value) {
 			return value switch {
-				"kSpiderManPeter" => MSM2SuitCharacter.Peter,
-				"kSpiderManMiles" => MSM2SuitCharacter.Miles,
+				"kSpiderManPeter" => MSM2Character.Peter,
+				"kSpiderManMiles" => MSM2Character.Miles,
 				_ => null
 			};
 		}
 
-		public static MSM2SuitCharacter? FromGameValues(JArray? values) {
-			MSM2SuitCharacter? result = null;
+		public static MSM2Character? FromGameValues(JArray? values) {
+			MSM2Character? result = null;
 			foreach (var value in values ?? new JArray()) {
 				var character = FromGameValue((string?)value);
 				if (!character.HasValue) return null;
@@ -59,11 +59,11 @@ namespace Overstrike.Utils {
 			return result;
 		}
 
-		public static string DisplayName(MSM2SuitCharacter character) {
-			return (character == MSM2SuitCharacter.Peter ? "Peter" : "Miles");
+		public static string DisplayName(MSM2Character character) {
+			return (character == MSM2Character.Peter ? "Peter" : "Miles");
 		}
 
-		public static MSM2SuitCharacter? TryResolve(TOC_I29 toc, string? rewardLoadoutPath) {
+		public static MSM2Character? TryResolve(TOC_I29 toc, string? rewardLoadoutPath) {
 			if (string.IsNullOrEmpty(rewardLoadoutPath)) return null;
 
 			try {

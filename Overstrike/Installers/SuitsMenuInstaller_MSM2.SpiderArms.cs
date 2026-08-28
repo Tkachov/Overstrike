@@ -33,7 +33,7 @@ namespace Overstrike.Installers {
 				}
 
 				var targetItemPath = DAT1.Utils.Normalize(request.TargetItemPath ?? "");
-				if (string.IsNullOrEmpty(targetItemPath) || ResolveSuitCharacter(targetItemPath) != MSM2SuitCharacter.Peter) {
+				if (string.IsNullOrEmpty(targetItemPath) || ResolveSuitCharacter(targetItemPath) != MSM2Character.Peter) {
 					throw new InvalidDataException($"Spider-Arms target for '{request.SuitName}' is not a Peter reward loadout");
 				}
 

@@ -24,6 +24,7 @@ namespace Overstrike.Tabs {
 
 		public MSM2SuitsMenu() {
 			InitializeComponent();
+
 			_forceSpiderArmsChoices.Add(new LoadoutItem() { Path = null, Name = "Keep this suit's Spider-Arms" });
 			_forceSpiderArmsChoices.Add(new LoadoutItem() { Path = "hero_spiderman_advanced_legs", Name = "Advanced Suit 2.0" });
 			_forceSpiderArmsChoices.Add(new LoadoutItem() { Path = "hero_spiderman_momoko_legs", Name = "Kumo Suit" });
@@ -32,62 +33,81 @@ namespace Overstrike.Tabs {
 			_forceSpiderArmsChoices.Add(new LoadoutItem() { Path = "hero_spiderman_ironspider_legs", Name = "Iron Spider Armor" });
 			_forceSpiderArmsChoices.Add(new LoadoutItem() { Path = "hero_spiderman_iw_legs", Name = "Iron Spider Suit" });
 			_SuitSpiderArmsComboBox.ItemsSource = _forceSpiderArmsChoices;
+
 			SuitsSlots.ItemContainerGenerator.StatusChanged += SuitsSlots_ItemGeneratorStatusChanged;
 		}
 
-		protected override ListView SuitsSlots => _SuitsSlots;
-		protected override Grid Modified => _Modified;
-		protected override Grid NotModified => _NotModified;
-		protected override TextBlock SuitName => _SuitName;
-		protected override Grid SuitInfo => _SuitInfo;
-		protected override Image BigIcon => null;
-		protected override ComboBox SuitLoadoutComboBox => _SuitLoadoutComboBox;
-		protected override ComboBox SuitIconComboBox => _SuitIconComboBox;
-		protected override ComboBox SuitBigIconComboBox => null;
-		protected override Button ToggleSuitDeleteButton => _ToggleSuitDeleteButton;
-		protected override Label NotModifiedStatusLabel => _NotModifiedStatusLabel;
-		protected override Button ResetButton => _ResetButton;
-		protected override bool HasBigIcons => false;
-		protected override Dictionary<string, byte> LANGUAGES => MSM2Suit2Installer.LANGUAGES;
+		protected override ListView SuitsSlots { get => _SuitsSlots; }
+		protected override Grid Modified { get => _Modified; }
+		protected override Grid NotModified { get => _NotModified; }
+		protected override TextBlock SuitName { get => _SuitName; }
+		protected override Grid SuitInfo { get => _SuitInfo; }
+		protected override Image BigIcon { get => null; }
+		protected override ComboBox SuitLoadoutComboBox { get => _SuitLoadoutComboBox; }
+		protected override ComboBox SuitIconComboBox { get => _SuitIconComboBox; }
+		protected override ComboBox SuitBigIconComboBox { get => null; }
+		protected override Button ToggleSuitDeleteButton { get => _ToggleSuitDeleteButton; }
+		protected override Label NotModifiedStatusLabel { get => _NotModifiedStatusLabel; }
+		protected override Button ResetButton { get => _ResetButton; }
 
-		private MSM2SuitCharacter _activeCharacter = MSM2SuitCharacter.Peter;
-		private readonly Dictionary<string, MSM2SuitCharacter?> _suitToCharacter = new();
-		private readonly Dictionary<string, MSM2SuitCharacter?> _loadoutToCharacter = new();
+		protected override bool HasBigIcons { get => false; }
+		protected override Dictionary<string, byte> LANGUAGES { get => MSM2Suit2Installer.LANGUAGES; }
+
+		#region state
+
+		private MSM2Character _activeCharacter = MSM2Character.Peter;
+		private readonly Dictionary<string, MSM2Character?> _suitToCharacter = new();
+		private readonly Dictionary<string, MSM2Character?> _loadoutToCharacter = new();
 		private readonly Dictionary<string, string> _loadoutNames = new();
 		private readonly ObservableCollection<LoadoutItem> _modelChoices = new();
 		private readonly ObservableCollection<LoadoutItem> _forceSpiderArmsChoices = new();
 		private bool _allowCrossCharacterSuitModels;
+
+		protected override dynamic LoadToc(string tocPath) {
+			var toc = new TOC_I29();
+			toc.Load(tocPath);
+			return toc;
+		}
+
+		protected override dynamic LoadTexture(dynamic toc, string path) {
+			try {
+				return new Texture_I30(toc.GetAssetReader(path));
+			} catch {
+				return null;
+			}
+		}
+
+		#endregion
+
+		#region start
 
 		public override void OnOpen() {
 			_allowCrossCharacterSuitModels = _selectedProfile.Settings_Suit_AllowCrossCharacterSuitModels;
 			base.OnOpen();
 		}
 
-		protected override dynamic LoadToc(string tocPath) {
-			var result = new TOC_I29();
-			result.Load(tocPath);
-			return result;
-		}
+		#endregion
+		#region loading
 
-		protected override dynamic LoadTexture(dynamic currentToc, string path) {
-			try {
-				return new Texture_I30(currentToc.GetAssetReader(path));
-			} catch {
-				return null;
-			}
-		}
+		#region - thread logic
 
-		public static JObject LoadConfig_MSM2(TOC_I29 currentToc) {
+		public static JObject LoadConfig_MSM2(TOC_I29 toc) {
 			try {
 				const ulong SYSTEM_PROGRESSION_CONFIG_AID = 0x9C9C72A303FCFA30;
-				var config = new Config_I30(currentToc.GetAssetReader(SYSTEM_PROGRESSION_CONFIG_AID));
-				return new JObject() { ["suits"] = config.ContentSection.Data["SuitList"]["Suits"] };
-			} catch {
-				return null;
-			}
+				var config = new Config_I30(toc.GetAssetReader(SYSTEM_PROGRESSION_CONFIG_AID));
+				var root = config.ContentSection.Data;
+				return new JObject() { ["suits"] = root["SuitList"]["Suits"] };
+			} catch {}
+
+			return null;
 		}
 
-		protected override JObject LoadConfigInternal(dynamic currentToc) => LoadConfig_MSM2(currentToc);
+		protected override JObject LoadConfigInternal(dynamic toc) {
+			return LoadConfig_MSM2(toc);
+		}
+
+		#endregion
+		#region - filling state
 
 		protected override void LoadConfigSuits(JObject config) {
 			_configSuits.Clear();
@@ -115,10 +135,11 @@ namespace Overstrike.Tabs {
 					Name = GetFriendlyMSM2SuitName(localization, displayName, suitId),
 					IconPath = icon,
 					BigIconPath = null,
-					LoadoutPath = loadout
+					LoadoutPath = loadout,
+					MarkedToDelete = false
 				};
 				_configSuits.Add(suitInfo);
-				_suitToCharacter[suitId] = TryDetermineSuitCharacter(loadout);
+				_suitToCharacter.Add(suitId, DetermineSuitCharacter(loadout));
 				if (!string.IsNullOrEmpty(loadout)) _loadoutNames.TryAdd(loadout, suitInfo.Name);
 			}
 
@@ -147,12 +168,7 @@ namespace Overstrike.Tabs {
 			msm2Suit.AlwaysUnlock = (bool?)changes["ignore_story_progression"] == true;
 		}
 
-		protected override void SaveSuitChanges(SuitSlot originalSuit, SuitSlot suit, JObject changes) {
-			var original = (MSM2SuitSlot)originalSuit;
-			var current = (MSM2SuitSlot)suit;
-			if (original.SpiderArms != current.SpiderArms) changes["force_arms"] = current.SpiderArms;
-			if (original.AlwaysUnlock != current.AlwaysUnlock) changes["ignore_story_progression"] = current.AlwaysUnlock;
-		}
+		//
 
 		private Localization_I30? LoadLocalization() {
 			if (!LANGUAGES.TryGetValue(_selectedProfile.Settings_Suit_Language, out var span)) return null;
@@ -162,6 +178,24 @@ namespace Overstrike.Tabs {
 			} catch {
 				return null;
 			}
+		}
+
+		private MSM2Character? DetermineSuitCharacter(string loadout) {
+			loadout = DAT1.Utils.Normalize(loadout ?? "");
+			if (string.IsNullOrEmpty(loadout)) return null;
+			if (_loadoutToCharacter.TryGetValue(loadout, out var cached)) return cached;
+			var result = MSM2SuitCharacterResolver.TryResolve((TOC_I29)toc, loadout);
+			_loadoutToCharacter[loadout] = result;
+			return result;
+		}
+
+		private void SortLoadoutPaths() {
+			_loadoutsPaths.Sort((left, right) => {
+				var leftName = _loadoutNames.GetValueOrDefault(left, left);
+				var rightName = _loadoutNames.GetValueOrDefault(right, right);
+				var comparison = StringComparer.InvariantCultureIgnoreCase.Compare(leftName, rightName);
+				return comparison != 0 ? comparison : StringComparer.OrdinalIgnoreCase.Compare(left, right);
+			});
 		}
 
 		private static string GetFriendlyMSM2SuitName(Localization_I30? localization, string? displayName, string suitId) {
@@ -178,14 +212,33 @@ namespace Overstrike.Tabs {
 			return $"%{displayName}%";
 		}
 
-		private void SortLoadoutPaths() {
-			_loadoutsPaths.Sort((left, right) => {
-				var leftName = _loadoutNames.GetValueOrDefault(left, left);
-				var rightName = _loadoutNames.GetValueOrDefault(right, right);
-				var comparison = StringComparer.InvariantCultureIgnoreCase.Compare(leftName, rightName);
-				return comparison != 0 ? comparison : StringComparer.OrdinalIgnoreCase.Compare(left, right);
-			});
+		#endregion
+		#region - making observable items
+
+		protected override void MakeDisplayedSuits() {
+			RefreshDisplayedSuits();
 		}
+
+		private void RefreshDisplayedSuits() {
+			var selectedId = GetCurrentlySelectedSuitId();
+			_displayedSuits.Clear();
+			foreach (var suit in _customizedSuits) {
+				if (!ShouldDisplaySuit(suit.SuitId)) continue;
+				if (suit.MarkedToDelete && !_showDeleted) continue;
+				var displayedSuit = CloneSuit(suit);
+				displayedSuit.Icon = GetIcon(suit.IconPath);
+				_displayedSuits.Add(displayedSuit);
+			}
+			SuitsSlots.ItemsSource = _displayedSuits;
+			SelectSuitWithId(selectedId);
+		}
+
+		private bool ShouldDisplaySuit(string suitId) {
+			var character = _suitToCharacter.GetValueOrDefault(suitId);
+			return (!character.HasValue || character.Value == _activeCharacter);
+		}
+
+		//
 
 		protected override string GetFriendlyLoadoutName(string path) {
 			var normalizedPath = DAT1.Utils.Normalize(path);
@@ -194,20 +247,30 @@ namespace Overstrike.Tabs {
 				: base.GetFriendlyLoadoutName(path);
 		}
 
-		private MSM2SuitCharacter? TryDetermineSuitCharacter(string loadout) {
-			loadout = DAT1.Utils.Normalize(loadout ?? "");
-			if (string.IsNullOrEmpty(loadout)) return null;
-			if (_loadoutToCharacter.TryGetValue(loadout, out var cached)) return cached;
-			var result = MSM2SuitCharacterResolver.TryResolve((TOC_I29)toc, loadout);
-			_loadoutToCharacter[loadout] = result;
-			return result;
+		protected override BitmapSource GetIcon(string path) {
+			if (_iconsOrigs.ContainsKey(path) && _iconsOrigs[path] != null && (!_icons.ContainsKey(path) || _icons[path] == null))
+				_icons[path] = Utils.Imaging.ConvertToBitmapImage(_iconsOrigs[path]);
+
+			if (_icons.ContainsKey(path) && _icons[path] != null)
+				return _icons[path];
+
+			if (_placeholderImage == null)
+				_placeholderImage = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.suit_missing_msm2);
+			
+			return _placeholderImage;
 		}
+
+		#endregion
+
+		#endregion
+
+		#region UI logic / helpers
 
 		protected override void OnSuitSelected(SuitSlot data) {
 			RefreshModelChoices(data);
 			var msm2Suit = (MSM2SuitSlot)data;
 			var targetCharacter = _suitToCharacter.GetValueOrDefault(data.SuitId);
-			var showArms = targetCharacter == MSM2SuitCharacter.Peter && !MSM2SpiderArmsBlockedSuits.IsBlocked(data.SuitId);
+			var showArms = targetCharacter == MSM2Character.Peter && !MSM2SpiderArmsBlockedSuits.IsBlocked(data.SuitId);
 			_SuitSpiderArmsPanel.Visibility = showArms ? Visibility.Visible : Visibility.Collapsed;
 			_SuitSpiderArmsRageWarning.Visibility = data.SuitId == "SUIT_SYMBIOTE" ? Visibility.Visible : Visibility.Collapsed;
 			_SuitAlwaysUnlockCheckBox.Visibility = MSM2CutsceneSuits.IsEligible(data.SuitId) ? Visibility.Visible : Visibility.Collapsed;
@@ -225,7 +288,7 @@ namespace Overstrike.Tabs {
 			var targetCharacter = _suitToCharacter.GetValueOrDefault(selectedSuit.SuitId);
 			LoadoutItem? selected = null;
 			foreach (var item in _loadouts) {
-				var sourceCharacter = TryDetermineSuitCharacter(item.Path);
+				var sourceCharacter = DetermineSuitCharacter(item.Path);
 				if (sourceCharacter == null) continue;
 				if (sourceCharacter != targetCharacter && !_allowCrossCharacterSuitModels) {
 					if (item.Path == selectedSuit.LoadoutPath) {
@@ -247,33 +310,16 @@ namespace Overstrike.Tabs {
 			_SuitLoadoutComboBox.SelectedItem = selected;
 		}
 
+		#endregion
+		#region event handlers
+
 		protected override void OnSuitLoadoutChanged(SuitSlot selectedSuit) => RefreshModelChoices(selectedSuit);
 
-		protected override void MakeDisplayedSuits() => RefreshDisplayedSuits();
-
-		private bool ShouldDisplaySuit(MSM2SuitCharacter? character) => !character.HasValue || character.Value == _activeCharacter;
-
-		private void RefreshDisplayedSuits() {
-			var selectedId = GetCurrentlySelectedSuitId();
-			_displayedSuits.Clear();
-			foreach (var suit in _customizedSuits) {
-				if (!ShouldDisplaySuit(_suitToCharacter.GetValueOrDefault(suit.SuitId))) continue;
-				if (suit.MarkedToDelete && !_showDeleted) continue;
-				var displayedSuit = CloneSuit(suit);
-				displayedSuit.Icon = GetIcon(suit.IconPath);
-				_displayedSuits.Add(displayedSuit);
-			}
-			SuitsSlots.ItemsSource = _displayedSuits;
-			SelectSuitWithId(selectedId);
-		}
-
-		protected override BitmapSource GetIcon(string path) {
-			if (_iconsOrigs.ContainsKey(path) && _iconsOrigs[path] != null && (!_icons.ContainsKey(path) || _icons[path] == null)) {
-				_icons[path] = Utils.Imaging.ConvertToBitmapImage(_iconsOrigs[path]);
-			}
-			if (_icons.ContainsKey(path) && _icons[path] != null) return _icons[path];
-			_placeholderImage ??= Utils.Imaging.ConvertToBitmapImage(Properties.Resources.suit_missing_msm2);
-			return _placeholderImage;
+		protected override void SaveSuitChanges(SuitSlot originalSuit, SuitSlot suit, JObject changes) {
+			var original = (MSM2SuitSlot)originalSuit;
+			var current = (MSM2SuitSlot)suit;
+			if (original.SpiderArms != current.SpiderArms) changes["force_arms"] = current.SpiderArms;
+			if (original.AlwaysUnlock != current.AlwaysUnlock) changes["ignore_story_progression"] = current.AlwaysUnlock;
 		}
 
 		private void SuitSpiderArmsComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
@@ -300,15 +346,28 @@ namespace Overstrike.Tabs {
 			}
 		}
 
-		private void PeterTabButton_Click(object sender, RoutedEventArgs e) => SetActiveCharacter(MSM2SuitCharacter.Peter);
-		private void MilesTabButton_Click(object sender, RoutedEventArgs e) => SetActiveCharacter(MSM2SuitCharacter.Miles);
+		private void PeterTabButton_Click(object sender, RoutedEventArgs e) {
+			SetActiveCharacter(MSM2Character.Peter);
+		}
 
-		private void SetActiveCharacter(MSM2SuitCharacter character) {
+		private void MilesTabButton_Click(object sender, RoutedEventArgs e) {
+			SetActiveCharacter(MSM2Character.Miles);
+		}
+
+		private void SetActiveCharacter(MSM2Character character) {
 			if (_activeCharacter == character) return;
 			_activeCharacter = character;
-			_PeterTabButton.Style = (Style)FindResource(character == MSM2SuitCharacter.Peter ? "CharacterTabActiveStyle" : "CharacterTabStyle");
-			_MilesTabButton.Style = (Style)FindResource(character == MSM2SuitCharacter.Miles ? "CharacterTabActiveStyle" : "CharacterTabStyle");
+			UpdateTabStyles();
 			RefreshDisplayedSuits();
 		}
+
+		private void UpdateTabStyles() {
+			var activeStyle = (Style)FindResource("CharacterTabActiveStyle");
+			var inactiveStyle = (Style)FindResource("CharacterTabStyle");
+			_PeterTabButton.Style = _activeCharacter == MSM2Character.Peter ? activeStyle : inactiveStyle;
+			_MilesTabButton.Style = _activeCharacter == MSM2Character.Miles ? activeStyle : inactiveStyle;
+		}
+
+		#endregion
 	}
 }
