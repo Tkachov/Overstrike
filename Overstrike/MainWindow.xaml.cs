@@ -322,7 +322,7 @@ namespace Overstrike {
 			SaveProfile();
 
 			if (_selectedProfile.Game == GameMSM2.ID) {
-				MSM2SuitsMenuContent.RefreshLocalizedNames();
+				MSM2SuitsMenuContent.RequestReload();
 			}
 		}
 
@@ -1279,7 +1279,6 @@ namespace Overstrike {
 					MMSuitsMenuContent.OnOpen();
 				} else if (MainTabs.SelectedItem == MSM2SuitsMenuTab) {
 					MSM2SuitsMenuContent.OnOpen();
-					MSM2SuitsMenuContent.RefreshLocalizedNames();
 				}
 			}
 		}

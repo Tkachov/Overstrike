@@ -54,11 +54,8 @@ namespace Overstrike.Tabs {
 		private readonly Dictionary<string, MSM2SuitCharacter?> _suitToCharacter = new();
 		private readonly Dictionary<string, MSM2SuitCharacter?> _loadoutToCharacter = new();
 		private readonly Dictionary<string, string> _loadoutNames = new();
-		private readonly Dictionary<string, string> _suitDisplayNames = new();
 		private readonly ObservableCollection<LoadoutItem> _modelChoices = new();
 		private readonly ObservableCollection<LoadoutItem> _forceSpiderArmsChoices = new();
-		private Localization_I30? _localization;
-		private string? _localizationLanguage;
 		private bool _allowCrossCharacterSuitModels;
 
 		public bool AllowCrossCharacterSuitModels {
@@ -101,9 +98,7 @@ namespace Overstrike.Tabs {
 			_suitToCharacter.Clear();
 			_loadoutToCharacter.Clear();
 			_loadoutNames.Clear();
-			_suitDisplayNames.Clear();
-			_localization = null;
-			_localizationLanguage = null;
+			var localization = LoadLocalization();
 
 			foreach (var suit in config["suits"]) {
 				var icon = (string?)suit["Icon"]?["AssetPath"] ?? "";
@@ -115,14 +110,13 @@ namespace Overstrike.Tabs {
 				var displayName = (string?)suit["DisplayName"];
 				var loadout = DAT1.Utils.Normalize((string?)suit["Item"] ?? "");
 				icon = DAT1.Utils.Normalize(icon);
-				_suitDisplayNames[suitId] = displayName ?? "";
 				RememberIcon(icon);
 				RememberLoadout(loadout);
 				LoadIcon(icon);
 
 				var suitInfo = new MSM2SuitSlot() {
 					SuitId = suitId,
-					Name = GetFriendlyMSM2SuitName(displayName, suitId),
+					Name = GetFriendlyMSM2SuitName(localization, displayName, suitId),
 					IconPath = icon,
 					BigIconPath = null,
 					LoadoutPath = loadout
@@ -164,45 +158,23 @@ namespace Overstrike.Tabs {
 			if (original.AlwaysUnlock != current.AlwaysUnlock) changes["ignore_story_progression"] = current.AlwaysUnlock;
 		}
 
-		private Localization_I30? GetLocalization() {
-			var language = _selectedProfile.Settings_Suit_Language;
-			if (_localizationLanguage == language) return _localization;
-			_localizationLanguage = language;
-			_localization = null;
-			if (!LANGUAGES.TryGetValue(language, out var span)) return null;
+		private Localization_I30? LoadLocalization() {
+			if (!LANGUAGES.TryGetValue(_selectedProfile.Settings_Suit_Language, out var span)) return null;
 			try {
 				const ulong LOCALIZATION_AID = 0xBE55D94F171BF8DE;
-				_localization = new Localization_I30(((TOC_I29)toc).GetAssetReader(span, LOCALIZATION_AID));
-			} catch {}
-			return _localization;
+				return new Localization_I30(((TOC_I29)toc).GetAssetReader(span, LOCALIZATION_AID));
+			} catch {
+				return null;
+			}
 		}
 
-		private string GetFriendlyMSM2SuitName(string? displayName, string suitId) {
+		private static string GetFriendlyMSM2SuitName(Localization_I30? localization, string? displayName, string suitId) {
 			if (!string.IsNullOrEmpty(displayName)) {
-				var localized = GetLocalization()?.GetValue(displayName);
+				var localized = localization?.GetValue(displayName);
 				if (!string.IsNullOrEmpty(localized)) return localized;
 				return $"%{displayName}%";
 			}
 			return suitId;
-		}
-
-		public void RefreshLocalizedNames() {
-			if (!_loaded) return;
-			_localizationLanguage = null;
-			_loadoutNames.Clear();
-			var names = new Dictionary<string, string>();
-			foreach (var suit in _configSuits) {
-				var displayName = _suitDisplayNames.GetValueOrDefault(suit.SuitId);
-				suit.Name = GetFriendlyMSM2SuitName(displayName, suit.SuitId);
-				names[suit.SuitId] = suit.Name;
-				if (!string.IsNullOrEmpty(suit.LoadoutPath)) _loadoutNames.TryAdd(suit.LoadoutPath, suit.Name);
-			}
-			foreach (var suit in _customizedSuits) {
-				if (names.TryGetValue(suit.SuitId, out var name)) suit.Name = name;
-			}
-			SortLoadoutPaths();
-			MakeLoadouts();
-			RefreshDisplayedSuits();
 		}
 
 		private void SortLoadoutPaths() {

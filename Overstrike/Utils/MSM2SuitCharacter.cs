@@ -14,15 +14,7 @@ namespace Overstrike.Utils {
 		Miles
 	}
 
-	// The only suit slots whose body/mask geometry is shown in a forced story cutscene: the
-	// starting suits (no unlock gate) and the suits gated behind story missions rather than
-	// being ordinary collectibles. Confirmed against toc.BAK: these are exactly SuitList.Suits[0..5],
-	// in this order, and each has a progression pattern (no gate, HideAfterMissionName, or
-	// ScriptedRequirement-only) that no ordinary collectible suit has.
-	//
-	// "Change Suit Model" (force_model/force_mask) exists to fix a forced cutscene rendering the
-	// wrong body/mask on these slots. Applying it to any other slot has no cutscene to fix, so the
-	// swap is refused there for both the UI and the installer.
+	// Story-gated slots that can opt out of the normal suit progression rules.
 	internal static class MSM2CutsceneSuits {
 		public static readonly HashSet<string> SLOT_NAMES = new(System.StringComparer.Ordinal) {
 			"i30_Advanced_Suit",     // Peter: Advanced Suit 2.0 (starting suit)
