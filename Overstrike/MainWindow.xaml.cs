@@ -89,9 +89,9 @@ namespace Overstrike {
 		}
 
 		public bool Settings_AllowCrossCharacterSuitModels {
-			get => _selectedProfile.Settings_SuitMenu_AllowCrossCharacterSuitModels;
+			get => _selectedProfile.Settings_Suit_AllowCrossCharacterSuitModels;
 			set {
-				_selectedProfile.Settings_SuitMenu_AllowCrossCharacterSuitModels = value;
+				_selectedProfile.Settings_Suit_AllowCrossCharacterSuitModels = value;
 				SaveProfile();
 			}
 		}
@@ -213,7 +213,7 @@ namespace Overstrike {
 		}
 
 		private void UpdateSuitMenuTabs() {
-			SuitMenuCrossCharacterCheckBox.IsChecked = _selectedProfile.Settings_SuitMenu_AllowCrossCharacterSuitModels;
+			SuitMenuCrossCharacterCheckBox.IsChecked = _selectedProfile.Settings_Suit_AllowCrossCharacterSuitModels;
 			MSMRSuitsMenuContent.SetProfile(_selectedProfile);
 			MMSuitsMenuContent.SetProfile(_selectedProfile);
 			MSM2SuitsMenuContent.SetProfile(_selectedProfile);

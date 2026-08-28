@@ -59,7 +59,7 @@ namespace Overstrike.Tabs {
 		private bool _allowCrossCharacterSuitModels;
 
 		public override void OnOpen() {
-			_allowCrossCharacterSuitModels = _selectedProfile.Settings_SuitMenu_AllowCrossCharacterSuitModels;
+			_allowCrossCharacterSuitModels = _selectedProfile.Settings_Suit_AllowCrossCharacterSuitModels;
 			base.OnOpen();
 		}
 
