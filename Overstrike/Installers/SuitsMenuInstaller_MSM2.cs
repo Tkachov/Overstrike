@@ -13,17 +13,10 @@ using System.IO;
 
 namespace Overstrike.Installers {
 	internal partial class SuitsMenuInstaller_MSM2: InstallerBase_I29 {
-		private const string GENERATED_ARCHIVES_MANIFEST = "overstrike_suitmenu_generated.txt";
-
 		private SuitsModifications _modifications;
 		private readonly bool _allowCrossCharacterSuitModels;
-		private readonly bool _enableSpiderArms;
-		private readonly bool _enableChangeModel;
-		private readonly bool _enableStoryProgressionOverride;
-		private readonly HashSet<string> _generatedArchives = new(System.StringComparer.OrdinalIgnoreCase);
 		private readonly Dictionary<string, SuitModelPaths> _modelPathsCache = new(System.StringComparer.OrdinalIgnoreCase);
 		private readonly Dictionary<string, MSM2SuitCharacter?> _suitCharacterCache = new(System.StringComparer.OrdinalIgnoreCase);
-		private readonly HashSet<string> _warningSet = new(System.StringComparer.Ordinal);
 		private static readonly HashSet<string> SPIDER_ARMS_MODELS = new(System.StringComparer.Ordinal) {
 			"hero_spiderman_advanced_legs",
 			"hero_spiderman_momoko_legs",
@@ -33,20 +26,15 @@ namespace Overstrike.Installers {
 			"hero_spiderman_iw_legs"
 		};
 
-		public SuitsMenuInstaller_MSM2(TOC_I29 toc, string gamePath, SuitsModifications suits, bool allowCrossCharacterSuitModels, bool enableSpiderArms, bool enableChangeModel, bool enableStoryProgressionOverride): base(toc, gamePath) {
+		public SuitsMenuInstaller_MSM2(TOC_I29 toc, string gamePath, SuitsModifications suits, bool allowCrossCharacterSuitModels): base(toc, gamePath) {
 			_modifications = suits;
 			_allowCrossCharacterSuitModels = allowCrossCharacterSuitModels;
-			_enableSpiderArms = enableSpiderArms;
-			_enableChangeModel = enableChangeModel;
-			_enableStoryProgressionOverride = enableStoryProgressionOverride;
 		}
 
 		public override void Install(ModEntry mod, int index) {
 			_mod = mod;
 			_modelPathsCache.Clear();
 			_suitCharacterCache.Clear();
-			_warningSet.Clear();
-			CleanGeneratedArchives();
 
 			const ulong SYSTEM_PROGRESSION_CONFIG_AID = 0x9C9C72A303FCFA30; // configs/system/system_progression.config
 			var config = new Config_I30(_toc.GetAssetReader((byte)0, SYSTEM_PROGRESSION_CONFIG_AID));
@@ -83,7 +71,7 @@ namespace Overstrike.Installers {
 				if (modify.ContainsKey(name)) {
 					var changes = modify[name];
 
-					if (_enableStoryProgressionOverride && MSM2CutsceneSuits.IsEligible(name) && (bool?)changes["ignore_story_progression"] == true) {
+					if (MSM2CutsceneSuits.IsEligible(name) && (bool?)changes["ignore_story_progression"] == true) {
 						IgnoreStorySuitProgression(suit);
 					}
 
@@ -95,29 +83,16 @@ namespace Overstrike.Installers {
 					}
 
 					if (changes.ContainsKey("model")) {
-						suit["Item"] = (string)changes["model"];
-					}
-
-					// "Change Suit Model": force this slot's body geometry from another suit
-					// only when every affected asset can remain isolated to this slot.
-					if (_enableChangeModel && changes.ContainsKey("force_model")) {
-						var sourceItem = (string)changes["force_model"];
+						var sourceItem = (string)changes["model"];
 						if (!string.IsNullOrEmpty(sourceItem)) {
-							if (!MSM2CutsceneSuits.IsEligible(name)) {
-								Warn($"Change Suit Model: '{name}' isn't shown in a forced cutscene; skipped.");
-							} else {
-								var forceMask = !changes.ContainsKey("force_mask") || (bool)changes["force_mask"];
-								forceRequests.Add(new SuitModelRequest(name, (string)suit["Item"], sourceItem, forceMask));
-							}
+							forceRequests.Add(new SuitModelRequest(name, (string)suit["Item"], sourceItem));
 						}
 					}
 
-					if (_enableSpiderArms && changes.ContainsKey("force_arms")) {
+					if (changes.ContainsKey("force_arms")) {
 						var armsModel = (string?)changes["force_arms"];
 						if (!string.IsNullOrEmpty(armsModel)) {
-							if (MSM2SpiderArmsBlockedSuits.IsBlocked(name)) {
-								Warn($"Spider-Arms: '{name}'s suit power replaces the arms with symbiote tendrils; skipped.");
-							} else {
+							if (!MSM2SpiderArmsBlockedSuits.IsBlocked(name)) {
 								spiderArmsRequests.Add(new SpiderArmsRequest(name, (string)suit["Item"], armsModel));
 							}
 						}
@@ -169,10 +144,10 @@ namespace Overstrike.Installers {
 			// save
 
 			var configBytes = config.Save();
-			var configHeader = PrepareSuitsMenuHeader(SYSTEM_PROGRESSION_CONFIG_AID, configBytes.Length);
-			ApplyForcedSuitModels(forceRequests, oldSuits);
-			ApplyForcedSpiderArms(spiderArmsRequests, oldSuits);
-			WriteSuitsMenuArchive(SYSTEM_PROGRESSION_CONFIG_AID, configBytes, configHeader);
+			var configHeader = PrepareConfigHeader(SYSTEM_PROGRESSION_CONFIG_AID, configBytes.Length, "system_progression.config");
+			ApplyForcedSuitModels(forceRequests);
+			var rewardConfigs = ApplyForcedSpiderArms(spiderArmsRequests, oldSuits);
+			WriteSuitsMenuArchive(SYSTEM_PROGRESSION_CONFIG_AID, configBytes, configHeader, rewardConfigs);
 		}
 
 		private static void IgnoreStorySuitProgression(JObject suit) {
@@ -203,12 +178,6 @@ namespace Overstrike.Installers {
 				if (playMoreMsgData["ObjectiveOnCompleteStopMsg"] != null) {
 					playMoreMsgData["ObjectiveOnCompleteStopMsg"] = "GP_A1_SANDMAN";
 				}
-			}
-		}
-
-		private void Warn(string message) {
-			if (_warningSet.Add(message)) {
-				ErrorLogger.WriteWarning(message);
 			}
 		}
 
