@@ -58,15 +58,6 @@ namespace Overstrike.Tabs {
 		private readonly ObservableCollection<LoadoutItem> _forceSpiderArmsChoices = new();
 		private bool _allowCrossCharacterSuitModels;
 
-		public bool AllowCrossCharacterSuitModels {
-			get => _allowCrossCharacterSuitModels;
-			set {
-				if (_allowCrossCharacterSuitModels == value) return;
-				_allowCrossCharacterSuitModels = value;
-				if (SuitsSlots.SelectedItem is SuitSlot selectedSuit) SuitSelected(selectedSuit);
-			}
-		}
-
 		public override void OnOpen() {
 			_allowCrossCharacterSuitModels = _selectedProfile.Settings_SuitMenu_AllowCrossCharacterSuitModels;
 			base.OnOpen();
@@ -193,7 +184,9 @@ namespace Overstrike.Tabs {
 
 		protected override string GetFriendlyLoadoutName(string path) {
 			var normalizedPath = DAT1.Utils.Normalize(path);
-			return _loadoutNames.GetValueOrDefault(normalizedPath, base.GetFriendlyLoadoutName(path));
+			return _loadoutNames.TryGetValue(normalizedPath, out var name)
+				? name
+				: base.GetFriendlyLoadoutName(path);
 		}
 
 		private MSM2SuitCharacter? TryDetermineSuitCharacter(string loadout) {
@@ -229,7 +222,7 @@ namespace Overstrike.Tabs {
 			foreach (var item in _loadouts) {
 				var sourceCharacter = TryDetermineSuitCharacter(item.Path);
 				if (sourceCharacter == null) continue;
-				if (sourceCharacter != targetCharacter && !AllowCrossCharacterSuitModels) {
+				if (sourceCharacter != targetCharacter && !_allowCrossCharacterSuitModels) {
 					if (item.Path == selectedSuit.LoadoutPath) {
 						selected = new LoadoutItem() { Path = item.Path, Name = item.Name, IsEnabled = false };
 						_modelChoices.Add(selected);
@@ -238,7 +231,7 @@ namespace Overstrike.Tabs {
 				}
 				var choice = new LoadoutItem() {
 					Path = item.Path,
-					Name = (AllowCrossCharacterSuitModels && sourceCharacter != targetCharacter)
+					Name = (_allowCrossCharacterSuitModels && sourceCharacter != targetCharacter)
 						? $"{item.Name} ({MSM2SuitCharacterResolver.DisplayName(sourceCharacter.Value)})"
 						: item.Name
 				};

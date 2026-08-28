@@ -92,7 +92,6 @@ namespace Overstrike {
 			get => _selectedProfile.Settings_SuitMenu_AllowCrossCharacterSuitModels;
 			set {
 				_selectedProfile.Settings_SuitMenu_AllowCrossCharacterSuitModels = value;
-				MSM2SuitsMenuContent.AllowCrossCharacterSuitModels = value;
 				SaveProfile();
 			}
 		}

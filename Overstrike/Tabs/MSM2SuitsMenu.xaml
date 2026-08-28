@@ -179,7 +179,7 @@
 								</ComboBox>
 							</Grid>
 
-							<StackPanel x:Name="_SuitSpiderArmsPanel" Margin="0,0,0,8">
+							<StackPanel x:Name="_SuitSpiderArmsPanel" Margin="0,0,0,8" Visibility="Collapsed">
 								<Grid>
 									<Label Content="Arms:" Padding="0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" />
 									<ComboBox x:Name="_SuitSpiderArmsComboBox" Margin="65,0,0,0" SelectionChanged="SuitSpiderArmsComboBox_SelectionChanged">
@@ -189,7 +189,7 @@
 								<TextBlock x:Name="_SuitSpiderArmsRageWarning" Text="Spider-Arms changes do not apply during Rage Mode. They only appear while the Symbiote Suit slot is selected in-game." TextWrapping="Wrap" Foreground="#666" FontSize="10.5" Margin="65,5,0,0" Visibility="Collapsed" />
 							</StackPanel>
 
-							<CheckBox x:Name="_SuitAlwaysUnlockCheckBox" Margin="0,0,0,8" Checked="SuitAlwaysUnlockCheckBox_Changed" Unchecked="SuitAlwaysUnlockCheckBox_Changed">
+							<CheckBox x:Name="_SuitAlwaysUnlockCheckBox" Margin="0,0,0,8" Visibility="Collapsed" Checked="SuitAlwaysUnlockCheckBox_Changed" Unchecked="SuitAlwaysUnlockCheckBox_Changed">
 								<TextBlock Text="Always unlock" Margin="2,0,0,0" />
 							</CheckBox>
 
