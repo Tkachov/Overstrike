@@ -193,7 +193,7 @@ namespace Overstrike.Tabs {
 			OnOpen();
 		}
 
-		public void OnOpen() {
+		public virtual void OnOpen() {
 			SuitDeselected();
 
 			if (_loaded) {

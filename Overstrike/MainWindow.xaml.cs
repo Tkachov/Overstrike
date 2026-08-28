@@ -171,14 +171,8 @@ namespace Overstrike {
 			SetupBanner();
 			ProfileGamePath.Content = profile.GamePath;
 
-			UpdateSuitMenuSettings();
 			UpdateSuitMenuTabs();
 			MakeModsItems();
-		}
-
-		private void UpdateSuitMenuSettings() {
-			MSM2SuitsMenuContent.AllowCrossCharacterSuitModels = _selectedProfile.Settings_SuitMenu_AllowCrossCharacterSuitModels;
-			SuitMenuCrossCharacterCheckBox.GetBindingExpression(CheckBox.IsCheckedProperty)?.UpdateTarget();
 		}
 
 		private bool _reactToScriptSettingsChange = true;
@@ -220,6 +214,7 @@ namespace Overstrike {
 		}
 
 		private void UpdateSuitMenuTabs() {
+			SuitMenuCrossCharacterCheckBox.IsChecked = _selectedProfile.Settings_SuitMenu_AllowCrossCharacterSuitModels;
 			MSMRSuitsMenuContent.SetProfile(_selectedProfile);
 			MMSuitsMenuContent.SetProfile(_selectedProfile);
 			MSM2SuitsMenuContent.SetProfile(_selectedProfile);

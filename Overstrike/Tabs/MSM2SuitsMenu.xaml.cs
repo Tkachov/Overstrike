@@ -67,6 +67,11 @@ namespace Overstrike.Tabs {
 			}
 		}
 
+		public override void OnOpen() {
+			_allowCrossCharacterSuitModels = _selectedProfile.Settings_SuitMenu_AllowCrossCharacterSuitModels;
+			base.OnOpen();
+		}
+
 		protected override dynamic LoadToc(string tocPath) {
 			var result = new TOC_I29();
 			result.Load(tocPath);

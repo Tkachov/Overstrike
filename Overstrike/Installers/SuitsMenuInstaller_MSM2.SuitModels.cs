@@ -70,13 +70,12 @@ namespace Overstrike.Installers {
 		// Resolve every source against the current TOC before changing any target. This preserves
 		// replacements installed earlier in the same run and prevents swaps from aliasing each other.
 		private void ApplyForcedSuitModels(List<SuitModelRequest> requests) {
-			var transfers = new List<ModelTransfer>();
-			var targets = new Dictionary<int, ModelAssetLocation>();
+			var transfers = new Dictionary<int, ModelTransfer>();
 			foreach (var request in requests) {
-				PlanSuitModelRequest(request, transfers, targets);
+				PlanSuitModelRequest(request, transfers);
 			}
 
-			foreach (var transfer in transfers) {
+			foreach (var transfer in transfers.Values) {
 				var updater = new TOC_I29.AssetUpdater(transfer.Target.AssetIndex);
 				updater
 					.UpdateArchiveIndex(transfer.Source.ArchiveIndex)
@@ -90,7 +89,7 @@ namespace Overstrike.Installers {
 			}
 		}
 
-		private void PlanSuitModelRequest(SuitModelRequest request, List<ModelTransfer> transfers, Dictionary<int, ModelAssetLocation> targets) {
+		private void PlanSuitModelRequest(SuitModelRequest request, Dictionary<int, ModelTransfer> transfers) {
 			var targetItemPath = DAT1.Utils.Normalize(request.TargetItemPath ?? "");
 			var sourceItemPath = DAT1.Utils.Normalize(request.SourceItemPath ?? "");
 			if (string.IsNullOrEmpty(targetItemPath) || string.IsNullOrEmpty(sourceItemPath) || targetItemPath == sourceItemPath) return;
@@ -109,36 +108,28 @@ namespace Overstrike.Installers {
 			if (target.Error != null || source.Error != null || target.BodyPaths.Count == 0 || source.BodyPaths.Count == 0) {
 				throw new InvalidDataException($"Could not resolve the body models for suit model change '{request.SuitName}'");
 			}
-			if (target.BodyPaths.Count != source.BodyPaths.Count) {
-				throw new InvalidDataException($"Suit model change '{request.SuitName}' has a different number of source and target body models");
-			}
-
-			for (var i = 0; i < target.BodyPaths.Count; ++i) {
-				AddTransfer(request.SuitName, target.BodyPaths[i], source.BodyPaths[i], transfers, targets);
+			// The first source model is the suit's main body. Point every target variant at it;
+			// loadout configs do not guarantee matching model counts or ordering.
+			foreach (var targetBodyPath in target.BodyPaths) {
+				AddTransfer(targetBodyPath, source.BodyPaths[0], transfers);
 			}
 
 			// Masks are optional. A missing mask never blocks an otherwise valid body redirect.
 			if (!string.IsNullOrEmpty(target.MaskPath) && !string.IsNullOrEmpty(source.MaskPath)) {
 				try {
-					AddTransfer(request.SuitName, target.MaskPath, source.MaskPath, transfers, targets);
+					AddTransfer(target.MaskPath, source.MaskPath, transfers);
 				} catch (InvalidDataException e) {
 					ErrorLogger.WriteInfo($"Suit Menu: mask redirect skipped for '{request.SuitName}': {e.Message}\n");
 				}
 			}
 		}
 
-		private void AddTransfer(string suitName, string targetPath, string sourcePath, List<ModelTransfer> transfers, Dictionary<int, ModelAssetLocation> targets) {
+		private void AddTransfer(string targetPath, string sourcePath, Dictionary<int, ModelTransfer> transfers) {
 			if (targetPath == sourcePath) return;
 
 			var target = FindModelAsset(targetPath) ?? throw new InvalidDataException($"target model '{targetPath}' is not present in the TOC");
 			var source = FindModelAsset(sourcePath) ?? throw new InvalidDataException($"source model '{sourcePath}' is not present in the TOC");
-			if (targets.TryGetValue(target.AssetIndex, out var existing)) {
-				if (existing.ArchiveIndex == source.ArchiveIndex && existing.ArchiveOffset == source.ArchiveOffset && existing.Size == source.Size) return;
-				throw new InvalidDataException($"Suit model changes request conflicting sources for '{targetPath}' (while processing '{suitName}')");
-			}
-
-			targets.Add(target.AssetIndex, source);
-			transfers.Add(new ModelTransfer(target, source));
+			transfers[target.AssetIndex] = new ModelTransfer(target, source);
 		}
 
 		private ModelAssetLocation? FindModelAsset(string path) {

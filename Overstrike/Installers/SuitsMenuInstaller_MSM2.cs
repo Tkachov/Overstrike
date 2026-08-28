@@ -146,7 +146,7 @@ namespace Overstrike.Installers {
 			var configBytes = config.Save();
 			var configHeader = PrepareConfigHeader(SYSTEM_PROGRESSION_CONFIG_AID, configBytes.Length, "system_progression.config");
 			ApplyForcedSuitModels(forceRequests);
-			var rewardConfigs = ApplyForcedSpiderArms(spiderArmsRequests, oldSuits);
+			var rewardConfigs = ApplyForcedSpiderArms(spiderArmsRequests);
 			WriteSuitsMenuArchive(SYSTEM_PROGRESSION_CONFIG_AID, configBytes, configHeader, rewardConfigs);
 		}
 

@@ -24,10 +24,8 @@ namespace Overstrike.Installers {
 			}
 		}
 
-		private List<SuitsMenuArchiveAsset> ApplyForcedSpiderArms(List<SpiderArmsRequest> requests, List<JObject> allSuits) {
+		private List<SuitsMenuArchiveAsset> ApplyForcedSpiderArms(List<SpiderArmsRequest> requests) {
 			var result = new List<SuitsMenuArchiveAsset>();
-			var owners = BuildLoadoutOwners(allSuits);
-			var written = new HashSet<ulong>();
 
 			foreach (var request in requests) {
 				if (!SPIDER_ARMS_MODELS.Contains(request.ArmsModel)) {
@@ -44,13 +42,6 @@ namespace Overstrike.Installers {
 				var span = _toc.GetSpanIndexByAssetIndex(assetIndex);
 				if (span == null) throw new InvalidDataException($"Reward loadout '{targetItemPath}' has no span");
 				var assetId = CRC64.Hash(targetItemPath);
-
-				if (owners.TryGetValue(assetId, out var slots) && slots.Count > 1) {
-					throw new InvalidDataException($"Reward loadout '{targetItemPath}' is shared by {string.Join(", ", slots)}");
-				}
-				if (!written.Add(assetId)) {
-					throw new InvalidDataException($"More than one Spider-Arms change targets reward loadout '{targetItemPath}'");
-				}
 
 				var config = new Config_I30(_toc.GetAssetReader(targetItemPath));
 				var root = config.ContentSection.Data;
@@ -69,22 +60,6 @@ namespace Overstrike.Installers {
 			}
 
 			return result;
-		}
-
-		private static Dictionary<ulong, HashSet<string>> BuildLoadoutOwners(List<JObject> allSuits) {
-			var owners = new Dictionary<ulong, HashSet<string>>();
-			foreach (var suit in allSuits) {
-				var itemPath = (string?)suit["Item"];
-				if (string.IsNullOrEmpty(itemPath)) continue;
-
-				var id = CRC64.Hash(DAT1.Utils.Normalize(itemPath));
-				if (!owners.TryGetValue(id, out var slots)) {
-					slots = new HashSet<string>(System.StringComparer.Ordinal);
-					owners.Add(id, slots);
-				}
-				slots.Add((string?)suit["Name"] ?? "an unnamed slot");
-			}
-			return owners;
 		}
 	}
 }
