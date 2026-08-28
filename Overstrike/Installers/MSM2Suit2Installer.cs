@@ -16,12 +16,6 @@ using OverstrikeShared.STG.Files;
 
 namespace Overstrike.Installers {
 	internal class MSM2Suit2Installer: InstallerBase_I29 {
-		// MSM2 lays out localization spans differently from MSMR, and this table was copied from
-		// MSMRSuitInstaller as is. Every entry from "br" onwards pointed at a wrong (or empty) span:
-		// "br" resolved to Arabic, "ar"/"zh" to empty spans, and "la"/"cs"/"hu"/"el" were one slot off.
-		// Spans below are verified against i30 'toc' by reading known suit name keys out of each one.
-		// "pt"/"br" keep the existing USERFRIENDLY_LANGUAGE_NAMES convention, where "pt" is labeled
-		// "Brazilian" (span 136, "TRAJE PRETO") and "br" is "Portuguese" (span 104, "FATO PRETO").
 		public static readonly Dictionary<string, byte> LANGUAGES = new() {
 			//{"en", 0},
 			{"us", 8},
@@ -35,11 +29,11 @@ namespace Overstrike.Installers {
 			{"ko", 80},
 			{"no", 88},
 			{"pl", 96},
-			{"pt", 136},
+			{"br", 104},
 			{"ru", 112},
 			{"es", 120},
 			{"sv", 128},
-			{"br", 104},
+			{"pt", 136},
 			{"ar", 144},
 			{"la", 160},
 			{"zh_s", 168},

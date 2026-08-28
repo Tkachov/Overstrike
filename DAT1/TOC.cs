@@ -628,10 +628,8 @@ namespace DAT1 {
 						if (_header == null) {
 							toc_i29.SizesSection.Entries[_index].HeaderOffset = -1;
 						} else {
+							// only overwrite the existing header if it has the same length
 							var header_offset = toc_i29.SizesSection.Entries[_index].HeaderOffset;
-							// I30 headers have variable length. Reusing an existing slot is safe only
-							// when its parsed length matches the new header; otherwise a longer write
-							// would overwrite the next header in this shared byte buffer.
 							var existingHeader = (header_offset == -1 ? null : toc_i29.GetHeaderByAssetIndex(_index));
 							if (existingHeader == null || existingHeader.Length != _header.Length) {
 								var new_header_offset = toc_i29.AssetHeadersSection.Buffer.Length;

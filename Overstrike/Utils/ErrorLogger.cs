@@ -53,6 +53,7 @@ namespace Overstrike.Utils {
 		public static void EndSession() {
 			try {
 				WriteSeparator();
+
 				if (_log != null) {
 					_log.Flush();
 					_log.Dispose();
