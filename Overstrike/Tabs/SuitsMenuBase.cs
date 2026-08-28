@@ -32,10 +32,6 @@ namespace Overstrike.Tabs {
 		public string IconPath;
 		public string BigIconPath;
 		public string LoadoutPath;
-		public string ForceModelPath; // "Change Suit Model": suit to force this slot's body geometry from, independent of LoadoutPath
-		public bool ForceSuitMask { get; set; } = true;
-		public string? ForceSpiderArms { get; set; }
-		public bool IgnoreStoryProgression { get; set; }
 		public bool MarkedToDelete;
 
 		public float DisplayOpacity => (MarkedToDelete ? 0.3f : 1.0f);
@@ -60,13 +56,6 @@ namespace Overstrike.Tabs {
 		protected abstract Button ResetButton { get; }
 
 		protected abstract bool HasBigIcons { get; }
-		protected virtual bool HasForceModel => false;
-		protected virtual ComboBox SuitForceModelComboBox => null;
-		protected virtual CheckBox SuitForceMaskCheckBox => null;
-		protected virtual bool HasForceSpiderArms => false;
-		protected virtual ComboBox SuitForceSpiderArmsComboBox => null;
-		protected virtual bool HasStoryProgressionOverride => false;
-		protected virtual CheckBox SuitStoryProgressionCheckBox => null;
 		protected abstract Dictionary<string, byte> LANGUAGES { get; }
 
 		#endregion
@@ -169,8 +158,6 @@ namespace Overstrike.Tabs {
 		protected ObservableCollection<SuitSlot> _displayedSuits = new();
 
 		protected ObservableCollection<LoadoutItem> _loadouts = new();
-		protected ObservableCollection<LoadoutItem> _forceModelChoices = new();
-
 		protected ObservableCollection<IconItem> _iconItems = new();
 		protected ObservableCollection<IconItem> _bigIconItems = new();
 
@@ -454,6 +441,20 @@ namespace Overstrike.Tabs {
 			}
 		}
 
+		protected virtual SuitSlot CloneSuit(SuitSlot suit) => new SuitSlot() {
+			SuitId = suit.SuitId,
+			Name = suit.Name,
+			Icon = suit.Icon,
+			BigIcon = suit.BigIcon,
+			IconPath = suit.IconPath,
+			BigIconPath = suit.BigIconPath,
+			LoadoutPath = suit.LoadoutPath,
+			MarkedToDelete = suit.MarkedToDelete
+		};
+
+		protected virtual void LoadSuitChanges(SuitSlot suit, JObject changes) {}
+		protected virtual void SaveSuitChanges(SuitSlot originalSuit, SuitSlot suit, JObject changes) {}
+
 		private void MakeCustomizedSuits() {
 			_customizedSuits.Clear();
 
@@ -476,20 +477,9 @@ namespace Overstrike.Tabs {
 			}
 
 			foreach (var suit in _configSuits) {
-				_customizedSuits.Add(new SuitSlot() {
-					SuitId = suit.SuitId,
-					Name = suit.Name,
-					Icon = suit.Icon,
-					BigIcon = suit.BigIcon,
-					IconPath = suit.IconPath,
-					BigIconPath = suit.BigIconPath,
-					LoadoutPath = suit.LoadoutPath,
-					ForceModelPath = suit.ForceModelPath,
-					ForceSuitMask = suit.ForceSuitMask,
-					ForceSpiderArms = suit.ForceSpiderArms,
-					IgnoreStoryProgression = suit.IgnoreStoryProgression,
-					MarkedToDelete = suit.MarkedToDelete || deletedSuits.ContainsKey(suit.SuitId)
-				});
+				var customizedSuit = CloneSuit(suit);
+				customizedSuit.MarkedToDelete = suit.MarkedToDelete || deletedSuits.ContainsKey(suit.SuitId);
+				_customizedSuits.Add(customizedSuit);
 			}
 
 			_customizedSuits.Sort((a, b) => {
@@ -530,24 +520,8 @@ namespace Overstrike.Tabs {
 					RememberLoadout(suit.LoadoutPath);
 				}
 
-				if (changes.ContainsKey("force_model")) {
-					suit.ForceModelPath = (string)changes["force_model"];
-					if (!string.IsNullOrEmpty(suit.ForceModelPath)) {
-						RememberLoadout(suit.ForceModelPath);
-					}
-				}
 
-				if (changes.ContainsKey("force_mask")) {
-					suit.ForceSuitMask = (bool)changes["force_mask"];
-				}
-
-				if (changes.ContainsKey("force_arms")) {
-					suit.ForceSpiderArms = (string?)changes["force_arms"];
-				}
-
-				if (changes.ContainsKey("ignore_story_progression")) {
-					suit.IgnoreStoryProgression = (bool)changes["ignore_story_progression"];
-				}
+				LoadSuitChanges(suit, changes);
 			}
 		}
 
@@ -610,20 +584,10 @@ namespace Overstrike.Tabs {
 			foreach (var suit in _customizedSuits) {
 				if (suit.MarkedToDelete && !_showDeleted) continue;
 
-				_displayedSuits.Add(new SuitSlot() {
-					SuitId = suit.SuitId,
-					Name = suit.Name,
-					Icon = GetIcon(suit.IconPath),
-					BigIcon = GetIcon(suit.BigIconPath),
-					IconPath = suit.IconPath,
-					BigIconPath = suit.BigIconPath,
-					LoadoutPath = suit.LoadoutPath,
-					ForceModelPath = suit.ForceModelPath,
-					ForceSuitMask = suit.ForceSuitMask,
-					ForceSpiderArms = suit.ForceSpiderArms,
-					IgnoreStoryProgression = suit.IgnoreStoryProgression,
-					MarkedToDelete = suit.MarkedToDelete
-				});
+				var displayedSuit = CloneSuit(suit);
+				displayedSuit.Icon = GetIcon(suit.IconPath);
+				displayedSuit.BigIcon = GetIcon(suit.BigIconPath);
+				_displayedSuits.Add(displayedSuit);
 			}
 
 			SuitsSlots.ItemsSource = _displayedSuits;
@@ -635,21 +599,7 @@ namespace Overstrike.Tabs {
 				_loadouts.Add(new LoadoutItem() { Path = path, Name = GetFriendlyLoadoutName(path) });
 			}
 			SuitLoadoutComboBox.ItemsSource = _loadouts;
-
-			if (HasForceModel) {
-				_forceModelChoices.Clear();
-				_forceModelChoices.Add(new LoadoutItem() { Path = null, Name = "None" });
-				foreach (var item in _loadouts) {
-					_forceModelChoices.Add(item);
-				}
-				SuitForceModelComboBox.ItemsSource = _forceModelChoices;
-			}
 		}
-
-		// MSM2 narrows these choices to the character of the slot's effective
-		// loadout. Other games retain the complete list.
-		protected virtual void RefreshForceModelChoices(SuitSlot selectedSuit) {}
-		protected virtual void RefreshForceSpiderArmsChoices(SuitSlot selectedSuit) {}
 
 		private void MakeIconItems() {
 			_iconItems.Clear();
@@ -786,19 +736,6 @@ namespace Overstrike.Tabs {
 			}
 			SuitLoadoutComboBox.SelectedItem = loadout;
 
-			if (HasForceModel) {
-				RefreshForceModelChoices(data);
-				RestoreForceModelSelection(data);
-				UpdateForceSuitMaskControl(data);
-			}
-			if (HasForceSpiderArms) {
-				RefreshForceSpiderArmsChoices(data);
-				RestoreForceSpiderArmsSelection(data);
-			}
-			if (HasStoryProgressionOverride) {
-				SuitStoryProgressionCheckBox.IsChecked = data.IgnoreStoryProgression;
-			}
-
 			IconItem icon = null;
 			foreach (var item in _iconItems) {
 				if (item.Path == data.IconPath) {
@@ -825,37 +762,6 @@ namespace Overstrike.Tabs {
 		}
 
 		protected virtual void OnSuitSelected(SuitSlot data) {}
-
-		protected void RestoreForceModelSelection(SuitSlot data) {
-			LoadoutItem forceModel = null;
-			foreach (var item in _forceModelChoices) {
-				if (item.Path == data.ForceModelPath) {
-					forceModel = item;
-					break;
-				}
-			}
-			SuitForceModelComboBox.SelectedItem = forceModel;
-		}
-
-		private void UpdateForceSuitMaskControl(SuitSlot data) {
-			SuitForceMaskCheckBox.IsChecked = data.ForceSuitMask;
-			SuitForceMaskCheckBox.IsEnabled = !string.IsNullOrEmpty(data.ForceModelPath);
-		}
-
-		private void RestoreForceSpiderArmsSelection(SuitSlot data) {
-			// A subclass that reports HasForceSpiderArms but leaves RefreshForceSpiderArmsChoices()
-			// at its no-op default never fills the combobox, so there is nothing to restore.
-			if (SuitForceSpiderArmsComboBox.ItemsSource is not IEnumerable<LoadoutItem> choices) return;
-
-			LoadoutItem arms = null;
-			foreach (var item in choices) {
-				if (item.Path == data.ForceSpiderArms) {
-					arms = item;
-					break;
-				}
-			}
-			SuitForceSpiderArmsComboBox.SelectedItem = arms;
-		}
 
 		private bool _reactToItemGeneratorStatusChange = false;
 
@@ -968,97 +874,10 @@ namespace Overstrike.Tabs {
 				}
 			}
 
-			// The valid source models can depend on the effective loadout (MSM2).
-			// Rebuild the choices immediately after the slot is redirected.
-			if (HasForceModel) {
-				RefreshForceModelChoices(selectedSuit);
-				RestoreForceModelSelection(selectedSuit);
-				UpdateForceSuitMaskControl(selectedSuit);
-			}
-			if (HasForceSpiderArms) {
-				RefreshForceSpiderArmsChoices(selectedSuit);
-				RestoreForceSpiderArmsSelection(selectedSuit);
-			}
+			OnSuitLoadoutChanged(selectedSuit);
 		}
 
-		protected void SuitForceModelComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-			if (e.AddedItems.Count <= 0) return;
-			DAT1.Utils.Assert(SuitsSlots.SelectedItem != null);
-
-			var choice = (LoadoutItem)e.AddedItems[0];
-			var selectedSuit = (SuitSlot)SuitsSlots.SelectedItem;
-			if (selectedSuit.ForceModelPath == choice.Path) return;
-
-			_hasChanges = true;
-			SetWasReset(false);
-			selectedSuit.ForceModelPath = choice.Path;
-
-			foreach (var suit in _customizedSuits) {
-				if (suit.SuitId == selectedSuit.SuitId) {
-					suit.ForceModelPath = selectedSuit.ForceModelPath;
-					break;
-				}
-			}
-
-			UpdateForceSuitMaskControl(selectedSuit);
-		}
-
-		protected void SuitForceMaskCheckBox_Changed(object sender, RoutedEventArgs e) {
-			if (!HasForceModel || SuitsSlots.SelectedItem == null) return;
-
-			var selectedSuit = (SuitSlot)SuitsSlots.SelectedItem;
-			var forceMask = SuitForceMaskCheckBox.IsChecked == true;
-			if (selectedSuit.ForceSuitMask == forceMask) return;
-
-			_hasChanges = true;
-			SetWasReset(false);
-			selectedSuit.ForceSuitMask = forceMask;
-
-			foreach (var suit in _customizedSuits) {
-				if (suit.SuitId == selectedSuit.SuitId) {
-					suit.ForceSuitMask = selectedSuit.ForceSuitMask;
-					break;
-				}
-			}
-		}
-
-		protected void SuitForceSpiderArmsComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-			if (!HasForceSpiderArms || e.AddedItems.Count <= 0 || SuitsSlots.SelectedItem == null) return;
-
-			var choice = (LoadoutItem)e.AddedItems[0];
-			var selectedSuit = (SuitSlot)SuitsSlots.SelectedItem;
-			if (selectedSuit.ForceSpiderArms == choice.Path) return;
-
-			_hasChanges = true;
-			SetWasReset(false);
-			selectedSuit.ForceSpiderArms = choice.Path;
-
-			foreach (var suit in _customizedSuits) {
-				if (suit.SuitId == selectedSuit.SuitId) {
-					suit.ForceSpiderArms = selectedSuit.ForceSpiderArms;
-					break;
-				}
-			}
-		}
-
-		protected void SuitStoryProgressionCheckBox_Changed(object sender, RoutedEventArgs e) {
-			if (!HasStoryProgressionOverride || SuitsSlots.SelectedItem == null) return;
-
-			var selectedSuit = (SuitSlot)SuitsSlots.SelectedItem;
-			var ignoreStoryProgression = SuitStoryProgressionCheckBox.IsChecked == true;
-			if (selectedSuit.IgnoreStoryProgression == ignoreStoryProgression) return;
-
-			_hasChanges = true;
-			SetWasReset(false);
-			selectedSuit.IgnoreStoryProgression = ignoreStoryProgression;
-
-			foreach (var suit in _customizedSuits) {
-				if (suit.SuitId == selectedSuit.SuitId) {
-					suit.IgnoreStoryProgression = selectedSuit.IgnoreStoryProgression;
-					break;
-				}
-			}
-		}
+		protected virtual void OnSuitLoadoutChanged(SuitSlot selectedSuit) {}
 
 		protected void SuitIconComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
 			if (e.AddedItems.Count <= 0) return;
@@ -1126,20 +945,7 @@ namespace Overstrike.Tabs {
 				// fill customizedSuits with the exact copy of configSuits -- that is what "reset" / "no changes at all" means
 				_customizedSuits.Clear();
 				foreach (var suit in _configSuits) {
-					_customizedSuits.Add(new SuitSlot() {
-						SuitId = suit.SuitId,
-						Name = suit.Name,
-						Icon = suit.Icon,
-						BigIcon = suit.BigIcon,
-						IconPath = suit.IconPath,
-						BigIconPath = suit.BigIconPath,
-						LoadoutPath = suit.LoadoutPath,
-						ForceModelPath = suit.ForceModelPath,
-						ForceSuitMask = suit.ForceSuitMask,
-						ForceSpiderArms = suit.ForceSpiderArms,
-						IgnoreStoryProgression = suit.IgnoreStoryProgression,
-						MarkedToDelete = suit.MarkedToDelete
-					});
+					_customizedSuits.Add(CloneSuit(suit));
 				}
 
 				MakeDisplayedSuits();
@@ -1194,25 +1000,9 @@ namespace Overstrike.Tabs {
 						suitHasChanges = true;
 					}
 
-					if (originalSuit.ForceModelPath != suit.ForceModelPath) {
-						changes["force_model"] = suit.ForceModelPath;
-						suitHasChanges = true;
-					}
 
-					if (originalSuit.ForceSuitMask != suit.ForceSuitMask) {
-						changes["force_mask"] = suit.ForceSuitMask;
-						suitHasChanges = true;
-					}
-
-					if (originalSuit.ForceSpiderArms != suit.ForceSpiderArms) {
-						changes["force_arms"] = suit.ForceSpiderArms;
-						suitHasChanges = true;
-					}
-
-					if (originalSuit.IgnoreStoryProgression != suit.IgnoreStoryProgression) {
-						changes["ignore_story_progression"] = suit.IgnoreStoryProgression;
-						suitHasChanges = true;
-					}
+					SaveSuitChanges(originalSuit, suit, changes);
+					suitHasChanges = changes.Count > 0;
 				}
 
 				if (suitHasChanges) modify.Add(suit.SuitId, changes);

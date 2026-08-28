@@ -238,58 +238,8 @@
 									</CheckBox>
 								</Grid>
 							</Expander>
-							<Expander x:Name="MSM2SuitMenuSettings" HorizontalAlignment="Stretch" Margin="6,10,3,0" BorderThickness="0" Padding="0,2,0,2" IsExpanded="True">
-								<Expander.Header>
-									<TextBlock Text=" Suit Menu Experimental Features" />
-								</Expander.Header>
-								<Grid Height="112" Margin="-2,2,0,0">
-									<Grid Margin="4,0,0,0" VerticalAlignment="Top">
-										<Grid.ColumnDefinitions>
-											<ColumnDefinition Width="Auto" />
-											<ColumnDefinition Width="26" />
-										</Grid.ColumnDefinitions>
-										<CheckBox x:Name="SuitMenuChangeModelCheckBox" Grid.Column="0" IsChecked="{Binding Settings_EnableSuitMenuChangeModel}" VerticalAlignment="Center" Click="SuitMenuChangeModelToggle_Click">
-											<TextBlock Text="Enable Suit Model Change" Margin="2,0,0,0" />
-										</CheckBox>
-										<Button Grid.Column="1" Content="i" ToolTip="About this option" Width="18" Height="18" Padding="0" Margin="6,0,0,0" FontWeight="Bold" Click="SuitMenuChangeModelInfo_Click" />
-									</Grid>
-
-									<Grid Margin="4,26,0,0" VerticalAlignment="Top">
-										<Grid.ColumnDefinitions>
-											<ColumnDefinition Width="Auto" />
-											<ColumnDefinition Width="26" />
-										</Grid.ColumnDefinitions>
-										<CheckBox x:Name="SuitMenuSpiderArmsCheckBox" Grid.Column="0" IsChecked="{Binding Settings_EnableSuitMenuSpiderArms}" VerticalAlignment="Center" Click="SuitMenuSpiderArmsToggle_Click">
-											<TextBlock Text="Enable Spider-Arms Model Swaps" Margin="2,0,0,0" />
-										</CheckBox>
-										<Button Grid.Column="1" Content="i" ToolTip="About this option" Width="18" Height="18" Padding="0" Margin="6,0,0,0" FontWeight="Bold" Click="SuitMenuSpiderArmsInfo_Click" />
-									</Grid>
-
-									<Grid Margin="4,52,0,0" VerticalAlignment="Top">
-										<Grid.ColumnDefinitions>
-											<ColumnDefinition Width="Auto" />
-											<ColumnDefinition Width="26" />
-										</Grid.ColumnDefinitions>
-										<CheckBox x:Name="SuitMenuStoryProgressionCheckBox" Grid.Column="0" IsChecked="{Binding Settings_EnableSuitMenuStoryProgressionOverride}" VerticalAlignment="Center" Click="SuitMenuStoryProgressionToggle_Click">
-											<TextBlock Text="Enable Story Suit Progression Override" Margin="2,0,0,0" />
-										</CheckBox>
-										<Button Grid.Column="1" Content="i" ToolTip="About this option" Width="18" Height="18" Padding="0" Margin="6,0,0,0" FontWeight="Bold" Click="SuitMenuStoryProgressionInfo_Click" />
-									</Grid>
-
-									<Grid Margin="4,78,0,0" VerticalAlignment="Top">
-										<Grid.ColumnDefinitions>
-											<ColumnDefinition Width="Auto" />
-											<ColumnDefinition Width="26" />
-										</Grid.ColumnDefinitions>
-										<CheckBox x:Name="SuitMenuCrossCharacterCheckBox" Grid.Column="0" IsChecked="{Binding Settings_AllowCrossCharacterSuitModels}" VerticalAlignment="Center" Click="SuitMenuCrossCharacterToggle_Click">
-											<TextBlock Text="Enable Peter and Miles Suit Model Swaps" Margin="2,0,0,0" />
-										</CheckBox>
-										<Button Grid.Column="1" Content="i" ToolTip="About this option" Width="18" Height="18" Padding="0" Margin="6,0,0,0" FontWeight="Bold" Click="SuitMenuCrossCharacterInfo_Click" />
-									</Grid>
-								</Grid>
-							</Expander>
 							<Expander x:Name="SuitModsSettings" Header=" .suit" HorizontalAlignment="Stretch" Margin="6,10,3,0" BorderThickness="0" Padding="0,2,0,2" IsExpanded="True">
-								<Grid Height="32" Margin="-2,2,0,0">
+								<Grid Height="58" Margin="-2,2,0,0">
 									<Label Content="Language:" HorizontalAlignment="Left" Margin="0,2,0,0" VerticalAlignment="Top" Width="70"/>
 									<ComboBox x:Name="SettingsSuitLanguageComboBox" Margin="75,4,5,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="180" SelectionChanged="SettingsSuitLanguageComboBox_SelectionChanged">
 										<ComboBox.ItemTemplate>
@@ -298,6 +248,9 @@
 											</DataTemplate>
 										</ComboBox.ItemTemplate>
 									</ComboBox>
+									<CheckBox x:Name="SuitMenuCrossCharacterCheckBox" IsChecked="{Binding Settings_AllowCrossCharacterSuitModels}" HorizontalAlignment="Left" Margin="4,34,0,0" VerticalAlignment="Top">
+										<TextBlock Text="Allow Peter and Miles suit model swaps" Margin="2,0,0,0" />
+									</CheckBox>
 								</Grid>
 							</Expander>
 							<Expander x:Name="ScriptSettings" Header=" .script" HorizontalAlignment="Stretch" Margin="6,10,3,0" BorderThickness="0" Padding="0,2,0,2" IsExpanded="True">

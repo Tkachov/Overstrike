@@ -160,91 +160,40 @@
 				<Grid x:Name="_SuitInfo" Grid.Row="1">
 					<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="6,8,6,8">
 						<StackPanel>
-							<Expander IsExpanded="True">
-								<Expander.Header>
-									<TextBlock Text="SLOT" FontWeight="SemiBold" />
-								</Expander.Header>
-								<Border BorderThickness="1" BorderBrush="#AAA" Padding="8" Margin="0,5,0,8">
-									<StackPanel>
-										<TextBlock Text="Change which suit this slot acts as, including its appearance and abilities." TextWrapping="Wrap" Foreground="#666" FontSize="10.5" Margin="0,0,0,8" />
+							<Grid Margin="0,0,0,8">
+								<Label Content="Suit:" Padding="0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" />
+								<ComboBox x:Name="_SuitLoadoutComboBox" Margin="65,0,0,0" SelectionChanged="SuitLoadoutComboBox_SelectionChanged">
+									<ComboBox.ItemContainerStyle>
+										<Style TargetType="{x:Type ComboBoxItem}"><Setter Property="IsEnabled" Value="{Binding IsEnabled}" /></Style>
+									</ComboBox.ItemContainerStyle>
+									<ComboBox.ItemTemplate><DataTemplate><TextBlock Text="{Binding Name}" /></DataTemplate></ComboBox.ItemTemplate>
+								</ComboBox>
+							</Grid>
 
-										<Grid Margin="0,0,0,8">
-											<Label Content="Suit:" Padding="0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" />
-											<ComboBox x:Name="_SuitLoadoutComboBox" Margin="65,0,0,0" SelectionChanged="SuitLoadoutComboBox_SelectionChanged">
-												<ComboBox.ItemTemplate>
-													<DataTemplate>
-														<TextBlock Text="{Binding Name}" />
-													</DataTemplate>
-												</ComboBox.ItemTemplate>
-											</ComboBox>
-										</Grid>
+							<Grid Margin="0,0,0,8">
+								<Label Content="Icon:" Padding="0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" />
+								<ComboBox x:Name="_SuitIconComboBox" Margin="65,0,0,0" SelectionChanged="SuitIconComboBox_SelectionChanged">
+									<ComboBox.ItemTemplate>
+										<DataTemplate><Grid><Image Source="{Binding Icon}" HorizontalAlignment="Left" Stretch="Fill" Width="16" Height="16" /><TextBlock Text="{Binding Name}" HorizontalAlignment="Left" Margin="23,0,0,0" /></Grid></DataTemplate>
+									</ComboBox.ItemTemplate>
+								</ComboBox>
+							</Grid>
 
-										<Grid Margin="0,0,0,8">
-											<Label Content="Icon:" Padding="0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" />
-											<ComboBox x:Name="_SuitIconComboBox" Margin="65,0,0,0" SelectionChanged="SuitIconComboBox_SelectionChanged">
-												<ComboBox.ItemTemplate>
-													<DataTemplate>
-														<Grid>
-															<Image Source="{Binding Icon}" HorizontalAlignment="Left" Stretch="Fill" Width="16" Height="16" />
-															<TextBlock Text="{Binding Name}" HorizontalAlignment="Left" Margin="23,0,0,0" />
-														</Grid>
-													</DataTemplate>
-												</ComboBox.ItemTemplate>
-											</ComboBox>
-										</Grid>
+							<StackPanel x:Name="_SuitSpiderArmsPanel" Margin="0,0,0,8">
+								<Grid>
+									<Label Content="Arms:" Padding="0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" />
+									<ComboBox x:Name="_SuitSpiderArmsComboBox" Margin="65,0,0,0" SelectionChanged="SuitSpiderArmsComboBox_SelectionChanged">
+										<ComboBox.ItemTemplate><DataTemplate><TextBlock Text="{Binding Name}" /></DataTemplate></ComboBox.ItemTemplate>
+									</ComboBox>
+								</Grid>
+								<TextBlock x:Name="_SuitSpiderArmsRageWarning" Text="Spider-Arms changes do not apply during Rage Mode. They only appear while the Symbiote Suit slot is selected in-game." TextWrapping="Wrap" Foreground="#666" FontSize="10.5" Margin="65,5,0,0" Visibility="Collapsed" />
+							</StackPanel>
 
-										<CheckBox x:Name="_SuitStoryProgressionCheckBox" Margin="0,0,0,8" Checked="SuitStoryProgressionCheckBox_Changed" Unchecked="SuitStoryProgressionCheckBox_Changed">
-											<TextBlock Text="Ignore Story Suit Progression" Margin="2,0,0,0" />
-										</CheckBox>
+							<CheckBox x:Name="_SuitAlwaysUnlockCheckBox" Margin="0,0,0,8" Checked="SuitAlwaysUnlockCheckBox_Changed" Unchecked="SuitAlwaysUnlockCheckBox_Changed">
+								<TextBlock Text="Always unlock" Margin="2,0,0,0" />
+							</CheckBox>
 
-										<Button x:Name="_ToggleSuitDeleteButton" Content="Delete" HorizontalAlignment="Left" MinWidth="70" Padding="10,2" Click="ToggleSuitDeleteButton_Click" />
-									</StackPanel>
-								</Border>
-							</Expander>
-
-							<Expander IsExpanded="True">
-								<Expander.Header>
-									<TextBlock Text="MODEL" FontWeight="SemiBold" />
-								</Expander.Header>
-								<Border BorderThickness="1" BorderBrush="#AAA" Padding="8" Margin="0,5,0,0">
-									<StackPanel>
-										<TextBlock x:Name="_ModelUnavailableMessage" TextWrapping="Wrap" Foreground="#666" FontSize="10.5" Visibility="Collapsed" />
-
-										<StackPanel x:Name="_ChangeSuitModelSection">
-											<TextBlock Text="Suit model" FontWeight="SemiBold" Margin="0,0,0,3" />
-											<TextBlock Text="Use another suit's body while keeping this slot's name, icon and abilities." TextWrapping="Wrap" Foreground="#666" FontSize="10.5" Margin="0,0,0,6" />
-											<ComboBox x:Name="_SuitForceModelComboBox" SelectionChanged="SuitForceModelComboBox_SelectionChanged">
-												<ComboBox.ItemContainerStyle>
-													<Style TargetType="{x:Type ComboBoxItem}">
-														<Setter Property="IsEnabled" Value="{Binding IsEnabled}" />
-													</Style>
-												</ComboBox.ItemContainerStyle>
-												<ComboBox.ItemTemplate>
-													<DataTemplate>
-														<TextBlock Text="{Binding Name}" />
-													</DataTemplate>
-												</ComboBox.ItemTemplate>
-											</ComboBox>
-											<CheckBox x:Name="_SuitForceMaskCheckBox" Margin="0,7,0,0" Checked="SuitForceMaskCheckBox_Changed" Unchecked="SuitForceMaskCheckBox_Changed">
-												<TextBlock Text="Force this suit's mask in cutscenes" Margin="2,0,0,0" />
-											</CheckBox>
-										</StackPanel>
-
-										<StackPanel x:Name="_SuitForceSpiderArmsPanel" Margin="0,12,0,0">
-											<Border BorderThickness="0,1,0,0" BorderBrush="#DDD" Margin="0,0,0,10" />
-											<TextBlock Text="Spider-Arms" FontWeight="SemiBold" Margin="0,0,0,6" />
-											<ComboBox x:Name="_SuitForceSpiderArmsComboBox" SelectionChanged="SuitForceSpiderArmsComboBox_SelectionChanged">
-												<ComboBox.ItemTemplate>
-													<DataTemplate>
-														<TextBlock Text="{Binding Name}" />
-													</DataTemplate>
-												</ComboBox.ItemTemplate>
-											</ComboBox>
-											<TextBlock x:Name="_SuitForceSpiderArmsRageWarning" Text="Spider-Arms changes do not apply during Rage Mode. They only appear while the Symbiote Suit slot is selected in-game." TextWrapping="Wrap" Foreground="#666" FontSize="10.5" Margin="0,5,0,0" Visibility="Collapsed" />
-										</StackPanel>
-									</StackPanel>
-								</Border>
-							</Expander>
+							<Button x:Name="_ToggleSuitDeleteButton" Content="Delete" HorizontalAlignment="Left" MinWidth="70" Padding="10,2" Click="ToggleSuitDeleteButton_Click" />
 						</StackPanel>
 					</ScrollViewer>
 				</Grid>
