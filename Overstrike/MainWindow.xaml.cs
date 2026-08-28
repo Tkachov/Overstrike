@@ -91,6 +91,7 @@ namespace Overstrike {
 		public bool Settings_AllowCrossCharacterSuitModels {
 			get => _selectedProfile.Settings_Suit_AllowCrossCharacterSuitModels;
 			set {
+				if (_selectedProfile.Settings_Suit_AllowCrossCharacterSuitModels == value) return;
 				_selectedProfile.Settings_Suit_AllowCrossCharacterSuitModels = value;
 				SaveProfile();
 			}
