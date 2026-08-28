@@ -961,19 +961,6 @@ namespace Overstrike {
 				});
 			};
 
-			builder.OnWarnings = (List<string> warnings) => {
-				Dispatcher.Invoke(() => {
-					var message = string.Join("\n\n", warnings);
-					var counted = (warnings.Count == 1 ? "1 warning needs" : $"{warnings.Count} warnings need");
-					MessageBox.Show(
-						$"Mods were installed, but {counted} attention:\n\n{message}",
-						"Installation warnings",
-						MessageBoxButton.OK,
-						MessageBoxImage.Warning
-					);
-				});
-			};
-
 			builder.OnErrorOccurred_BeforeWritingTrace = () => {
 				Dispatcher.Invoke(() => {
 					ShowStatusMessageError("Error occurred. See 'errors.log' for details.");
