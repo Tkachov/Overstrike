@@ -28,17 +28,6 @@ namespace Overstrike.Utils {
 		public static bool IsEligible(string suitSlotName) => !string.IsNullOrEmpty(suitSlotName) && SLOT_NAMES.Contains(suitSlotName);
 	}
 
-	// Anti-Venom remains blocked because its signature suit power replaces the mechanical
-	// Spider-Arms with tendrils. Symbiote Suit is allowed, but the UI explains that its selected
-	// Spider-Arms only appear outside Rage Mode while that suit slot is active in-game.
-	internal static class MSM2SpiderArmsBlockedSuits {
-		public static readonly HashSet<string> SLOT_NAMES = new(System.StringComparer.Ordinal) {
-			"AntiVenom_Suit"     // Peter: Anti-Venom Suit
-		};
-
-		public static bool IsBlocked(string suitSlotName) => !string.IsNullOrEmpty(suitSlotName) && SLOT_NAMES.Contains(suitSlotName);
-	}
-
 	internal static class MSM2SuitCharacterResolver {
 		public static MSM2Character? FromGameValue(string? value) {
 			return value switch {

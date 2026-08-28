@@ -270,7 +270,7 @@ namespace Overstrike.Tabs {
 			RefreshModelChoices(data);
 			var msm2Suit = (MSM2SuitSlot)data;
 			var targetCharacter = _suitToCharacter.GetValueOrDefault(data.SuitId);
-			var showArms = targetCharacter == MSM2Character.Peter && !MSM2SpiderArmsBlockedSuits.IsBlocked(data.SuitId);
+			var showArms = targetCharacter == MSM2Character.Peter;
 			_SuitSpiderArmsPanel.Visibility = showArms ? Visibility.Visible : Visibility.Collapsed;
 			_SuitSpiderArmsRageWarning.Visibility = data.SuitId == "SUIT_SYMBIOTE" ? Visibility.Visible : Visibility.Collapsed;
 			_SuitAlwaysUnlockCheckBox.Visibility = MSM2CutsceneSuits.IsEligible(data.SuitId) ? Visibility.Visible : Visibility.Collapsed;

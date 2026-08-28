@@ -92,9 +92,7 @@ namespace Overstrike.Installers {
 					if (changes.ContainsKey("force_arms")) {
 						var armsModel = (string?)changes["force_arms"];
 						if (!string.IsNullOrEmpty(armsModel)) {
-							if (!MSM2SpiderArmsBlockedSuits.IsBlocked(name)) {
-								spiderArmsRequests.Add(new SpiderArmsRequest(name, (string)suit["Item"], armsModel));
-							}
+							spiderArmsRequests.Add(new SpiderArmsRequest(name, (string)suit["Item"], armsModel));
 						}
 					}
 				}
