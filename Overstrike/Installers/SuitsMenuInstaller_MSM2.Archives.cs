@@ -5,6 +5,7 @@
 
 using Overstrike.Utils;
 using OverstrikeShared.STG;
+using OverstrikeShared.Utils;
 using System.Collections.Generic;
 using System.IO;
 
@@ -48,6 +49,7 @@ namespace Overstrike.Installers {
 			using var writer = new BinaryWriter(stream);
 			OverwriteAsset(0, systemProgressionAssetId, archiveIndex, writer, header, null, systemProgressionBytes);
 			foreach (var asset in extraAssets) {
+				BinaryStreams.Align16(writer);
 				OverwriteAsset(asset.Span, asset.Id, archiveIndex, writer, asset.Header, null, asset.Data);
 			}
 		}
