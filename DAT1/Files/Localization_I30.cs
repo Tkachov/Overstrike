@@ -27,5 +27,10 @@ namespace DAT1.Files {
 			uint valueOffset = ValuesOffsetsSection.Values[index];
 			return ValuesDataSection.GetStringByOffset(valueOffset);
 		}
+
+		public bool HasKey(string? key) {
+			if (string.IsNullOrEmpty(key)) return false;
+			return KeysDataSection.GetOffsetByKey(key) != -1;
+		}
 	}
 }

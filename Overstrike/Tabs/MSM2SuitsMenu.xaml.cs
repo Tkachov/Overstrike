@@ -165,12 +165,17 @@ namespace Overstrike.Tabs {
 		}
 
 		private static string GetFriendlyMSM2SuitName(Localization_I30? localization, string? displayName, string suitId) {
-			if (!string.IsNullOrEmpty(displayName)) {
-				var localized = localization?.GetValue(displayName);
-				if (!string.IsNullOrEmpty(localized)) return localized;
-				return $"%{displayName}%";
-			}
-			return suitId;
+			if (string.IsNullOrEmpty(displayName)) return suitId;
+
+			var localized = localization?.GetValue(displayName);
+			if (!string.IsNullOrEmpty(localized)) return localized;
+
+			// Suits added by mods keep the name itself in "DisplayName", because MSM2 suit installers
+			// don't write localization entries yet. Such a name is not a key of the .localization at all,
+			// so show it as is instead of reporting it as a key that failed to resolve.
+			if (localization != null && !localization.HasKey(displayName)) return displayName;
+
+			return $"%{displayName}%";
 		}
 
 		private void SortLoadoutPaths() {
