@@ -13,6 +13,8 @@ using Newtonsoft.Json.Linq;
 
 namespace Overstrike.Installers {
 	internal partial class SuitsMenuInstaller_MSM2 {
+		private const string MILES_VENOM_XRAY_MODEL = "characters/hero/hero_spiderman_miles_venomxray/hero_spiderman_miles_venomxray.model";
+
 		private sealed class SuitModelPaths {
 			public List<string> BodyPaths { get; }
 			public string? MaskPath { get; }
@@ -108,10 +110,28 @@ namespace Overstrike.Installers {
 			if (target.Error != null || source.Error != null || target.BodyPaths.Count == 0 || source.BodyPaths.Count == 0) {
 				throw new InvalidDataException($"Could not resolve the body models for suit model change '{request.SuitName}'");
 			}
-			// The first source model is the suit's main body. Point every target variant at it;
-			// loadout configs do not guarantee matching model counts or ordering.
-			foreach (var targetBodyPath in target.BodyPaths) {
-				AddTransfer(targetBodyPath, source.BodyPaths[0], transfers);
+
+			// Miles loadouts include a shared venom-xray overlay in addition to the suit body.
+			// Redirecting that shared asset replaces the overlay for every Miles suit. Some DLC
+			// loadouts list the overlay first, so exclude it when Miles is on either side.
+			var sourceBodyPath = sourceCharacter == MSM2Character.Miles
+				? ResolvePrimaryBodyPath(source.BodyPaths)
+				: source.BodyPaths[0];
+			if (sourceBodyPath == null) {
+				throw new InvalidDataException($"Could not resolve the primary body models for suit model change '{request.SuitName}'");
+			}
+
+			if (targetCharacter == MSM2Character.Miles) {
+				var targetBodyPath = ResolvePrimaryBodyPath(target.BodyPaths);
+				if (targetBodyPath == null) {
+					throw new InvalidDataException($"Could not resolve the primary body models for suit model change '{request.SuitName}'");
+				}
+				AddTransfer(targetBodyPath, sourceBodyPath, transfers);
+			} else {
+				// Preserve the original behavior for Peter and any future non-Miles character.
+				foreach (var targetBodyPath in target.BodyPaths) {
+					AddTransfer(targetBodyPath, sourceBodyPath, transfers);
+				}
 			}
 
 			// Masks are optional. A missing mask never blocks an otherwise valid body redirect.
@@ -122,6 +142,13 @@ namespace Overstrike.Installers {
 					ErrorLogger.WriteInfo($"Suit Menu: mask redirect skipped for '{request.SuitName}': {e.Message}\n");
 				}
 			}
+		}
+
+		private static string? ResolvePrimaryBodyPath(List<string> bodyPaths) {
+			foreach (var path in bodyPaths) {
+				if (!path.Equals(MILES_VENOM_XRAY_MODEL, StringComparison.OrdinalIgnoreCase)) return path;
+			}
+			return null;
 		}
 
 		private void AddTransfer(string targetPath, string sourcePath, Dictionary<int, ModelTransfer> transfers) {
