@@ -14,6 +14,20 @@ using Newtonsoft.Json.Linq;
 namespace Overstrike.Installers {
 	internal partial class SuitsMenuInstaller_MSM2 {
 		private const string MILES_VENOM_XRAY_MODEL = "characters/hero/hero_spiderman_miles_venomxray/hero_spiderman_miles_venomxray.model";
+		private static readonly Dictionary<string, string[]> STORY_BODY_MODELS = new(StringComparer.Ordinal) {
+			["i30_Advanced_Suit"] = new[] {
+				"characters/hero/hero_spiderman_advanced/hero_spiderman_advanced_removesymbiote.model"
+			},
+			["SUIT_SYMBIOTE"] = new[] {
+				"characters/hero/hero_spiderman_symbiote/hero_spiderman_symbiote_split_cine.model"
+			},
+			["AntiVenom_Suit"] = new[] {
+				"characters/hero/hero_spiderman_antivenom/hero_spiderman_antivenom_damaged.model"
+			},
+			["SUIT_MILES_EVOLVE"] = new[] {
+				"characters/hero/hero_spiderman_miles_evolve/hero_spiderman_miles_evolve_damaged.model"
+			}
+		};
 
 		private sealed class SuitModelPaths {
 			public List<string> BodyPaths { get; }
@@ -131,6 +145,15 @@ namespace Overstrike.Installers {
 				// Preserve the original behavior for Peter and any future non-Miles character.
 				foreach (var targetBodyPath in target.BodyPaths) {
 					AddTransfer(targetBodyPath, sourceBodyPath, transfers);
+				}
+			}
+
+			// Some forced story sequences load dedicated body assets instead of the suit's
+			// normal loadout model. Mirror the selected source body into those slot-specific
+			// variants so the vanilla suit does not return during the sequence.
+			if (STORY_BODY_MODELS.TryGetValue(request.SuitName, out var storyBodyPaths)) {
+				foreach (var storyBodyPath in storyBodyPaths) {
+					AddTransfer(storyBodyPath, sourceBodyPath, transfers);
 				}
 			}
 
