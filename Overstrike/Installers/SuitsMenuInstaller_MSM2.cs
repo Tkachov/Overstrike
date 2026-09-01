@@ -65,6 +65,8 @@ namespace Overstrike.Installers {
 			var forceRequests = new List<SuitModelRequest>();
 			var spiderArmsRequests = new List<SpiderArmsRequest>();
 			var webwingsRequests = new List<WebwingsRequest>();
+			var styleSourceRequests = new List<StyleSourceRequest>();
+			var pendingAutoStyles = new List<(string SuitName, string ModelSourcePath)>();
 			var visibleSuits = new List<JObject>();
 			var modify = _modifications.Modifications;
 			foreach (var suit in oldSuits) {
@@ -106,8 +108,22 @@ namespace Overstrike.Installers {
 							webwingsRequests.Add(new WebwingsRequest(name, (string)suit["Item"], webwings));
 						}
 					}
+
+					// The styles follow whatever model the slot ends up wearing. There is no separate
+					// donor to name: a style is a list of material swaps keyed by the mapping names
+					// of one model, and no two suits share a mapping name, so styles from anywhere
+					// else would silently repaint nothing.
+					var modelSource = (string?)changes["model"];
+					if (!string.IsNullOrEmpty(modelSource)) {
+						pendingAutoStyles.Add((name, modelSource));
+					}
 				}
 			}
+
+			// Donors are looked up in the whole list, so a suit hidden from the menu can still lend
+			// its styles to one that stays visible.
+			ResolveAutomaticStyleSources(pendingAutoStyles, oldSuits, styleSourceRequests);
+			var styleConfigs = ApplyStyleSources(styleSourceRequests, oldSuits);
 
 			var newSuits = BuildMenuSuitList(oldSuits, deletedSuits);
 			if (newSuits.Count == 0) {
@@ -157,6 +173,7 @@ namespace Overstrike.Installers {
 			ApplyForcedSuitModels(forceRequests);
 			var extraConfigs = ApplyForcedSpiderArms(spiderArmsRequests);
 			extraConfigs.AddRange(ApplyForcedWebwings(webwingsRequests, visibleSuits));
+			extraConfigs.AddRange(styleConfigs);
 			WriteSuitsMenuArchive(SYSTEM_PROGRESSION_CONFIG_AID, configBytes, configHeader, extraConfigs);
 		}
 
@@ -181,6 +198,8 @@ namespace Overstrike.Installers {
 				suit["HideSuitAfterMissionObjective"] = false;
 			}
 
+			UnlockSuitStyles(suit);
+
 			if (suit["PlayMoreMsgData"] is JObject playMoreMsgData) {
 				if (playMoreMsgData["MissionOnCompleteStopMsg"] != null) {
 					playMoreMsgData["MissionOnCompleteStopMsg"] = "GP_A1_SANDMAN";
@@ -189,6 +208,33 @@ namespace Overstrike.Installers {
 					playMoreMsgData["ObjectiveOnCompleteStopMsg"] = "GP_A1_SANDMAN";
 				}
 			}
+		}
+
+		// A suit's styles are gated apart from the suit itself: the Ultimate ones behind a player
+		// level, the rest behind tokens. "Always unlock" is about a slot being usable from the
+		// start, so it frees the styles too instead of handing over a suit whose styles stay shut.
+		// Only keys the slot already carries are touched, so nothing is invented for a suit that
+		// never gated its styles in the first place.
+		private static void UnlockSuitStyles(JObject suit) {
+			if (suit["VariantGroup"] is not JObject group) return;
+
+			if (group["Costs"] is JArray) {
+				group["Costs"] = new JArray();
+			}
+			foreach (var key in new[] { "CityTokenCost", "HeroTokenCost", "DiscoveryTokenCost", "RequiredLevelIndex" }) {
+				if (group[key] != null) group[key] = 0;
+			}
+
+			if (group["Variants"] is not JArray variants) return;
+			foreach (var variant in variants) {
+				if (variant is not JObject style) continue;
+				if (style["RequiredLevelIndex"] != null) style["RequiredLevelIndex"] = 0;
+				if (style["Costs"] is JArray) style["Costs"] = new JArray();
+			}
+
+			// Zeroing those levels is exactly what the Ultimate panel cannot survive, so the slot
+			// moves to the ordinary styles panel rather than losing its styles to the unlock.
+			DropUltimateStyleFraming(suit, group, "its styles are unlocked from the start");
 		}
 
 		private static List<JObject> BuildMenuSuitList(List<JObject> processedSuits, Dictionary<string, bool> deletedSuits) {
