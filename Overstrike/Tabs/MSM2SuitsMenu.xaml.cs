@@ -19,6 +19,7 @@ namespace Overstrike.Tabs {
 	public partial class MSM2SuitsMenu : SuitsMenuBase {
 		private sealed class MSM2SuitSlot : SuitSlot {
 			public string? SpiderArms { get; set; }
+			public string? Webwings { get; set; }
 			public bool AlwaysUnlock { get; set; }
 		}
 
@@ -61,6 +62,7 @@ namespace Overstrike.Tabs {
 		private readonly Dictionary<string, string> _loadoutNames = new();
 		private readonly ObservableCollection<LoadoutItem> _modelChoices = new();
 		private readonly ObservableCollection<LoadoutItem> _forceSpiderArmsChoices = new();
+		private readonly ObservableCollection<LoadoutItem> _webwingsChoices = new();
 		private bool _allowCrossCharacterSuitModels;
 
 		protected override dynamic LoadToc(string tocPath) {
@@ -158,6 +160,7 @@ namespace Overstrike.Tabs {
 				LoadoutPath = suit.LoadoutPath,
 				MarkedToDelete = suit.MarkedToDelete,
 				SpiderArms = msm2Suit?.SpiderArms,
+				Webwings = msm2Suit?.Webwings,
 				AlwaysUnlock = msm2Suit?.AlwaysUnlock ?? false
 			};
 		}
@@ -165,10 +168,9 @@ namespace Overstrike.Tabs {
 		protected override void LoadSuitChanges(SuitSlot suit, JObject changes) {
 			var msm2Suit = (MSM2SuitSlot)suit;
 			msm2Suit.SpiderArms = (string?)changes["force_arms"];
+			msm2Suit.Webwings = (string?)changes["force_webwings"];
 			msm2Suit.AlwaysUnlock = (bool?)changes["ignore_story_progression"] == true;
 		}
-
-		//
 
 		private Localization_I30? LoadLocalization() {
 			if (!LANGUAGES.TryGetValue(_selectedProfile.Settings_Suit_Language, out var span)) return null;
@@ -256,7 +258,7 @@ namespace Overstrike.Tabs {
 
 			if (_placeholderImage == null)
 				_placeholderImage = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.suit_missing_msm2);
-			
+
 			return _placeholderImage;
 		}
 
@@ -281,6 +283,40 @@ namespace Overstrike.Tabs {
 				if (item.Path == msm2Suit.SpiderArms) arms = item;
 			}
 			_SuitSpiderArmsComboBox.SelectedItem = arms;
+
+			RefreshWebwingsChoices(msm2Suit, targetCharacter);
+		}
+
+		// A slot's Webwings are decided by the character its reward loadout declares: the wings
+		// model is shared, but every look and every recolor is authored for one hero's material
+		// slot, and the installer refuses anything else. A loadout that declares no character gets
+		// no choices at all, since none of them can be verified as safe for it.
+		private void RefreshWebwingsChoices(MSM2SuitSlot selectedSuit, MSM2Character? targetCharacter) {
+			_webwingsChoices.Clear();
+			_webwingsChoices.Add(new LoadoutItem() { Path = null, Name = "Keep this suit's Webwings" });
+
+			foreach (var option in MSM2Webwings.OPTIONS) {
+				if (MSM2Webwings.IsAvailableFor(option, targetCharacter)) {
+					_webwingsChoices.Add(new LoadoutItem() { Path = option.Id, Name = option.DisplayName });
+				} else if (option.Id == selectedSuit.Webwings) {
+					// Keep an incompatible saved choice visible but disabled, instead of hiding a
+					// value that is still stored in the profile.
+					_webwingsChoices.Add(new LoadoutItem() {
+						Path = option.Id,
+						Name = $"{option.DisplayName} ({(targetCharacter == null ? "character not declared" : "different character")})",
+						IsEnabled = false
+					});
+				}
+			}
+
+			_SuitWebwingsPanel.Visibility = (_webwingsChoices.Count > 1 ? Visibility.Visible : Visibility.Collapsed);
+			_SuitWebwingsComboBox.ItemsSource = _webwingsChoices;
+
+			LoadoutItem? webwings = null;
+			foreach (var item in _webwingsChoices) {
+				if (item.Path == selectedSuit.Webwings) webwings = item;
+			}
+			_SuitWebwingsComboBox.SelectedItem = webwings;
 		}
 
 		private void RefreshModelChoices(SuitSlot selectedSuit) {
@@ -319,6 +355,7 @@ namespace Overstrike.Tabs {
 			var original = (MSM2SuitSlot)originalSuit;
 			var current = (MSM2SuitSlot)suit;
 			if (original.SpiderArms != current.SpiderArms) changes["force_arms"] = current.SpiderArms;
+			if (original.Webwings != current.Webwings) changes["force_webwings"] = current.Webwings;
 			if (original.AlwaysUnlock != current.AlwaysUnlock) changes["ignore_story_progression"] = current.AlwaysUnlock;
 		}
 
@@ -331,6 +368,18 @@ namespace Overstrike.Tabs {
 			selectedSuit.SpiderArms = choice.Path;
 			foreach (var suit in _customizedSuits) {
 				if (suit.SuitId == selectedSuit.SuitId) ((MSM2SuitSlot)suit).SpiderArms = choice.Path;
+			}
+		}
+
+		private void SuitWebwingsComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+			if (e.AddedItems.Count == 0 || SuitsSlots.SelectedItem is not MSM2SuitSlot selectedSuit) return;
+			var choice = (LoadoutItem)e.AddedItems[0];
+			if (selectedSuit.Webwings == choice.Path) return;
+			_hasChanges = true;
+			SetWasReset(false);
+			selectedSuit.Webwings = choice.Path;
+			foreach (var suit in _customizedSuits) {
+				if (suit.SuitId == selectedSuit.SuitId) ((MSM2SuitSlot)suit).Webwings = choice.Path;
 			}
 		}
 

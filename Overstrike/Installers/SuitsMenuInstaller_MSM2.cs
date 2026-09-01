@@ -35,6 +35,7 @@ namespace Overstrike.Installers {
 			_mod = mod;
 			_modelPathsCache.Clear();
 			_suitCharacterCache.Clear();
+			_webwingsTargetsCache.Clear();
 
 			const ulong SYSTEM_PROGRESSION_CONFIG_AID = 0x9C9C72A303FCFA30; // configs/system/system_progression.config
 			var config = new Config_I30(_toc.GetAssetReader((byte)0, SYSTEM_PROGRESSION_CONFIG_AID));
@@ -63,10 +64,13 @@ namespace Overstrike.Installers {
 
 			var forceRequests = new List<SuitModelRequest>();
 			var spiderArmsRequests = new List<SpiderArmsRequest>();
+			var webwingsRequests = new List<WebwingsRequest>();
+			var visibleSuits = new List<JObject>();
 			var modify = _modifications.Modifications;
 			foreach (var suit in oldSuits) {
 				var name = (string)suit["Name"];
 				if (deletedSuits.ContainsKey(name)) continue;
+				visibleSuits.Add(suit);
 
 				if (modify.ContainsKey(name)) {
 					var changes = modify[name];
@@ -93,6 +97,13 @@ namespace Overstrike.Installers {
 						var armsModel = (string?)changes["force_arms"];
 						if (!string.IsNullOrEmpty(armsModel)) {
 							spiderArmsRequests.Add(new SpiderArmsRequest(name, (string)suit["Item"], armsModel));
+						}
+					}
+
+					if (changes.ContainsKey("force_webwings")) {
+						var webwings = (string?)changes["force_webwings"];
+						if (!string.IsNullOrEmpty(webwings)) {
+							webwingsRequests.Add(new WebwingsRequest(name, (string)suit["Item"], webwings));
 						}
 					}
 				}
@@ -144,8 +155,9 @@ namespace Overstrike.Installers {
 			var configBytes = config.Save();
 			var configHeader = PrepareConfigHeader(SYSTEM_PROGRESSION_CONFIG_AID, configBytes.Length, "system_progression.config");
 			ApplyForcedSuitModels(forceRequests);
-			var rewardConfigs = ApplyForcedSpiderArms(spiderArmsRequests);
-			WriteSuitsMenuArchive(SYSTEM_PROGRESSION_CONFIG_AID, configBytes, configHeader, rewardConfigs);
+			var extraConfigs = ApplyForcedSpiderArms(spiderArmsRequests);
+			extraConfigs.AddRange(ApplyForcedWebwings(webwingsRequests, visibleSuits));
+			WriteSuitsMenuArchive(SYSTEM_PROGRESSION_CONFIG_AID, configBytes, configHeader, extraConfigs);
 		}
 
 		private static void IgnoreStorySuitProgression(JObject suit) {
