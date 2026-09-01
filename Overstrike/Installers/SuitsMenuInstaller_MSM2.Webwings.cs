@@ -62,12 +62,6 @@ namespace Overstrike.Installers {
 					throw new InvalidDataException($"Webwings target for '{request.SuitName}' has no reward loadout");
 				}
 
-				var character = ResolveSuitCharacter(targetItemPath)
-					?? throw new InvalidDataException($"Could not determine the character of the Webwings target for '{request.SuitName}'");
-				if (!MSM2Webwings.IsAvailableFor(option, character)) {
-					throw new InvalidDataException($"'{option.DisplayName}' Webwings are not available on the {MSM2SuitCharacterResolver.DisplayName(character)} slot '{request.SuitName}'");
-				}
-
 				var targets = ResolveWebwingsTargets(targetItemPath)
 					?? throw new InvalidDataException($"Could not resolve the item loadout of the Webwings target for '{request.SuitName}'");
 

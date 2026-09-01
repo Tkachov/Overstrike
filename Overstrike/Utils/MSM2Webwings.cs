@@ -31,8 +31,7 @@ namespace Overstrike.Utils {
 	internal sealed class MSM2WebwingsOption {
 		public string Id { get; }
 		public string DisplayName { get; }
-		// null = usable by both heroes.
-		public MSM2Character? Character { get; }
+		public MSM2Character Character { get; }
 		// null = leave the suit's WingsuitLook untouched.
 		public string? Look { get; }
 		// null = leave WingsuitActor untouched; "" clears it back to the default wings actor, which
@@ -41,7 +40,7 @@ namespace Overstrike.Utils {
 		// null = this option wants no wings equipment config (any existing one is still removed).
 		public string? Equipment { get; }
 
-		public MSM2WebwingsOption(string id, string displayName, MSM2Character? character, string? look, string? actor, string? equipment) {
+		public MSM2WebwingsOption(string id, string displayName, MSM2Character character, string? look, string? actor, string? equipment) {
 			Id = id;
 			DisplayName = displayName;
 			Character = character;
@@ -77,9 +76,6 @@ namespace Overstrike.Utils {
 			new MSM2WebwingsOption(
 				"peter_itsvnoir", "Into the Spider-Verse Noir Suit",
 				MSM2Character.Peter, LOOK_PETER_ADVANCED, "", "configs/equipment/equip_peter_itsvnoir_wings.config"),
-			// Peter-only on purpose: this is the one option that swaps the wings actor, and the
-			// replacement is a Civil War-specific model with its own animset and ragdoll. No Miles
-			// suit in the game uses it, so it is not offered on Miles slots.
 			new MSM2WebwingsOption(
 				"peter_civilwar", "Civil War Suit (solid wings)",
 				MSM2Character.Peter, null, CIVILWAR_WINGSUIT_ACTOR, null),
@@ -100,11 +96,6 @@ namespace Overstrike.Utils {
 				if (option.Id == id) return option;
 			}
 			return null;
-		}
-
-		public static bool IsAvailableFor(MSM2WebwingsOption option, MSM2Character? character) {
-			if (option.Character == null) return true;
-			return character != null && option.Character.Value == character.Value;
 		}
 	}
 }

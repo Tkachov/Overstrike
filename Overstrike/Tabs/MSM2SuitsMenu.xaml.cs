@@ -287,26 +287,17 @@ namespace Overstrike.Tabs {
 			RefreshWebwingsChoices(msm2Suit, targetCharacter);
 		}
 
-		// A slot's Webwings are decided by the character its reward loadout declares: the wings
-		// model is shared, but every look and every recolor is authored for one hero's material
-		// slot, and the installer refuses anything else. A loadout that declares no character gets
-		// no choices at all, since none of them can be verified as safe for it.
+		// The wings model and its material slots are shared, so every shipped Webwings appearance
+		// can be selected for either hero.
 		private void RefreshWebwingsChoices(MSM2SuitSlot selectedSuit, MSM2Character? targetCharacter) {
 			_webwingsChoices.Clear();
 			_webwingsChoices.Add(new LoadoutItem() { Path = null, Name = "Keep this suit's Webwings" });
 
 			foreach (var option in MSM2Webwings.OPTIONS) {
-				if (MSM2Webwings.IsAvailableFor(option, targetCharacter)) {
-					_webwingsChoices.Add(new LoadoutItem() { Path = option.Id, Name = option.DisplayName });
-				} else if (option.Id == selectedSuit.Webwings) {
-					// Keep an incompatible saved choice visible but disabled, instead of hiding a
-					// value that is still stored in the profile.
-					_webwingsChoices.Add(new LoadoutItem() {
-						Path = option.Id,
-						Name = $"{option.DisplayName} ({(targetCharacter == null ? "character not declared" : "different character")})",
-						IsEnabled = false
-					});
-				}
+				var name = targetCharacter.HasValue && option.Character != targetCharacter.Value
+					? $"{option.DisplayName} ({MSM2SuitCharacterResolver.DisplayName(option.Character)})"
+					: option.DisplayName;
+				_webwingsChoices.Add(new LoadoutItem() { Path = option.Id, Name = name });
 			}
 
 			_SuitWebwingsPanel.Visibility = (_webwingsChoices.Count > 1 ? Visibility.Visible : Visibility.Collapsed);
