@@ -26,7 +26,11 @@ namespace Overstrike.Installers {
 		}
 
 		private byte[] PrepareConfigHeader(ulong assetId, int byteCount, string description) {
-			var assetIndex = _toc.FindFirstAssetIndexById(assetId);
+			return PrepareConfigHeaderFromAsset(assetId, byteCount, description);
+		}
+
+		private byte[] PrepareConfigHeaderFromAsset(ulong sourceAssetId, int byteCount, string description) {
+			var assetIndex = _toc.FindFirstAssetIndexById(sourceAssetId);
 			var originalHeader = (assetIndex < 0 ? null : _toc.GetHeaderByAssetIndex(assetIndex));
 			if (originalHeader == null) {
 				throw new InvalidDataException($"{description} has no asset header");

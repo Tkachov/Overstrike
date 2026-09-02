@@ -56,9 +56,9 @@ namespace Overstrike.Installers {
 		// Rewriting only the first swaps the icons and leaves the suit wearing its original styles,
 		// which is exactly what the first build did. So the slots are filled in both places.
 		//
-		// Every path involved already exists and is already referenced by system_progression, so no
-		// new asset is created here -- the item loadout is the one config that gets rewritten.
-		private List<SuitsMenuArchiveAsset> ApplyStyleSources(List<StyleSourceRequest> requests, List<JObject> allSuits) {
+		// Slots without styles receive a small private variant group and item loadout. This avoids
+		// sharing the donor's group state while still making all of its styles available.
+		private List<SuitsMenuArchiveAsset> ApplyStyleSources(List<StyleSourceRequest> requests, List<JObject> allSuits, Config_I30 progressionConfig) {
 			var assets = new List<SuitsMenuArchiveAsset>();
 			if (requests.Count == 0) return assets;
 
@@ -75,12 +75,48 @@ namespace Overstrike.Installers {
 			foreach (var request in requests) {
 				if (!suitsByName.TryGetValue(request.SuitName, out var target)) continue;
 				if (!suitsByName.TryGetValue(request.SourceSuitName, out var source)) continue;
-				if (target["VariantGroup"] is not JObject targetGroup || targetGroup["Variants"] is not JArray targetVariants) continue;
-				if (source["VariantGroup"] is not JObject sourceGroup || sourceGroup["Variants"] is not JArray sourceVariants) continue;
-				if (sourceVariants.Count == 0 || targetVariants.Count == 0) continue;
 
-				// Fill every slot the target owns, never adding one: the game does not show more
-				// than three styles, and a donor with fewer styles just repeats its last one.
+				var targetGroup = target["VariantGroup"] as JObject;
+				var sourceGroup = source["VariantGroup"] as JObject;
+				var sourceVariants = sourceGroup?["Variants"] as JArray;
+				if (sourceGroup == null || sourceVariants == null || sourceVariants.Count == 0) {
+					if (targetGroup != null) {
+						DropUltimateStyleFraming(target, targetGroup, "the model source has no styles");
+						target.Remove("VariantGroup");
+						ErrorLogger.WriteInfo($"[i] '{request.SuitName}' drops its styles because '{request.SourceSuitName}' has none\n");
+					}
+					continue;
+				}
+
+				var sourceItemLoadoutPath = ResolveStyleItemLoadoutPath(request.SourceSuitName, sourceGroup);
+				string targetItemLoadoutPath;
+				if (targetGroup == null) {
+					var generated = BuildMissingStyleGroup(request, target, sourceGroup, progressionConfig, written);
+					targetGroup = generated.Group;
+					targetItemLoadoutPath = generated.ItemLoadoutPath;
+					assets.Add(generated.Asset);
+				} else {
+					targetItemLoadoutPath = ResolveStyleItemLoadoutPath(request.SuitName, targetGroup);
+				}
+
+				var targetVariants = targetGroup["Variants"] as JArray;
+				if (targetVariants == null) {
+					targetVariants = new JArray();
+					targetGroup["Variants"] = targetVariants;
+				}
+
+				var targetHadStyles = targetVariants.Count > 0;
+				if (!targetHadStyles) {
+					var groupName = (string?)targetGroup["Name"] ?? request.SuitName;
+					for (var i = 0; i < sourceVariants.Count; ++i) {
+						var slot = (JObject)((JObject)sourceVariants[i]).DeepClone();
+						slot["Name"] = $"{groupName}_Var{i + 1}";
+						targetVariants.Add(slot);
+					}
+				}
+
+				// Existing style slots keep their identity and gates. A donor with fewer styles just
+				// repeats its last one. Newly created slots already mirror the donor count.
 				//
 				// Each slot keeps its own identity and keeps whatever gates it -- the Ultimate suits
 				// carry a RequiredLevelIndex per style, and the save file knows those styles by the
@@ -105,11 +141,50 @@ namespace Overstrike.Installers {
 				}
 
 				DropUltimateStyleFraming(target, targetGroup, "its styles are now borrowed");
-				assets.Add(BuildStyleLoadoutAsset(request, targetGroup, equipPaths, written));
+				assets.Add(BuildStyleLoadoutAsset(request, targetItemLoadoutPath, sourceItemLoadoutPath, equipPaths, written));
 				ErrorLogger.WriteInfo($"[i] '{request.SuitName}' takes its {targetVariants.Count} style slots from '{request.SourceSuitName}'\n");
 			}
 
 			return assets;
+		}
+
+		private (JObject Group, string ItemLoadoutPath, SuitsMenuArchiveAsset Asset) BuildMissingStyleGroup(StyleSourceRequest request, JObject target, JObject sourceGroup, Config_I30 progressionConfig, Dictionary<ulong, string> written) {
+			var suffix = CRC64.Hash(request.SuitName).ToString("x16");
+			var groupName = $"suits_menu_{suffix}_variant_group";
+			var groupPath = $"configs/overstrike/suits_menu/{suffix}_variant_group.config";
+			var itemLoadoutPath = $"configs/overstrike/suits_menu/{suffix}_variant_group_loadout.config";
+
+			var sourceGroupPath = (string?)sourceGroup["Item"];
+			if (string.IsNullOrEmpty(sourceGroupPath)) {
+				throw new InvalidDataException($"Style source: '{request.SourceSuitName}' has no variant group config");
+			}
+			sourceGroupPath = DAT1.Utils.Normalize(sourceGroupPath);
+
+			var config = new Config_I30(_toc.GetAssetReader(sourceGroupPath));
+			var root = config.ContentSection.Data;
+			root["ItemLoadoutConfig"] = new JObject {
+				["AssetPath"] = itemLoadoutPath,
+				["Autoload"] = false
+			};
+			root["Name"] = groupName;
+			config.ContentSection.Data = root;
+			ReplaceConfigReferences(config, new List<string> { itemLoadoutPath });
+
+			var groupId = CRC64.Hash(groupPath);
+			TrackStyleAsset(request, "variant group", groupPath, groupId, written);
+			var bytes = config.Save();
+			var header = PrepareConfigHeaderFromAsset(CRC64.Hash(sourceGroupPath), bytes.Length, $"Variant group '{groupPath}'");
+
+			var group = new JObject {
+				["Icon"] = (target["Icon"] ?? sourceGroup["Icon"])?.DeepClone(),
+				["Item"] = groupPath,
+				["Name"] = groupName,
+				["Variants"] = new JArray()
+			};
+			target["VariantGroup"] = group;
+			AddConfigReference(progressionConfig, groupPath);
+
+			return (group, itemLoadoutPath, new SuitsMenuArchiveAsset(0, groupId, bytes, header));
 		}
 
 		// Black Suit, Symbiote and Anti-Venom are the only slots the game treats as owning "Ultimate"
@@ -129,24 +204,20 @@ namespace Overstrike.Installers {
 			ErrorLogger.WriteInfo($"[i] '{(string?)suit["Name"]}' drops its Ultimate styles framing, since {reason}\n");
 		}
 
-		private SuitsMenuArchiveAsset BuildStyleLoadoutAsset(StyleSourceRequest request, JObject targetGroup, List<string> equipPaths, Dictionary<ulong, string> written) {
-			var itemLoadoutPath = ResolveStyleItemLoadoutPath(request, targetGroup);
-
+		private SuitsMenuArchiveAsset BuildStyleLoadoutAsset(StyleSourceRequest request, string itemLoadoutPath, string sourceItemLoadoutPath, List<string> equipPaths, Dictionary<ulong, string> written) {
 			var assetIndex = _toc.FindFirstAssetIndexByPath(itemLoadoutPath);
-			if (assetIndex < 0) throw new InvalidDataException($"Style source: item loadout '{itemLoadoutPath}' is not installed");
-			var span = _toc.GetSpanIndexByAssetIndex(assetIndex);
+			var isNew = assetIndex < 0;
+			var templatePath = isNew ? sourceItemLoadoutPath : itemLoadoutPath;
+			var span = isNew ? (byte?)0 : _toc.GetSpanIndexByAssetIndex(assetIndex);
 			if (span == null) throw new InvalidDataException($"Style source: item loadout '{itemLoadoutPath}' has no span");
 
 			var assetId = CRC64.Hash(itemLoadoutPath);
-			if (written.TryGetValue(assetId, out var firstSuit)) {
-				throw new InvalidDataException($"'{request.SuitName}' and '{firstSuit}' both change item loadout '{itemLoadoutPath}'");
-			}
-			written[assetId] = request.SuitName;
+			TrackStyleAsset(request, "item loadout", itemLoadoutPath, assetId, written);
 
-			var config = new Config_I30(_toc.GetAssetReader(itemLoadoutPath));
+			var config = new Config_I30(_toc.GetAssetReader(templatePath));
 			var root = config.ContentSection.Data;
 			if (root["Loadout"]?["ItemLoadoutLists"] is not JArray lists || lists.Count == 0 || lists[0] is not JObject list) {
-				throw new InvalidDataException($"Style source: item loadout '{itemLoadoutPath}' has no loadout list");
+				throw new InvalidDataException($"Style source: item loadout template '{templatePath}' has no loadout list");
 			}
 
 			var items = new JArray();
@@ -164,16 +235,16 @@ namespace Overstrike.Installers {
 			ReplaceConfigReferences(config, equipPaths);
 
 			var bytes = config.Save();
-			var header = PrepareConfigHeader(assetId, bytes.Length, $"Item loadout '{itemLoadoutPath}'");
+			var header = PrepareConfigHeaderFromAsset(CRC64.Hash(templatePath), bytes.Length, $"Item loadout '{itemLoadoutPath}'");
 			return new SuitsMenuArchiveAsset((byte)span, assetId, bytes, header);
 		}
 
 		// VariantGroup.Item is a VanityVariantGroupItemConfig, and the list of equippable styles
 		// hangs off its ItemLoadoutConfig.
-		private string ResolveStyleItemLoadoutPath(StyleSourceRequest request, JObject targetGroup) {
-			var groupPath = (string?)targetGroup["Item"];
+		private string ResolveStyleItemLoadoutPath(string suitName, JObject group) {
+			var groupPath = (string?)group["Item"];
 			if (string.IsNullOrEmpty(groupPath)) {
-				throw new InvalidDataException($"Style source: '{request.SuitName}' has no variant group config");
+				throw new InvalidDataException($"Style source: '{suitName}' has no variant group config");
 			}
 			groupPath = DAT1.Utils.Normalize(groupPath);
 
@@ -184,6 +255,28 @@ namespace Overstrike.Installers {
 			}
 
 			return DAT1.Utils.Normalize(itemLoadoutPath);
+		}
+
+		private static void TrackStyleAsset(StyleSourceRequest request, string kind, string path, ulong assetId, Dictionary<ulong, string> written) {
+			if (written.TryGetValue(assetId, out var firstSuit)) {
+				throw new InvalidDataException($"'{request.SuitName}' and '{firstSuit}' both change {kind} '{path}'");
+			}
+			written[assetId] = request.SuitName;
+		}
+
+		private static void AddConfigReference(Config_I30 config, string path) {
+			if (!config.HasSection(DAT1.Sections.Config.ConfigReferencesSection.TAG)) return;
+
+			foreach (var entry in config.ReferencesSection.Entries) {
+				if (string.Equals(config.GetStringByOffset(entry.AssetPathStringOffset), path, StringComparison.OrdinalIgnoreCase)) return;
+			}
+
+			var extension = path[path.LastIndexOf('.')..];
+			config.ReferencesSection.Entries.Add(new ReferenceEntry() {
+				AssetId = CRC64.Hash(path),
+				AssetPathStringOffset = config.AddString(path, true),
+				ExtensionHash = CRC32.Hash(extension)
+			});
 		}
 
 		// Config_I30.Save() rebuilds the references section from the strings its entries point at,
