@@ -538,13 +538,25 @@ namespace LocalizationTool {
             return result.ToString();
         }
 
+        private List<LocalizationEntry> GetCopyPasteOrderedEntries() {
+            var orderedEntries = new List<LocalizationEntry>(_displayedLocalizationList);
+            orderedEntries.Sort((a, b) => StringComparer.CurrentCulture.Compare(a.Key, b.Key));
+            return orderedEntries;
+        }
+
         private void ExecuteCopyAllTexts(object parameter) {
             if (_displayedLocalizationList.Count == 0) {
                 MessageBox.Show("There are no texts to copy.", "Copy all texts", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
-            string clipboardText = string.Join(Environment.NewLine, _displayedLocalizationList.Select(entry => EscapeClipboardText(entry.Value)));
+            var orderedEntries = GetCopyPasteOrderedEntries();
+            var clipboardLines = new string[orderedEntries.Count];
+            for (int i = 0; i < orderedEntries.Count; i++) {
+                clipboardLines[i] = EscapeClipboardText(orderedEntries[i].Value);
+            }
+
+            var clipboardText = string.Join(Environment.NewLine, clipboardLines);
             Clipboard.SetText(clipboardText);
             MessageBox.Show($"Copied {_displayedLocalizationList.Count} texts to the clipboard.", "Copy all texts", MessageBoxButton.OK, MessageBoxImage.Information);
         }
@@ -555,16 +567,17 @@ namespace LocalizationTool {
                 return;
             }
 
-            string normalizedText = Clipboard.GetText().Replace("\r\n", "\n").Replace('\r', '\n');
-            List<string> pastedTexts = normalizedText.Split('\n').ToList();
+            var orderedEntries = GetCopyPasteOrderedEntries();
+            var normalizedText = Clipboard.GetText().Replace("\r\n", "\n").Replace('\r', '\n');
+            var pastedTexts = normalizedText.Split('\n').ToList();
 
-            if (pastedTexts.Count == _displayedLocalizationList.Count + 1 && pastedTexts[^1] == "") {
+            if (pastedTexts.Count == orderedEntries.Count + 1 && pastedTexts[^1] == "") {
                 pastedTexts.RemoveAt(pastedTexts.Count - 1);
             }
 
-            if (pastedTexts.Count != _displayedLocalizationList.Count) {
+            if (pastedTexts.Count != orderedEntries.Count) {
                 MessageBox.Show(
-                    $"Paste cancelled to protect the localization order.\n\nExpected texts: {_displayedLocalizationList.Count}\nClipboard lines: {pastedTexts.Count}",
+                    $"Paste cancelled to protect the localization order.\n\nExpected texts: {orderedEntries.Count}\nClipboard lines: {pastedTexts.Count}",
                     "Paste all texts",
                     MessageBoxButton.OK,
                     MessageBoxImage.Warning
@@ -572,26 +585,29 @@ namespace LocalizationTool {
                 return;
             }
 
-            int changedCount = 0;
-            for (int i = 0; i < _displayedLocalizationList.Count; i++) {
-                LocalizationEntry entry = _displayedLocalizationList[i];
-                string newValue = UnescapeClipboardText(pastedTexts[i]);
+            var changes = new List<Action>();
+            for (int i = 0; i < orderedEntries.Count; i++) {
+                var entry = orderedEntries[i];
+                var newValue = UnescapeClipboardText(pastedTexts[i]);
 
                 if (entry.Value == newValue) {
                     continue;
                 }
 
-                LocalizationEntry oldState = entry.DeepCopy();
-                LocalizationEntry newState = entry.DeepCopy();
+                var oldState = entry.DeepCopy();
+                var newState = entry.DeepCopy();
                 newState.Value = newValue;
-                _undoRedoManager.AddChange(new Action { OldEntry = oldState, Entry = newState, Type = ActionType.Edit });
+                changes.Add(new Action { OldEntry = oldState, Entry = newState, Type = ActionType.Edit });
                 entry.Value = newValue;
-                changedCount++;
+            }
+
+            if (changes.Count > 0) {
+                _undoRedoManager.AddChange(new Action { GroupActions = changes, Type = ActionType.Group });
             }
 
             LocalizationList.Items.Refresh();
             UpdateChangesLabels();
-            MessageBox.Show($"Pasted {pastedTexts.Count} texts. Changed entries: {changedCount}.", "Paste all texts", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show($"Pasted {pastedTexts.Count} texts. Changed entries: {changes.Count}.", "Paste all texts", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void ExecuteLocalizationListRemoveEntry(object parameter) {
@@ -600,7 +616,7 @@ namespace LocalizationTool {
 
         // actual logic
 
-        private void HandleChangeCase(Action action) {
+        private void HandleChangeCase(Action action, bool refreshList = true) {
             LocalizationEntry localizationEntry = action.Entry;
             switch (action.Type) {
                 case ActionType.Add:
@@ -613,7 +629,9 @@ namespace LocalizationTool {
                             entry.Key = action.Entry.Key;
                             entry.Value = action.Entry.Value;
                             entry.Flags = action.Entry.Flags;
-                            LocalizationList.Items.Refresh();
+                            if (refreshList) {
+                                LocalizationList.Items.Refresh();
+                            }
                             break;
                         }
                     }
@@ -622,6 +640,14 @@ namespace LocalizationTool {
                     LocalizationEntry entryToRemove = _displayedLocalizationList.FirstOrDefault(entry => entry.Key == localizationEntry.Key);
                     if (entryToRemove != null) {
                         _displayedLocalizationList.Remove(entryToRemove);
+                    }
+                    break;
+                case ActionType.Group:
+                    foreach (var groupAction in action.GroupActions) {
+                        HandleChangeCase(groupAction, false);
+                    }
+                    if (refreshList) {
+                        LocalizationList.Items.Refresh();
                     }
                     break;
             }
