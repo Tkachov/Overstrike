@@ -19,6 +19,8 @@
         <KeyBinding Key="S" Modifiers="Control+Shift" Command="{Binding FileSaveAsLocalizationCommand}" />
         <KeyBinding Key="Z" Modifiers="Control" Command="{Binding FileUndo}" />
         <KeyBinding Key="Y" Modifiers="Control" Command="{Binding FileRedo}" />
+        <KeyBinding Key="C" Modifiers="Control+Shift" Command="{Binding CopyAllTextsCommand}" />
+        <KeyBinding Key="V" Modifiers="Control+Shift" Command="{Binding PasteAllTextsCommand}" />
     </Window.InputBindings>
 
     <Grid>
@@ -47,6 +49,9 @@
                         <MenuItem x:Name="File_Edit" Header="Edit" Visibility="Collapsed">
                             <MenuItem x:Name="File_Undo" Header="Undo" InputGestureText="Ctrl+Z" Command="{Binding FileUndo}" IsEnabled="False" />
                             <MenuItem x:Name="File_Redo" Header="Redo" InputGestureText="Ctrl+Y" Command="{Binding FileRedo}" IsEnabled="False" />
+                            <Separator />
+                            <MenuItem Header="Copy all texts" InputGestureText="Ctrl+Shift+C" Command="{Binding CopyAllTextsCommand}" />
+                            <MenuItem Header="Paste all texts" InputGestureText="Ctrl+Shift+V" Command="{Binding PasteAllTextsCommand}" />
                         </MenuItem>
                         <MenuItem Header="View">
                             <MenuItem Header="Show flags" IsCheckable="True" x:Name="ShowFlags" IsChecked="False" Click="ShowFlags_Click" Margin="2,2,0,2" />

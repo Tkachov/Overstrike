@@ -12,6 +12,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -29,6 +30,8 @@ namespace LocalizationTool {
         public ICommand FileSaveAsLocalizationCommand { get; set; } = null;
         public ICommand FileUndo { get; set; } = null;
         public ICommand FileRedo { get; set; } = null;
+        public ICommand CopyAllTextsCommand { get; set; } = null;
+        public ICommand PasteAllTextsCommand { get; set; } = null;
         public ICommand LocalizationListRemoveEntry { get; set; } = null;
 
         // settings
@@ -100,6 +103,8 @@ namespace LocalizationTool {
             FileSaveAsLocalizationCommand = new RelayCommand(ExecuteFileSaveAsLocalization);
             FileUndo = new RelayCommand(ExecuteFileUndo);
             FileRedo = new RelayCommand(ExecuteFileRedo);
+            CopyAllTextsCommand = new RelayCommand(ExecuteCopyAllTexts);
+            PasteAllTextsCommand = new RelayCommand(ExecutePasteAllTexts);
             LocalizationListRemoveEntry = new RelayCommand(ExecuteLocalizationListRemoveEntry);
             DataContext = this; // Set the DataContext to enable data binding.
         }
@@ -496,6 +501,97 @@ namespace LocalizationTool {
 
             UpdateChangesLabels();
             UpdateEntriesCount();
+        }
+
+        private static string EscapeClipboardText(string value) {
+            return value.Replace("\\", "\\\\").Replace("\r", "\\r").Replace("\n", "\\n");
+        }
+
+        private static string UnescapeClipboardText(string value) {
+            StringBuilder result = new();
+
+            for (int i = 0; i < value.Length; i++) {
+                if (value[i] != '\\' || i + 1 >= value.Length) {
+                    result.Append(value[i]);
+                    continue;
+                }
+
+                switch (value[i + 1]) {
+                    case '\\':
+                        result.Append('\\');
+                        i++;
+                        break;
+                    case 'r':
+                        result.Append('\r');
+                        i++;
+                        break;
+                    case 'n':
+                        result.Append('\n');
+                        i++;
+                        break;
+                    default:
+                        result.Append('\\');
+                        break;
+                }
+            }
+
+            return result.ToString();
+        }
+
+        private void ExecuteCopyAllTexts(object parameter) {
+            if (_displayedLocalizationList.Count == 0) {
+                MessageBox.Show("There are no texts to copy.", "Copy all texts", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            string clipboardText = string.Join(Environment.NewLine, _displayedLocalizationList.Select(entry => EscapeClipboardText(entry.Value)));
+            Clipboard.SetText(clipboardText);
+            MessageBox.Show($"Copied {_displayedLocalizationList.Count} texts to the clipboard.", "Copy all texts", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void ExecutePasteAllTexts(object parameter) {
+            if (!Clipboard.ContainsText()) {
+                MessageBox.Show("The clipboard does not contain text.", "Paste all texts", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            string normalizedText = Clipboard.GetText().Replace("\r\n", "\n").Replace('\r', '\n');
+            List<string> pastedTexts = normalizedText.Split('\n').ToList();
+
+            if (pastedTexts.Count == _displayedLocalizationList.Count + 1 && pastedTexts[^1] == "") {
+                pastedTexts.RemoveAt(pastedTexts.Count - 1);
+            }
+
+            if (pastedTexts.Count != _displayedLocalizationList.Count) {
+                MessageBox.Show(
+                    $"Paste cancelled to protect the localization order.\n\nExpected texts: {_displayedLocalizationList.Count}\nClipboard lines: {pastedTexts.Count}",
+                    "Paste all texts",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning
+                );
+                return;
+            }
+
+            int changedCount = 0;
+            for (int i = 0; i < _displayedLocalizationList.Count; i++) {
+                LocalizationEntry entry = _displayedLocalizationList[i];
+                string newValue = UnescapeClipboardText(pastedTexts[i]);
+
+                if (entry.Value == newValue) {
+                    continue;
+                }
+
+                LocalizationEntry oldState = entry.DeepCopy();
+                LocalizationEntry newState = entry.DeepCopy();
+                newState.Value = newValue;
+                _undoRedoManager.AddChange(new Action { OldEntry = oldState, Entry = newState, Type = ActionType.Edit });
+                entry.Value = newValue;
+                changedCount++;
+            }
+
+            LocalizationList.Items.Refresh();
+            UpdateChangesLabels();
+            MessageBox.Show($"Pasted {pastedTexts.Count} texts. Changed entries: {changedCount}.", "Paste all texts", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void ExecuteLocalizationListRemoveEntry(object parameter) {
