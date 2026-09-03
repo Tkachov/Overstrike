@@ -53,8 +53,11 @@ namespace Overstrike.Installers {
 			// make new suits
 
 			var oldSuits = new List<JObject>();
+			var styleSourceSuits = new List<JObject>();
 			foreach (var suit in suits) {
-				oldSuits.Add((JObject)suit);
+				var entry = (JObject)suit;
+				oldSuits.Add(entry);
+				styleSourceSuits.Add((JObject)entry.DeepClone());
 			}
 
 			var deletedSuits = new Dictionary<string, bool>();
@@ -122,8 +125,8 @@ namespace Overstrike.Installers {
 
 			// Donors are looked up in the whole list, so a suit hidden from the menu can still lend
 			// its styles to one that stays visible.
-			ResolveAutomaticStyleSources(pendingAutoStyles, oldSuits, styleSourceRequests);
-			var styleConfigs = ApplyStyleSources(styleSourceRequests, oldSuits, config);
+			ResolveAutomaticStyleSources(pendingAutoStyles, styleSourceSuits, styleSourceRequests);
+			var styleConfigs = ApplyStyleSources(styleSourceRequests, oldSuits, styleSourceSuits, config);
 
 			var newSuits = BuildMenuSuitList(oldSuits, deletedSuits);
 			if (newSuits.Count == 0) {

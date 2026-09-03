@@ -58,14 +58,23 @@ namespace Overstrike.Installers {
 		//
 		// Slots without styles receive a small private variant group and item loadout. This avoids
 		// sharing the donor's group state while still making all of its styles available.
-		private List<SuitsMenuArchiveAsset> ApplyStyleSources(List<StyleSourceRequest> requests, List<JObject> allSuits, Config_I30 progressionConfig) {
+		private List<SuitsMenuArchiveAsset> ApplyStyleSources(List<StyleSourceRequest> requests, List<JObject> targetSuits, List<JObject> sourceSuits, Config_I30 progressionConfig) {
 			var assets = new List<SuitsMenuArchiveAsset>();
 			if (requests.Count == 0) return assets;
 
-			var suitsByName = new Dictionary<string, JObject>(StringComparer.Ordinal);
-			foreach (var suit in allSuits) {
+			var targetsByName = new Dictionary<string, JObject>(StringComparer.Ordinal);
+			foreach (var suit in targetSuits) {
 				var name = (string?)suit["Name"];
-				if (!string.IsNullOrEmpty(name)) suitsByName[name] = suit;
+				if (!string.IsNullOrEmpty(name)) targetsByName[name] = suit;
+			}
+
+			// Sources are snapshots taken before any target is modified. Without a separate map,
+			// chained swaps depend on request order: A borrowing B mutates A, then C borrowing A
+			// accidentally receives B's styles instead of A's original ones.
+			var sourcesByName = new Dictionary<string, JObject>(StringComparer.Ordinal);
+			foreach (var suit in sourceSuits) {
+				var name = (string?)suit["Name"];
+				if (!string.IsNullOrEmpty(name)) sourcesByName[name] = suit;
 			}
 
 			// Every request here is the installer following a model change, not something the user
@@ -73,8 +82,8 @@ namespace Overstrike.Installers {
 			// than failing an install nobody aimed at styles.
 			var written = new Dictionary<ulong, string>();
 			foreach (var request in requests) {
-				if (!suitsByName.TryGetValue(request.SuitName, out var target)) continue;
-				if (!suitsByName.TryGetValue(request.SourceSuitName, out var source)) continue;
+				if (!targetsByName.TryGetValue(request.SuitName, out var target)) continue;
+				if (!sourcesByName.TryGetValue(request.SourceSuitName, out var source)) continue;
 
 				var targetGroup = target["VariantGroup"] as JObject;
 				var sourceGroup = source["VariantGroup"] as JObject;
