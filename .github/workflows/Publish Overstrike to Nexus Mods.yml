@@ -1,4 +1,4 @@
-name: "Publish Overstrike to Nexus Mods"
+name: "Overstrike to Nexus"
 
 permissions:
   contents: read
@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       target:
-        description: "Nexus file target"
+        description: "Game"
         required: true
         type: choice
         options:
@@ -19,11 +19,11 @@ on:
 env:
   RELEASE_TAG_PREFIX: OS/v
   NEXUS_CATEGORY: main
-  NEXUS_ARCHIVE_EXISTING_VERSION: "false"
-  NEXUS_PRIMARY_MOD_MANAGER_DOWNLOAD: "false"
-  NEXUS_ALLOW_MOD_MANAGER_DOWNLOAD: "true"
-  NEXUS_SHOW_REQUIREMENTS_POP_UP: "false"
-  NEXUS_UPDATE_MOD_VERSION: "false"
+  NEXUS_ARCHIVE_EXISTING_VERSION: "true"
+  NEXUS_PRIMARY_MOD_MANAGER_DOWNLOAD: "true"
+  NEXUS_ALLOW_MOD_MANAGER_DOWNLOAD: "false"
+  NEXUS_SHOW_REQUIREMENTS_POP_UP: "true"
+  NEXUS_UPDATE_MOD_VERSION: "true"
 
 jobs:
   publish:
