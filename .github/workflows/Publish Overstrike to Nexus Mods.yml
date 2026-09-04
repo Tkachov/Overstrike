@@ -1,4 +1,4 @@
-name: "Overstrike to Nexus"
+name: "- Overstrike to Nexus"
 
 permissions:
   contents: read
@@ -18,6 +18,7 @@ on:
 
 env:
   RELEASE_TAG_PREFIX: OS/v
+  NEXUS_FILENAME: Overstrike
   NEXUS_CATEGORY: main
   NEXUS_ARCHIVE_EXISTING_VERSION: "true"
   NEXUS_PRIMARY_MOD_MANAGER_DOWNLOAD: "true"
@@ -91,9 +92,9 @@ jobs:
       - name: Upload to Nexus Mods
         uses: Nexus-Mods/upload-action@main
         with:
-          api_key: ${{ secrets.NEXUSMODS_API_KEY }}
+          api_key: ${{ secrets.NEXUS_API_KEY }}
           file_id: ${{ steps.nexus_file.outputs.file_id }}
-          filename: ${{ steps.release.outputs.asset_name }}
+          filename: ${{ env.NEXUS_FILENAME }}
           version: ${{ steps.release.outputs.version }}
           description: ${{ steps.release.outputs.description }}
           category: ${{ env.NEXUS_CATEGORY }}
