@@ -1,0 +1,104 @@
+name: "Overstrike to Nexus"
+
+permissions:
+  contents: read
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Game"
+        required: true
+        type: choice
+        options:
+          - MSMR
+          - MM
+          - RCRA
+          - MSM2
+
+env:
+  RELEASE_TAG_PREFIX: OS/v
+  NEXUS_CATEGORY: main
+  NEXUS_ARCHIVE_EXISTING_VERSION: "true"
+  NEXUS_PRIMARY_MOD_MANAGER_DOWNLOAD: "true"
+  NEXUS_ALLOW_MOD_MANAGER_DOWNLOAD: "false"
+  NEXUS_SHOW_REQUIREMENTS_POP_UP: "true"
+  NEXUS_UPDATE_MOD_VERSION: "true"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Resolve file_id for target
+        id: nexus_file
+        env:
+          FILE_ID_MSMR: ${{ secrets.NEXUS_FILE_ID_MSMR }}
+          FILE_ID_MM: ${{ secrets.NEXUS_FILE_ID_MM }}
+          FILE_ID_RCRA: ${{ secrets.NEXUS_FILE_ID_RCRA }}
+          FILE_ID_MSM2: ${{ secrets.NEXUS_FILE_ID_MSM2 }}
+        run: |
+          case "${{ inputs.target }}" in
+            MSMR) selected_file_id="$FILE_ID_MSMR" ;;
+            MM) selected_file_id="$FILE_ID_MM" ;;
+            RCRA) selected_file_id="$FILE_ID_RCRA" ;;
+            MSM2) selected_file_id="$FILE_ID_MSM2" ;;
+            *)
+              echo "Unsupported target: ${{ inputs.target }}" >&2
+              exit 1
+              ;;
+          esac
+
+          if [ -z "$selected_file_id" ]; then
+            echo "Missing Nexus file_id secret for target: ${{ inputs.target }}" >&2
+            exit 1
+          fi
+
+          echo "file_id=$selected_file_id" >> "$GITHUB_OUTPUT"
+
+      - name: Get latest Overstrike release
+        id: release
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const release = await github.rest.repos.getLatestRelease({ owner, repo });
+            const data = release.data;
+
+            const zipAsset = data.assets.find((asset) => asset.name.endsWith('.zip'));
+            if (!zipAsset) {
+              core.setFailed('No zip asset found in the latest release.');
+              return;
+            }
+
+            let version = data.tag_name || '';
+            if (version.startsWith(process.env.RELEASE_TAG_PREFIX)) {
+              version = version.slice(process.env.RELEASE_TAG_PREFIX.length);
+            }
+            if (!version) {
+              core.setFailed('Failed to resolve version from release tag.');
+              return;
+            }
+
+            core.setOutput('asset_name', zipAsset.name);
+            core.setOutput('asset_url', zipAsset.browser_download_url);
+            core.setOutput('description', data.body || '');
+            core.setOutput('version', version);
+
+      - name: Download release zip
+        run: |
+          curl -L "${{ steps.release.outputs.asset_url }}" -o "${{ steps.release.outputs.asset_name }}"
+
+      - name: Upload to Nexus Mods
+        uses: Nexus-Mods/upload-action@main
+        with:
+          api_key: ${{ secrets.NEXUSMODS_API_KEY }}
+          file_id: ${{ steps.nexus_file.outputs.file_id }}
+          filename: ${{ steps.release.outputs.asset_name }}
+          version: ${{ steps.release.outputs.version }}
+          description: ${{ steps.release.outputs.description }}
+          category: ${{ env.NEXUS_CATEGORY }}
+          archive_existing_version: ${{ env.NEXUS_ARCHIVE_EXISTING_VERSION }}
+          primary_mod_manager_download: ${{ env.NEXUS_PRIMARY_MOD_MANAGER_DOWNLOAD }}
+          allow_mod_manager_download: ${{ env.NEXUS_ALLOW_MOD_MANAGER_DOWNLOAD }}
+          show_requirements_pop_up: ${{ env.NEXUS_SHOW_REQUIREMENTS_POP_UP }}
+          update_mod_version: ${{ env.NEXUS_UPDATE_MOD_VERSION }}
