@@ -94,8 +94,9 @@ jobs:
         with:
           api_key: ${{ secrets.NEXUS_API_KEY }}
           file_id: ${{ steps.nexus_file.outputs.file_id }}
-          filename: ${{ env.NEXUS_FILENAME }}
+          filename: ${{ steps.release.outputs.asset_name }}
           version: ${{ steps.release.outputs.version }}
+          display_name: ${{ env.NEXUS_FILENAME }}
           description: ${{ steps.release.outputs.description }}
           category: ${{ env.NEXUS_CATEGORY }}
           archive_existing_version: ${{ env.NEXUS_ARCHIVE_EXISTING_VERSION }}
