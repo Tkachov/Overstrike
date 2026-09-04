@@ -67,6 +67,7 @@ namespace LocalizationTool.Helpers {
     public class Action {
         public LocalizationEntry OldEntry { get; set; }
         public LocalizationEntry Entry { get; set; }
+        public List<Action> GroupActions { get; set; } = new();
         public ActionType Type { get; set; }
 
         public Action Reverse() {
@@ -85,6 +86,13 @@ namespace LocalizationTool.Helpers {
                     reversedChange.Entry = new LocalizationEntry(Entry.Key, Entry.Value, Entry.Flags);
                     reversedChange.Type = ActionType.Add;
                     break;
+                case ActionType.Group:
+                    reversedChange.GroupActions = new();
+                    reversedChange.Type = ActionType.Group;
+                    for (int i = GroupActions.Count - 1; i >= 0; i--) {
+                        reversedChange.GroupActions.Add(GroupActions[i].Reverse());
+                    }
+                    break;
                 default:
                     throw new NotSupportedException("Unsupported ActionType");
             }
@@ -95,6 +103,7 @@ namespace LocalizationTool.Helpers {
     public enum ActionType {
         Edit,
         Add,
-        Delete
+        Delete,
+        Group
     }
 }
