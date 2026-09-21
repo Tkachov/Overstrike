@@ -257,7 +257,7 @@ namespace Overstrike.Tabs {
 				return _icons[path];
 
 			if (_placeholderImage == null)
-				_placeholderImage = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.suit_missing_msm2);
+				_placeholderImage = ((App)Application.Current).Themes.GetBitmapImage("suit_missing_msm2");
 
 			return _placeholderImage;
 		}

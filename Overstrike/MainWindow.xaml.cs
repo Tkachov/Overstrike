@@ -9,6 +9,7 @@ using Overstrike.Games;
 using Overstrike.Installers;
 using Overstrike.MetaInstallers;
 using Overstrike.Tabs;
+using Overstrike.Theming;
 using Overstrike.Utils;
 using Overstrike.Windows;
 using System;
@@ -97,6 +98,14 @@ namespace Overstrike {
 			}
 		}
 
+		private class ThemeItem {
+			public string Text { get; set; }
+			public AppTheme Theme { get; set; }
+		}
+
+		private ObservableCollection<ThemeItem> _themeItems = new();
+		private bool _reactToThemeSelectionChange = true;
+
 		private class LanguageItem {
 			public string Name { get; set; }
 			public string InternalName { get; set; }
@@ -130,9 +139,11 @@ namespace Overstrike {
 			_profiles = profiles;
 			_mods = mods;
 
-			AddModsIcon.Source = Imaging.ConvertToBitmapImage(Properties.Resources.add_icon);
-			RefreshIcon.Source = Imaging.ConvertToBitmapImage(Properties.Resources.reload_icon);
+			((App)App.Current).Themes.ThemeChanged += OnThemeChanged;
+			Closed += (_, _) => ((App)App.Current).Themes.ThemeChanged -= OnThemeChanged;
 
+			ApplyThemeVisuals();
+			MakeThemeItems();
 			MakeProfileItems();
 			FirstSwitchToProfile();
 			StartTickThread();
@@ -148,6 +159,32 @@ namespace Overstrike {
 		private void SaveSettings() {
 			// TODO: run a timer so multiple calls in the row are aggregated into one actual file write
 			((App)App.Current).WriteSettings();
+		}
+
+		private void OnThemeChanged() {
+			ApplyThemeVisuals();
+		}
+
+		private void ApplyThemeVisuals() {
+			var themeManager = ((App)App.Current).Themes;
+			AddModsIcon.Source = themeManager.GetBitmapImage("add_icon");
+			RefreshIcon.Source = themeManager.GetBitmapImage("reload_icon");
+			UpdateStatusMessageBrush();
+			UpdateSelectedThemeItem();
+
+			if (_selectedProfile != null) {
+				ModEntry.ResetBadgeCache();
+				SetupBanner();
+				MakeModsItems();
+			}
+
+			MSMRSuitsMenuContent.ThemeChanged();
+			MMSuitsMenuContent.ThemeChanged();
+			MSM2SuitsMenuContent.ThemeChanged();
+		}
+
+		private void UpdateStatusMessageBrush() {
+			StatusMessage.Foreground = (Brush)FindResource(_statusMessageErrorShown ? "error_text" : "light_text");
 		}
 
 		private void FirstSwitchToProfile() {
@@ -343,6 +380,46 @@ namespace Overstrike {
 			ProfileComboBox.ItemsSource = new CompositeCollection {
 				new CollectionContainer() { Collection = _profilesItems }
 			};
+		}
+
+		private void MakeThemeItems() {
+			_themeItems.Clear();
+
+			foreach (var theme in ((App)App.Current).Themes.AvailableThemes) {
+				_themeItems.Add(new ThemeItem() { Text = theme.DisplayName, Theme = theme });
+			}
+
+			SettingsThemeComboBox.ItemsSource = new CompositeCollection {
+				new CollectionContainer() { Collection = _themeItems }
+			};
+
+			UpdateSelectedThemeItem();
+		}
+
+		private void UpdateSelectedThemeItem() {
+			if (SettingsThemeComboBox == null) return;
+
+			_reactToThemeSelectionChange = false;
+			ThemeItem selectedItem = null;
+			foreach (var item in _themeItems) {
+				if (item.Theme.Id == _settings.SelectedTheme) {
+					selectedItem = item;
+					break;
+				}
+			}
+
+			SettingsThemeComboBox.SelectedItem = selectedItem;
+			_reactToThemeSelectionChange = true;
+		}
+
+		private void SettingsThemeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+			if (!_reactToThemeSelectionChange) return;
+			if (e.AddedItems.Count <= 0) return;
+
+			ThemeItem item = (ThemeItem)e.AddedItems[0];
+			_settings.SelectedTheme = item.Theme.Id;
+			SaveSettings();
+			((App)App.Current).Themes.ApplyThemeById(item.Theme.Id);
 		}
 
 		private void MakeModsItems() {
@@ -978,17 +1055,20 @@ namespace Overstrike {
 		private void ShowStatusMessage(string text) {
 			StatusMessage.Content = text;
 			_statusMessageErrorShown = false;
+			UpdateStatusMessageBrush();
 			PlayAnimation("ShowStatusMessage");
 		}
 
 		private void ShowStatusMessageError(string text) {
 			StatusMessage.Content = text;
 			_statusMessageErrorShown = true;
+			UpdateStatusMessageBrush();
 			PlayAnimation("ShowStatusMessageError");
 		}
 
 		private void HideStatusMessageError() {
 			_statusMessageErrorShown = false;
+			UpdateStatusMessageBrush();
 			PlayAnimation("HideStatusMessageError");
 		}
 

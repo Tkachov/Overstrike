@@ -41,30 +41,11 @@ namespace Overstrike.Games {
 
 		//
 
-		private BitmapImage _back;
-		private BitmapImage _logo;
-		private BitmapImage _logo2;
+		public override BitmapImage BannerBackground => GetThemedImage("banner_i30_back"); // not a typo, shares image
 
-		public override BitmapImage BannerBackground {
-			get {
-				_back ??= Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_i30_back); // not a typo, shares image
-				return _back;
-			}
-		}
+		public override BitmapImage BannerLogoLeft => GetThemedImage("banner_i33_logo");
 
-		public override BitmapImage BannerLogoLeft {
-			get {
-				_logo ??= Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_i33_logo);
-				return _logo;
-			}
-		}
-
-		public override BitmapImage BannerLogoRight {
-			get {
-				_logo2 ??= Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_i30_logo2); // not a typo, shares image
-				return _logo2;
-			}
-		}
+		public override BitmapImage BannerLogoRight => GetThemedImage("banner_i30_logo2"); // not a typo, shares image
 
 		public override bool HasSuitsSettingsSection => false;
 		public override bool HasScriptsSettingsSection => false;

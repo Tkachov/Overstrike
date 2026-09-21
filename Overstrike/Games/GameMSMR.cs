@@ -44,30 +44,11 @@ namespace Overstrike.Games {
 
 		//
 
-		private BitmapImage _back;
-		private BitmapImage _logo;
-		private BitmapImage _logo2;
+		public override BitmapImage BannerBackground => GetThemedImage("banner_msmr_back");
 
-		public override BitmapImage BannerBackground {
-			get {
-				_back ??= Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_msmr_back);
-				return _back;
-			}
-		}
+		public override BitmapImage BannerLogoLeft => GetThemedImage("banner_msmr_logo");
 
-		public override BitmapImage BannerLogoLeft {
-			get {
-				_logo ??= Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_msmr_logo);
-				return _logo;
-			}
-		}
-
-		public override BitmapImage BannerLogoRight {
-			get {
-				_logo2 ??= Utils.Imaging.ConvertToBitmapImage(Properties.Resources.banner_msmr_logo2);
-				return _logo2;
-			}
-		}
+		public override BitmapImage BannerLogoRight => GetThemedImage("banner_msmr_logo2");
 
 		public override bool HasSuitsSettingsSection => true;
 		public override bool HasScriptsSettingsSection => true;

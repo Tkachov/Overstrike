@@ -193,6 +193,20 @@ namespace Overstrike.Tabs {
 			OnOpen();
 		}
 
+		public virtual void ThemeChanged() {
+			_placeholderImage = null;
+			_bigPlaceholderImage = null;
+
+			if (!_loaded) return;
+
+			var selectedSuitId = GetCurrentlySelectedSuitId();
+			MakeDisplayedSuits();
+			SelectSuitWithId(selectedSuitId);
+			if (SuitsSlots.SelectedItem != null) {
+				SuitSelected((SuitSlot)SuitsSlots.SelectedItem);
+			}
+		}
+
 		public virtual void OnOpen() {
 			SuitDeselected();
 
@@ -687,7 +701,7 @@ namespace Overstrike.Tabs {
 				return _icons[path];
 
 			if (_placeholderImage == null)
-				_placeholderImage = Utils.Imaging.ConvertToBitmapImage(HasBigIcons ? Properties.Resources.suit_missing_mm : Properties.Resources.suit_missing);
+				_placeholderImage = ((App)Application.Current).Themes.GetBitmapImage(HasBigIcons ? "suit_missing_mm" : "suit_missing");
 
 			return _placeholderImage;
 		}
@@ -700,7 +714,7 @@ namespace Overstrike.Tabs {
 				return _icons[path];
 
 			if (_bigPlaceholderImage == null)
-				_bigPlaceholderImage = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.suit_missing_mm_big); // no MSMR variant since there are no big icons in it
+				_bigPlaceholderImage = ((App)Application.Current).Themes.GetBitmapImage("suit_missing_mm_big"); // no MSMR variant since there are no big icons in it
 
 			return _bigPlaceholderImage;
 		}

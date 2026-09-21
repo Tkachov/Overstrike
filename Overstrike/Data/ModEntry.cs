@@ -8,6 +8,7 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Media.Imaging;
 
 namespace Overstrike.Data {
@@ -183,30 +184,43 @@ namespace Overstrike.Data {
 		private static BitmapImage badge_modular = null;
 		private static BitmapImage badge_script = null;
 
+		public static void ResetBadgeCache() {
+			badge_smpc = null;
+			badge_mmpc = null;
+			badge_suit = null;
+			badge_suit2 = null;
+			badge_style = null;
+			badge_stage = null;
+			badge_modular = null;
+			badge_script = null;
+		}
+
 		private static void LoadBadges() {
+			var themeManager = ((App)Application.Current).Themes;
+
 			if (badge_smpc == null)
-				badge_smpc = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.badge_smpc);
+				badge_smpc = themeManager.GetBitmapImage("badge_smpc");
 
 			if (badge_mmpc == null)
-				badge_mmpc = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.badge_mmpc);
+				badge_mmpc = themeManager.GetBitmapImage("badge_mmpc");
 
 			if (badge_suit == null)
-				badge_suit = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.badge_suit);
+				badge_suit = themeManager.GetBitmapImage("badge_suit");
 
 			if (badge_suit2 == null)
-				badge_suit2 = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.badge_suit2);
+				badge_suit2 = themeManager.GetBitmapImage("badge_suit2");
 
 			if (badge_style == null)
-				badge_style = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.badge_style);
+				badge_style = themeManager.GetBitmapImage("badge_style");
 
 			if (badge_stage == null)
-				badge_stage = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.badge_stage);
+				badge_stage = themeManager.GetBitmapImage("badge_stage");
 
 			if (badge_modular == null)
-				badge_modular = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.badge_modular);
+				badge_modular = themeManager.GetBitmapImage("badge_modular");
 
 			if (badge_script == null)
-				badge_script = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.badge_script);
+				badge_script = themeManager.GetBitmapImage("badge_script");
 		}
 
 		public static bool IsTypeFamilyModular(ModType type) {
