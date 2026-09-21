@@ -19,11 +19,11 @@
 			<Setter Property="Height" Value="100" />
 			<Setter Property="Width" Value="20" />
 			<Setter Property="Content" Value="+"/>
-			<Setter Property="Foreground" Value="{DynamicResource suits_separator_foreground}" />
+			<Setter Property="Foreground" Value="{DynamicResource MSM2SuitsMenu_SeparatorButtonForeground}" />
 			<Setter Property="Template">
 				<Setter.Value>
 					<ControlTemplate TargetType="Button">
-						<Border Name="border" BorderThickness="1" BorderBrush="Transparent" Background="{DynamicResource suits_separator_background}" CornerRadius="6">
+						<Border Name="border" BorderThickness="1" BorderBrush="Transparent" Background="{DynamicResource MSM2SuitsMenu_SeparatorButtonBackground}" CornerRadius="6">
 							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
 						</Border>
 						<ControlTemplate.Triggers>
@@ -39,19 +39,19 @@
 		<Style x:Key="CharacterTabStyle" TargetType="Button">
 			<Setter Property="OverridesDefaultStyle" Value="True" />
 			<Setter Property="Height" Value="28" />
-			<Setter Property="Foreground" Value="{DynamicResource msm2_tab_foreground}" />
+			<Setter Property="Foreground" Value="{DynamicResource MSM2SuitsMenu_CharacterTabForeground}" />
 			<Setter Property="FontWeight" Value="SemiBold" />
 			<Setter Property="Cursor" Value="Hand" />
 			<Setter Property="Template">
 				<Setter.Value>
 					<ControlTemplate TargetType="Button">
-						<Border Name="border" Background="{DynamicResource msm2_tab_background}" BorderThickness="2,2,0,2" BorderBrush="{DynamicResource msm2_tab_border}">
+						<Border Name="border" Background="{DynamicResource MSM2SuitsMenu_CharacterTabBackground}" BorderThickness="2,2,0,2" BorderBrush="{DynamicResource MSM2SuitsMenu_CharacterTabBorder}">
 							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
 						</Border>
 						<ControlTemplate.Triggers>
 							<Trigger Property="IsMouseOver" Value="True">
-								<Setter Property="BorderBrush" Value="{DynamicResource msm2_tab_hover_border}" TargetName="border" />
-								<Setter Property="Foreground" Value="{DynamicResource msm2_tab_hover_foreground}" />
+								<Setter Property="BorderBrush" Value="{DynamicResource MSM2SuitsMenu_CharacterTabHoverBorder}" TargetName="border" />
+								<Setter Property="Foreground" Value="{DynamicResource MSM2SuitsMenu_CharacterTabHoverForeground}" />
 							</Trigger>
 						</ControlTemplate.Triggers>
 					</ControlTemplate>
@@ -62,13 +62,13 @@
 		<Style x:Key="CharacterTabActiveStyle" TargetType="Button">
 			<Setter Property="OverridesDefaultStyle" Value="True" />
 			<Setter Property="Height" Value="28" />
-			<Setter Property="Foreground" Value="{DynamicResource msm2_tab_active_foreground}" />
+			<Setter Property="Foreground" Value="{DynamicResource MSM2SuitsMenu_CharacterTabActiveForeground}" />
 			<Setter Property="FontWeight" Value="SemiBold" />
 			<Setter Property="Cursor" Value="Hand" />
 			<Setter Property="Template">
 				<Setter.Value>
 					<ControlTemplate TargetType="Button">
-						<Border Name="border" Background="{DynamicResource msm2_tab_active_background}" BorderThickness="2,2,0,2" BorderBrush="{DynamicResource msm2_tab_active_border}">
+						<Border Name="border" Background="{DynamicResource MSM2SuitsMenu_CharacterTabActiveBackground}" BorderThickness="2,2,0,2" BorderBrush="{DynamicResource MSM2SuitsMenu_CharacterTabActiveBorder}">
 							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
 						</Border>
 					</ControlTemplate>
@@ -85,10 +85,10 @@
 						</Border>
 						<ControlTemplate.Triggers>
 							<Trigger Property="IsSelected" Value="true">
-								<Setter Property="Background" TargetName="Bd" Value="{DynamicResource msm2_selection}" />
+								<Setter Property="Background" TargetName="Bd" Value="{DynamicResource MSM2SuitsMenu_ListSelectionBackground}" />
 							</Trigger>
 							<Trigger Property="IsEnabled" Value="false">
-								<Setter Property="Background" TargetName="Bd" Value="{DynamicResource msm2_selection}" />
+								<Setter Property="Background" TargetName="Bd" Value="{DynamicResource MSM2SuitsMenu_ListSelectionBackground}" />
 							</Trigger>
 						</ControlTemplate.Triggers>
 					</ControlTemplate>
@@ -99,8 +99,8 @@
 		</Style>
 	</UserControl.Resources>
 
-	<Border BorderThickness="0,1,0,0" BorderBrush="{DynamicResource msm2_outer_border}" Margin="-2,-1,-2,-2">
-		<Grid Background="{DynamicResource msm2_background}">
+	<Border BorderThickness="0,1,0,0" BorderBrush="{DynamicResource MSM2SuitsMenu_OuterBorder}" Margin="-2,-1,-2,-2">
+		<Grid Background="{DynamicResource MSM2SuitsMenu_Background}">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition/>
 			<ColumnDefinition Width="1004" />
@@ -119,7 +119,7 @@
 					<RowDefinition Height="*" />
 				</Grid.RowDefinitions>
 				
-				<Grid Grid.Row="0" Background="{DynamicResource msm2_background}">
+				<Grid Grid.Row="0" Background="{DynamicResource MSM2SuitsMenu_TabStripBackground}">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="*" />
 						<ColumnDefinition Width="*" />
@@ -128,13 +128,13 @@
 					<Button x:Name="_MilesTabButton" Grid.Column="1" Content="MILES" Style="{StaticResource CharacterTabStyle}" Click="MilesTabButton_Click" />
 				</Grid>
 
-				<ListView Grid.Row="1" BorderThickness="0" Margin="0,0,0,-1" VirtualizingStackPanel.VirtualizationMode="Recycling" x:Name="_SuitsSlots" Background="{DynamicResource msm2_list_background}"
+				<ListView Grid.Row="1" BorderThickness="0" Margin="0,0,0,-1" VirtualizingStackPanel.VirtualizationMode="Recycling" x:Name="_SuitsSlots" Background="{DynamicResource MSM2SuitsMenu_ListBackground}"
 					ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible"
 					ItemsPanel="{StaticResource ThumbnailListTemplate}" ItemContainerStyle="{StaticResource NotemanagerContainerStyle}" AllowDrop="True" SelectionMode="Single" Padding="77,7,77,0" SelectionChanged="SuitsSlots_SelectionChanged" MouseLeftButtonDown="SuitsSlots_MouseLeftButtonDown" MouseMove="SuitsSlots_MouseMove" DragEnter="SuitsSlots_DragEnter" Drop="SuitsSlots_Drop" KeyUp="SuitsSlots_KeyUp">
 					<ListView.Resources>
 						<DataTemplate DataType="{x:Type local:SuitSlot}">
 							<Border Margin="11,8,11,7">
-								<Border Width="112" Height="153" BorderThickness="3,3,3,3" BorderBrush="{DynamicResource msm2_slot_border}">
+								<Border Width="112" Height="153" BorderThickness="3,3,3,3" BorderBrush="{DynamicResource MSM2SuitsMenu_SlotBorder}">
 									<Grid ClipToBounds="True">
 										<Image Source="{Binding Icon}" VerticalAlignment="Top" HorizontalAlignment="Left" Opacity="{Binding DisplayOpacity}" Stretch="Fill" Margin="-20,0,0,0" Width="149" Height="154" />
 									</Grid>
@@ -145,7 +145,7 @@
 				</ListView>
 			</Grid>
 
-			<Grid Background="{DynamicResource msm2_side_background}" HorizontalAlignment="Stretch" Grid.Column="1">
+			<Grid Background="{DynamicResource MSM2SuitsMenu_SideBackground}" HorizontalAlignment="Stretch" Grid.Column="1">
 				<Grid.RowDefinitions>
 					<RowDefinition Height="34" />
 					<RowDefinition Height="*" />
@@ -153,7 +153,7 @@
 					<RowDefinition Height="34" />
 				</Grid.RowDefinitions>
 
-				<Border Grid.Row="0" BorderThickness="0,0,0,1" BorderBrush="{DynamicResource msm2_divider}">
+				<Border Grid.Row="0" BorderThickness="0,0,0,1" BorderBrush="{DynamicResource MSM2SuitsMenu_HeaderDivider}">
 					<TextBlock x:Name="_SuitName" Text="SUIT NAME" Margin="9,0,5,0" VerticalAlignment="Center" FontWeight="Bold" TextTrimming="CharacterEllipsis" />
 				</Border>
 
@@ -186,7 +186,7 @@
 										<ComboBox.ItemTemplate><DataTemplate><TextBlock Text="{Binding Name}" /></DataTemplate></ComboBox.ItemTemplate>
 									</ComboBox>
 								</Grid>
-								<TextBlock x:Name="_SuitSpiderArmsRageWarning" Text="Spider-Arms changes do not apply during Rage Mode. They only appear while the Symbiote Suit slot is selected in-game." TextWrapping="Wrap" Foreground="{DynamicResource muted_text}" FontSize="10.5" Margin="65,5,0,0" Visibility="Collapsed" />
+								<TextBlock x:Name="_SuitSpiderArmsRageWarning" Text="Spider-Arms changes do not apply during Rage Mode. They only appear while the Symbiote Suit slot is selected in-game." TextWrapping="Wrap" Foreground="{DynamicResource MSM2SuitsMenu_SpiderArmsWarningForeground}" FontSize="10.5" Margin="65,5,0,0" Visibility="Collapsed" />
 							</StackPanel>
 
 							<StackPanel x:Name="_SuitWebwingsPanel" Margin="0,0,0,8" Visibility="Collapsed">
@@ -210,7 +210,7 @@
 					</ScrollViewer>
 				</Grid>
 
-				<Border Grid.Row="2" Margin="6,0,6,0" Padding="0,7" BorderThickness="0,1,0,1" BorderBrush="{DynamicResource msm2_divider}">
+				<Border Grid.Row="2" Margin="6,0,6,0" Padding="0,7" BorderThickness="0,1,0,1" BorderBrush="{DynamicResource MSM2SuitsMenu_FooterDivider}">
 					<CheckBox IsChecked="{Binding Path=MSM2SuitsMenuContent_ShowDeleted}" HorizontalAlignment="Left">
 						<TextBlock Text="Show deleted" Margin="2,0,0,0" />
 					</CheckBox>

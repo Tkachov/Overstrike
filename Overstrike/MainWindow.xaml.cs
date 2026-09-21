@@ -139,9 +139,6 @@ namespace Overstrike {
 			_profiles = profiles;
 			_mods = mods;
 
-			((App)App.Current).Themes.ThemeChanged += OnThemeChanged;
-			Closed += (_, _) => ((App)App.Current).Themes.ThemeChanged -= OnThemeChanged;
-
 			ApplyThemeVisuals();
 			MakeThemeItems();
 			MakeProfileItems();
@@ -161,14 +158,11 @@ namespace Overstrike {
 			((App)App.Current).WriteSettings();
 		}
 
-		private void OnThemeChanged() {
-			ApplyThemeVisuals();
-		}
 
 		private void ApplyThemeVisuals() {
 			var themeManager = ((App)App.Current).Themes;
-			AddModsIcon.Source = themeManager.GetBitmapImage("add_icon");
-			RefreshIcon.Source = themeManager.GetBitmapImage("reload_icon");
+			AddModsIcon.Source = themeManager.GetBitmapImage("add_icon.png");
+			RefreshIcon.Source = themeManager.GetBitmapImage("reload_icon.png");
 			UpdateStatusMessageBrush();
 			UpdateSelectedThemeItem();
 
@@ -184,7 +178,7 @@ namespace Overstrike {
 		}
 
 		private void UpdateStatusMessageBrush() {
-			StatusMessage.Foreground = (Brush)FindResource(_statusMessageErrorShown ? "error_text" : "light_text");
+			StatusMessage.Foreground = (Brush)FindResource(_statusMessageErrorShown ? "MainWindow_StatusMessageErrorForeground" : "MainWindow_StatusMessageForeground");
 		}
 
 		private void FirstSwitchToProfile() {
@@ -417,9 +411,12 @@ namespace Overstrike {
 			if (e.AddedItems.Count <= 0) return;
 
 			ThemeItem item = (ThemeItem)e.AddedItems[0];
-			_settings.SelectedTheme = item.Theme.Id;
+			var changed = ((App)App.Current).Themes.ApplyThemeById(item.Theme.Id);
+			_settings.SelectedTheme = ((App)App.Current).Themes.ActiveTheme.Id;
 			SaveSettings();
-			((App)App.Current).Themes.ApplyThemeById(item.Theme.Id);
+			if (changed) {
+				ApplyThemeVisuals();
+			}
 		}
 
 		private void MakeModsItems() {

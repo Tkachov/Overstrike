@@ -6,7 +6,7 @@
 		xmlns:local="clr-namespace:Overstrike.Windows"
 		mc:Ignorable="d"
 		Title="Overstrike — Error Log" WindowStartupLocation="CenterScreen" Height="600" Width="800" KeyUp="Window_KeyUp">
-	<Grid Background="{DynamicResource app_background}">
+	<Grid Background="{DynamicResource ErrorLogWindow_Background}">
 		<Grid.RowDefinitions>
 			<RowDefinition />
 			<RowDefinition Height="26" />

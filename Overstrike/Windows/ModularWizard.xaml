@@ -25,14 +25,14 @@
 			<RowDefinition Height="30" />
 		</Grid.RowDefinitions>
 
-		<Border BorderThickness="0,1,0,1" BorderBrush="{DynamicResource light_border}">
+		<Border BorderThickness="0,1,0,1" BorderBrush="{DynamicResource ModularWizard_Border}">
 			<ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible" Grid.Row="0">
-				<Grid x:Name="_MainGrid" HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="{DynamicResource window_background}" />
+				<Grid x:Name="_MainGrid" HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="{DynamicResource ModularWizard_MainBackground}" />
 			</ScrollViewer>
 		</Border>
 
-		<Grid Grid.Row="1" Background="{DynamicResource window_background}">
-			<Label x:Name="_NumberLabel" Content="#13/37" HorizontalAlignment="Stretch" Margin="1,2,0,0" Foreground="{DynamicResource light_border}" VerticalAlignment="Top" Height="30" MouseLeftButtonUp="NumberLabel_MouseLeftButtonUp" />
+		<Grid Grid.Row="1" Background="{DynamicResource ModularWizard_FooterBackground}">
+			<Label x:Name="_NumberLabel" Content="#13/37" HorizontalAlignment="Stretch" Margin="1,2,0,0" Foreground="{DynamicResource ModularWizard_NumberLabelForeground}" VerticalAlignment="Top" Height="30" MouseLeftButtonUp="NumberLabel_MouseLeftButtonUp" />
 			<TextBox x:Name="_NumberBox" Margin="4,6,0,0" Visibility="Collapsed" Text="13" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top" Height="20" LostFocus="NumberBox_LostFocus" TextChanged="NumberBox_TextChanged" />
 
 			<Button x:Name="CancelButton" Margin="4,4,88,4" Content="Cancel" VerticalAlignment="Top" HorizontalAlignment="Right" Width="80" Height="22" Click="CancelButton_Click" />

@@ -199,28 +199,28 @@ namespace Overstrike.Data {
 			var themeManager = ((App)Application.Current).Themes;
 
 			if (badge_smpc == null)
-				badge_smpc = themeManager.GetBitmapImage("badge_smpc");
+				badge_smpc = themeManager.GetBitmapImage("badge_smpc.png");
 
 			if (badge_mmpc == null)
-				badge_mmpc = themeManager.GetBitmapImage("badge_mmpc");
+				badge_mmpc = themeManager.GetBitmapImage("badge_mmpc.png");
 
 			if (badge_suit == null)
-				badge_suit = themeManager.GetBitmapImage("badge_suit");
+				badge_suit = themeManager.GetBitmapImage("badge_suit.png");
 
 			if (badge_suit2 == null)
-				badge_suit2 = themeManager.GetBitmapImage("badge_suit2");
+				badge_suit2 = themeManager.GetBitmapImage("badge_suit2.png");
 
 			if (badge_style == null)
-				badge_style = themeManager.GetBitmapImage("badge_style");
+				badge_style = themeManager.GetBitmapImage("badge_style.png");
 
 			if (badge_stage == null)
-				badge_stage = themeManager.GetBitmapImage("badge_stage");
+				badge_stage = themeManager.GetBitmapImage("badge_stage.png");
 
 			if (badge_modular == null)
-				badge_modular = themeManager.GetBitmapImage("badge_modular");
+				badge_modular = themeManager.GetBitmapImage("badge_modular.png");
 
 			if (badge_script == null)
-				badge_script = themeManager.GetBitmapImage("badge_script");
+				badge_script = themeManager.GetBitmapImage("badge_script.png");
 		}
 
 		public static bool IsTypeFamilyModular(ModType type) {

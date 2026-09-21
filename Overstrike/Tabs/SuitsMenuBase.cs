@@ -706,7 +706,7 @@ namespace Overstrike.Tabs {
 				return _icons[path];
 
 			if (_placeholderImage == null)
-				_placeholderImage = ((App)Application.Current).Themes.GetBitmapImage(HasBigIcons ? "suit_missing_mm" : "suit_missing");
+				_placeholderImage = ((App)Application.Current).Themes.GetBitmapImage(HasBigIcons ? "suit_missing_mm.png" : "suit_missing.png");
 
 			return _placeholderImage;
 		}
@@ -719,7 +719,7 @@ namespace Overstrike.Tabs {
 				return _icons[path];
 
 			if (_bigPlaceholderImage == null)
-				_bigPlaceholderImage = ((App)Application.Current).Themes.GetBitmapImage("suit_missing_mm_big"); // no MSMR variant since there are no big icons in it
+				_bigPlaceholderImage = ((App)Application.Current).Themes.GetBitmapImage("suit_missing_mm_big.png"); // no MSMR variant since there are no big icons in it
 
 			return _bigPlaceholderImage;
 		}

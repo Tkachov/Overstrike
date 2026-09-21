@@ -18,11 +18,11 @@
 			<Setter Property="Height" Value="100" />
 			<Setter Property="Width" Value="20" />
 			<Setter Property="Content" Value="+"/>
-			<Setter Property="Foreground" Value="{DynamicResource suits_separator_foreground}" />
+			<Setter Property="Foreground" Value="{DynamicResource MMSuitsMenu_SeparatorButtonForeground}" />
 			<Setter Property="Template">
 				<Setter.Value>
 					<ControlTemplate TargetType="Button">
-						<Border Name="border" BorderThickness="1" BorderBrush="Transparent" Background="{DynamicResource suits_separator_background}" CornerRadius="6">
+						<Border Name="border" BorderThickness="1" BorderBrush="Transparent" Background="{DynamicResource MMSuitsMenu_SeparatorButtonBackground}" CornerRadius="6">
 							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
 						</Border>
 						<ControlTemplate.Triggers>
@@ -43,10 +43,10 @@
 						</Border>
 						<ControlTemplate.Triggers>
 							<Trigger Property="IsSelected" Value="true">
-								<Setter Property="Background" TargetName="Bd" Value="{DynamicResource mm_selection}" />
+								<Setter Property="Background" TargetName="Bd" Value="{DynamicResource MMSuitsMenu_ListSelectionBackground}" />
 							</Trigger>
 							<Trigger Property="IsEnabled" Value="false">
-								<Setter Property="Background" TargetName="Bd" Value="{DynamicResource mm_selection}" />
+								<Setter Property="Background" TargetName="Bd" Value="{DynamicResource MMSuitsMenu_ListSelectionBackground}" />
 							</Trigger>
 						</ControlTemplate.Triggers>
 					</ControlTemplate>
@@ -57,8 +57,8 @@
 		</Style>
 	</UserControl.Resources>
 
-	<Border BorderThickness="0,1,0,0" BorderBrush="{DynamicResource mm_outer_border}" Margin="-2,-1,-2,-2">
-		<Grid Background="{DynamicResource mm_background}">
+	<Border BorderThickness="0,1,0,0" BorderBrush="{DynamicResource MMSuitsMenu_OuterBorder}" Margin="-2,-1,-2,-2">
+		<Grid Background="{DynamicResource MMSuitsMenu_Background}">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition/>
 				<ColumnDefinition Width="1004" />
@@ -70,13 +70,13 @@
 					<ColumnDefinition Width="710" />
 					<ColumnDefinition Width="294" />
 				</Grid.ColumnDefinitions>
-				<ListView BorderThickness="0" Grid.Column="0" Margin="0,-1,0,-1" VirtualizingStackPanel.VirtualizationMode="Recycling" x:Name="_SuitsSlots" Background="{DynamicResource mm_list_background}"
+				<ListView BorderThickness="0" Grid.Column="0" Margin="0,-1,0,-1" VirtualizingStackPanel.VirtualizationMode="Recycling" x:Name="_SuitsSlots" Background="{DynamicResource MMSuitsMenu_ListBackground}"
 						ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible"
 						ItemsPanel="{StaticResource ThumbnailListTemplate}" ItemContainerStyle="{StaticResource NotemanagerContainerStyle}" AllowDrop="True" SelectionMode="Single" Padding="57,5,74,6" SelectionChanged="SuitsSlots_SelectionChanged" MouseLeftButtonDown="SuitsSlots_MouseLeftButtonDown" MouseMove="SuitsSlots_MouseMove" DragEnter="SuitsSlots_DragEnter" Drop="SuitsSlots_Drop" KeyUp="SuitsSlots_KeyUp">
 					<ListView.Resources>
 						<DataTemplate DataType="{x:Type local:SuitSlot}">
 							<Border Margin="19,9,19,9">
-								<Border Width="102" Height="102" BorderThickness="2,2,2,2" BorderBrush="{DynamicResource mm_slot_border}">
+								<Border Width="102" Height="102" BorderThickness="2,2,2,2" BorderBrush="{DynamicResource MMSuitsMenu_SlotBorder}">
 									<Grid>
 										<Image Source="{Binding Icon}" VerticalAlignment="Center" HorizontalAlignment="Center" Opacity="{Binding DisplayOpacity}" Stretch="Fill" Width="125" Height="85" Margin="3,5,0,0" />
 									</Grid>
@@ -86,7 +86,7 @@
 					</ListView.Resources>
 				</ListView>
 
-				<Grid Background="{DynamicResource mm_side_background}" HorizontalAlignment="Stretch" Grid.Column="1">
+				<Grid Background="{DynamicResource MMSuitsMenu_SideBackground}" HorizontalAlignment="Stretch" Grid.Column="1">
 					<TextBlock x:Name="_SuitName" Text="SUIT NAME" Margin="9,7,5,0" VerticalAlignment="Top" FontWeight="Bold"/>
 
 					<Grid x:Name="_SuitInfo" Margin="-1,-1,0,0">
@@ -128,7 +128,7 @@
 						<Button x:Name="_ToggleSuitDeleteButton" Content="Delete" HorizontalAlignment="Left" Margin="10,231,0,0" VerticalAlignment="Top" Width="70" Height="22" Click="ToggleSuitDeleteButton_Click" />
 					</Grid>
 
-					<Border VerticalAlignment="Bottom" Margin="6,0,6,34" BorderThickness="0,0,0,1" BorderBrush="{DynamicResource mm_divider}">
+					<Border VerticalAlignment="Bottom" Margin="6,0,6,34" BorderThickness="0,0,0,1" BorderBrush="{DynamicResource MMSuitsMenu_Divider}">
 						<Grid Margin="-5,0,-1,0">
 							<CheckBox IsChecked="{Binding MMSuitsMenuContent_ShowDeleted}" HorizontalAlignment="Left" Margin="4,0,0,7" VerticalAlignment="Top">
 								<StackPanel Orientation="Horizontal">

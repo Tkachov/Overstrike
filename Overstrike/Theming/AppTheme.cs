@@ -8,33 +8,26 @@ namespace Overstrike.Theming {
 
 		public required string Id { get; init; }
 		public required string Name { get; init; }
-		public required string Author { get; init; }
-		public required string OverstrikeVersion { get; init; }
+		public required string Version { get; init; }
 		public required Dictionary<string, string> Colors { get; init; }
 		public bool IsBuiltIn { get; init; }
 		public string? DirectoryPath { get; init; }
 
 		public string DisplayName {
 			get {
-				if (IsBuiltIn || String.IsNullOrWhiteSpace(OverstrikeVersion) || OverstrikeVersion == ThemeManager.CurrentOverstrikeVersion) {
+				if (IsBuiltIn || String.IsNullOrWhiteSpace(Version) || Version == ThemeManager.CurrentOverstrikeVersion) {
 					return Name;
 				}
 
-				return $"{Name} (for {OverstrikeVersion})";
+				return $"{Name} (for {Version})";
 			}
 		}
 
 		public string? GetResourceOverridePath(string fileName) {
 			if (String.IsNullOrWhiteSpace(DirectoryPath)) return null;
 
-			foreach (var directoryName in new[] { "resources", "Resources" }) {
-				var path = Path.Combine(DirectoryPath, directoryName, fileName);
-				if (File.Exists(path)) {
-					return path;
-				}
-			}
-
-			return null;
+			var path = Path.Combine(DirectoryPath, "Resources", fileName);
+			return File.Exists(path) ? path : null;
 		}
 	}
 }
