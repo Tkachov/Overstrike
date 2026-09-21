@@ -27,8 +27,14 @@ namespace Overstrike.Theming {
 		public string? GetResourceOverridePath(string fileName) {
 			if (String.IsNullOrWhiteSpace(DirectoryPath)) return null;
 
-			var path = Path.Combine(DirectoryPath, "resources", fileName);
-			return File.Exists(path) ? path : null;
+			foreach (var directoryName in new[] { "resources", "Resources" }) {
+				var path = Path.Combine(DirectoryPath, directoryName, fileName);
+				if (File.Exists(path)) {
+					return path;
+				}
+			}
+
+			return null;
 		}
 	}
 }

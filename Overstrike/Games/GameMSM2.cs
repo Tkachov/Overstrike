@@ -62,7 +62,7 @@ namespace Overstrike.Games {
 
 		//
 
-		public override BitmapImage BannerBackground => GetThemedImage("banner_msmr_back");
+		public override BitmapImage BannerBackground => GetThemedImage("banner_msmr_back"); // shared background image
 
 		public override BitmapImage BannerLogoLeft => GetThemedImage("banner_msm2_logo");
 
