@@ -194,6 +194,11 @@ namespace Overstrike.Tabs {
 		}
 
 		public virtual void ThemeChanged() {
+			if (!Dispatcher.CheckAccess()) {
+				Dispatcher.Invoke(ThemeChanged);
+				return;
+			}
+
 			_placeholderImage = null;
 			_bigPlaceholderImage = null;
 

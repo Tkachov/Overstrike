@@ -136,13 +136,18 @@ namespace Overstrike.Theming {
 		public bool ApplyThemeById(string? themeId, bool silentFallback = false) {
 			var theme = ResolveTheme(themeId);
 			var changed = !String.Equals(ActiveTheme.Id, theme.Id, StringComparison.OrdinalIgnoreCase);
+			var fallbackApplied = !silentFallback && !String.Equals(themeId, theme.Id, StringComparison.OrdinalIgnoreCase);
+
+			if (!changed) {
+				return fallbackApplied;
+			}
 
 			ActiveTheme = theme;
 			ApplyBrushResources(theme);
 			_bitmapCache.Clear();
 
 			ThemeChanged?.Invoke();
-			return changed || (!silentFallback && !String.Equals(themeId, theme.Id, StringComparison.OrdinalIgnoreCase));
+			return true;
 		}
 
 		public BitmapImage GetBitmapImage(string resourceKey) {
