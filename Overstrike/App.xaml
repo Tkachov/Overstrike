@@ -18,6 +18,12 @@
 		<SolidColorBrush x:Key="ThemeButtonHoverBrush" Color="#35445E" />
 		<SolidColorBrush x:Key="ThemeButtonPressedBrush" Color="#1F293B" />
 		<SolidColorBrush x:Key="ThemeSelectionBrush" Color="#2D7ED4" />
+		<SolidColorBrush x:Key="ThemeSelectionInactiveBrush" Color="#2E3B52" />
+
+		<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#2D7ED4" />
+		<SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#E7ECF6" />
+		<SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="#2E3B52" />
+		<SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="#E7ECF6" />
 
 		<Style TargetType="{x:Type Window}">
 			<Setter Property="Background" Value="{DynamicResource ThemeWindowBackgroundBrush}" />
@@ -51,6 +57,22 @@
 			<Setter Property="SelectionTextBrush" Value="{DynamicResource ThemeTextPrimaryBrush}" />
 		</Style>
 
+		<Style TargetType="{x:Type RichTextBox}">
+			<Setter Property="Background" Value="{DynamicResource ThemeInputBackgroundBrush}" />
+			<Setter Property="Foreground" Value="{DynamicResource ThemeTextPrimaryBrush}" />
+			<Setter Property="BorderBrush" Value="{DynamicResource ThemeInputBorderBrush}" />
+			<Setter Property="CaretBrush" Value="{DynamicResource ThemeTextPrimaryBrush}" />
+			<Setter Property="SelectionBrush" Value="{DynamicResource ThemeSelectionBrush}" />
+			<Setter Property="SelectionTextBrush" Value="{DynamicResource ThemeTextPrimaryBrush}" />
+		</Style>
+
+		<Style TargetType="{x:Type PasswordBox}">
+			<Setter Property="Background" Value="{DynamicResource ThemeInputBackgroundBrush}" />
+			<Setter Property="Foreground" Value="{DynamicResource ThemeTextPrimaryBrush}" />
+			<Setter Property="BorderBrush" Value="{DynamicResource ThemeInputBorderBrush}" />
+			<Setter Property="CaretBrush" Value="{DynamicResource ThemeTextPrimaryBrush}" />
+		</Style>
+
 		<Style TargetType="{x:Type ComboBox}">
 			<Setter Property="Background" Value="{DynamicResource ThemeInputBackgroundBrush}" />
 			<Setter Property="Foreground" Value="{DynamicResource ThemeTextPrimaryBrush}" />
@@ -61,6 +83,10 @@
 						<SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#101622" />
 						<SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#101622" />
 						<SolidColorBrush x:Key="{x:Static SystemColors.WindowTextBrushKey}" Color="#E7ECF6" />
+						<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#2D7ED4" />
+						<SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#E7ECF6" />
+						<SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="#2E3B52" />
+						<SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="#E7ECF6" />
 					</ResourceDictionary>
 				</Setter.Value>
 			</Setter>
