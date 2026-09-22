@@ -179,7 +179,11 @@
 							</ListView.Resources>
 						</local:ListViewEx>
 
-						<Label x:Name="StatusMessage" Opacity="0" Content="Done! 10 mods installed." HorizontalAlignment="Left" Margin="1,4,0,0" Grid.Row="2" Foreground="{DynamicResource ThemeTextSecondaryBrush}" VerticalAlignment="Top" Height="30" MouseLeftButtonUp="StatusMessage_MouseLeftButtonUp" />
+						<Label x:Name="StatusMessage" Opacity="0" Content="Done! 10 mods installed." HorizontalAlignment="Left" Margin="1,4,0,0" Grid.Row="2" VerticalAlignment="Top" Height="30" MouseLeftButtonUp="StatusMessage_MouseLeftButtonUp">
+							<Label.Foreground>
+								<SolidColorBrush Color="{StaticResource ThemeTextMutedColor}" />
+							</Label.Foreground>
+						</Label>
 
 						<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="2">
 							<Button x:Name="InstallModsButton" Margin="4,6,4,4" Grid.Row="2" Content="Install mods" VerticalAlignment="Top" HorizontalAlignment="Right" Width="120" Height="22" Click="InstallModsButton_Click">
