@@ -1,0 +1,113 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <SolidColorBrush x:Key="MainWindow_IconButtonHoverBackground" Color="#EEE" />
+    <SolidColorBrush x:Key="MainWindow_IconButtonPressedBackground" Color="#CCC" />
+    <SolidColorBrush x:Key="MainWindow_WindowTopBorder" Color="#EEE" />
+    <SolidColorBrush x:Key="MainWindow_Background" Color="#FFF" />
+    <SolidColorBrush x:Key="MainWindow_OverlayBackground" Color="#FFF" />
+    <SolidColorBrush x:Key="MainWindow_ModsOrderLabelForeground" Color="#AAA" />
+    <SolidColorBrush x:Key="MainWindow_StatusMessageForeground" Color="#AAA" />
+    <SolidColorBrush x:Key="MainWindow_StatusMessageErrorForeground" Color="#F04" />
+    <SolidColorBrush x:Key="MainWindow_SettingsGlobalDescriptionForeground" Color="#666" />
+    <SolidColorBrush x:Key="MainWindow_ScriptWarningForeground" Color="#F04" />
+
+    <SolidColorBrush x:Key="FirstLaunch_WindowTopBorder" Color="#EEE" />
+    <SolidColorBrush x:Key="FirstLaunch_Background" Color="#FFF" />
+    <SolidColorBrush x:Key="FirstLaunch_ProfilesHeaderBackground" Color="#F6F6F6" />
+    <SolidColorBrush x:Key="FirstLaunch_ProfilesHeaderBorder" Color="#AAA" />
+    <SolidColorBrush x:Key="FirstLaunch_ProfilesHeaderProfileNameForeground" Color="#666" />
+    <SolidColorBrush x:Key="FirstLaunch_ProfilesHeaderGamePathForeground" Color="#666" />
+    <SolidColorBrush x:Key="FirstLaunch_ProfilesListBorder" Color="#AAA" />
+
+    <SolidColorBrush x:Key="CreateProfile_WindowTopBorder" Color="#EEE" />
+    <SolidColorBrush x:Key="CreateProfile_Background" Color="#FFF" />
+
+    <SolidColorBrush x:Key="ModsDetectionSplash_TopBorder" Color="#CCC" />
+    <SolidColorBrush x:Key="ModsDetectionSplash_Background" Color="#FFF" />
+    <SolidColorBrush x:Key="ModsDetectionSplash_OperationForeground" Color="#666" />
+
+    <SolidColorBrush x:Key="ErrorLogWindow_Background" Color="#EEE" />
+
+    <SolidColorBrush x:Key="ModularWizard_Border" Color="#CCC" />
+    <SolidColorBrush x:Key="ModularWizard_MainBackground" Color="#FFF" />
+    <SolidColorBrush x:Key="ModularWizard_FooterBackground" Color="#FFF" />
+    <SolidColorBrush x:Key="ModularWizard_NumberLabelForeground" Color="#CCC" />
+
+    <SolidColorBrush x:Key="TocMismatchDialog_WindowTopBorder" Color="#EEE" />
+    <SolidColorBrush x:Key="TocMismatchDialog_Background" Color="#FFF" />
+    <SolidColorBrush x:Key="TocMismatchDialog_FooterForeground" Color="#666" />
+
+    <SolidColorBrush x:Key="MSMRSuitsMenu_SeparatorButtonForeground" Color="White" />
+    <SolidColorBrush x:Key="MSMRSuitsMenu_SeparatorButtonBackground" Color="Gray" />
+    <SolidColorBrush x:Key="MSMRSuitsMenu_ListSelectionBackground" Color="#098ae4" />
+    <SolidColorBrush x:Key="MSMRSuitsMenu_OuterBorder" Color="#057" />
+    <SolidColorBrush x:Key="MSMRSuitsMenu_Background" Color="#034" />
+    <SolidColorBrush x:Key="MSMRSuitsMenu_ListBackground" Color="#057" />
+    <SolidColorBrush x:Key="MSMRSuitsMenu_SlotBorder" Color="#00DDEE" />
+    <SolidColorBrush x:Key="MSMRSuitsMenu_SideBackground" Color="#FFF" />
+    <SolidColorBrush x:Key="MSMRSuitsMenu_Divider" Color="#CCC" />
+
+    <SolidColorBrush x:Key="MMSuitsMenu_SeparatorButtonForeground" Color="White" />
+    <SolidColorBrush x:Key="MMSuitsMenu_SeparatorButtonBackground" Color="Gray" />
+    <SolidColorBrush x:Key="MMSuitsMenu_ListSelectionBackground" Color="#098ae4" />
+    <SolidColorBrush x:Key="MMSuitsMenu_OuterBorder" Color="#0D1C2B" />
+    <SolidColorBrush x:Key="MMSuitsMenu_Background" Color="#070C1B" />
+    <SolidColorBrush x:Key="MMSuitsMenu_ListBackground" Color="#0D1C2B" />
+    <SolidColorBrush x:Key="MMSuitsMenu_SlotBorder" Color="#0FF" />
+    <SolidColorBrush x:Key="MMSuitsMenu_SideBackground" Color="#FFF" />
+    <SolidColorBrush x:Key="MMSuitsMenu_Divider" Color="#CCC" />
+
+    <SolidColorBrush x:Key="MSM2SuitsMenu_SeparatorButtonForeground" Color="White" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_SeparatorButtonBackground" Color="Gray" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabForeground" Color="#CCC" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabBackground" Color="#032338" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabBorder" Color="#032338" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabHoverBorder" Color="#3CCCF7" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabHoverForeground" Color="#62F7F8" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabActiveForeground" Color="#62F7F8" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabActiveBackground" Color="#389ED5" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabActiveBorder" Color="#3CCCF7" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_ListSelectionBackground" Color="#61EFF0" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_OuterBorder" Color="#06132F" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_Background" Color="#000B1F" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_TabStripBackground" Color="#000B1F" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_ListBackground" Color="#06132F" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_SlotBorder" Color="#61EFF0" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_SideBackground" Color="#FFF" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_HeaderDivider" Color="#DDD" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_SpiderArmsWarningForeground" Color="#666" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_FooterDivider" Color="#DDD" />
+
+    <BitmapImage x:Key="add_icon.png" UriSource="/Overstrike;component/Properties/Resources/add_icon.png" />
+    <BitmapImage x:Key="badge_mmpc.png" UriSource="/Overstrike;component/Properties/Resources/badge_mmpc.png" />
+    <BitmapImage x:Key="badge_modular.png" UriSource="/Overstrike;component/Properties/Resources/badge_modular.png" />
+    <BitmapImage x:Key="badge_script.png" UriSource="/Overstrike;component/Properties/Resources/badge_script.png" />
+    <BitmapImage x:Key="badge_smpc.png" UriSource="/Overstrike;component/Properties/Resources/badge_smpc.png" />
+    <BitmapImage x:Key="badge_stage.png" UriSource="/Overstrike;component/Properties/Resources/badge_stage.png" />
+    <BitmapImage x:Key="badge_style.png" UriSource="/Overstrike;component/Properties/Resources/badge_style.png" />
+    <BitmapImage x:Key="badge_suit.png" UriSource="/Overstrike;component/Properties/Resources/badge_suit.png" />
+    <BitmapImage x:Key="badge_suit2.png" UriSource="/Overstrike;component/Properties/Resources/badge_suit2.png" />
+    <BitmapImage x:Key="banner_i30_back.png" UriSource="/Overstrike;component/Properties/Resources/banner_i30_back.png" />
+    <BitmapImage x:Key="banner_i30_logo.png" UriSource="/Overstrike;component/Properties/Resources/banner_i30_logo.png" />
+    <BitmapImage x:Key="banner_i30_logo2.png" UriSource="/Overstrike;component/Properties/Resources/banner_i30_logo2.png" />
+    <BitmapImage x:Key="banner_i33_back.png" UriSource="/Overstrike;component/Properties/Resources/banner_i30_back.png" />
+    <BitmapImage x:Key="banner_i33_logo.png" UriSource="/Overstrike;component/Properties/Resources/banner_i33_logo.png" />
+    <BitmapImage x:Key="banner_i33_logo2.png" UriSource="/Overstrike;component/Properties/Resources/banner_i30_logo2.png" />
+    <BitmapImage x:Key="banner_mm_back.png" UriSource="/Overstrike;component/Properties/Resources/banner_mm_back.png" />
+    <BitmapImage x:Key="banner_mm_logo.png" UriSource="/Overstrike;component/Properties/Resources/banner_mm_logo.png" />
+    <BitmapImage x:Key="banner_mm_logo2.png" UriSource="/Overstrike;component/Properties/Resources/banner_mm_logo2.png" />
+    <BitmapImage x:Key="banner_msm2_back.png" UriSource="/Overstrike;component/Properties/Resources/banner_msmr_back.png" />
+    <BitmapImage x:Key="banner_msm2_logo.png" UriSource="/Overstrike;component/Properties/Resources/banner_msm2_logo.png" />
+    <BitmapImage x:Key="banner_msm2_logo2.png" UriSource="/Overstrike;component/Properties/Resources/banner_msm2_logo2.png" />
+    <BitmapImage x:Key="banner_msmr_back.png" UriSource="/Overstrike;component/Properties/Resources/banner_msmr_back.png" />
+    <BitmapImage x:Key="banner_msmr_logo.png" UriSource="/Overstrike;component/Properties/Resources/banner_msmr_logo.png" />
+    <BitmapImage x:Key="banner_msmr_logo2.png" UriSource="/Overstrike;component/Properties/Resources/banner_msmr_logo2.png" />
+    <BitmapImage x:Key="banner_rcra_back.png" UriSource="/Overstrike;component/Properties/Resources/banner_rcra_back.png" />
+    <BitmapImage x:Key="banner_rcra_logo.png" UriSource="/Overstrike;component/Properties/Resources/banner_rcra_logo.png" />
+    <BitmapImage x:Key="banner_rcra_logo2.png" UriSource="/Overstrike;component/Properties/Resources/banner_rcra_logo2.png" />
+    <BitmapImage x:Key="reload_icon.png" UriSource="/Overstrike;component/Properties/Resources/reload_icon.png" />
+    <BitmapImage x:Key="suit_missing.png" UriSource="/Overstrike;component/Properties/Resources/suit_missing.png" />
+    <BitmapImage x:Key="suit_missing_mm.png" UriSource="/Overstrike;component/Properties/Resources/suit_missing_mm.png" />
+    <BitmapImage x:Key="suit_missing_mm_big.png" UriSource="/Overstrike;component/Properties/Resources/suit_missing_mm_big.png" />
+    <BitmapImage x:Key="suit_missing_msm2.png" UriSource="/Overstrike;component/Properties/Resources/suit_missing_msm2.png" />
+</ResourceDictionary>

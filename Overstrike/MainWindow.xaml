@@ -141,13 +141,13 @@
 								<Button.Resources>
 									<Style TargetType="{x:Type Button}" BasedOn="{StaticResource IconButton}" />
 								</Button.Resources>
-								<Image x:Name="AddModsIcon" Grid.Column="1" Width="16" Height="16" HorizontalAlignment="Left" Stretch="UniformToFill" VerticalAlignment="Top" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+								<Image x:Name="AddModsIcon" Grid.Column="1" Width="16" Height="16" HorizontalAlignment="Left" Stretch="UniformToFill" VerticalAlignment="Top" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" Source="{DynamicResource ResourceKey=add_icon.png}" />
 							</Button>
 							<Button Grid.Column="2" x:Name="RefreshButton" VerticalAlignment="Top" Height="22" Click="RefreshButton_Click">
 								<Button.Resources>
 									<Style TargetType="{x:Type Button}" BasedOn="{StaticResource IconButton}" />
 								</Button.Resources>
-								<Image x:Name="RefreshIcon" Grid.Column="1" Width="16" Height="16" HorizontalAlignment="Left" Stretch="UniformToFill" VerticalAlignment="Top" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+								<Image x:Name="RefreshIcon" Grid.Column="1" Width="16" Height="16" HorizontalAlignment="Left" Stretch="UniformToFill" VerticalAlignment="Top" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" Source="{DynamicResource ResourceKey=reload_icon.png}" />
 							</Button>
 						</Grid>
 

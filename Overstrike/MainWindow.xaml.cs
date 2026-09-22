@@ -139,7 +139,6 @@ namespace Overstrike {
 			_profiles = profiles;
 			_mods = mods;
 
-			ApplyThemeVisuals();
 			MakeThemeItems();
 			MakeProfileItems();
 			FirstSwitchToProfile();
@@ -160,15 +159,11 @@ namespace Overstrike {
 
 
 		private void ApplyThemeVisuals() {
-			var themeManager = ((App)App.Current).Themes;
-			AddModsIcon.Source = themeManager.GetBitmapImage("add_icon.png");
-			RefreshIcon.Source = themeManager.GetBitmapImage("reload_icon.png");
 			UpdateStatusMessageBrush();
 			UpdateSelectedThemeItem();
 
 			if (_selectedProfile != null) {
 				ModEntry.ResetBadgeCache();
-				SetupBanner();
 				MakeModsItems();
 			}
 
@@ -209,9 +204,9 @@ namespace Overstrike {
 		private bool _reactToScriptSettingsChange = true;
 
 		private void SetupBanner() {
-			GradientImage.Source = _selectedGame.BannerBackground;
-			LogoImage.Source = _selectedGame.BannerLogoLeft;
-			LogoImage2.Source = _selectedGame.BannerLogoRight;
+			GradientImage.SetResourceReference(Image.SourceProperty, _selectedGame.BannerBackgroundResourceKey);
+			LogoImage.SetResourceReference(Image.SourceProperty, _selectedGame.BannerLogoLeftResourceKey);
+			LogoImage2.SetResourceReference(Image.SourceProperty, _selectedGame.BannerLogoRightResourceKey);
 
 			if (_selectedGame.HasSuitsSettingsSection) {
 				SuitModsSettings.Visibility = Visibility.Visible;

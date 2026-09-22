@@ -1,0 +1,96 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="Theme.Name">XAML Prototype</sys:String>
+    <sys:String x:Key="Theme.Version">1.8.1.0</sys:String>
+
+    <Color x:Key="Theme.Window">#101820</Color>
+    <Color x:Key="Theme.Panel">#1B2735</Color>
+    <Color x:Key="Theme.PanelAlt">#243447</Color>
+    <Color x:Key="Theme.Border">#3A506B</Color>
+    <Color x:Key="Theme.Accent">#5BC0BE</Color>
+    <Color x:Key="Theme.AccentStrong">#6FFFE9</Color>
+    <Color x:Key="Theme.TextMuted">#B7C4D3</Color>
+    <Color x:Key="Theme.Error">#FF6B6B</Color>
+
+    <SolidColorBrush x:Key="MainWindow_WindowTopBorder" Color="{StaticResource Theme.Border}" />
+    <SolidColorBrush x:Key="MainWindow_Background" Color="{StaticResource Theme.Window}" />
+    <SolidColorBrush x:Key="MainWindow_OverlayBackground" Color="{StaticResource Theme.Panel}" />
+    <SolidColorBrush x:Key="MainWindow_IconButtonHoverBackground" Color="{StaticResource Theme.PanelAlt}" />
+    <SolidColorBrush x:Key="MainWindow_IconButtonPressedBackground" Color="{StaticResource Theme.Border}" />
+    <SolidColorBrush x:Key="MainWindow_ModsOrderLabelForeground" Color="{StaticResource Theme.TextMuted}" />
+    <SolidColorBrush x:Key="MainWindow_StatusMessageForeground" Color="{StaticResource Theme.TextMuted}" />
+    <SolidColorBrush x:Key="MainWindow_StatusMessageErrorForeground" Color="{StaticResource Theme.Error}" />
+    <SolidColorBrush x:Key="MainWindow_SettingsGlobalDescriptionForeground" Color="{StaticResource Theme.TextMuted}" />
+    <SolidColorBrush x:Key="MainWindow_ScriptWarningForeground" Color="{StaticResource Theme.Error}" />
+
+    <SolidColorBrush x:Key="FirstLaunch_WindowTopBorder" Color="{StaticResource Theme.Border}" />
+    <SolidColorBrush x:Key="FirstLaunch_Background" Color="{StaticResource Theme.Window}" />
+    <SolidColorBrush x:Key="FirstLaunch_ProfilesHeaderBackground" Color="{StaticResource Theme.Panel}" />
+    <SolidColorBrush x:Key="FirstLaunch_ProfilesHeaderBorder" Color="{StaticResource Theme.Border}" />
+    <SolidColorBrush x:Key="FirstLaunch_ProfilesHeaderProfileNameForeground" Color="{StaticResource Theme.TextMuted}" />
+    <SolidColorBrush x:Key="FirstLaunch_ProfilesHeaderGamePathForeground" Color="{StaticResource Theme.TextMuted}" />
+    <SolidColorBrush x:Key="FirstLaunch_ProfilesListBorder" Color="{StaticResource Theme.Border}" />
+
+    <SolidColorBrush x:Key="CreateProfile_WindowTopBorder" Color="{StaticResource Theme.Border}" />
+    <SolidColorBrush x:Key="CreateProfile_Background" Color="{StaticResource Theme.Window}" />
+
+    <SolidColorBrush x:Key="ModsDetectionSplash_TopBorder" Color="{StaticResource Theme.Border}" />
+    <SolidColorBrush x:Key="ModsDetectionSplash_Background" Color="{StaticResource Theme.Window}" />
+    <SolidColorBrush x:Key="ModsDetectionSplash_OperationForeground" Color="{StaticResource Theme.TextMuted}" />
+
+    <SolidColorBrush x:Key="ErrorLogWindow_Background" Color="{StaticResource Theme.Panel}" />
+
+    <SolidColorBrush x:Key="ModularWizard_Border" Color="{StaticResource Theme.Border}" />
+    <SolidColorBrush x:Key="ModularWizard_MainBackground" Color="{StaticResource Theme.Window}" />
+    <SolidColorBrush x:Key="ModularWizard_FooterBackground" Color="{StaticResource Theme.Window}" />
+    <SolidColorBrush x:Key="ModularWizard_NumberLabelForeground" Color="{StaticResource Theme.Border}" />
+
+    <SolidColorBrush x:Key="TocMismatchDialog_WindowTopBorder" Color="{StaticResource Theme.Border}" />
+    <SolidColorBrush x:Key="TocMismatchDialog_Background" Color="{StaticResource Theme.Window}" />
+    <SolidColorBrush x:Key="TocMismatchDialog_FooterForeground" Color="{StaticResource Theme.TextMuted}" />
+
+    <SolidColorBrush x:Key="MSMRSuitsMenu_SeparatorButtonForeground" Color="White" />
+    <SolidColorBrush x:Key="MSMRSuitsMenu_SeparatorButtonBackground" Color="{StaticResource Theme.PanelAlt}" />
+    <SolidColorBrush x:Key="MSMRSuitsMenu_ListSelectionBackground" Color="{StaticResource Theme.Accent}" />
+    <SolidColorBrush x:Key="MSMRSuitsMenu_OuterBorder" Color="{StaticResource Theme.PanelAlt}" />
+    <SolidColorBrush x:Key="MSMRSuitsMenu_Background" Color="{StaticResource Theme.Panel}" />
+    <SolidColorBrush x:Key="MSMRSuitsMenu_ListBackground" Color="{StaticResource Theme.PanelAlt}" />
+    <SolidColorBrush x:Key="MSMRSuitsMenu_SlotBorder" Color="{StaticResource Theme.AccentStrong}" />
+    <SolidColorBrush x:Key="MSMRSuitsMenu_SideBackground" Color="{StaticResource Theme.Window}" />
+    <SolidColorBrush x:Key="MSMRSuitsMenu_Divider" Color="{StaticResource Theme.Border}" />
+
+    <SolidColorBrush x:Key="MMSuitsMenu_SeparatorButtonForeground" Color="White" />
+    <SolidColorBrush x:Key="MMSuitsMenu_SeparatorButtonBackground" Color="{StaticResource Theme.PanelAlt}" />
+    <SolidColorBrush x:Key="MMSuitsMenu_ListSelectionBackground" Color="{StaticResource Theme.Accent}" />
+    <SolidColorBrush x:Key="MMSuitsMenu_OuterBorder" Color="{StaticResource Theme.PanelAlt}" />
+    <SolidColorBrush x:Key="MMSuitsMenu_Background" Color="{StaticResource Theme.Panel}" />
+    <SolidColorBrush x:Key="MMSuitsMenu_ListBackground" Color="{StaticResource Theme.PanelAlt}" />
+    <SolidColorBrush x:Key="MMSuitsMenu_SlotBorder" Color="{StaticResource Theme.AccentStrong}" />
+    <SolidColorBrush x:Key="MMSuitsMenu_SideBackground" Color="{StaticResource Theme.Window}" />
+    <SolidColorBrush x:Key="MMSuitsMenu_Divider" Color="{StaticResource Theme.Border}" />
+
+    <SolidColorBrush x:Key="MSM2SuitsMenu_SeparatorButtonForeground" Color="White" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_SeparatorButtonBackground" Color="{StaticResource Theme.PanelAlt}" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabForeground" Color="{StaticResource Theme.TextMuted}" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabBackground" Color="{StaticResource Theme.PanelAlt}" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabBorder" Color="{StaticResource Theme.PanelAlt}" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabHoverBorder" Color="{StaticResource Theme.AccentStrong}" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabHoverForeground" Color="{StaticResource Theme.AccentStrong}" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabActiveForeground" Color="{StaticResource Theme.AccentStrong}" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabActiveBackground" Color="{StaticResource Theme.Accent}" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabActiveBorder" Color="{StaticResource Theme.AccentStrong}" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_ListSelectionBackground" Color="{StaticResource Theme.AccentStrong}" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_OuterBorder" Color="{StaticResource Theme.PanelAlt}" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_Background" Color="{StaticResource Theme.Panel}" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_TabStripBackground" Color="{StaticResource Theme.Panel}" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_ListBackground" Color="{StaticResource Theme.PanelAlt}" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_SlotBorder" Color="{StaticResource Theme.AccentStrong}" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_SideBackground" Color="{StaticResource Theme.Window}" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_HeaderDivider" Color="{StaticResource Theme.Border}" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_SpiderArmsWarningForeground" Color="{StaticResource Theme.TextMuted}" />
+    <SolidColorBrush x:Key="MSM2SuitsMenu_FooterDivider" Color="{StaticResource Theme.Border}" />
+
+    <BitmapImage x:Key="add_icon.png" UriSource="Resources/reload_icon.png" />
+    <BitmapImage x:Key="banner_msmr_logo.png" UriSource="Resources/banner_mm_logo.png" />
+</ResourceDictionary>

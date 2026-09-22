@@ -6,7 +6,6 @@
 using Overstrike.Data;
 using Overstrike.MetaInstallers;
 using System.IO;
-using System.Windows.Media.Imaging;
 
 namespace Overstrike.Games {
 	internal class GameMM: GameBase {
@@ -44,11 +43,11 @@ namespace Overstrike.Games {
 
 		//
 
-		public override BitmapImage BannerBackground => GetThemedImage("banner_mm_back.png");
+		public override string BannerBackgroundResourceKey => "banner_mm_back.png";
 
-		public override BitmapImage BannerLogoLeft => GetThemedImage("banner_mm_logo.png");
+		public override string BannerLogoLeftResourceKey => "banner_mm_logo.png";
 
-		public override BitmapImage BannerLogoRight => GetThemedImage("banner_mm_logo2.png");
+		public override string BannerLogoRightResourceKey => "banner_mm_logo2.png";
 
 		public override bool HasSuitsSettingsSection => true;
 		public override bool HasScriptsSettingsSection => false;
