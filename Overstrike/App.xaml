@@ -98,7 +98,7 @@
 			<Setter Property="Template">
 				<Setter.Value>
 					<ControlTemplate TargetType="{x:Type ComboBoxItem}">
-						<Border x:Name="ComboBoxItemBorder" Background="{TemplateBinding Background}" Padding="4,2">
+						<Border x:Name="ComboBoxItemBorder" Background="{TemplateBinding Background}" BorderBrush="Transparent" BorderThickness="1" Padding="4,2">
 							<ContentPresenter />
 						</Border>
 						<ControlTemplate.Triggers>
@@ -110,6 +110,9 @@
 							</Trigger>
 							<Trigger Property="IsEnabled" Value="False">
 								<Setter Property="Opacity" Value="0.65" />
+							</Trigger>
+							<Trigger Property="IsKeyboardFocused" Value="True">
+								<Setter TargetName="ComboBoxItemBorder" Property="BorderBrush" Value="{DynamicResource ThemeTextSecondaryBrush}" />
 							</Trigger>
 						</ControlTemplate.Triggers>
 					</ControlTemplate>
@@ -134,6 +137,19 @@
 		<Style TargetType="{x:Type ListViewItem}">
 			<Setter Property="Foreground" Value="{DynamicResource ThemeTextPrimaryBrush}" />
 			<Setter Property="Background" Value="Transparent" />
+			<Setter Property="FocusVisualStyle">
+				<Setter.Value>
+					<Style TargetType="{x:Type Control}">
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate>
+									<Rectangle Margin="1" Stroke="{DynamicResource ThemeTextSecondaryBrush}" StrokeThickness="1" StrokeDashArray="1 1" SnapsToDevicePixels="True" />
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+					</Style>
+				</Setter.Value>
+			</Setter>
 			<Style.Triggers>
 				<Trigger Property="IsSelected" Value="True">
 					<Setter Property="Background" Value="{DynamicResource ThemeSelectionBrush}" />
