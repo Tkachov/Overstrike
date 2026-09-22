@@ -52,7 +52,7 @@ namespace Overstrike.Theming {
 
 		public bool ApplyThemeById(string? themeId) {
 			var theme = ResolveTheme(themeId);
-			if (String.Equals(ActiveTheme.Id, theme.Id, StringComparison.OrdinalIgnoreCase)) {
+			if (String.Equals(ActiveTheme.Id, theme.Id, StringComparison.OrdinalIgnoreCase) && ReferenceEquals(theme.Resources, _activeThemeResources)) {
 				return false;
 			}
 

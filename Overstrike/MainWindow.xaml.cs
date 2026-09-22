@@ -162,8 +162,8 @@ namespace Overstrike {
 			UpdateStatusMessageBrush();
 			UpdateSelectedThemeItem();
 
+			ModEntry.ResetBadgeCache();
 			if (_selectedProfile != null) {
-				ModEntry.ResetBadgeCache();
 				MakeModsItems();
 			}
 
