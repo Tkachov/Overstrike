@@ -45,12 +45,28 @@
 			<Setter Property="Background" Value="{DynamicResource ThemeInputBackgroundBrush}" />
 			<Setter Property="Foreground" Value="{DynamicResource ThemeTextPrimaryBrush}" />
 			<Setter Property="BorderBrush" Value="{DynamicResource ThemeInputBorderBrush}" />
+			<Setter Property="CaretBrush" Value="{DynamicResource ThemeTextPrimaryBrush}" />
+			<Setter Property="SelectionBrush" Value="{DynamicResource ThemeSelectionBrush}" />
+			<Setter Property="SelectionTextBrush" Value="{DynamicResource ThemeTextPrimaryBrush}" />
 		</Style>
 
 		<Style TargetType="{x:Type ComboBox}">
 			<Setter Property="Background" Value="{DynamicResource ThemeInputBackgroundBrush}" />
 			<Setter Property="Foreground" Value="{DynamicResource ThemeTextPrimaryBrush}" />
 			<Setter Property="BorderBrush" Value="{DynamicResource ThemeInputBorderBrush}" />
+		</Style>
+
+		<Style TargetType="{x:Type ComboBoxItem}">
+			<Setter Property="Background" Value="{DynamicResource ThemeInputBackgroundBrush}" />
+			<Setter Property="Foreground" Value="{DynamicResource ThemeTextPrimaryBrush}" />
+			<Style.Triggers>
+				<Trigger Property="IsHighlighted" Value="True">
+					<Setter Property="Background" Value="{DynamicResource ThemeButtonHoverBrush}" />
+				</Trigger>
+				<Trigger Property="IsSelected" Value="True">
+					<Setter Property="Background" Value="{DynamicResource ThemeSelectionBrush}" />
+				</Trigger>
+			</Style.Triggers>
 		</Style>
 
 		<Style TargetType="{x:Type ListView}">
@@ -65,6 +81,7 @@
 			<Style.Triggers>
 				<Trigger Property="IsSelected" Value="True">
 					<Setter Property="Background" Value="{DynamicResource ThemeSelectionBrush}" />
+					<Setter Property="Foreground" Value="{DynamicResource ThemeTextPrimaryBrush}" />
 				</Trigger>
 			</Style.Triggers>
 		</Style>
