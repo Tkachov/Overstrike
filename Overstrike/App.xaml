@@ -38,14 +38,14 @@
 			<Setter Property="Foreground" Value="{DynamicResource ThemeTextPrimaryBrush}" />
 		</Style>
 
-		<Style TargetType="{x:Type Control}">
-			<Setter Property="Foreground" Value="{DynamicResource ThemeTextPrimaryBrush}" />
-		</Style>
-
 		<Style TargetType="{x:Type Button}">
 			<Setter Property="Background" Value="{DynamicResource ThemeButtonBackgroundBrush}" />
 			<Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderBrush}" />
 			<Setter Property="BorderThickness" Value="1" />
+		</Style>
+
+		<Style TargetType="{x:Type CheckBox}">
+			<Setter Property="Foreground" Value="{DynamicResource ThemeTextPrimaryBrush}" />
 		</Style>
 
 		<Style TargetType="{x:Type TextBox}">
@@ -136,12 +136,10 @@
 
 		<Style TargetType="{x:Type TabItem}">
 			<Setter Property="Foreground" Value="{DynamicResource ThemeTextPrimaryBrush}" />
-			<Setter Property="Background" Value="{DynamicResource ThemeSurfaceBackgroundBrush}" />
 		</Style>
 
 		<Style TargetType="{x:Type Expander}">
 			<Setter Property="Foreground" Value="{DynamicResource ThemeTextPrimaryBrush}" />
-			<Setter Property="Background" Value="{DynamicResource ThemeSurfaceBackgroundBrush}" />
 		</Style>
 	</Application.Resources>
 </Application>
