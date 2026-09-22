@@ -7,8 +7,8 @@
 		mc:Ignorable="d"
 		Title="Overstrike" Height="422" MinHeight="422" MaxHeight="422" Width="600" MinWidth="600" MaxWidth="600" WindowStartupLocation="CenterScreen">
 
-	<Border BorderThickness="0,1,0,0" BorderBrush="#EEE">
-		<Grid Background="#FFF">
+	<Border BorderThickness="0,1,0,0" BorderBrush="{DynamicResource FirstLaunch_WindowTopBorder}">
+		<Grid Background="{DynamicResource FirstLaunch_Background}">
 			<TextBlock Text="Welcome!" FontWeight="Bold" VerticalAlignment="Top" Margin="10,10,10,0" />
 			<TextBlock Text="Looks like this is your first time here." VerticalAlignment="Top" Margin="10,34,10,0" />
 			<TextBlock Text="To start, you need to create a profile." VerticalAlignment="Top" Margin="10,58,10,0" />
@@ -30,15 +30,15 @@
 						<RowDefinition Height="34" />
 					</Grid.RowDefinitions>
 
-					<Border BorderThickness="1,1,1,0" Grid.Row="0" Background="#F6F6F6" BorderBrush="#AAA">
+					<Border BorderThickness="1,1,1,0" Grid.Row="0" Background="{DynamicResource FirstLaunch_ProfilesHeaderBackground}" BorderBrush="{DynamicResource FirstLaunch_ProfilesHeaderBorder}">
 						<Grid>
 							<CheckBox x:Name="CreateAllProfilesCheckbox" IsChecked="True" HorizontalAlignment="Left" Margin="10,6,0,0" VerticalAlignment="Top" Checked="CreateAllProfilesCheckbox_Changed" Unchecked="CreateAllProfilesCheckbox_Changed" />
-							<TextBlock Text="Profile name" Foreground="#666" HorizontalAlignment="Left" Margin="40,5,0,0" VerticalAlignment="Top" />
-							<TextBlock Text="Game path" Foreground="#666" HorizontalAlignment="Left" Margin="180,5,0,0" VerticalAlignment="Top" />
+							<TextBlock Text="Profile name" Foreground="{DynamicResource FirstLaunch_ProfilesHeaderProfileNameForeground}" HorizontalAlignment="Left" Margin="40,5,0,0" VerticalAlignment="Top" />
+							<TextBlock Text="Game path" Foreground="{DynamicResource FirstLaunch_ProfilesHeaderGamePathForeground}" HorizontalAlignment="Left" Margin="180,5,0,0" VerticalAlignment="Top" />
 						</Grid>
 					</Border>
 
-					<local:ListViewEx Grid.Row="1" BorderThickness="1,0,1,1" BorderBrush="#AAA" Padding="0,0,1,0"
+					<local:ListViewEx Grid.Row="1" BorderThickness="1,0,1,1" BorderBrush="{DynamicResource FirstLaunch_ProfilesListBorder}" Padding="0,0,1,0"
 										  x:Name="ProfilesList" VirtualizingStackPanel.VirtualizationMode="Recycling"
 										  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible"
 										  SelectionMode="Single" Height="150" VerticalAlignment="Top">

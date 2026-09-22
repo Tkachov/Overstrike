@@ -6,6 +6,7 @@
 using Overstrike.MetaInstallers;
 using System.IO;
 using System;
+using System.Windows;
 using System.Windows.Media.Imaging;
 using Overstrike.Data;
 
@@ -62,5 +63,9 @@ namespace Overstrike.Games {
 
 		public abstract bool HasSuitsSettingsSection { get; }
 		public abstract bool HasScriptsSettingsSection { get; }
+
+		protected static BitmapImage GetThemedImage(string resourceKey) {
+			return ((App)Application.Current).Themes.GetBitmapImage(resourceKey);
+		}
 	}
 }

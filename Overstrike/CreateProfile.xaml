@@ -6,8 +6,8 @@
 		xmlns:local="clr-namespace:Overstrike"
 		mc:Ignorable="d"
 		Title="Create new profile" Height="150" Width="700" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
-	<Border BorderThickness="0,1,0,0" BorderBrush="#EEE">
-		<Grid>
+	<Border BorderThickness="0,1,0,0" BorderBrush="{DynamicResource CreateProfile_WindowTopBorder}">
+		<Grid Background="{DynamicResource CreateProfile_Background}">
 			<Grid Height="22" Margin="7,7,7,0" VerticalAlignment="Top">
 				<TextBox x:Name="NameTextBox" Text="" VerticalAlignment="Top" Height="22" Padding="1" TextChanged="NameTextBox_TextChanged" />
 				<TextBlock IsHitTestVisible="False" Text="Profile Name" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="DarkGray">

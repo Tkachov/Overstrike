@@ -18,11 +18,11 @@
 			<Setter Property="Height" Value="100" />
 			<Setter Property="Width" Value="20" />
 			<Setter Property="Content" Value="+"/>
-			<Setter Property="Foreground" Value="White" />
+			<Setter Property="Foreground" Value="{DynamicResource MSMRSuitsMenu_SeparatorButtonForeground}" />
 			<Setter Property="Template">
 				<Setter.Value>
 					<ControlTemplate TargetType="Button">
-						<Border Name="border" BorderThickness="1" BorderBrush="Transparent" Background="Gray" CornerRadius="6">
+						<Border Name="border" BorderThickness="1" BorderBrush="Transparent" Background="{DynamicResource MSMRSuitsMenu_SeparatorButtonBackground}" CornerRadius="6">
 							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
 						</Border>
 						<ControlTemplate.Triggers>
@@ -43,10 +43,10 @@
 						</Border>
 						<ControlTemplate.Triggers>
 							<Trigger Property="IsSelected" Value="true">
-								<Setter Property="Background" TargetName="Bd" Value="#098ae4" />
+								<Setter Property="Background" TargetName="Bd" Value="{DynamicResource MSMRSuitsMenu_ListSelectionBackground}" />
 							</Trigger>
 							<Trigger Property="IsEnabled" Value="false">
-								<Setter Property="Background" TargetName="Bd" Value="#098ae4" />
+								<Setter Property="Background" TargetName="Bd" Value="{DynamicResource MSMRSuitsMenu_ListSelectionBackground}" />
 							</Trigger>
 						</ControlTemplate.Triggers>
 					</ControlTemplate>
@@ -57,8 +57,8 @@
 		</Style>
 	</UserControl.Resources>
 
-	<Border BorderThickness="0,1,0,0" BorderBrush="#057" Margin="-2,-1,-2,-2">
-		<Grid Background="#034">
+	<Border BorderThickness="0,1,0,0" BorderBrush="{DynamicResource MSMRSuitsMenu_OuterBorder}" Margin="-2,-1,-2,-2">
+		<Grid Background="{DynamicResource MSMRSuitsMenu_Background}">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition/>
 			<ColumnDefinition Width="1004" />
@@ -70,13 +70,13 @@
 				<ColumnDefinition Width="710" />
 				<ColumnDefinition Width="294" />
 			</Grid.ColumnDefinitions>
-				<ListView BorderThickness="0" Grid.Column="0" Margin="0,-1,0,-1" VirtualizingStackPanel.VirtualizationMode="Recycling" x:Name="_SuitsSlots" Background="#057"
+				<ListView BorderThickness="0" Grid.Column="0" Margin="0,-1,0,-1" VirtualizingStackPanel.VirtualizationMode="Recycling" x:Name="_SuitsSlots" Background="{DynamicResource MSMRSuitsMenu_ListBackground}"
 					ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible"
 					ItemsPanel="{StaticResource ThumbnailListTemplate}" ItemContainerStyle="{StaticResource NotemanagerContainerStyle}" AllowDrop="True" SelectionMode="Single" SelectionChanged="SuitsSlots_SelectionChanged" MouseLeftButtonDown="SuitsSlots_MouseLeftButtonDown" MouseMove="SuitsSlots_MouseMove" DragEnter="SuitsSlots_DragEnter" Drop="SuitsSlots_Drop" KeyUp="SuitsSlots_KeyUp">
 					<ListView.Resources>
 					<DataTemplate DataType="{x:Type local:SuitSlot}">
 						<Border Margin="11,19,11,19">
-							<Border Width="116" BorderThickness="1,1,1,1" BorderBrush="#00DDEE">
+							<Border Width="116" BorderThickness="1,1,1,1" BorderBrush="{DynamicResource MSMRSuitsMenu_SlotBorder}">
 								<Grid>
 									<Image Source="{Binding Icon}" VerticalAlignment="Bottom" HorizontalAlignment="Center" Opacity="{Binding DisplayOpacity}" Stretch="Fill" Width="116" Height="80" />
 								</Grid>
@@ -85,7 +85,7 @@
 					</DataTemplate>
 				</ListView.Resources>
 			</ListView>
-				<Grid Background="#FFF" HorizontalAlignment="Stretch" Grid.Column="1">
+				<Grid Background="{DynamicResource MSMRSuitsMenu_SideBackground}" HorizontalAlignment="Stretch" Grid.Column="1">
 					<TextBlock x:Name="_SuitName" Text="SUIT NAME" Margin="9,7,5,0" VerticalAlignment="Top" FontWeight="Bold"/>
 
 					<Grid x:Name="_SuitInfo" Margin="-1,-1,0,0">
@@ -113,7 +113,7 @@
 						<Button x:Name="_ToggleSuitDeleteButton" Content="Delete" HorizontalAlignment="Left" Margin="10,89,0,0" VerticalAlignment="Top" Width="70" Height="22" Click="ToggleSuitDeleteButton_Click" />
 					</Grid>
 
-					<Border VerticalAlignment="Bottom" Margin="6,0,6,34" BorderThickness="0,0,0,1" BorderBrush="#CCC">
+					<Border VerticalAlignment="Bottom" Margin="6,0,6,34" BorderThickness="0,0,0,1" BorderBrush="{DynamicResource MSMRSuitsMenu_Divider}">
 						<Grid Margin="-5,0,-1,0">
 							<CheckBox IsChecked="{Binding Path=MSMRSuitsMenuContent_ShowDeleted}" HorizontalAlignment="Left" Margin="4,0,0,7" VerticalAlignment="Top">
 								<StackPanel Orientation="Horizontal">

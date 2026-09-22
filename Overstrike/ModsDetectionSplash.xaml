@@ -6,10 +6,10 @@
 		mc:Ignorable="d"
 		Title="Overstrike" Height="128" Width="600" MinWidth="320" WindowStartupLocation="CenterScreen">
 	<Grid>
-		<Border BorderThickness="0,1,0,0" BorderBrush="#CCC">
-			<Grid HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="80" Background="#FFF">
+		<Border BorderThickness="0,1,0,0" BorderBrush="{DynamicResource ModsDetectionSplash_TopBorder}">
+			<Grid HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="80" Background="{DynamicResource ModsDetectionSplash_Background}">
 				<TextBlock x:Name="OverlayHeaderLabel" Text="Scanning Mods Library..." HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Margin="15,15,0,0" />
-				<TextBlock x:Name="OverlayOperationLabel" Text="(Current Path)" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="14" Margin="15,45,0,0" Foreground="#666" />
+				<TextBlock x:Name="OverlayOperationLabel" Text="(Current Path)" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="14" Margin="15,45,0,0" Foreground="{DynamicResource ModsDetectionSplash_OperationForeground}" />
 			</Grid>
 		</Border>
 	</Grid>

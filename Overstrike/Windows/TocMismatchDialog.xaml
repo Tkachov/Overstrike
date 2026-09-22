@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:Overstrike.Windows"
         mc:Ignorable="d"
         Title="Overstrike — 'toc' change detected" WindowStartupLocation="CenterScreen" Height="342" Width="400" ResizeMode="NoResize">
-	<Border BorderThickness="0,1,0,0" BorderBrush="#EEE">
-		<Grid Background="#FFF">
+	<Border BorderThickness="0,1,0,0" BorderBrush="{DynamicResource TocMismatchDialog_WindowTopBorder}">
+		<Grid Background="{DynamicResource TocMismatchDialog_Background}">
 			<TextBlock Text="Hey!" FontWeight="Bold" VerticalAlignment="Top" Margin="14,10,10,0" />
 			<TextBlock Text="It seems your 'toc' has changed!" VerticalAlignment="Top" Margin="14,34,10,0" />
 			<TextBlock Text="Do you want to update 'toc.BAK' with it?" VerticalAlignment="Top" Margin="14,51,10,0" />
@@ -33,7 +33,7 @@
 				</ListView.ItemContainerStyle>
 			</ListView>
 
-			<TextBlock Text="You can close this window to cancel mods installation." Foreground="#666" VerticalAlignment="Bottom" Margin="14,0,6,10" />
+			<TextBlock Text="You can close this window to cancel mods installation." Foreground="{DynamicResource TocMismatchDialog_FooterForeground}" VerticalAlignment="Bottom" Margin="14,0,6,10" />
 		</Grid>
 	</Border>
 </Window>
