@@ -86,7 +86,7 @@
 					</ListView.Resources>
 				</ListView>
 
-				<Grid Background="#FFF" HorizontalAlignment="Stretch" Grid.Column="1">
+				<Grid Background="{DynamicResource ThemeSurfaceBackgroundBrush}" HorizontalAlignment="Stretch" Grid.Column="1">
 					<TextBlock x:Name="_SuitName" Text="SUIT NAME" Margin="9,7,5,0" VerticalAlignment="Top" FontWeight="Bold"/>
 
 					<Grid x:Name="_SuitInfo" Margin="-1,-1,0,0">
@@ -128,7 +128,7 @@
 						<Button x:Name="_ToggleSuitDeleteButton" Content="Delete" HorizontalAlignment="Left" Margin="10,231,0,0" VerticalAlignment="Top" Width="70" Height="22" Click="ToggleSuitDeleteButton_Click" />
 					</Grid>
 
-					<Border VerticalAlignment="Bottom" Margin="6,0,6,34" BorderThickness="0,0,0,1" BorderBrush="#CCC">
+					<Border VerticalAlignment="Bottom" Margin="6,0,6,34" BorderThickness="0,0,0,1" BorderBrush="{DynamicResource ThemeBorderBrush}">
 						<Grid Margin="-5,0,-1,0">
 							<CheckBox IsChecked="{Binding MMSuitsMenuContent_ShowDeleted}" HorizontalAlignment="Left" Margin="4,0,0,7" VerticalAlignment="Top">
 								<StackPanel Orientation="Horizontal">

@@ -3,5 +3,85 @@
 			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			xmlns:local="clr-namespace:Overstrike">
 	<Application.Resources>
+		<Color x:Key="ThemeTextMutedColor">#A8B3C8</Color>
+
+		<SolidColorBrush x:Key="ThemeWindowBackgroundBrush" Color="#141821" />
+		<SolidColorBrush x:Key="ThemeSurfaceBackgroundBrush" Color="#1B2231" />
+		<SolidColorBrush x:Key="ThemeSurfaceAltBackgroundBrush" Color="#20283A" />
+		<SolidColorBrush x:Key="ThemeBorderBrush" Color="#2F3A4F" />
+		<SolidColorBrush x:Key="ThemeTextPrimaryBrush" Color="#E7ECF6" />
+		<SolidColorBrush x:Key="ThemeTextSecondaryBrush" Color="#A8B3C8" />
+		<SolidColorBrush x:Key="ThemeInputBackgroundBrush" Color="#101622" />
+		<SolidColorBrush x:Key="ThemeInputBorderBrush" Color="#3D4960" />
+		<SolidColorBrush x:Key="ThemeButtonBackgroundBrush" Color="#2A3448" />
+		<SolidColorBrush x:Key="ThemeButtonHoverBrush" Color="#35445E" />
+		<SolidColorBrush x:Key="ThemeButtonPressedBrush" Color="#1F293B" />
+		<SolidColorBrush x:Key="ThemeSelectionBrush" Color="#2D7ED4" />
+
+		<Style TargetType="{x:Type Window}">
+			<Setter Property="Background" Value="{DynamicResource ThemeWindowBackgroundBrush}" />
+			<Setter Property="Foreground" Value="{DynamicResource ThemeTextPrimaryBrush}" />
+		</Style>
+
+		<Style TargetType="{x:Type TextBlock}">
+			<Setter Property="Foreground" Value="{DynamicResource ThemeTextPrimaryBrush}" />
+		</Style>
+
+		<Style TargetType="{x:Type Label}">
+			<Setter Property="Foreground" Value="{DynamicResource ThemeTextPrimaryBrush}" />
+		</Style>
+
+		<Style TargetType="{x:Type Control}">
+			<Setter Property="Foreground" Value="{DynamicResource ThemeTextPrimaryBrush}" />
+		</Style>
+
+		<Style TargetType="{x:Type Button}">
+			<Setter Property="Background" Value="{DynamicResource ThemeButtonBackgroundBrush}" />
+			<Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderBrush}" />
+			<Setter Property="BorderThickness" Value="1" />
+		</Style>
+
+		<Style TargetType="{x:Type TextBox}">
+			<Setter Property="Background" Value="{DynamicResource ThemeInputBackgroundBrush}" />
+			<Setter Property="Foreground" Value="{DynamicResource ThemeTextPrimaryBrush}" />
+			<Setter Property="BorderBrush" Value="{DynamicResource ThemeInputBorderBrush}" />
+		</Style>
+
+		<Style TargetType="{x:Type ComboBox}">
+			<Setter Property="Background" Value="{DynamicResource ThemeInputBackgroundBrush}" />
+			<Setter Property="Foreground" Value="{DynamicResource ThemeTextPrimaryBrush}" />
+			<Setter Property="BorderBrush" Value="{DynamicResource ThemeInputBorderBrush}" />
+		</Style>
+
+		<Style TargetType="{x:Type ListView}">
+			<Setter Property="Background" Value="{DynamicResource ThemeInputBackgroundBrush}" />
+			<Setter Property="BorderBrush" Value="{DynamicResource ThemeInputBorderBrush}" />
+			<Setter Property="Foreground" Value="{DynamicResource ThemeTextPrimaryBrush}" />
+		</Style>
+
+		<Style TargetType="{x:Type ListViewItem}">
+			<Setter Property="Foreground" Value="{DynamicResource ThemeTextPrimaryBrush}" />
+			<Setter Property="Background" Value="Transparent" />
+			<Style.Triggers>
+				<Trigger Property="IsSelected" Value="True">
+					<Setter Property="Background" Value="{DynamicResource ThemeSelectionBrush}" />
+				</Trigger>
+			</Style.Triggers>
+		</Style>
+
+		<Style TargetType="{x:Type TabControl}">
+			<Setter Property="Background" Value="{DynamicResource ThemeWindowBackgroundBrush}" />
+			<Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderBrush}" />
+		</Style>
+
+		<Style TargetType="{x:Type TabItem}">
+			<Setter Property="Foreground" Value="{DynamicResource ThemeTextPrimaryBrush}" />
+			<Setter Property="Background" Value="{DynamicResource ThemeSurfaceBackgroundBrush}" />
+		</Style>
+
+		<Style TargetType="{x:Type Expander}">
+			<Setter Property="Foreground" Value="{DynamicResource ThemeTextPrimaryBrush}" />
+			<Setter Property="Background" Value="{DynamicResource ThemeSurfaceBackgroundBrush}" />
+		</Style>
 	</Application.Resources>
 </Application>
