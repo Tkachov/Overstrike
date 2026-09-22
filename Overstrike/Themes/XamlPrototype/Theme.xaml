@@ -92,5 +92,4 @@
     <SolidColorBrush x:Key="MSM2SuitsMenu_FooterDivider" Color="{StaticResource Theme.Border}" />
 
     <BitmapImage x:Key="add_icon.png" UriSource="Resources/add_icon.png" />
-    <BitmapImage x:Key="banner_msmr_logo.png" UriSource="Resources/banner_mm_logo.png" />
 </ResourceDictionary>

@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Media.Imaging;
+using Overstrike.Utils;
 
 namespace Overstrike.Theming {
 	internal sealed class ThemeManager {
@@ -56,14 +57,16 @@ namespace Overstrike.Theming {
 				return false;
 			}
 
-			RemoveActiveThemeResources();
-			if (theme.Resources != null) {
-				_application.Resources.MergedDictionaries.Add(theme.Resources);
-				_activeThemeResources = theme.Resources;
-			}
+			RunOnUiThread(() => {
+				RemoveActiveThemeResources();
+				if (theme.Resources != null) {
+					_application.Resources.MergedDictionaries.Add(theme.Resources);
+					_activeThemeResources = theme.Resources;
+				}
 
-			ActiveTheme = theme;
-			_bitmapCache.Clear();
+				ActiveTheme = theme;
+				_bitmapCache.Clear();
+			});
 			return true;
 		}
 
@@ -122,7 +125,8 @@ namespace Overstrike.Theming {
 					IsBuiltIn = false,
 					Resources = resources,
 				};
-			} catch {
+			} catch (Exception ex) {
+				ErrorLogger.WriteError($"Failed to load theme '{themePath}'.{Environment.NewLine}{ex}{Environment.NewLine}");
 				return null;
 			}
 		}
@@ -138,6 +142,14 @@ namespace Overstrike.Theming {
 			}
 
 			return resources;
+		}
+
+		private void RunOnUiThread(Action action) {
+			if (_application.Dispatcher.CheckAccess()) {
+				action();
+			} else {
+				_application.Dispatcher.Invoke(action);
+			}
 		}
 
 		private void RemoveActiveThemeResources() {
