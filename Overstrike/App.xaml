@@ -4,26 +4,30 @@
 			xmlns:primitives="clr-namespace:System.Windows.Controls.Primitives;assembly=PresentationFramework"
 			xmlns:local="clr-namespace:Overstrike">
 	<Application.Resources>
+		<Color x:Key="ThemeTextPrimaryColor">#E7ECF6</Color>
 		<Color x:Key="ThemeTextMutedColor">#A8B3C8</Color>
+		<Color x:Key="ThemeInputBackgroundColor">#101622</Color>
+		<Color x:Key="ThemeSelectionColor">#2D7ED4</Color>
+		<Color x:Key="ThemeSelectionInactiveColor">#2E3B52</Color>
 
 		<SolidColorBrush x:Key="ThemeWindowBackgroundBrush" Color="#141821" />
 		<SolidColorBrush x:Key="ThemeSurfaceBackgroundBrush" Color="#1B2231" />
 		<SolidColorBrush x:Key="ThemeSurfaceAltBackgroundBrush" Color="#20283A" />
 		<SolidColorBrush x:Key="ThemeBorderBrush" Color="#2F3A4F" />
-		<SolidColorBrush x:Key="ThemeTextPrimaryBrush" Color="#E7ECF6" />
-		<SolidColorBrush x:Key="ThemeTextSecondaryBrush" Color="#A8B3C8" />
-		<SolidColorBrush x:Key="ThemeInputBackgroundBrush" Color="#101622" />
+		<SolidColorBrush x:Key="ThemeTextPrimaryBrush" Color="{StaticResource ThemeTextPrimaryColor}" />
+		<SolidColorBrush x:Key="ThemeTextSecondaryBrush" Color="{StaticResource ThemeTextMutedColor}" />
+		<SolidColorBrush x:Key="ThemeInputBackgroundBrush" Color="{StaticResource ThemeInputBackgroundColor}" />
 		<SolidColorBrush x:Key="ThemeInputBorderBrush" Color="#3D4960" />
 		<SolidColorBrush x:Key="ThemeButtonBackgroundBrush" Color="#2A3448" />
 		<SolidColorBrush x:Key="ThemeButtonHoverBrush" Color="#35445E" />
 		<SolidColorBrush x:Key="ThemeButtonPressedBrush" Color="#1F293B" />
-		<SolidColorBrush x:Key="ThemeSelectionBrush" Color="#2D7ED4" />
-		<SolidColorBrush x:Key="ThemeSelectionInactiveBrush" Color="#2E3B52" />
+		<SolidColorBrush x:Key="ThemeSelectionBrush" Color="{StaticResource ThemeSelectionColor}" />
+		<SolidColorBrush x:Key="ThemeSelectionInactiveBrush" Color="{StaticResource ThemeSelectionInactiveColor}" />
 
-		<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#2D7ED4" />
-		<SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#E7ECF6" />
-		<SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="#2E3B52" />
-		<SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="#E7ECF6" />
+		<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{StaticResource ThemeSelectionColor}" />
+		<SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="{StaticResource ThemeTextPrimaryColor}" />
+		<SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{StaticResource ThemeSelectionInactiveColor}" />
+		<SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="{StaticResource ThemeTextPrimaryColor}" />
 
 		<Style TargetType="{x:Type Window}">
 			<Setter Property="Background" Value="{DynamicResource ThemeWindowBackgroundBrush}" />
@@ -79,13 +83,13 @@
 			<Setter Property="Resources">
 				<Setter.Value>
 					<ResourceDictionary>
-						<SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#101622" />
-						<SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#101622" />
-						<SolidColorBrush x:Key="{x:Static SystemColors.WindowTextBrushKey}" Color="#E7ECF6" />
-						<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#2D7ED4" />
-						<SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#E7ECF6" />
-						<SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="#2E3B52" />
-						<SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="#E7ECF6" />
+						<SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="{StaticResource ThemeInputBackgroundColor}" />
+						<SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="{StaticResource ThemeInputBackgroundColor}" />
+						<SolidColorBrush x:Key="{x:Static SystemColors.WindowTextBrushKey}" Color="{StaticResource ThemeTextPrimaryColor}" />
+						<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{StaticResource ThemeSelectionColor}" />
+						<SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="{StaticResource ThemeTextPrimaryColor}" />
+						<SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{StaticResource ThemeSelectionInactiveColor}" />
+						<SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="{StaticResource ThemeTextPrimaryColor}" />
 					</ResourceDictionary>
 				</Setter.Value>
 			</Setter>
