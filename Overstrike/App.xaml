@@ -95,6 +95,26 @@
 		<Style TargetType="{x:Type ComboBoxItem}">
 			<Setter Property="Background" Value="{DynamicResource ThemeInputBackgroundBrush}" />
 			<Setter Property="Foreground" Value="{DynamicResource ThemeTextPrimaryBrush}" />
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type ComboBoxItem}">
+						<Border x:Name="ComboBoxItemBorder" Background="{TemplateBinding Background}" Padding="4,2">
+							<ContentPresenter />
+						</Border>
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsHighlighted" Value="True">
+								<Setter TargetName="ComboBoxItemBorder" Property="Background" Value="{DynamicResource ThemeButtonHoverBrush}" />
+							</Trigger>
+							<Trigger Property="IsSelected" Value="True">
+								<Setter TargetName="ComboBoxItemBorder" Property="Background" Value="{DynamicResource ThemeSelectionBrush}" />
+							</Trigger>
+							<Trigger Property="IsEnabled" Value="False">
+								<Setter Property="Opacity" Value="0.65" />
+							</Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
 			<Style.Triggers>
 				<Trigger Property="IsHighlighted" Value="True">
 					<Setter Property="Background" Value="{DynamicResource ThemeButtonHoverBrush}" />
