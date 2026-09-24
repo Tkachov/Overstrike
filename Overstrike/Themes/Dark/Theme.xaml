@@ -72,6 +72,7 @@
 
 	<!-- ComboBox -->
 
+<!--
 	<Style x:Key="FocusVisual">
 		<Setter Property="Control.Template">
 			<Setter.Value>
@@ -81,7 +82,8 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
-	<SolidColorBrush x:Key="TextBox.Static.Background" Color="#FFFFFFFF"/>
+-->
+	<SolidColorBrush x:Key="TextBox.Static.Background" Color="{StaticResource background}"/>
 	<Style x:Key="ComboBoxEditableTextBox" TargetType="{x:Type TextBox}">
 		<Setter Property="OverridesDefaultStyle" Value="true"/>
 		<Setter Property="AllowDrop" Value="true"/>
@@ -98,12 +100,9 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
-	<LinearGradientBrush x:Key="ComboBox.Static.Background" EndPoint="0,1" StartPoint="0,0">
-		<GradientStop Color="#FFF0F0F0" Offset="0.0"/>
-		<GradientStop Color="#FFE5E5E5" Offset="1.0"/>
-	</LinearGradientBrush>
-	<SolidColorBrush x:Key="ComboBox.Static.Border" Color="#FFACACAC"/>
-	<SolidColorBrush x:Key="ComboBox.Static.Glyph" Color="#FF606060"/>
+	<SolidColorBrush x:Key="ComboBox.Static.Background" Color="{StaticResource background}"/>
+	<SolidColorBrush x:Key="ComboBox.Static.Border" Color="{StaticResource border}"/>
+	<SolidColorBrush x:Key="ComboBox.Static.Glyph" Color="#FFFF6060"/>
 	<SolidColorBrush x:Key="ComboBox.Static.Editable.Background" Color="#FFFFFFFF"/>
 	<SolidColorBrush x:Key="ComboBox.Static.Editable.Border" Color="#FFABADB3"/>
 	<SolidColorBrush x:Key="ComboBox.Static.Editable.Button.Background" Color="Transparent"/>
@@ -332,10 +331,10 @@
 		</ControlTemplate.Triggers>
 	</ControlTemplate>
 	<Style TargetType="{x:Type ComboBox}">
-		<Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+		<!-- <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/> -->
 		<Setter Property="Background" Value="{StaticResource ComboBox.Static.Background}"/>
 		<Setter Property="BorderBrush" Value="{StaticResource ComboBox.Static.Border}"/>
-		<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"/>
+		<Setter Property="Foreground" Value="{DynamicResource textBrush}"/>
 		<Setter Property="BorderThickness" Value="1"/>
 		<Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
 		<Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
