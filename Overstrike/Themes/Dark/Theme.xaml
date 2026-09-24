@@ -1,0 +1,35 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:sys="clr-namespace:System;assembly=mscorlib">
+	<sys:String x:Key="Theme.Name">Overstrike Dark by Tkachov</sys:String>
+	<sys:String x:Key="Theme.Version">1.8.1.0</sys:String>
+
+	<Color x:Key="background">#202024</Color>
+	<Color x:Key="border">#303035</Color>
+	<Color x:Key="text">#EEEEEE</Color>
+	<SolidColorBrush x:Key="textBrush" Color="{StaticResource text}" />
+	<SolidColorBrush x:Key="borderBrush" Color="{StaticResource border}" />
+	<SolidColorBrush x:Key="backgroundBrush" Color="{StaticResource background}" />
+
+	<SolidColorBrush x:Key="MainWindow_WindowTopBorder" Color="{StaticResource border}" />
+	<SolidColorBrush x:Key="MainWindow_Background" Color="{StaticResource background}" />
+
+	<Style TargetType="Label">
+		<Setter Property="Foreground" Value="{StaticResource textBrush}"/>
+	</Style>
+
+	<Style TargetType="TabItem">
+		<Setter Property="Background" Value="{DynamicResource background}"/>
+	</Style>
+
+	<Style TargetType="TabControl">
+		<Setter Property="Background" Value="{DynamicResource background}"/>
+		<Setter Property="BorderBrush" Value="{StaticResource borderBrush}"/>
+	</Style>
+
+	<Style TargetType="ListView">
+		<Setter Property="Background" Value="{DynamicResource background}"/>
+	</Style>
+
+	<BitmapImage x:Key="banner_msm2_back.png" UriSource="Resources/banner_msm2_back.png" />
+</ResourceDictionary>
