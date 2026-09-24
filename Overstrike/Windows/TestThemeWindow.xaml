@@ -22,36 +22,21 @@
 		<ScrollViewer Grid.Column="0" Grid.Row="1" VerticalScrollBarVisibility="Auto" Background="{DynamicResource MainWindow_Background}">
 			<Border BorderThickness="0,1,0,0" BorderBrush="{DynamicResource MainWindow_WindowTopBorder}">
 				<StackPanel Margin="10,10,10,10">
-					<!-- 1. Label -->
-					<Label Content="Sample Label Element" Margin="0,0,0,10"/>
+					<Grid>
+						<Label Content="Profile:" HorizontalAlignment="Left" Margin="0,3,0,0" VerticalAlignment="Top" Width="55"/>
+						<ComboBox SelectedIndex="0" Margin="55,5,5,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="180">
+							<ComboBoxItem Content="Option 1" />
+							<ComboBoxItem Content="Option 2" />
+							<ComboBoxItem Content="Option 3" />
+						</ComboBox>
+					</Grid>
 
-					<!-- 2. TextBlock -->
-					<TextBlock Text="Sample TextBlock Element" Margin="0,0,0,10"/>
-					<TextBlock Text="Sample TextBlock Element" Margin="0,0,0,10" Foreground="{DynamicResource MainWindow_ScriptWarningForeground}"/>
-					<TextBlock Text="Sample TextBlock Element" Margin="0,0,0,10" Foreground="{DynamicResource MainWindow_SettingsGlobalDescriptionForeground}"/>
-
-					<!-- 3. TextBox -->
-					<TextBox Text="Sample TextBox text..." Padding="6,4" Margin="0,0,0,10"/>
-
-					<!-- 4. ComboBox -->
-					<ComboBox SelectedIndex="0" Margin="0,0,0,10">
-						<ComboBoxItem Content="Option 1" />
-						<ComboBoxItem Content="Option 2" />
-						<ComboBoxItem Content="Option 3" />
-					</ComboBox>
-
-					<!-- 5. Button (Normal & Disabled) -->
-					<Button Content="Normal Button" Margin="0,0,0,5"/>
-					<Button Content="Disabled Button" IsEnabled="False" Margin="0,0,0,10"/>
-
-					<!-- 6. CheckBox (Normal & Disabled) -->
-					<CheckBox Content="Normal CheckBox" Margin="0,0,0,5"/>
-					<CheckBox Content="Disabled CheckBox" IsEnabled="False" Margin="0,0,0,10"/>
-					<CheckBox Content="Normal CheckBox" IsChecked="True" Margin="0,0,0,5"/>
-					<CheckBox Content="Disabled CheckBox" IsChecked="True" IsEnabled="False" Margin="0,0,0,10"/>
-
-					<!-- 7. TabControl & TabItem -->
-					<TabControl Height="90" Margin="0,0,0,10">
+					<Grid Margin="0,10,0,10">
+						<TextBlock Text="TextBlock" Margin="5,0,0,0"/>
+						<TextBlock Text="TextBlock" Margin="125,0,0,0" Foreground="{DynamicResource MainWindow_ScriptWarningForeground}"/>
+						<TextBlock Text="TextBlock" Margin="245,0,0,0" Foreground="{DynamicResource MainWindow_SettingsGlobalDescriptionForeground}"/>
+					</Grid>
+					<TabControl Height="90" Margin="0,0,0,0">
 						<TabItem Header="Tab One">
 							<TextBlock Text="Content inside Tab One." Margin="5"/>
 						</TabItem>
@@ -60,9 +45,75 @@
 						</TabItem>
 					</TabControl>
 
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="32" />
+						</Grid.RowDefinitions>
+
+						<Label Content="Done! 10 mods installed." HorizontalAlignment="Left" Margin="0,4,0,0" Grid.Row="0" Foreground="{DynamicResource MainWindow_StatusMessageForeground}" VerticalAlignment="Top" Height="30" />
+
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="0">
+							<Button Margin="4,6,4,4" Content="Install mods" VerticalAlignment="Top" HorizontalAlignment="Right" Width="120" Height="22">
+								<Button.ContextMenu>
+									<ContextMenu>
+										<MenuItem Header="Uninstall all mods" />
+										<MenuItem Header="Launch the game" />
+										<Separator />
+										<MenuItem Header="Reset 'toc'" />
+									</ContextMenu>
+								</Button.ContextMenu>
+							</Button>
+
+							<Button Margin="4,6,0,4" Content="Run modded game" VerticalAlignment="Top" HorizontalAlignment="Right" Width="120" Height="22" IsEnabled="False" />
+						</StackPanel>
+					</Grid>
+
+					<Grid DockPanel.Dock="Top" Height="22" Margin="0,20,0,6" VerticalAlignment="Top" Grid.Row="0">
+						<Grid Grid.Column="0">
+							<TextBox HorizontalAlignment="Left" Width="234" Padding="1" x:Name="FilterTextBox1" />
+							<TextBlock IsHitTestVisible="False" Text="Filter..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="DarkGray">
+								<TextBlock.Style>
+									<Style TargetType="{x:Type TextBlock}">
+										<Setter Property="Visibility" Value="Collapsed"/>
+										<Style.Triggers>
+											<DataTrigger Binding="{Binding Text, ElementName=FilterTextBox1}" Value="">
+												<Setter Property="Visibility" Value="Visible"/>
+											</DataTrigger>
+										</Style.Triggers>
+									</Style>
+								</TextBlock.Style>
+							</TextBlock>
+						</Grid>
+					</Grid>
+
+					<Grid DockPanel.Dock="Top" Height="22" Margin="0,2,0,20" VerticalAlignment="Top" Grid.Row="0">
+						<Grid Grid.Column="0">
+							<TextBox HorizontalAlignment="Left" Width="234" Padding="1" x:Name="FilterTextBox2" Text="text" />
+							<TextBlock IsHitTestVisible="False" Text="Filter..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="DarkGray">
+								<TextBlock.Style>
+									<Style TargetType="{x:Type TextBlock}">
+										<Setter Property="Visibility" Value="Collapsed"/>
+										<Style.Triggers>
+											<DataTrigger Binding="{Binding Text, ElementName=FilterTextBox2}" Value="">
+												<Setter Property="Visibility" Value="Visible"/>
+											</DataTrigger>
+										</Style.Triggers>
+									</Style>
+								</TextBlock.Style>
+							</TextBlock>
+						</Grid>
+					</Grid>
+
+					<!-- 6. CheckBox (Normal & Disabled) -->
+					<CheckBox Content="Normal CheckBox" Margin="0,0,0,5"/>
+					<CheckBox Content="Disabled CheckBox" IsEnabled="False" Margin="0,0,0,10"/>
+					<CheckBox Content="Normal CheckBox" IsChecked="True" Margin="0,0,0,5"/>
+					<CheckBox Content="Disabled CheckBox" IsChecked="True" IsEnabled="False" Margin="0,0,0,10"/>
+
+					<!-- 7. TabControl & TabItem -->
+
 					<!-- 8. Expander -->
 					<Expander Header="Click to Expand" Margin="0,0,0,10">
-						<TextBlock Text="Hidden content revealed inside the Expander." Margin="5"/>
 					</Expander>
 					<Expander Header="Click to Expand" IsExpanded="True" Margin="0,0,0,10">
 						<TextBlock Text="Hidden content revealed inside the Expander." Margin="5"/>
@@ -95,36 +146,21 @@
 
 			<Border BorderThickness="0,1,0,0" BorderBrush="{DynamicResource MainWindow_WindowTopBorder}">
 				<StackPanel Margin="10,10,10,10">
-					<!-- 1. Label -->
-					<Label Content="Sample Label Element" Margin="0,0,0,10"/>
+					<Grid>
+						<Label Content="Profile:" HorizontalAlignment="Left" Margin="0,3,0,0" VerticalAlignment="Top" Width="55"/>
+						<ComboBox SelectedIndex="0" Margin="55,5,5,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="180">
+							<ComboBoxItem Content="Option 1" />
+							<ComboBoxItem Content="Option 2" />
+							<ComboBoxItem Content="Option 3" />
+						</ComboBox>
+					</Grid>
 
-					<!-- 2. TextBlock -->
-					<TextBlock Text="Sample TextBlock Element" Margin="0,0,0,10"/>
-					<TextBlock Text="Sample TextBlock Element" Margin="0,0,0,10" Foreground="{DynamicResource MainWindow_ScriptWarningForeground}"/>
-					<TextBlock Text="Sample TextBlock Element" Margin="0,0,0,10" Foreground="{DynamicResource MainWindow_SettingsGlobalDescriptionForeground}"/>
-
-					<!-- 3. TextBox -->
-					<TextBox Text="Sample TextBox text..." Padding="6,4" Margin="0,0,0,10"/>
-
-					<!-- 4. ComboBox -->
-					<ComboBox SelectedIndex="0" Margin="0,0,0,10">
-						<ComboBoxItem Content="Option 1" />
-						<ComboBoxItem Content="Option 2" />
-						<ComboBoxItem Content="Option 3" />
-					</ComboBox>
-
-					<!-- 5. Button (Normal & Disabled) -->
-					<Button Content="Normal Button" Margin="0,0,0,5"/>
-					<Button Content="Disabled Button" IsEnabled="False" Margin="0,0,0,10"/>
-
-					<!-- 6. CheckBox (Normal & Disabled) -->
-					<CheckBox Content="Normal CheckBox" Margin="0,0,0,5"/>
-					<CheckBox Content="Disabled CheckBox" IsEnabled="False" Margin="0,0,0,10"/>
-					<CheckBox Content="Normal CheckBox" IsChecked="True" Margin="0,0,0,5"/>
-					<CheckBox Content="Disabled CheckBox" IsChecked="True" IsEnabled="False" Margin="0,0,0,10"/>
-
-					<!-- 7. TabControl & TabItem -->
-					<TabControl Height="90" Margin="0,0,0,10">
+					<Grid Margin="0,10,0,10">
+						<TextBlock Text="TextBlock" Margin="5,0,0,0"/>
+						<TextBlock Text="TextBlock" Margin="125,0,0,0" Foreground="{DynamicResource MainWindow_ScriptWarningForeground}"/>
+						<TextBlock Text="TextBlock" Margin="245,0,0,0" Foreground="{DynamicResource MainWindow_SettingsGlobalDescriptionForeground}"/>
+					</Grid>
+					<TabControl Height="90" Margin="0,0,0,0">
 						<TabItem Header="Tab One">
 							<TextBlock Text="Content inside Tab One." Margin="5"/>
 						</TabItem>
@@ -133,9 +169,73 @@
 						</TabItem>
 					</TabControl>
 
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="32" />
+						</Grid.RowDefinitions>
+
+						<Label Content="Done! 10 mods installed." HorizontalAlignment="Left" Margin="0,4,0,0" Grid.Row="0" Foreground="{DynamicResource MainWindow_StatusMessageForeground}" VerticalAlignment="Top" Height="30" />
+
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="0">
+							<Button Margin="4,6,4,4" Content="Install mods" VerticalAlignment="Top" HorizontalAlignment="Right" Width="120" Height="22">
+								<Button.ContextMenu>
+									<ContextMenu>
+										<MenuItem Header="Uninstall all mods" />
+										<MenuItem Header="Launch the game" />
+										<Separator />
+										<MenuItem Header="Reset 'toc'" />
+									</ContextMenu>
+								</Button.ContextMenu>
+							</Button>
+
+							<Button Margin="4,6,0,4" Content="Run modded game" VerticalAlignment="Top" HorizontalAlignment="Right" Width="120" Height="22" IsEnabled="False" />
+						</StackPanel>
+					</Grid>
+
+					<Grid DockPanel.Dock="Top" Height="22" Margin="0,20,0,6" VerticalAlignment="Top" Grid.Row="0">
+						<Grid Grid.Column="0">
+							<TextBox HorizontalAlignment="Left" Width="234" Padding="1" x:Name="FilterTextBox3" />
+							<TextBlock IsHitTestVisible="False" Text="Filter..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="DarkGray">
+								<TextBlock.Style>
+									<Style TargetType="{x:Type TextBlock}">
+										<Setter Property="Visibility" Value="Collapsed"/>
+										<Style.Triggers>
+											<DataTrigger Binding="{Binding Text, ElementName=FilterTextBox3}" Value="">
+												<Setter Property="Visibility" Value="Visible"/>
+											</DataTrigger>
+										</Style.Triggers>
+									</Style>
+								</TextBlock.Style>
+							</TextBlock>
+						</Grid>
+					</Grid>
+
+					<Grid DockPanel.Dock="Top" Height="22" Margin="0,2,0,20" VerticalAlignment="Top" Grid.Row="0">
+						<Grid Grid.Column="0">
+							<TextBox HorizontalAlignment="Left" Width="234" Padding="1" x:Name="FilterTextBox4" Text="text" />
+							<TextBlock IsHitTestVisible="False" Text="Filter..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="DarkGray">
+								<TextBlock.Style>
+									<Style TargetType="{x:Type TextBlock}">
+										<Setter Property="Visibility" Value="Collapsed"/>
+										<Style.Triggers>
+											<DataTrigger Binding="{Binding Text, ElementName=FilterTextBox4}" Value="">
+												<Setter Property="Visibility" Value="Visible"/>
+											</DataTrigger>
+										</Style.Triggers>
+									</Style>
+								</TextBlock.Style>
+							</TextBlock>
+						</Grid>
+					</Grid>
+
+					<!-- 6. CheckBox (Normal & Disabled) -->
+					<CheckBox Content="Normal CheckBox" Margin="0,0,0,5"/>
+					<CheckBox Content="Disabled CheckBox" IsEnabled="False" Margin="0,0,0,10"/>
+					<CheckBox Content="Normal CheckBox" IsChecked="True" Margin="0,0,0,5"/>
+					<CheckBox Content="Disabled CheckBox" IsChecked="True" IsEnabled="False" Margin="0,0,0,10"/>
+
 					<!-- 8. Expander -->
 					<Expander Header="Click to Expand" Margin="0,0,0,10">
-						<TextBlock Text="Hidden content revealed inside the Expander." Margin="5"/>
 					</Expander>
 					<Expander Header="Click to Expand" IsExpanded="True" Margin="0,0,0,10">
 						<TextBlock Text="Hidden content revealed inside the Expander." Margin="5"/>
