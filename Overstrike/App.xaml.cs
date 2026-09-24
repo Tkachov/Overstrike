@@ -8,6 +8,7 @@ using Overstrike.Detectors;
 using Overstrike.Games;
 using Overstrike.MetaInstallers;
 using Overstrike.Theming;
+using Overstrike.Windows;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -67,6 +68,13 @@ namespace Overstrike {
 			}
 
 			ShutdownMode = ShutdownMode.OnLastWindowClose;
+
+			if (e.Args.Length >= 1 && e.Args[0] == "test-theme") {
+				var window = new TestThemeWindow();
+				window.Show();
+				return;
+			}
+
 			if (Profiles.Count > 0) {
 				var window = new MainWindow(Settings, Profiles, Mods);
 				window.Show();

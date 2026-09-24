@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Overstrike": {
+      "commandName": "Project",
+      "commandLineArgs": "test-theme"
+    }
+  }
+}
