@@ -23,8 +23,10 @@
 - checkbox
 - mod icons
 
-- button
++ button
 - context menu
+	
+- TODO: revisit button, input, dropdown (, tab?)
 
 / suits menu
 
@@ -71,6 +73,24 @@
 	<Color x:Key="borderDisabled">#2B2B31</Color>
 	<Color x:Key="textDisabled">#66666E</Color>
 	<SolidColorBrush x:Key="textDisabledBrush" Color="{StaticResource textDisabled}" />
+	
+	<!-- button -->
+	<Color x:Key="buttonBackground">#2E2E33</Color>
+	<Color x:Key="buttonBorder">#303035</Color>
+	<Color x:Key="buttonHoverBackground">#333338</Color>
+	<Color x:Key="buttonHoverBorder">#47474C</Color>
+	<!--
+	<Color x:Key="buttonBackground">#202024</Color>
+	<Color x:Key="buttonBorder">#303035</Color>
+	<Color x:Key="buttonHoverBackground">#292930</Color>
+	<Color x:Key="buttonHoverBorder">#3B3B40</Color>
+	-->
+	
+	<Color x:Key="buttonPressBackground">#38383D</Color>
+	<Color x:Key="buttonPressBorder">#4C4C51</Color>
+	<Color x:Key="buttonDisableBackground">#27272C</Color>
+	<Color x:Key="buttonDisableBorder">#303035</Color>
+	<Color x:Key="buttonDisableText">#66666E</Color> <!-- == textDisabled -->
 
 	<SolidColorBrush x:Key="MainWindow_WindowTopBorder" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="MainWindow_Background" Color="{StaticResource background}" />
@@ -670,6 +690,56 @@
 				<Setter Property="Foreground" Value="{DynamicResource textBrush}"/>
 			</Trigger>
 		</Style.Triggers>
+	</Style>
+	
+	<!-- button -->
+
+	<SolidColorBrush x:Key="Button.Static.Background" Color="{StaticResource buttonBackground}"/>
+	<SolidColorBrush x:Key="Button.Static.Border" Color="{StaticResource buttonBorder}"/>
+	<SolidColorBrush x:Key="Button.Static.Foreground" Color="{StaticResource text}"/>
+	<SolidColorBrush x:Key="Button.MouseOver.Background" Color="{StaticResource buttonHoverBackground}"/>
+	<SolidColorBrush x:Key="Button.MouseOver.Border" Color="{StaticResource buttonHoverBorder}"/>
+	<SolidColorBrush x:Key="Button.Pressed.Background" Color="{StaticResource buttonPressBackground}"/>
+	<SolidColorBrush x:Key="Button.Pressed.Border" Color="{StaticResource buttonPressBorder}"/>
+	<SolidColorBrush x:Key="Button.Disabled.Background" Color="{StaticResource buttonDisableBackground}"/>
+	<SolidColorBrush x:Key="Button.Disabled.Border" Color="{StaticResource buttonDisableBorder}"/>
+	<SolidColorBrush x:Key="Button.Disabled.Foreground" Color="{StaticResource buttonDisableText}"/>
+	<Style TargetType="{x:Type Button}">
+		<!-- <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/> -->
+		<Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+		<Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+		<Setter Property="Foreground" Value="{StaticResource Button.Static.Foreground}"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+		<Setter Property="Padding" Value="1"/>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type Button}">
+					<Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+						<ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+					</Border>
+					<ControlTemplate.Triggers>
+						<Trigger Property="IsDefaulted" Value="true">
+							<Setter Property="BorderBrush" TargetName="border" Value="#FF0000"/> <!-- "highlight" brush -->
+						</Trigger>
+						<Trigger Property="IsMouseOver" Value="true">
+							<Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+							<Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+						</Trigger>
+						<Trigger Property="IsPressed" Value="true">
+							<Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+							<Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+						</Trigger>
+						<Trigger Property="IsEnabled" Value="false">
+							<Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+							<Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+							<Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
 	</Style>
 
 	<SolidColorBrush x:Key="MSM2SuitsMenu_SpiderArmsWarningForeground" Color="{StaticResource Theme.TextMuted}" />
