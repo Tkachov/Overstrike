@@ -111,6 +111,14 @@
 		<Setter Property="Foreground" Value="{StaticResource textBrush}"/>
 	</Style>
 
+	<Style TargetType="CheckBox">
+		<Setter Property="Foreground" Value="{DynamicResource textBrush}" />
+	</Style>
+
+	<Style TargetType="Expander">
+		<Setter Property="Foreground" Value="{DynamicResource textBrush}" />
+	</Style>
+
 	<SolidColorBrush x:Key="MainWindow_ModsOrderLabelForeground" Color="{StaticResource mutedText}" />
 
 	<SolidColorBrush x:Key="MainWindow_StatusMessageForeground" Color="{StaticResource mutedText}" />
