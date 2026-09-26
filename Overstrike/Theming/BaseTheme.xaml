@@ -39,7 +39,7 @@
 
     <SolidColorBrush x:Key="MSMRSuitsMenu_SeparatorButtonForeground" Color="White" />
     <SolidColorBrush x:Key="MSMRSuitsMenu_SeparatorButtonBackground" Color="Gray" />
-    <SolidColorBrush x:Key="MSMRSuitsMenu_ListSelectionBackground" Color="#098ae4" />
+    <SolidColorBrush x:Key="MSMRSuitsMenu_ListSelectionBackground" Color="#098AE4" />
     <SolidColorBrush x:Key="MSMRSuitsMenu_OuterBorder" Color="#057" />
     <SolidColorBrush x:Key="MSMRSuitsMenu_Background" Color="#034" />
     <SolidColorBrush x:Key="MSMRSuitsMenu_ListBackground" Color="#057" />
@@ -49,7 +49,7 @@
 
     <SolidColorBrush x:Key="MMSuitsMenu_SeparatorButtonForeground" Color="White" />
     <SolidColorBrush x:Key="MMSuitsMenu_SeparatorButtonBackground" Color="Gray" />
-    <SolidColorBrush x:Key="MMSuitsMenu_ListSelectionBackground" Color="#098ae4" />
+    <SolidColorBrush x:Key="MMSuitsMenu_ListSelectionBackground" Color="#098AE4" />
     <SolidColorBrush x:Key="MMSuitsMenu_OuterBorder" Color="#0D1C2B" />
     <SolidColorBrush x:Key="MMSuitsMenu_Background" Color="#070C1B" />
     <SolidColorBrush x:Key="MMSuitsMenu_ListBackground" Color="#0D1C2B" />

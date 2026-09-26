@@ -42,13 +42,16 @@
 	<Color x:Key="background">#202024</Color>
 	<Color x:Key="border">#303035</Color>
 	<Color x:Key="text">#E4E4E4</Color>
+	<Color x:Key="redText">#D24</Color>
+	<Color x:Key="grayText">#A6A6AE</Color>
+	<Color x:Key="mutedText">#96969E</Color>
 	<SolidColorBrush x:Key="textBrush" Color="{StaticResource text}" />
 	<SolidColorBrush x:Key="borderBrush" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="backgroundBrush" Color="{StaticResource background}" />
 
 	<Color x:Key="backgroundD">#1A1A1E</Color>
 	<Color x:Key="borderD">#303035</Color> <!-- follows 'border' -->
-	<Color x:Key="textD">#96979E</Color>
+	<Color x:Key="textD">#96969E</Color>
 	<SolidColorBrush x:Key="borderDBrush" Color="{StaticResource borderD}" />
 	<SolidColorBrush x:Key="backgroundDBrush" Color="{StaticResource backgroundD}" />
 	<SolidColorBrush x:Key="textDBrush" Color="{StaticResource textD}" />
@@ -59,10 +62,6 @@
 	<SolidColorBrush x:Key="MainWindow_WindowTopBorder" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="MainWindow_Background" Color="{StaticResource background}" />
 
-	<Style TargetType="Label">
-		<Setter Property="Foreground" Value="{StaticResource textBrush}"/>
-	</Style>
-
 	<Style TargetType="ListView">
 		<Setter Property="Background" Value="{DynamicResource background}"/>
 	</Style>
@@ -70,6 +69,22 @@
 	<BitmapImage x:Key="banner_msm2_back.png" UriSource="Resources/banner_msm2_back.png" />
 
 	<!-- common elements -->
+
+	<Style TargetType="Label">
+		<Setter Property="Foreground" Value="{StaticResource textBrush}"/>
+	</Style>
+
+	<Style TargetType="TextBlock">
+		<Setter Property="Foreground" Value="{StaticResource textBrush}"/>
+	</Style>
+
+	<SolidColorBrush x:Key="MainWindow_ModsOrderLabelForeground" Color="{StaticResource mutedText}" />
+
+	<SolidColorBrush x:Key="MainWindow_StatusMessageForeground" Color="{StaticResource mutedText}" />
+	<SolidColorBrush x:Key="MainWindow_StatusMessageErrorForeground" Color="{StaticResource redText}" />
+
+	<SolidColorBrush x:Key="MainWindow_SettingsGlobalDescriptionForeground" Color="{StaticResource grayText}" />
+	<SolidColorBrush x:Key="MainWindow_ScriptWarningForeground" Color="{StaticResource redText}" />
 
 	<!-- ComboBox -->
 
