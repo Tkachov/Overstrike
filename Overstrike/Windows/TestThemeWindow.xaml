@@ -41,7 +41,10 @@
 							<TextBlock Text="Content inside Tab One." Margin="5"/>
 						</TabItem>
 						<TabItem Header="Tab Two">
-							<TextBlock Text="Content inside Tab Two." Margin="5"/>
+							<StackPanel>
+								<Label Content="Muted" HorizontalAlignment="Left" Margin="5,3" VerticalAlignment="Top" Width="55" Foreground="{DynamicResource MainWindow_SettingsGlobalDescriptionForeground}"/>
+								<Label Content="Warning" HorizontalAlignment="Left" Margin="5,3" VerticalAlignment="Top" Width="55" Foreground="{DynamicResource MainWindow_ScriptWarningForeground}"/>
+							</StackPanel>
 						</TabItem>
 					</TabControl>
 
@@ -165,7 +168,10 @@
 							<TextBlock Text="Content inside Tab One." Margin="5"/>
 						</TabItem>
 						<TabItem Header="Tab Two">
-							<TextBlock Text="Content inside Tab Two." Margin="5"/>
+							<StackPanel>
+								<Label Content="Muted" HorizontalAlignment="Left" Margin="5,3" VerticalAlignment="Top" Width="55" Foreground="{DynamicResource MainWindow_SettingsGlobalDescriptionForeground}"/>
+								<Label Content="Warning" HorizontalAlignment="Left" Margin="5,3" VerticalAlignment="Top" Width="55" Foreground="{DynamicResource MainWindow_ScriptWarningForeground}"/>
+							</StackPanel>
 						</TabItem>
 					</TabControl>
 

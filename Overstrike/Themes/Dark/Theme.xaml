@@ -106,7 +106,7 @@
 	<!-- common elements -->
 
 	<Style TargetType="Label">
-		<Setter Property="Foreground" Value="{StaticResource textBrush}"/>
+		<Setter Property="Foreground" Value="{DynamicResource textBrush}"/>
 	</Style>
 
 	<Style TargetType="TextBlock">
@@ -123,11 +123,11 @@
 
 	<SolidColorBrush x:Key="MainWindow_ModsOrderLabelForeground" Color="{StaticResource mutedText}" />
 
-	<SolidColorBrush x:Key="MainWindow_StatusMessageForeground" Color="{StaticResource mutedText}" />
-	<SolidColorBrush x:Key="MainWindow_StatusMessageErrorForeground" Color="{StaticResource redText}" />
+	<SolidColorBrush x:Key="MainWindow_StatusMessageForeground" Color="{DynamicResource mutedText}" />
+	<SolidColorBrush x:Key="MainWindow_StatusMessageErrorForeground" Color="{DynamicResource redText}" />
 
-	<SolidColorBrush x:Key="MainWindow_SettingsGlobalDescriptionForeground" Color="{StaticResource grayText}" />
-	<SolidColorBrush x:Key="MainWindow_ScriptWarningForeground" Color="{StaticResource redText}" />
+	<SolidColorBrush x:Key="MainWindow_SettingsGlobalDescriptionForeground" Color="{DynamicResource grayText}" /> <!-- TODO: why works in test window and not actual? -->
+	<SolidColorBrush x:Key="MainWindow_ScriptWarningForeground" Color="{DynamicResource redText}" />
 
 	<!-- ComboBox -->
 
