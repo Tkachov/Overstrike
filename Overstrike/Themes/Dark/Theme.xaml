@@ -97,10 +97,6 @@
 	<SolidColorBrush x:Key="MainWindow_WindowTopBorder" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="MainWindow_Background" Color="{StaticResource background}" />
 
-	<Style TargetType="ListView">
-		<Setter Property="Background" Value="{DynamicResource background}"/>
-	</Style>
-
 	<BitmapImage x:Key="banner_msm2_back.png" UriSource="Resources/banner_msm2_back.png" />
 
 	<!-- common elements -->
@@ -128,6 +124,26 @@
 
 	<SolidColorBrush x:Key="MainWindow_SettingsGlobalDescriptionForeground" Color="{DynamicResource grayText}" /> <!-- TODO: why works in test window and not actual? -->
 	<SolidColorBrush x:Key="MainWindow_ScriptWarningForeground" Color="{DynamicResource redText}" />
+
+	<Color x:Key="ListView_Background">#202024</Color> <!-- == background -->
+	<Color x:Key="ListView_Border">#303035</Color> <!-- == border -->
+	<Color x:Key="ListView_Foreground">#E4E4E4</Color> <!-- == text -->
+	<!-- TODO: figure out why ListBoxEx doesn't refresh its style on theme change -->
+
+	<SolidColorBrush x:Key="FirstLaunch_WindowTopBorder" Color="{StaticResource border}" />
+	<SolidColorBrush x:Key="FirstLaunch_Background" Color="{StaticResource background}" />
+
+	<SolidColorBrush x:Key="CreateProfile_WindowTopBorder" Color="{StaticResource border}" />
+	<SolidColorBrush x:Key="CreateProfile_Background" Color="{StaticResource background}" />
+
+	<SolidColorBrush x:Key="ModsDetectionSplash_TopBorder" Color="{StaticResource border}" />
+	<SolidColorBrush x:Key="ModsDetectionSplash_Background" Color="{StaticResource background}" />
+
+	<SolidColorBrush x:Key="ModularWizard_Border" Color="{StaticResource border}" />
+	<SolidColorBrush x:Key="ModularWizard_MainBackground" Color="{StaticResource background}" />
+
+	<SolidColorBrush x:Key="TocMismatchDialog_WindowTopBorder" Color="{StaticResource border}" />
+	<SolidColorBrush x:Key="TocMismatchDialog_Background" Color="{StaticResource background}" />
 
 	<!-- ComboBox -->
 
@@ -1081,22 +1097,8 @@
 		</Style.Triggers>
 	</Style>
 	
+	<!-- listbox -->
+
 	<!-- / -->
-
-	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabActiveBorder" Color="{StaticResource Theme.AccentStrong}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_ListSelectionBackground" Color="{StaticResource Theme.AccentStrong}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_OuterBorder" Color="{StaticResource Theme.PanelAlt}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_SpiderArmsWarningForeground" Color="{StaticResource Theme.TextMuted}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_FooterDivider" Color="{StaticResource Theme.Border}" />
-	-->
-			<Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
-		</Style>
-
-		<Style TargetType="{x:Type ToolTip}">
-			<Setter Property="Background" Value="{DynamicResource SurfaceAltBrush}" />
-			<Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
-			<Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderBrush}" />
-		</Style>
-	-->
 
 </ResourceDictionary>
