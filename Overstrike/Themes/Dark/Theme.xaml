@@ -14,7 +14,7 @@
 - dropdown items
 
 + tabs
-- filter
++ filter
 - plus/refresh icons
 
 - scrollbox
@@ -31,8 +31,8 @@
 / suits menu
 
 - settings collapser
-- settings muted text
-- settings red text
++ settings muted text
++ settings red text
 
 / modular
 / create profile
@@ -91,6 +91,8 @@
 	<Color x:Key="buttonDisableBackground">#27272C</Color>
 	<Color x:Key="buttonDisableBorder">#303035</Color>
 	<Color x:Key="buttonDisableText">#66666E</Color> <!-- == textDisabled -->
+
+	<Color x:Key="borderFocused">#39F</Color>
 
 	<SolidColorBrush x:Key="MainWindow_WindowTopBorder" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="MainWindow_Background" Color="{StaticResource background}" />
@@ -749,9 +751,96 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
+	
+	<!-- input -->
 
+	<SolidColorBrush x:Key="MainWindow_TextBoxPlaceholder" Color="{StaticResource mutedText}" />
+
+	<!--<SolidColorBrush x:Key="ControlBackgroundBrush" Color="#35363A" />
+	<SolidColorBrush x:Key="SelectionBrush" Color="#3D5875" />
+
+	<Style TargetType="{x:Type TextBox}">
+		<Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}" />
+		<Setter Property="Foreground" Value="{DynamicResource textBrush}" />
+		<Setter Property="BorderBrush" Value="{DynamicResource borderBrush}" />
+		<Setter Property="CaretBrush" Value="{DynamicResource textBrush}" />
+		<Setter Property="SelectionBrush" Value="{DynamicResource SelectionBrush}" />
+	</Style> -->
+	
+	<SolidColorBrush x:Key="2TextBox.Background" Color="#FFF"/> <!-- {DynamicResource {x:Static SystemColors.WindowBrushKey}} -->
+	<SolidColorBrush x:Key="2TextBox.Text" Color="#000"/> <!-- {DynamicResource {x:Static SystemColors.ControlTextBrushKey}} -->
+	<SolidColorBrush x:Key="2TextBox.Static.Border" Color="#FFABAdB3"/>
+	<SolidColorBrush x:Key="2TextBox.MouseOver.Border" Color="#FF7EB4EA"/>
+	<SolidColorBrush x:Key="2TextBox.Focus.Border" Color="#FF569DE5"/>
+	<SolidColorBrush x:Key="2TextBox.SelectionBrush" Color="#69F"/> <!-- {DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}} -->
+	<SolidColorBrush x:Key="TextBox.Background" Color="#17171E"/>
+	<SolidColorBrush x:Key="TextBox.Text" Color="{StaticResource text}"/>
+	<SolidColorBrush x:Key="TextBox.Static.Border" Color="{StaticResource border}"/>
+	<SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="{StaticResource borderHover}"/>
+	<SolidColorBrush x:Key="TextBox.Focus.Border" Color="{StaticResource borderFocused}"/>
+	<SolidColorBrush x:Key="3TextBox.SelectionBrush" Color="#69F"/>
+	<SolidColorBrush x:Key="4TextBox.SelectionBrush" Color="#0539A3"/>
+	<SolidColorBrush x:Key="5TextBox.SelectionBrush" Color="#F00"/>
+	<SolidColorBrush x:Key="TextBox.SelectionBrush" Color="#39F"/>
+	<Style TargetType="{x:Type TextBox}">
+		<Setter Property="Background" Value="{StaticResource TextBox.Background}"/>
+		<Setter Property="BorderBrush" Value="{StaticResource TextBox.Static.Border}"/>
+		<Setter Property="Foreground" Value="{StaticResource TextBox.Text}"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+		<Setter Property="HorizontalContentAlignment" Value="Left"/>
+		<Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+		<Setter Property="AllowDrop" Value="true"/>
+		<Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+		<Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type TextBox}">
+					<Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
+						<ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+					</Border>
+					<ControlTemplate.Triggers>
+						<Trigger Property="IsEnabled" Value="false">
+							<Setter Property="Opacity" TargetName="border" Value="0.56"/>
+						</Trigger>
+						<Trigger Property="IsMouseOver" Value="true">
+							<Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.MouseOver.Border}"/>
+						</Trigger>
+						<Trigger Property="IsKeyboardFocused" Value="true">
+							<Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.Focus.Border}"/>
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+		<Setter Property="SelectionBrush" Value="{StaticResource TextBox.SelectionBrush}" />
+		<!--
+		<Style.Triggers>
+			<MultiTrigger>
+				<MultiTrigger.Conditions>
+					<Condition Property="IsInactiveSelectionHighlightEnabled" Value="true"/>
+					<Condition Property="IsSelectionActive" Value="false"/>
+				</MultiTrigger.Conditions>
+				<Setter Property="SelectionBrush" Value="{StaticResource TextBox.SelectionBrush}"/>
+			</MultiTrigger>
+		</Style.Triggers>
+		-->
+	</Style>
+
+	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabActiveBorder" Color="{StaticResource Theme.AccentStrong}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_ListSelectionBackground" Color="{StaticResource Theme.AccentStrong}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_OuterBorder" Color="{StaticResource Theme.PanelAlt}" />
 	<SolidColorBrush x:Key="MSM2SuitsMenu_SpiderArmsWarningForeground" Color="{StaticResource Theme.TextMuted}" />
 	<SolidColorBrush x:Key="MSM2SuitsMenu_FooterDivider" Color="{StaticResource Theme.Border}" />
+	-->
+			<Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+		</Style>
+
+		<Style TargetType="{x:Type ToolTip}">
+			<Setter Property="Background" Value="{DynamicResource SurfaceAltBrush}" />
+			<Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+			<Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderBrush}" />
+		</Style>
 	-->
 
 </ResourceDictionary>
