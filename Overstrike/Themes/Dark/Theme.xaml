@@ -1,7 +1,8 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 					xmlns:sys="clr-namespace:System;assembly=mscorlib"
-					xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2">
+					xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
+					xmlns:local="clr-namespace:Overstrike;assembly=Overstrike">
 	<sys:String x:Key="Theme.Name">Overstrike Dark by Tkachov</sys:String>
 	<sys:String x:Key="Theme.Version">1.8.1.0</sys:String>
 
@@ -124,11 +125,6 @@
 
 	<SolidColorBrush x:Key="MainWindow_SettingsGlobalDescriptionForeground" Color="{DynamicResource grayText}" /> <!-- TODO: why works in test window and not actual? -->
 	<SolidColorBrush x:Key="MainWindow_ScriptWarningForeground" Color="{DynamicResource redText}" />
-
-	<Color x:Key="ListView_Background">#202024</Color> <!-- == background -->
-	<Color x:Key="ListView_Border">#303035</Color> <!-- == border -->
-	<Color x:Key="ListView_Foreground">#E4E4E4</Color> <!-- == text -->
-	<!-- TODO: figure out why ListBoxEx doesn't refresh its style on theme change -->
 
 	<SolidColorBrush x:Key="FirstLaunch_WindowTopBorder" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="FirstLaunch_Background" Color="{StaticResource background}" />
@@ -1098,6 +1094,17 @@
 	</Style>
 	
 	<!-- listbox -->
+
+	<SolidColorBrush x:Key="ListView_BackgroundBrush" Color="{DynamicResource background}" />
+	<SolidColorBrush x:Key="ListView_BorderBrush" Color="{DynamicResource border}" />
+	<SolidColorBrush x:Key="ListView_ForegroundBrush" Color="{DynamicResource text}" />
+
+	<Style TargetType="{x:Type ListView}">
+		<Setter Property="Background" Value="{DynamicResource ListView_BackgroundBrush}"/>
+		<Setter Property="Foreground" Value="{DynamicResource ListView_ForegroundBrush}" />
+		<Setter Property="BorderBrush" Value="{DynamicResource ListView_BorderBrush}" />
+	</Style>
+	<Style TargetType="{x:Type local:ListViewEx}" BasedOn="{StaticResource {x:Type ListView}}" />
 
 	<!-- / -->
 
