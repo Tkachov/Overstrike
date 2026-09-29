@@ -41,9 +41,9 @@
 / first launch
 	- checkbox
 	- list item
-	- tooltip
+	+ tooltip
 	- disabled button
-	- custom colors (header panel, list border)
+	+ custom colors (header panel, list border)
 / error log
 / toc mismatch
 
@@ -1113,6 +1113,17 @@
 		<Setter Property="BorderBrush" Value="{DynamicResource ListView_BorderBrush}" />
 	</Style>
 	<Style TargetType="{x:Type local:ListViewEx}" BasedOn="{StaticResource {x:Type ListView}}" />
+	
+	<!-- tooltip -->
+
+	<SolidColorBrush x:Key="Tooltip_BorderBrush" Color="{StaticResource buttonDisableBorder}" />
+	<SolidColorBrush x:Key="Tooltip_BackgroundBrush" Color="{StaticResource buttonBackground}" />
+
+	<Style TargetType="ToolTip">
+		<Setter Property="BorderBrush" Value="{StaticResource Tooltip_BorderBrush}"/>
+		<Setter Property="Background" Value="{StaticResource Tooltip_BackgroundBrush}"/>
+		<Setter Property="Foreground" Value="{StaticResource textDisabledBrush}"/>
+	</Style>
 
 	<!-- / -->
 
