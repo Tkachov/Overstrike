@@ -39,6 +39,11 @@
 / create profile
 / scan library
 / first launch
+	- checkbox
+	- list item
+	- tooltip
+	- disabled button
+	- custom colors (header panel, list border)
 / error log
 / toc mismatch
 
@@ -46,7 +51,7 @@
 
 	<Color x:Key="background">#202024</Color>
 	<Color x:Key="border">#303035</Color>
-	<Color x:Key="text">#E4E4E4</Color>
+	<Color x:Key="text">#DDD</Color> <!-- TODO: slightly more muted? -->
 	<Color x:Key="redText">#D24</Color>
 	<Color x:Key="grayText">#A6A6AE</Color>
 	<Color x:Key="mutedText">#96969E</Color>
@@ -89,7 +94,7 @@
 	
 	<Color x:Key="buttonPressBackground">#38383D</Color>
 	<Color x:Key="buttonPressBorder">#4C4C51</Color>
-	<Color x:Key="buttonDisableBackground">#27272C</Color>
+	<Color x:Key="buttonDisableBackground">#27272C</Color> <!-- TODO: better contrast against normal button -->
 	<Color x:Key="buttonDisableBorder">#303035</Color>
 	<Color x:Key="buttonDisableText">#66666E</Color> <!-- == textDisabled -->
 
@@ -128,6 +133,9 @@
 
 	<SolidColorBrush x:Key="FirstLaunch_WindowTopBorder" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="FirstLaunch_Background" Color="{StaticResource background}" />
+	<SolidColorBrush x:Key="FirstLaunch_ProfilesHeaderBackground" Color="{StaticResource buttonDisableBackground}" />
+	<SolidColorBrush x:Key="FirstLaunch_ProfilesHeaderForeground" Color="{StaticResource mutedText}" />
+	<SolidColorBrush x:Key="FirstLaunch_ProfilesBorder" Color="{StaticResource border}" />
 
 	<SolidColorBrush x:Key="CreateProfile_WindowTopBorder" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="CreateProfile_Background" Color="{StaticResource background}" />

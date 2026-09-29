@@ -6,23 +6,21 @@
     <SolidColorBrush x:Key="MainWindow_WindowTopBorder" Color="#EEE" />
     <SolidColorBrush x:Key="MainWindow_Background" Color="#FFF" />
     <SolidColorBrush x:Key="MainWindow_OverlayBackground" Color="#FFF" />
-	<SolidColorBrush x:Key="MainWindow_TextBoxPlaceholder" Color="DarkGray"/>
+	<SolidColorBrush x:Key="MainWindow_TextBoxPlaceholder" Color="DarkGray"/> <!-- TODO: rename to something non-window-specific -->
 	<SolidColorBrush x:Key="MainWindow_ModsOrderLabelForeground" Color="#AAA" />
     <SolidColorBrush x:Key="MainWindow_StatusMessageForeground" Color="#AAA" />
     <SolidColorBrush x:Key="MainWindow_StatusMessageErrorForeground" Color="#F04" />
     <SolidColorBrush x:Key="MainWindow_SettingsGlobalDescriptionForeground" Color="#666" />
-    <SolidColorBrush x:Key="MainWindow_ScriptWarningForeground" Color="#F04" />
+	<SolidColorBrush x:Key="MainWindow_ScriptWarningForeground" Color="#F04" />
 
-    <SolidColorBrush x:Key="FirstLaunch_WindowTopBorder" Color="#EEE" />
+	<SolidColorBrush x:Key="FirstLaunch_WindowTopBorder" Color="#EEE" />
     <SolidColorBrush x:Key="FirstLaunch_Background" Color="#FFF" />
     <SolidColorBrush x:Key="FirstLaunch_ProfilesHeaderBackground" Color="#F6F6F6" />
-    <SolidColorBrush x:Key="FirstLaunch_ProfilesHeaderBorder" Color="#AAA" />
-    <SolidColorBrush x:Key="FirstLaunch_ProfilesHeaderProfileNameForeground" Color="#666" />
-    <SolidColorBrush x:Key="FirstLaunch_ProfilesHeaderGamePathForeground" Color="#666" />
-    <SolidColorBrush x:Key="FirstLaunch_ProfilesListBorder" Color="#AAA" />
+	<SolidColorBrush x:Key="FirstLaunch_ProfilesHeaderForeground" Color="#666" />
+	<SolidColorBrush x:Key="FirstLaunch_ProfilesBorder" Color="#AAA" />
 
-    <SolidColorBrush x:Key="CreateProfile_WindowTopBorder" Color="#EEE" />
-    <SolidColorBrush x:Key="CreateProfile_Background" Color="#FFF" />
+	<SolidColorBrush x:Key="CreateProfile_WindowTopBorder" Color="#EEE" /> <!-- TODO: for common things like these, declare <Color> and use in here and all others that are supposed to match -->
+    <SolidColorBrush x:Key="CreateProfile_Background" Color="#FFF" /> <!-- TODO: -//- -->
 
     <SolidColorBrush x:Key="ModsDetectionSplash_TopBorder" Color="#CCC" />
     <SolidColorBrush x:Key="ModsDetectionSplash_Background" Color="#FFF" />
@@ -36,8 +34,8 @@
     <SolidColorBrush x:Key="ModularWizard_NumberLabelForeground" Color="#CCC" />
 
     <SolidColorBrush x:Key="TocMismatchDialog_WindowTopBorder" Color="#EEE" />
-    <SolidColorBrush x:Key="TocMismatchDialog_Background" Color="#FFF" />
-    <SolidColorBrush x:Key="TocMismatchDialog_FooterForeground" Color="#666" />
+	<SolidColorBrush x:Key="TocMismatchDialog_Background" Color="#FFF" />
+	<SolidColorBrush x:Key="TocMismatchDialog_FooterForeground" Color="#666" />
 
     <SolidColorBrush x:Key="MSMRSuitsMenu_SeparatorButtonForeground" Color="White" />
     <SolidColorBrush x:Key="MSMRSuitsMenu_SeparatorButtonBackground" Color="Gray" />
