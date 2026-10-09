@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Overstrike.Windows"
+        xmlns:local="clr-namespace:Overstrike"
         mc:Ignorable="d"
         Title="Theme Test" Height="900" Width="900">
 
@@ -132,6 +132,15 @@
 					<ScrollViewer Height="80" VerticalScrollBarVisibility="Visible" Margin="0,0,0,10">
 						<TextBlock Text="Line 1: Disabled scroll content...&#x0a;Line 2: Locked text state...&#x0a;Line 3: More text items...&#x0a;Line 4: End of content line." />
 					</ScrollViewer>
+
+					<local:ListViewEx Grid.Row="1" VirtualizingStackPanel.VirtualizationMode="Recycling"
+								  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible"
+								  SelectionMode="Single" Height="150" VerticalAlignment="Top">
+						<ListViewItem Content="Item 1" />
+						<ListViewItem Content="Item 2" />
+						<ListViewItem Content="Item 3" />
+						<ListViewItem Content="Disabled Item" IsEnabled="False" />
+					</local:ListViewEx>
 				</StackPanel>
 			</Border>
 		</ScrollViewer>
@@ -257,6 +266,15 @@
 					<ScrollViewer Height="80" VerticalScrollBarVisibility="Visible" Margin="0,0,0,10">
 						<TextBlock Text="Line 1: Disabled scroll content...&#x0a;Line 2: Locked text state...&#x0a;Line 3: More text items...&#x0a;Line 4: End of content line." />
 					</ScrollViewer>
+
+					<local:ListViewEx Grid.Row="1" VirtualizingStackPanel.VirtualizationMode="Recycling"
+								  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible"
+								  SelectionMode="Single" Height="150" VerticalAlignment="Top">
+						<ListViewItem Content="Item 1" />
+						<ListViewItem Content="Item 2" />
+						<ListViewItem Content="Item 3" />
+						<ListViewItem Content="Disabled Item" IsEnabled="False" />
+					</local:ListViewEx>
 				</StackPanel>
 			</Border>
 		</ScrollViewer>
