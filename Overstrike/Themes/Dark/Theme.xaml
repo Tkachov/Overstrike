@@ -21,7 +21,7 @@
 ? scrollbox
 + scrollbar
 - list item
-- checkbox
++ checkbox
 - mod icons
 
 + button
@@ -39,7 +39,7 @@
 / create profile
 / scan library
 / first launch
-	- checkbox
+	+ checkbox
 	- list item
 	+ tooltip
 	- disabled button
@@ -94,9 +94,11 @@
 	
 	<Color x:Key="buttonPressBackground">#38383D</Color>
 	<Color x:Key="buttonPressBorder">#4C4C51</Color>
-	<Color x:Key="buttonDisableBackground">#27272C</Color> <!-- TODO: better contrast against normal button -->
+	<Color x:Key="buttonDisableBackground">#27272C</Color> <!-- TODO: better contrast against normal button; use other keys because these are shared with scrollbars -->
 	<Color x:Key="buttonDisableBorder">#303035</Color>
 	<Color x:Key="buttonDisableText">#66666E</Color> <!-- == textDisabled -->
+	<!-- for better contrast = bck: #232326, brd: #303035, txt: #454549 -->
+	<!-- TODO: figure out why FirstLaunch disabled button doesn't follow this text color -->
 
 	<Color x:Key="borderFocused">#39F</Color>
 
@@ -760,7 +762,8 @@
 						<Trigger Property="IsEnabled" Value="false">
 							<Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
 							<Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
-							<Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+							<Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{DynamicResource Button.Disabled.Foreground}"/>
+							<Setter Property="Foreground" Value="{DynamicResource Button.Disabled.Foreground}"/>
 						</Trigger>
 					</ControlTemplate.Triggers>
 				</ControlTemplate>
