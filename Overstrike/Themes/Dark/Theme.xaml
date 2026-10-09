@@ -20,7 +20,7 @@
 
 ? scrollbox
 + scrollbar
-- list item
++ list item
 + checkbox
 - mod icons
 
@@ -40,9 +40,9 @@
 / scan library
 / first launch
 	+ checkbox
-	- list item
+	+ list item
 	+ tooltip
-	- disabled button
+	? disabled button
 	+ custom colors (header panel, list border)
 / error log
 / toc mismatch
@@ -1116,35 +1116,10 @@
 	
 	<!-- list item -->
 
-	<!--
-	<SolidColorBrush x:Key="Item.MouseOver.Background" Color="#1F26A0DA"/>
-	<SolidColorBrush x:Key="Item.MouseOver.Border" Color="#a826A0Da"/>
-	<SolidColorBrush x:Key="Item.SelectedActive.Background" Color="#3D26A0DA"/>
-	<SolidColorBrush x:Key="Item.SelectedActive.Border" Color="#FF26A0DA"/>
-	<SolidColorBrush x:Key="Item.SelectedInactive.Background" Color="#3DDADADA"/>
-	<SolidColorBrush x:Key="Item.SelectedInactive.Border" Color="#FFDADADA"/>
-	-->
-
-	<SolidColorBrush x:Key="Item.MouseOver.Background2" Color="#2626A0DA"/>
-	<SolidColorBrush x:Key="Item.MouseOver.Border2" Color="#8026A0DA"/>
-	<SolidColorBrush x:Key="Item.SelectedActive.Background2" Color="#5926A0DA"/>
-	<SolidColorBrush x:Key="Item.SelectedActive.Border2" Color="#FF26A0DA"/>
-	<SolidColorBrush x:Key="Item.SelectedInactive.Background2" Color="#50454550"/>
-	<SolidColorBrush x:Key="Item.SelectedInactive.Border2" Color="#B360606B"/>
-
 	<SolidColorBrush x:Key="Item.MouseOver.Background" Color="#292930"/> <!-- == backgroundHover -->
 	<SolidColorBrush x:Key="Item.MouseOver.Border" Color="#3B3B40"/> <!-- == borderHover -->
-
-	<SolidColorBrush x:Key="Item.SelectedActive.Background3" Color="#33333D"/>
-	<SolidColorBrush x:Key="Item.SelectedActive.Border3" Color="#26A0DA"/>
-	<SolidColorBrush x:Key="Item.SelectedInactive.Background3" Color="#2C2C33"/>
-	<SolidColorBrush x:Key="Item.SelectedInactive.Border3" Color="#50505A"/>
-
-	<SolidColorBrush x:Key="Item.SelectedActive.Background4" Color="#2A3545"/>
-	<SolidColorBrush x:Key="Item.SelectedActive.Border4" Color="#26A0DA"/>
 	<SolidColorBrush x:Key="Item.SelectedInactive.Background" Color="#33333C"/>
 	<SolidColorBrush x:Key="Item.SelectedInactive.Border" Color="#666675"/>
-
 	<SolidColorBrush x:Key="Item.SelectedActive.Background" Color="#24344B"/>
 	<SolidColorBrush x:Key="Item.SelectedActive.Border" Color="#39F"/> <!-- == borderFocused -->
 
