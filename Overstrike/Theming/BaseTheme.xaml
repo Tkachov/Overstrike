@@ -5,7 +5,8 @@
     <SolidColorBrush x:Key="MainWindow_IconButtonPressedBackground" Color="#CCC" />
     <SolidColorBrush x:Key="MainWindow_WindowTopBorder" Color="#EEE" />
     <SolidColorBrush x:Key="MainWindow_Background" Color="#FFF" />
-    <SolidColorBrush x:Key="MainWindow_OverlayBackground" Color="#FFF" />
+	<SolidColorBrush x:Key="MainWindow_OverlayBackground" Color="Black" Opacity=".75"/>
+    <SolidColorBrush x:Key="MainWindow_OverlayPanelBackground" Color="#FFF" />
 	<SolidColorBrush x:Key="MainWindow_TextBoxPlaceholder" Color="DarkGray"/> <!-- TODO: rename to something non-window-specific -->
 	<SolidColorBrush x:Key="MainWindow_ModsOrderLabelForeground" Color="#AAA" />
     <SolidColorBrush x:Key="MainWindow_StatusMessageForeground" Color="#AAA" />

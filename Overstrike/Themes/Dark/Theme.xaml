@@ -32,13 +32,14 @@
 / suits menu
 
 - settings collapser
-+ settings muted text
-+ settings red text
+? settings muted text
+? settings red text
 
 / modular
-/ create profile
-/ scan library
-/ first launch
++ create profile
+	? disabled button
++ scan library
++ first launch
 	+ checkbox
 	+ list item
 	+ tooltip
@@ -105,6 +106,8 @@
 
 	<SolidColorBrush x:Key="MainWindow_WindowTopBorder" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="MainWindow_Background" Color="{StaticResource background}" />
+	<SolidColorBrush x:Key="MainWindow_OverlayBackground" Color="{StaticResource border}" Opacity=".75"/>
+	<SolidColorBrush x:Key="MainWindow_OverlayPanelBackground" Color="{StaticResource background}" />
 
 	<BitmapImage x:Key="banner_msm2_back.png" UriSource="Resources/banner_msm2_back.png" />
 
@@ -133,7 +136,7 @@
 	<SolidColorBrush x:Key="FirstLaunch_WindowTopBorder" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="FirstLaunch_Background" Color="{StaticResource background}" />
 	<SolidColorBrush x:Key="FirstLaunch_ProfilesHeaderBackground" Color="{StaticResource buttonDisableBackground}" />
-	<SolidColorBrush x:Key="FirstLaunch_ProfilesHeaderForeground" Color="{StaticResource mutedText}" />
+	<SolidColorBrush x:Key="FirstLaunch_ProfilesHeaderForeground" Color="{StaticResource mutedText}" /> <!-- maybe should be gray? -->
 	<SolidColorBrush x:Key="FirstLaunch_ProfilesBorder" Color="{StaticResource border}" />
 
 	<SolidColorBrush x:Key="CreateProfile_WindowTopBorder" Color="{StaticResource border}" />
@@ -141,6 +144,7 @@
 
 	<SolidColorBrush x:Key="ModsDetectionSplash_TopBorder" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="ModsDetectionSplash_Background" Color="{StaticResource background}" />
+	<SolidColorBrush x:Key="ModsDetectionSplash_OperationForeground" Color="{StaticResource grayText}" />
 
 	<SolidColorBrush x:Key="ModularWizard_Border" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="ModularWizard_MainBackground" Color="{StaticResource background}" />
