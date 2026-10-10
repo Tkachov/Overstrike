@@ -89,7 +89,7 @@
 					<TextBlock x:Name="_SuitName" Text="SUIT NAME" Margin="9,7,5,0" VerticalAlignment="Top" FontWeight="Bold"/>
 
 					<Grid x:Name="_SuitInfo" Margin="-1,-1,0,0">
-						<Label Content="Model:" HorizontalAlignment="Left" Margin="5,30,0,0" VerticalAlignment="Top" Width="65"/>
+						<TextBlock Text="Model:" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" Width="65"/>
 						<ComboBox x:Name="_SuitLoadoutComboBox" Margin="80,32,6,0" VerticalAlignment="Top" SelectionChanged="SuitLoadoutComboBox_SelectionChanged">
 							<ComboBox.ItemTemplate>
 								<DataTemplate>
@@ -98,7 +98,7 @@
 							</ComboBox.ItemTemplate>
 						</ComboBox>
 
-						<Label Content="Icon:" HorizontalAlignment="Left" Margin="5,56,0,0" VerticalAlignment="Top" Width="65"/>
+						<TextBlock Text="Icon:" HorizontalAlignment="Left" Margin="10,61,0,0" VerticalAlignment="Top" Width="65"/>
 						<ComboBox x:Name="_SuitIconComboBox" VerticalAlignment="Top" Margin="80,58,6,0" SelectionChanged="SuitIconComboBox_SelectionChanged">
 							<ComboBox.ItemTemplate>
 								<DataTemplate>
@@ -124,13 +124,13 @@
 					</Border>
 
 					<Grid x:Name="_NotModified" VerticalAlignment="Bottom" Margin="1,0,5,5" Visibility="Collapsed">
-						<Label x:Name="_NotModifiedStatusLabel" Content="No unsaved changes" HorizontalAlignment="Left" Margin="0,0,0,-1" VerticalAlignment="Bottom"/>
+						<TextBlock x:Name="_NotModifiedStatusLabel" Text="No unsaved changes" HorizontalAlignment="Left" Margin="5,5,5,4" VerticalAlignment="Bottom"/>
 
 						<Button x:Name="_ResetButton" Content="Reset" HorizontalAlignment="Right" Margin="0,0,1,1" VerticalAlignment="Bottom" Width="120" Height="22" Click="ResetButtonClicked" />
 					</Grid>
 
 					<Grid x:Name="_Modified" VerticalAlignment="Bottom" Margin="1,0,5,5">
-						<Label Content="There are unsaved changes!" HorizontalAlignment="Left" Margin="0,0,0,-1" VerticalAlignment="Bottom" FontWeight="Bold" />
+						<TextBlock Text="There are unsaved changes!" HorizontalAlignment="Left" Margin="5,5,5,4" VerticalAlignment="Bottom" FontWeight="Bold" />
 
 						<Button Content="Undo" HorizontalAlignment="Right" Margin="0,0,62,1" VerticalAlignment="Bottom" Width="55" Height="22" Click="UndoChangesButtonClicked" />
 						<Button Content="Save" HorizontalAlignment="Right" Margin="0,0,1,1" VerticalAlignment="Bottom" Width="55" Height="22" Click="SaveChangesButtonClicked" />

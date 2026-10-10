@@ -61,7 +61,6 @@
 			</Grid>
 
 			<Grid VerticalAlignment="Bottom" Margin="5,0,5,5">
-				<!-- <Label Content="There are unsaved changes!" HorizontalAlignment="Left" Margin="0,0,0,3" VerticalAlignment="Bottom"/> -->
 				<Button x:Name="CreateProfilesButton" Content="Create profiles" IsEnabled="False" HorizontalAlignment="Right" Margin="0,0,2,5" VerticalAlignment="Bottom" Width="120" Click="CreateProfilesButton_Click" />
 			</Grid>
 		</Grid>

@@ -85,7 +85,7 @@
 			</Grid>
 
 			<Grid>
-				<Label Content="Profile:" HorizontalAlignment="Left" Margin="5,87,0,0" VerticalAlignment="Top" Width="55"/>
+				<TextBlock Text="Profile:" HorizontalAlignment="Left" Margin="10,92,5,5" VerticalAlignment="Top" Width="55"/>
 				<ComboBox x:Name="ProfileComboBox" Margin="60,89,5,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="180" SelectionChanged="ProfileComboBox_SelectionChanged">
 					<ComboBox.ItemTemplate>
 						<DataTemplate>
@@ -93,7 +93,7 @@
 						</DataTemplate>
 					</ComboBox.ItemTemplate>
 				</ComboBox>
-				<Label x:Name="ProfileGamePath" Content="C:/Path/To/MSMR" Margin="260,87,5,0" VerticalAlignment="Top" MouseDoubleClick="ProfileGamePath_MouseDoubleClick" />
+				<TextBlock x:Name="ProfileGamePath" Text="C:/Path/To/MSMR" Margin="265,92,10,5" VerticalAlignment="Top" MouseDown="ProfileGamePath_MouseDoubleClick" />
 			</Grid>
 
 			<TabControl x:Name="MainTabs" Margin="-1,125,-1,-1" SelectionChanged="MainTabs_SelectionChanged">
@@ -161,7 +161,7 @@
 											</ContextMenu>
 										</Grid.ContextMenu>
 										
-										<Label HorizontalAlignment="Left" Margin="-3,0,0,0" VerticalAlignment="Top"><TextBlock Text="{Binding Order}" Style="{StaticResource MutedText}" /></Label>
+										<TextBlock HorizontalAlignment="Left" Margin="2,5,5,5" VerticalAlignment="Top" Text="{Binding Order}" Style="{StaticResource MutedText}" />
 
 										<CheckBox IsChecked="{Binding Install}" HorizontalAlignment="Left" Margin="22,6,0,0"  VerticalAlignment="Top" />
 
@@ -173,13 +173,7 @@
 							</ListView.Resources>
 						</local:ListViewEx>
 
-						<Label x:Name="StatusMessage" Opacity="0" Content="Done! 10 mods installed." HorizontalAlignment="Left" Margin="1,4,0,0" Grid.Row="2" Foreground="{DynamicResource MainWindow_StatusMessageForeground}" VerticalAlignment="Top" Height="30" MouseLeftButtonUp="StatusMessage_MouseLeftButtonUp">
-							<Label.ContentTemplate>
-								<DataTemplate>
-									<TextBlock Text="{Binding}" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Label}}}" />
-								</DataTemplate>
-							</Label.ContentTemplate>
-						</Label>
+						<TextBlock x:Name="StatusMessage" Opacity="0" Text="Done! 10 mods installed." HorizontalAlignment="Left" Margin="6,9,5,5" Grid.Row="2" Foreground="{DynamicResource MainWindow_StatusMessageForeground}" VerticalAlignment="Top" Height="30" MouseLeftButtonUp="StatusMessage_MouseLeftButtonUp" />
 
 						<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="2">
 							<Button x:Name="InstallModsButton" Margin="4,6,4,4" Grid.Row="2" Content="Install mods" VerticalAlignment="Top" HorizontalAlignment="Right" Width="120" Height="22" Click="InstallModsButton_Click">
@@ -211,9 +205,9 @@
 						<StackPanel>
 							<Expander Header=" Global" HorizontalAlignment="Stretch" Margin="6,4,3,0" BorderThickness="0" Padding="0,2,0,2" IsExpanded="True">
 								<Grid Height="164" Margin="-2,2,0,0">
-									<Label Margin="0,-2,0,0" VerticalAlignment="Top"><TextBlock Text="These settings apply to all of the profiles. Other sections apply to current profile only." Style="{DynamicResource GrayText}" /></Label>
+									<TextBlock Margin="5,3,5,5" VerticalAlignment="Top" Text="These settings apply to all of the profiles. Other sections apply to current profile only." Style="{DynamicResource GrayText}" />
 									<Grid Height="32" Margin="0,24,0,0" VerticalAlignment="Top">
-										<Label Content="Theme:" HorizontalAlignment="Left" Margin="0,2,0,0" VerticalAlignment="Top" Width="70"/>
+										<TextBlock Text="Theme:" HorizontalAlignment="Left" Margin="5,7,5,5" VerticalAlignment="Top" Width="70"/>
 										<ComboBox x:Name="SettingsThemeComboBox" Margin="75,4,5,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="250" SelectionChanged="SettingsThemeComboBox_SelectionChanged">
 											<ComboBox.ItemTemplate>
 												<DataTemplate>
@@ -251,7 +245,7 @@
 							<Expander x:Name="SuitModsSettings" Header=" .suit" HorizontalAlignment="Stretch" Margin="6,10,3,0" BorderThickness="0" Padding="0,2,0,2" IsExpanded="True">
 								<StackPanel Margin="-2,2,0,0">
 									<Grid Height="32">
-										<Label Content="Language:" HorizontalAlignment="Left" Margin="0,2,0,0" VerticalAlignment="Top" Width="70"/>
+										<TextBlock Text="Language:" HorizontalAlignment="Left" Margin="5,7,5,5" VerticalAlignment="Top" Width="70"/>
 										<ComboBox x:Name="SettingsSuitLanguageComboBox" Margin="75,4,5,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="180" SelectionChanged="SettingsSuitLanguageComboBox_SelectionChanged">
 											<ComboBox.ItemTemplate>
 												<DataTemplate>
@@ -267,7 +261,7 @@
 							</Expander>
 							<Expander x:Name="ScriptSettings" Header=" .script" HorizontalAlignment="Stretch" Margin="6,10,3,0" BorderThickness="0" Padding="0,2,0,2" IsExpanded="True">
 								<Grid Height="108" Margin="-2,2,0,0">
-									<Label Margin="0,-2,0,0" VerticalAlignment="Top"><TextBlock Text="WARNING: never install scripts you don't trust! They could contain any code, potentially damaging your computer or stealing your data." TextWrapping="Wrap" Style="{DynamicResource WarningText}" /></Label>
+									<TextBlock Margin="5,3,5,5" VerticalAlignment="Top" Text="WARNING: never install scripts you don't trust! They could contain any code, potentially damaging your computer or stealing your data." TextWrapping="Wrap" Style="{DynamicResource WarningText}" />
 
 									<CheckBox x:Name="ScriptSettings_EnableScripting" Checked="ScriptSettings_EnableScripting_Changed" Unchecked="ScriptSettings_EnableScripting_Changed" HorizontalAlignment="Left" Margin="4,30,0,0" VerticalAlignment="Top">
 										<StackPanel Orientation="Horizontal">

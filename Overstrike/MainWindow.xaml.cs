@@ -195,7 +195,7 @@ namespace Overstrike {
 			SaveSettings();
 
 			SetupBanner();
-			ProfileGamePath.Content = profile.GamePath;
+			ProfileGamePath.Text = profile.GamePath;
 
 			UpdateSuitMenuTabs();
 			MakeModsItems();
@@ -1045,14 +1045,14 @@ namespace Overstrike {
 		}
 
 		private void ShowStatusMessage(string text) {
-			StatusMessage.Content = text;
+			StatusMessage.Text = text;
 			_statusMessageErrorShown = false;
 			UpdateStatusMessageBrush();
 			PlayAnimation("ShowStatusMessage");
 		}
 
 		private void ShowStatusMessageError(string text) {
-			StatusMessage.Content = text;
+			StatusMessage.Text = text;
 			_statusMessageErrorShown = true;
 			UpdateStatusMessageBrush();
 			PlayAnimation("ShowStatusMessageError");

@@ -161,7 +161,7 @@
 					<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="6,8,6,8">
 						<StackPanel>
 							<Grid Margin="0,0,0,8">
-								<Label Content="Suit:" Padding="0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" />
+								<TextBlock Text="Suit:" Margin="0,1,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" />
 								<ComboBox x:Name="_SuitLoadoutComboBox" Margin="65,0,0,0" SelectionChanged="SuitLoadoutComboBox_SelectionChanged">
 									<ComboBox.ItemContainerStyle>
 										<Style TargetType="{x:Type ComboBoxItem}"><Setter Property="IsEnabled" Value="{Binding IsEnabled}" /></Style>
@@ -171,7 +171,7 @@
 							</Grid>
 
 							<Grid Margin="0,0,0,8">
-								<Label Content="Icon:" Padding="0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" />
+								<TextBlock Text="Icon:" Margin="0,1,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" />
 								<ComboBox x:Name="_SuitIconComboBox" Margin="65,0,0,0" SelectionChanged="SuitIconComboBox_SelectionChanged">
 									<ComboBox.ItemTemplate>
 										<DataTemplate><Grid><Image Source="{Binding Icon}" HorizontalAlignment="Left" Stretch="Fill" Width="16" Height="16" /><TextBlock Text="{Binding Name}" HorizontalAlignment="Left" Margin="23,0,0,0" /></Grid></DataTemplate>
@@ -181,7 +181,7 @@
 
 							<StackPanel x:Name="_SuitSpiderArmsPanel" Margin="0,0,0,8" Visibility="Collapsed">
 								<Grid>
-									<Label Content="Arms:" Padding="0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" />
+									<TextBlock Text="Arms:" Margin="0,1,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" />
 									<ComboBox x:Name="_SuitSpiderArmsComboBox" Margin="65,0,0,0" SelectionChanged="SuitSpiderArmsComboBox_SelectionChanged">
 										<ComboBox.ItemTemplate><DataTemplate><TextBlock Text="{Binding Name}" /></DataTemplate></ComboBox.ItemTemplate>
 									</ComboBox>
@@ -191,7 +191,7 @@
 
 							<StackPanel x:Name="_SuitWebwingsPanel" Margin="0,0,0,8" Visibility="Collapsed">
 								<Grid>
-									<Label Content="Wings:" Padding="0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" />
+									<TextBlock Text="Wings:" Margin="0,1,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" />
 									<ComboBox x:Name="_SuitWebwingsComboBox" Margin="65,0,0,0" SelectionChanged="SuitWebwingsComboBox_SelectionChanged">
 										<ComboBox.ItemContainerStyle>
 											<Style TargetType="{x:Type ComboBoxItem}"><Setter Property="IsEnabled" Value="{Binding IsEnabled}" /></Style>
@@ -217,12 +217,12 @@
 				</Border>
 
 				<Grid x:Name="_NotModified" Grid.Row="3" Margin="1,0,5,5" Visibility="Collapsed">
-					<Label x:Name="_NotModifiedStatusLabel" Content="No unsaved changes" HorizontalAlignment="Left" Margin="0,0,0,-1" VerticalAlignment="Bottom" />
+					<TextBlock x:Name="_NotModifiedStatusLabel" Text="No unsaved changes" HorizontalAlignment="Left" Margin="5,5,5,4" VerticalAlignment="Bottom" />
 					<Button x:Name="_ResetButton" Content="Reset" HorizontalAlignment="Right" Margin="0,0,1,1" VerticalAlignment="Bottom" Width="120" Height="22" Click="ResetButtonClicked" />
 				</Grid>
 
 				<Grid x:Name="_Modified" Grid.Row="3" Margin="1,0,5,5">
-					<Label Content="There are unsaved changes!" HorizontalAlignment="Left" Margin="0,0,0,-1" VerticalAlignment="Bottom" FontWeight="Bold" />
+					<TextBlock Text="There are unsaved changes!" HorizontalAlignment="Left" Margin="5,5,5,4" VerticalAlignment="Bottom" FontWeight="Bold" />
 					<Button Content="Undo" HorizontalAlignment="Right" Margin="0,0,62,1" VerticalAlignment="Bottom" Width="55" Height="22" Click="UndoChangesButtonClicked" />
 					<Button Content="Save" HorizontalAlignment="Right" Margin="0,0,1,1" VerticalAlignment="Bottom" Width="55" Height="22" Click="SaveChangesButtonClicked" />
 				</Grid>

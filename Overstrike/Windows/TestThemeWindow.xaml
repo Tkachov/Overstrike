@@ -31,7 +31,7 @@
 			<Border BorderThickness="0,1,0,0" BorderBrush="{DynamicResource MainWindow_WindowTopBorder}">
 				<StackPanel Margin="10,10,10,10">
 					<Grid>
-						<Label Content="Profile:" HorizontalAlignment="Left" Margin="0,3,0,0" VerticalAlignment="Top" Width="55"/>
+						<TextBlock Text="Profile:" HorizontalAlignment="Left" Margin="5,8,5,5" VerticalAlignment="Top" Width="55"/>
 						<ComboBox SelectedIndex="0" Margin="55,5,5,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="180">
 							<ComboBoxItem Content="Option 1" />
 							<ComboBoxItem Content="Option 2" />
@@ -50,8 +50,8 @@
 						</TabItem>
 						<TabItem Header="Tab Two">
 							<StackPanel>
-								<Label HorizontalAlignment="Left" Margin="5,3" VerticalAlignment="Top" Width="55"><TextBlock Text="Muted" Style="{StaticResource GrayText}" /></Label>
-								<Label HorizontalAlignment="Left" Margin="5,3" VerticalAlignment="Top" Width="55"><TextBlock Text="Warning" Style="{StaticResource WarningText}" /></Label>
+								<TextBlock HorizontalAlignment="Left" Margin="10,8" VerticalAlignment="Top" Width="55" Text="Muted" Style="{StaticResource GrayText}" />
+								<TextBlock HorizontalAlignment="Left" Margin="10,8" VerticalAlignment="Top" Width="55" Text="Warning" Style="{StaticResource WarningText}" />
 							</StackPanel>
 						</TabItem>
 					</TabControl>
@@ -155,18 +155,10 @@
 
 		<!-- RIGHT COLUMN: Dark Theme Controls (Scoped via Resources) -->
 		<ScrollViewer Grid.Column="1" Grid.Row="1" VerticalScrollBarVisibility="Auto" Background="{DynamicResource MainWindow_Background}" x:Name="RightColumn">
-			<ScrollViewer.Resources>
-				<ResourceDictionary>
-					<ResourceDictionary.MergedDictionaries>
-						<ResourceDictionary Source="../Themes/Dark/Theme.xaml" />
-					</ResourceDictionary.MergedDictionaries>
-				</ResourceDictionary>
-			</ScrollViewer.Resources>
-
 			<Border BorderThickness="0,1,0,0" BorderBrush="{DynamicResource MainWindow_WindowTopBorder}">
 				<StackPanel Margin="10,10,10,10">
 					<Grid>
-						<Label Content="Profile:" HorizontalAlignment="Left" Margin="0,3,0,0" VerticalAlignment="Top" Width="55"/>
+						<TextBlock Text="Profile:" HorizontalAlignment="Left" Margin="5,8,5,5" VerticalAlignment="Top" Width="55"/>
 						<ComboBox SelectedIndex="0" Margin="55,5,5,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="180">
 							<ComboBoxItem Content="Option 1" />
 							<ComboBoxItem Content="Option 2" />
@@ -185,8 +177,8 @@
 						</TabItem>
 						<TabItem Header="Tab Two">
 							<StackPanel>
-								<Label HorizontalAlignment="Left" Margin="5,3" VerticalAlignment="Top" Width="55"><TextBlock Text="Muted" Style="{StaticResource GrayText}" /></Label>
-								<Label HorizontalAlignment="Left" Margin="5,3" VerticalAlignment="Top" Width="55"><TextBlock Text="Warning" Style="{StaticResource WarningText}" /></Label>
+								<TextBlock HorizontalAlignment="Left" Margin="10,8" VerticalAlignment="Top" Width="55" Text="Muted" Style="{StaticResource GrayText}" />
+								<TextBlock HorizontalAlignment="Left" Margin="10,8" VerticalAlignment="Top" Width="55" Text="Warning" Style="{StaticResource WarningText}" />
 							</StackPanel>
 						</TabItem>
 					</TabControl>

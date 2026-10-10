@@ -159,10 +159,6 @@
 
 	<!-- common elements -->
 
-	<Style TargetType="Label">
-		<Setter Property="Foreground" Value="{DynamicResource textBrush}"/>
-	</Style>
-
 	<Style TargetType="Expander">
 		<Setter Property="Foreground" Value="{DynamicResource textBrush}" />
 	</Style>

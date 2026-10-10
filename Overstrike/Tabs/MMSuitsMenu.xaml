@@ -92,7 +92,7 @@
 					<Grid x:Name="_SuitInfo" Margin="-1,-1,0,0">
 						<Image x:Name="_BigIcon" HorizontalAlignment="Left" Margin="7,31,0,0" VerticalAlignment="Top" Stretch="Fill" Width="282" Height="112" />
 						
-						<Label Content="Model:" HorizontalAlignment="Left" Margin="5,148,0,0" VerticalAlignment="Top" Width="65"/>
+						<TextBlock Text="Model:" HorizontalAlignment="Left" Margin="10,153,0,0" VerticalAlignment="Top" Width="65"/>
 						<ComboBox x:Name="_SuitLoadoutComboBox" Margin="80,150,6,0" VerticalAlignment="Top" SelectionChanged="SuitLoadoutComboBox_SelectionChanged">
 							<ComboBox.ItemTemplate>
 								<DataTemplate>
@@ -101,7 +101,7 @@
 							</ComboBox.ItemTemplate>
 						</ComboBox>
 
-						<Label Content="Icon:" HorizontalAlignment="Left" Margin="5,174,0,0" VerticalAlignment="Top" Width="65"/>
+						<TextBlock Text="Icon:" HorizontalAlignment="Left" Margin="10,179,0,0" VerticalAlignment="Top" Width="65"/>
 						<ComboBox x:Name="_SuitIconComboBox" VerticalAlignment="Top" Margin="80,176,6,0" SelectionChanged="SuitIconComboBox_SelectionChanged">
 							<ComboBox.ItemTemplate>
 								<DataTemplate>
@@ -113,7 +113,7 @@
 							</ComboBox.ItemTemplate>
 						</ComboBox>
 
-						<Label Content="Image:" HorizontalAlignment="Left" Margin="5,200,0,0" VerticalAlignment="Top" Width="65"/>
+						<TextBlock Text="Image:" HorizontalAlignment="Left" Margin="10,205,0,0" VerticalAlignment="Top" Width="65"/>
 						<ComboBox x:Name="_SuitBigIconComboBox" VerticalAlignment="Top" Margin="80,202,6,0" SelectionChanged="SuitBigIconComboBox_SelectionChanged">
 							<ComboBox.ItemTemplate>
 								<DataTemplate>
@@ -139,13 +139,13 @@
 					</Border>
 
 					<Grid x:Name="_NotModified" VerticalAlignment="Bottom" Margin="1,0,5,5" Visibility="Collapsed">
-						<Label x:Name="_NotModifiedStatusLabel" Content="No unsaved changes" HorizontalAlignment="Left" Margin="0,0,0,-1" VerticalAlignment="Bottom"/>
+						<TextBlock x:Name="_NotModifiedStatusLabel" Text="No unsaved changes" HorizontalAlignment="Left" Margin="5,5,5,4" VerticalAlignment="Bottom"/>
 
 						<Button x:Name="_ResetButton" Content="Reset" HorizontalAlignment="Right" Margin="0,0,1,1" VerticalAlignment="Bottom" Width="120" Height="22" Click="ResetButtonClicked" />
 					</Grid>
 
 					<Grid x:Name="_Modified" VerticalAlignment="Bottom" Margin="1,0,5,5">
-						<Label Content="There are unsaved changes!" HorizontalAlignment="Left" Margin="0,0,0,-1" VerticalAlignment="Bottom" FontWeight="Bold" />
+						<TextBlock Text="There are unsaved changes!" HorizontalAlignment="Left" Margin="5,5,5,4" VerticalAlignment="Bottom" FontWeight="Bold" />
 
 						<Button Content="Undo" HorizontalAlignment="Right" Margin="0,0,62,1" VerticalAlignment="Bottom" Width="55" Height="22" Click="UndoChangesButtonClicked" />
 						<Button Content="Save" HorizontalAlignment="Right" Margin="0,0,1,1" VerticalAlignment="Bottom" Width="55" Height="22" Click="SaveChangesButtonClicked" />

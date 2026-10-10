@@ -52,7 +52,7 @@ namespace Overstrike.Tabs {
 		protected abstract ComboBox SuitIconComboBox { get; }
 		protected abstract ComboBox SuitBigIconComboBox { get; }
 		protected abstract Button ToggleSuitDeleteButton { get; }
-		protected abstract Label NotModifiedStatusLabel { get; }
+		protected abstract TextBlock NotModifiedStatusLabel { get; }
 		protected abstract Button ResetButton { get; }
 
 		protected abstract bool HasBigIcons { get; }
@@ -823,7 +823,7 @@ namespace Overstrike.Tabs {
 		protected void SetWasReset(bool wasReset) {
 			_wasReset = wasReset;
 
-			NotModifiedStatusLabel.Content = _wasReset ? "No changes at all" : "No unsaved changes";
+			NotModifiedStatusLabel.Text = _wasReset ? "No changes at all" : "No unsaved changes";
 			ResetButton.Content = _wasReset ? "Undo reset" : "Reset";
 		}
 

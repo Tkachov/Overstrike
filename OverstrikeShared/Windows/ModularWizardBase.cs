@@ -19,7 +19,7 @@ namespace OverstrikeShared.Windows {
 		#region implementation-defined
 
 		protected abstract Grid MainGrid { get; }
-		protected abstract Label NumberLabel { get; }
+		protected abstract TextBlock NumberLabel { get; }
 		protected abstract TextBox NumberBox { get; }
 
 		protected abstract string ModName { get; }
@@ -244,12 +244,12 @@ namespace OverstrikeShared.Windows {
 
 		private void UpdateNumberLabel() {
 			var current = GetCurrentCombinationNumber();
-			NumberLabel.Content = $"#{current}/{GetCombinationsNumber()}";
+			NumberLabel.Text = $"#{current}/{GetCombinationsNumber()}";
 			NumberBox.Text = $"{current}";
 		}
 
 		private void ShowNumberBox() {
-			NumberLabel.Content = "";
+			NumberLabel.Text = "";
 
 			NumberBox.Visibility = Visibility.Visible;
 			NumberBox.Focus();
