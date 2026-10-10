@@ -1,6 +1,17 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 					xmlns:local="clr-namespace:Overstrike">
+
+	<Style x:Key="MutedText" TargetType="TextBlock">
+		<Setter Property="Foreground" Value="#969696" />
+	</Style>
+	<Style x:Key="GrayText" TargetType="TextBlock">
+		<Setter Property="Foreground" Value="#666" />
+	</Style>
+	<Style x:Key="WarningText" TargetType="TextBlock">
+		<Setter Property="Foreground" Value="#F04" />
+	</Style>
+
     <SolidColorBrush x:Key="MainWindow_IconButtonHoverBackground" Color="#EEE" />
     <SolidColorBrush x:Key="MainWindow_IconButtonPressedBackground" Color="#CCC" />
     <SolidColorBrush x:Key="MainWindow_WindowTopBorder" Color="#EEE" />

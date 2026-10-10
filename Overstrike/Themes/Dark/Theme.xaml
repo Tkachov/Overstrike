@@ -32,18 +32,18 @@
 / suits menu
 
 - settings collapser
-? settings muted text
-? settings red text
++ settings muted text
++ settings red text
 
 / modular
 + create profile
-	? disabled button
+	+ disabled button
 + scan library
 + first launch
 	+ checkbox
 	+ list item
 	+ tooltip
-	? disabled button
+	+ disabled button
 	+ custom colors (header panel, list border)
 / error log
 / toc mismatch
@@ -60,6 +60,53 @@
 	<SolidColorBrush x:Key="borderBrush" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="backgroundBrush" Color="{StaticResource background}" />
 	<SolidColorBrush x:Key="mutedTextBrush" Color="{StaticResource mutedText}" />
+	<SolidColorBrush x:Key="grayTextBrush" Color="{StaticResource grayText}" />
+	<SolidColorBrush x:Key="warningTextBrush" Color="{StaticResource redText}" />
+
+	<Style TargetType="TextBlock">
+		<Setter Property="Foreground" Value="{DynamicResource textBrush}" />
+		<Style.Triggers>
+			<Trigger Property="IsEnabled" Value="False">
+				<Setter Property="Foreground" Value="{DynamicResource textDisabledBrush}" />
+			</Trigger>
+		</Style.Triggers>
+	</Style>
+
+	<Style x:Key="MutedText" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+		<Setter Property="Foreground" Value="{DynamicResource mutedTextBrush}" />
+	</Style>
+	<Style x:Key="GrayText" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+		<Setter Property="Foreground" Value="{DynamicResource grayTextBrush}" />
+	</Style>
+	<Style x:Key="WarningText" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+		<Setter Property="Foreground" Value="{DynamicResource warningTextBrush}" />
+	</Style>
+
+	<Style x:Key="MenuItemHeaderText" TargetType="TextBlock">
+		<Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type MenuItem}}}" />
+		<Style.Triggers>
+			<Trigger Property="IsEnabled" Value="False">
+				<Setter Property="Foreground" Value="{DynamicResource textDisabledBrush}" />
+			</Trigger>
+		</Style.Triggers>
+	</Style>
+	<Style x:Key="TabItemHeaderText" TargetType="TextBlock">
+		<Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type TabItem}}}" />
+		<Style.Triggers>
+			<Trigger Property="IsEnabled" Value="False">
+				<Setter Property="Foreground" Value="{DynamicResource textDisabledBrush}" />
+			</Trigger>
+		</Style.Triggers>
+	</Style>
+	<Style TargetType="MenuItem">
+		<Setter Property="HeaderTemplate">
+			<Setter.Value>
+				<DataTemplate>
+					<TextBlock Text="{Binding}" Style="{StaticResource MenuItemHeaderText}" />
+				</DataTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
 
 	<!-- inactive/non-selected, not disabled/grayed-out -->
 	<Color x:Key="backgroundD">#1A1A1E</Color>
@@ -100,7 +147,6 @@
 	<Color x:Key="buttonDisableBorder">#303035</Color>
 	<Color x:Key="buttonDisableText">#66666E</Color> <!-- == textDisabled -->
 	<!-- for better contrast = bck: #232326, brd: #303035, txt: #454549 -->
-	<!-- TODO: figure out why FirstLaunch disabled button doesn't follow this text color -->
 
 	<Color x:Key="borderFocused">#39F</Color>
 
@@ -117,10 +163,6 @@
 		<Setter Property="Foreground" Value="{DynamicResource textBrush}"/>
 	</Style>
 
-	<Style TargetType="TextBlock">
-		<Setter Property="Foreground" Value="{StaticResource textBrush}"/>
-	</Style>
-
 	<Style TargetType="Expander">
 		<Setter Property="Foreground" Value="{DynamicResource textBrush}" />
 	</Style>
@@ -130,7 +172,7 @@
 	<SolidColorBrush x:Key="MainWindow_StatusMessageForeground" Color="{DynamicResource mutedText}" />
 	<SolidColorBrush x:Key="MainWindow_StatusMessageErrorForeground" Color="{DynamicResource redText}" />
 
-	<SolidColorBrush x:Key="MainWindow_SettingsGlobalDescriptionForeground" Color="{DynamicResource grayText}" /> <!-- TODO: why works in test window and not actual? -->
+	<SolidColorBrush x:Key="MainWindow_SettingsGlobalDescriptionForeground" Color="{DynamicResource grayText}" />
 	<SolidColorBrush x:Key="MainWindow_ScriptWarningForeground" Color="{DynamicResource redText}" />
 
 	<SolidColorBrush x:Key="FirstLaunch_WindowTopBorder" Color="{StaticResource border}" />
@@ -712,6 +754,13 @@
 		<Setter Property="Background" Value="{DynamicResource backgroundDBrush}"/> <!-- non-active -->
 		<Setter Property="BorderBrush" Value="{DynamicResource borderDBrush}"/>
 		<Setter Property="Foreground" Value="{DynamicResource textDBrush}"/>
+		<Setter Property="HeaderTemplate">
+			<Setter.Value>
+				<DataTemplate>
+					<TextBlock Text="{Binding}" Style="{StaticResource TabItemHeaderText}" />
+				</DataTemplate>
+			</Setter.Value>
+		</Setter>
 
 		<Setter Property="Template" Value="{StaticResource TabItemTemplate}"/>
 		
@@ -1183,7 +1232,7 @@
 	<Style TargetType="ToolTip">
 		<Setter Property="BorderBrush" Value="{StaticResource Tooltip_BorderBrush}"/>
 		<Setter Property="Background" Value="{StaticResource Tooltip_BackgroundBrush}"/>
-		<Setter Property="Foreground" Value="{StaticResource textDisabledBrush}"/>
+		<Setter Property="Foreground" Value="{StaticResource textDisabledBrush}"/> <!-- TODO: uses default Foreground, needs custom style, and thus probably a custom ControlTemplate -->
 	</Style>
 	
 	<!-- checkbox -->
