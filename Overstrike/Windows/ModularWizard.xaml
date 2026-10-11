@@ -19,7 +19,7 @@
 			</Grid>
 		</DataTemplate>
 	</Window.Resources>
-	<Grid>
+	<Grid Background="{DynamicResource ModularWizard_MainBackground}">
 		<Grid.RowDefinitions>
 			<RowDefinition />
 			<RowDefinition Height="30" />
@@ -27,7 +27,7 @@
 
 		<Border BorderThickness="0,1,0,1" BorderBrush="{DynamicResource ModularWizard_Border}">
 			<ScrollViewer ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible" Grid.Row="0">
-				<Grid x:Name="_MainGrid" HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="{DynamicResource ModularWizard_MainBackground}" />
+				<Grid x:Name="_MainGrid" HorizontalAlignment="Stretch" VerticalAlignment="Top" />
 			</ScrollViewer>
 		</Border>
 

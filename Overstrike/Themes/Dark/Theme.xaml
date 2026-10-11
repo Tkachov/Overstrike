@@ -35,7 +35,7 @@
 + settings muted text
 + settings red text
 
-/ modular
++ modular
 + create profile
 	+ disabled button
 + scan library
@@ -186,6 +186,8 @@
 
 	<SolidColorBrush x:Key="ModularWizard_Border" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="ModularWizard_MainBackground" Color="{StaticResource background}" />
+	<SolidColorBrush x:Key="ModularWizard_FooterBackground" Color="{StaticResource background}" />
+	<SolidColorBrush x:Key="ModularWizard_NumberLabelForeground" Color="#666" /> <!-- very muted -->
 
 	<SolidColorBrush x:Key="TocMismatchDialog_WindowTopBorder" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="TocMismatchDialog_Background" Color="{StaticResource background}" />
