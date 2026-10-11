@@ -16,7 +16,7 @@
 
 + tabs
 + filter
-- plus/refresh icons
++ plus/refresh icons
 
 ? scrollbox
 + scrollbar
@@ -141,12 +141,16 @@
 
 	<Color x:Key="borderFocused">#39F</Color>
 
+	<SolidColorBrush x:Key="MainWindow_IconButtonHoverBackground" Color="{StaticResource buttonHoverBackground}" />
+	<SolidColorBrush x:Key="MainWindow_IconButtonPressedBackground" Color="{StaticResource buttonPressBackground}" />
 	<SolidColorBrush x:Key="MainWindow_WindowTopBorder" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="MainWindow_Background" Color="{StaticResource background}" />
 	<SolidColorBrush x:Key="MainWindow_OverlayBackground" Color="{StaticResource border}" Opacity=".75"/>
 	<SolidColorBrush x:Key="MainWindow_OverlayPanelBackground" Color="{StaticResource background}" />
 
 	<BitmapImage x:Key="banner_msm2_back.png" UriSource="Resources/banner_msm2_back.png" />
+	<BitmapImage x:Key="add_icon.png" UriSource="Resources/add_icon.png" />
+	<BitmapImage x:Key="reload_icon.png" UriSource="Resources/reload_icon.png" />
 
 	<!-- common elements -->
 
