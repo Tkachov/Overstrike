@@ -26,7 +26,7 @@
 					</DataTemplate>
 				</ListView.Resources>
 				<ListView.ItemContainerStyle>
-					<Style TargetType="ListViewItem">
+					<Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
 						<Setter Property="Margin" Value="0,0,0,10"></Setter>
 						<EventSetter Event="MouseUp" Handler="Option_Clicked" />
 					</Style>

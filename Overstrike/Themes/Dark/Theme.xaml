@@ -18,7 +18,7 @@
 + filter
 + plus/refresh icons
 
-? scrollbox
++ scrollbox
 + scrollbar
 + list item
 + checkbox
@@ -45,8 +45,10 @@
 	+ tooltip
 	+ disabled button
 	+ custom colors (header panel, list border)
-/ error log
-/ toc mismatch
++ error log
++ toc mismatch
+
+- textbox w/h both scrollbars: white square in corner
 
 -->
 
@@ -179,6 +181,8 @@
 	<SolidColorBrush x:Key="ModsDetectionSplash_Background" Color="{StaticResource background}" />
 	<SolidColorBrush x:Key="ModsDetectionSplash_OperationForeground" Color="{StaticResource grayText}" />
 
+	<SolidColorBrush x:Key="ErrorLogWindow_Background" Color="{StaticResource backgroundDisabled}" />
+
 	<SolidColorBrush x:Key="ModularWizard_Border" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="ModularWizard_MainBackground" Color="{StaticResource background}" />
 	<SolidColorBrush x:Key="ModularWizard_FooterBackground" Color="{StaticResource background}" />
@@ -186,6 +190,7 @@
 
 	<SolidColorBrush x:Key="TocMismatchDialog_WindowTopBorder" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="TocMismatchDialog_Background" Color="{StaticResource background}" />
+	<SolidColorBrush x:Key="TocMismatchDialog_FooterForeground" Color="{DynamicResource grayText}" />
 
 	<!-- ComboBox -->
 
