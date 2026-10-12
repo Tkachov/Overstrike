@@ -188,6 +188,47 @@
 	<SolidColorBrush x:Key="TocMismatchDialog_Background" Color="{StaticResource background}" />
 	<SolidColorBrush x:Key="TocMismatchDialog_FooterForeground" Color="{DynamicResource grayText}" />
 
+	<Color x:Key="SuitsMenu_SideBackground">#202024</Color> <!-- ==background -->
+	<Color x:Key="SuitsMenu_Divider">#303035</Color> <!-- ==border -->
+	<Color x:Key="SuitsMenu_Selection">#39F</Color> <!-- ==borderFocused -->
+	<Color x:Key="SuitsMenu_ListBackground">#1A1A1E</Color>
+	<Color x:Key="SuitsMenu_Background">#101014</Color>
+
+	<SolidColorBrush x:Key="MSMRSuitsMenu_ListSelectionBackground" Color="{StaticResource SuitsMenu_Selection}" />
+	<SolidColorBrush x:Key="MSMRSuitsMenu_OuterBorder" Color="{StaticResource SuitsMenu_ListBackground}" />
+	<SolidColorBrush x:Key="MSMRSuitsMenu_Background" Color="{StaticResource SuitsMenu_Background}" />
+	<SolidColorBrush x:Key="MSMRSuitsMenu_ListBackground" Color="{StaticResource SuitsMenu_ListBackground}" />
+	<SolidColorBrush x:Key="MSMRSuitsMenu_SlotBorder" Color="{StaticResource SuitsMenu_Selection}" />
+	<SolidColorBrush x:Key="MSMRSuitsMenu_SideBackground" Color="{StaticResource SuitsMenu_SideBackground}" />
+	<SolidColorBrush x:Key="MSMRSuitsMenu_Divider" Color="{StaticResource SuitsMenu_Divider}" />
+
+	<SolidColorBrush x:Key="MMSuitsMenu_ListSelectionBackground" Color="{StaticResource SuitsMenu_Selection}" />
+	<SolidColorBrush x:Key="MMSuitsMenu_OuterBorder" Color="{StaticResource SuitsMenu_ListBackground}" />
+	<SolidColorBrush x:Key="MMSuitsMenu_Background" Color="{StaticResource SuitsMenu_Background}" />
+	<SolidColorBrush x:Key="MMSuitsMenu_ListBackground" Color="{StaticResource SuitsMenu_ListBackground}" />
+	<SolidColorBrush x:Key="MMSuitsMenu_SlotBorder" Color="{StaticResource SuitsMenu_Selection}" />
+	<SolidColorBrush x:Key="MMSuitsMenu_SideBackground" Color="{StaticResource SuitsMenu_SideBackground}" />
+	<SolidColorBrush x:Key="MMSuitsMenu_Divider" Color="{StaticResource SuitsMenu_Divider}" />
+
+	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabForeground" Color="{StaticResource mutedText}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabBackground" Color="{StaticResource backgroundD}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabBorder" Color="{StaticResource backgroundD}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabHoverBorder" Color="{StaticResource border}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabHoverForeground" Color="{StaticResource textHover}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabActiveForeground" Color="{StaticResource text}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabActiveBackground" Color="{StaticResource border}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabActiveBorder" Color="{StaticResource border}" /> <!-- TabItem.Selected.Border -->
+	<SolidColorBrush x:Key="MSM2SuitsMenu_ListSelectionBackground" Color="{StaticResource SuitsMenu_Selection}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_OuterBorder" Color="{StaticResource SuitsMenu_ListBackground}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_Background" Color="{StaticResource SuitsMenu_Background}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_TabStripBackground" Color="{StaticResource backgroundD}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_ListBackground" Color="{StaticResource SuitsMenu_ListBackground}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_SlotBorder" Color="{StaticResource SuitsMenu_Selection}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_SideBackground" Color="{StaticResource SuitsMenu_SideBackground}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_HeaderDivider" Color="{StaticResource SuitsMenu_Divider}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_SpiderArmsWarningForeground" Color="{StaticResource mutedText}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_FooterDivider" Color="{StaticResource SuitsMenu_Divider}" />
+
 	<!-- ComboBox -->
 
 <!--

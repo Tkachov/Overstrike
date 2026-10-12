@@ -11,29 +11,6 @@
 		<ItemsPanelTemplate x:Key="ThumbnailListTemplate">
 			<WrapPanel Orientation="Horizontal" />
 		</ItemsPanelTemplate>
-		<Style x:Key="SeparatorButtonStyle" TargetType="Button">
-			<Setter Property="OverridesDefaultStyle" Value="True" />
-			<Setter Property="Margin" Value="0,0,0,0" />
-			<Setter Property="HorizontalAlignment" Value="Center" />
-			<Setter Property="Height" Value="100" />
-			<Setter Property="Width" Value="20" />
-			<Setter Property="Content" Value="+"/>
-			<Setter Property="Foreground" Value="{DynamicResource MMSuitsMenu_SeparatorButtonForeground}" />
-			<Setter Property="Template">
-				<Setter.Value>
-					<ControlTemplate TargetType="Button">
-						<Border Name="border" BorderThickness="1" BorderBrush="Transparent" Background="{DynamicResource MMSuitsMenu_SeparatorButtonBackground}" CornerRadius="6">
-							<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-						</Border>
-						<ControlTemplate.Triggers>
-							<Trigger Property="IsMouseOver" Value="True">
-								<Setter Property="Opacity" Value="0.8" TargetName="border" />
-							</Trigger>
-						</ControlTemplate.Triggers>
-					</ControlTemplate>
-				</Setter.Value>
-			</Setter>
-		</Style>
 		<Style TargetType="{x:Type ListViewItem}" x:Key="NotemanagerContainerStyle">
 			<Setter Property="Template">
 				<Setter.Value>

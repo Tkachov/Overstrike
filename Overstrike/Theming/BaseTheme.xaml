@@ -49,8 +49,6 @@
 	<SolidColorBrush x:Key="TocMismatchDialog_Background" Color="#FFF" />
 	<SolidColorBrush x:Key="TocMismatchDialog_FooterForeground" Color="#666" />
 
-    <SolidColorBrush x:Key="MSMRSuitsMenu_SeparatorButtonForeground" Color="White" />
-    <SolidColorBrush x:Key="MSMRSuitsMenu_SeparatorButtonBackground" Color="Gray" />
     <SolidColorBrush x:Key="MSMRSuitsMenu_ListSelectionBackground" Color="#098AE4" />
     <SolidColorBrush x:Key="MSMRSuitsMenu_OuterBorder" Color="#057" />
     <SolidColorBrush x:Key="MSMRSuitsMenu_Background" Color="#034" />
@@ -59,8 +57,6 @@
     <SolidColorBrush x:Key="MSMRSuitsMenu_SideBackground" Color="#FFF" />
     <SolidColorBrush x:Key="MSMRSuitsMenu_Divider" Color="#CCC" />
 
-    <SolidColorBrush x:Key="MMSuitsMenu_SeparatorButtonForeground" Color="White" />
-    <SolidColorBrush x:Key="MMSuitsMenu_SeparatorButtonBackground" Color="Gray" />
     <SolidColorBrush x:Key="MMSuitsMenu_ListSelectionBackground" Color="#098AE4" />
     <SolidColorBrush x:Key="MMSuitsMenu_OuterBorder" Color="#0D1C2B" />
     <SolidColorBrush x:Key="MMSuitsMenu_Background" Color="#070C1B" />
@@ -69,8 +65,6 @@
     <SolidColorBrush x:Key="MMSuitsMenu_SideBackground" Color="#FFF" />
     <SolidColorBrush x:Key="MMSuitsMenu_Divider" Color="#CCC" />
 
-    <SolidColorBrush x:Key="MSM2SuitsMenu_SeparatorButtonForeground" Color="White" />
-    <SolidColorBrush x:Key="MSM2SuitsMenu_SeparatorButtonBackground" Color="Gray" />
     <SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabForeground" Color="#CCC" />
     <SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabBackground" Color="#032338" />
     <SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabBorder" Color="#032338" />
