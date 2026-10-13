@@ -22,14 +22,15 @@
 + scrollbar
 + list item
 + checkbox
-- mod icons
++ mod icons
+- banners
 
 + button
 + context menu
 	
 - TODO: revisit button, input, dropdown (, tab?)
 
-/ suits menu
++ suits menu
 
 + settings collapser
 + settings muted text
@@ -49,6 +50,7 @@
 + toc mismatch
 
 - textbox w/h both scrollbars: white square in corner
+- some dropdowns use wrong style (suits menu wings?)
 
 -->
 
@@ -153,7 +155,15 @@
 	<BitmapImage x:Key="banner_msm2_back.png" UriSource="Resources/banner_msm2_back.png" />
 	<BitmapImage x:Key="add_icon.png" UriSource="Resources/add_icon.png" />
 	<BitmapImage x:Key="reload_icon.png" UriSource="Resources/reload_icon.png" />
-
+	<BitmapImage x:Key="badge_mmpc.png" UriSource="Resources/badge_mmpc.png" />
+	<BitmapImage x:Key="badge_modular.png" UriSource="Resources/badge_modular.png" />
+	<BitmapImage x:Key="badge_script.png" UriSource="Resources/badge_script.png" />
+	<BitmapImage x:Key="badge_smpc.png" UriSource="Resources/badge_smpc.png" />
+	<BitmapImage x:Key="badge_stage.png" UriSource="Resources/badge_stage.png" />
+	<BitmapImage x:Key="badge_style.png" UriSource="Resources/badge_style.png" />
+	<BitmapImage x:Key="badge_suit.png" UriSource="Resources/badge_suit.png" />
+	<BitmapImage x:Key="badge_suit2.png" UriSource="Resources/badge_suit2.png" />	
+	
 	<!-- common elements -->
 
 	<SolidColorBrush x:Key="MainWindow_ModsOrderLabelForeground" Color="{StaticResource mutedText}" />
