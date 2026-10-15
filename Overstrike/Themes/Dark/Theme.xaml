@@ -23,12 +23,16 @@
 + list item
 + checkbox
 + mod icons
-- banners
++ banners
 
 + button
 + context menu
 	
-- TODO: revisit button, input, dropdown (, tab?)
+- TODO: revisit button, input, dropdown (, tab?) - white-ish border on the button? check the normal/hover for combobox to be matching (list)item?
+- TODO: revisit text, have somewhat more muted? // might have to remake icons then
+- TODO: cleanup the base file, see if there are strange color names or unnecessary ones
+- TODO: cleanup the file, rearrange definitions, define colors with better names and merge what's the same
+- TODO: when all done, final pass on all windows & on built app.
 
 + suits menu
 
@@ -49,8 +53,9 @@
 + error log
 + toc mismatch
 
+- bugs:
 - textbox w/h both scrollbars: white square in corner
-- some dropdowns use wrong style (suits menu wings?)
+- some dropdowns use wrong style (suits menu wings?) - make them match
 
 -->
 
@@ -153,6 +158,11 @@
 	<SolidColorBrush x:Key="MainWindow_OverlayPanelBackground" Color="{StaticResource background}" />
 
 	<BitmapImage x:Key="banner_msm2_back.png" UriSource="Resources/banner_msm2_back.png" />
+	<BitmapImage x:Key="banner_i30_back.png" UriSource="Resources/banner_i30_back.png" />
+	<BitmapImage x:Key="banner_i33_back.png" UriSource="Resources/banner_i30_back.png" />
+	<BitmapImage x:Key="banner_mm_back.png" UriSource="Resources/banner_mm_back.png" />
+	<BitmapImage x:Key="banner_msmr_back.png" UriSource="Resources/banner_msmr_back.png" />
+	<BitmapImage x:Key="banner_rcra_back.png" UriSource="Resources/banner_rcra_back.png" />
 	<BitmapImage x:Key="add_icon.png" UriSource="Resources/add_icon.png" />
 	<BitmapImage x:Key="reload_icon.png" UriSource="Resources/reload_icon.png" />
 	<BitmapImage x:Key="badge_mmpc.png" UriSource="Resources/badge_mmpc.png" />
