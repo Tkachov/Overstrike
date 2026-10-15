@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Overstrike"
         mc:Ignorable="d"
-        Title="Theme Test" Height="900" Width="900">
+        Title="Theme Test" Height="875" Width="900">
 
 	<Grid>
 		<Grid.ColumnDefinitions>
@@ -44,15 +44,78 @@
 						<TextBlock Text="TextBlock" Margin="125,0,0,0" Style="{StaticResource WarningText}"/>
 						<TextBlock Text="TextBlock" Margin="245,0,0,0" Style="{StaticResource GrayText}"/>
 					</Grid>
-					<TabControl Height="90" Margin="0,0,0,0">
-						<TabItem Header="Tab One">
-							<TextBlock Text="Content inside Tab One." Margin="5"/>
+					<TabControl Height="140" Margin="0,0,0,0">
+						<TabItem Header="Inputs">
+							<StackPanel Margin="5">
+								<Grid DockPanel.Dock="Top" Height="22" Margin="0,6,0,6" VerticalAlignment="Top" Grid.Row="0">
+									<Grid Grid.Column="0">
+										<TextBox HorizontalAlignment="Left" Width="234" Padding="1" x:Name="FilterTextBox1" />
+										<TextBlock IsHitTestVisible="False" Text="Filter..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="{DynamicResource MainWindow_TextBoxPlaceholder}">
+											<TextBlock.Style>
+												<Style TargetType="{x:Type TextBlock}">
+													<Setter Property="Visibility" Value="Collapsed"/>
+													<Style.Triggers>
+														<DataTrigger Binding="{Binding Text, ElementName=FilterTextBox1}" Value="">
+															<Setter Property="Visibility" Value="Visible"/>
+														</DataTrigger>
+													</Style.Triggers>
+												</Style>
+											</TextBlock.Style>
+										</TextBlock>
+									</Grid>
+								</Grid>
+
+								<Grid DockPanel.Dock="Top" Height="22" Margin="0,2,0,20" VerticalAlignment="Top" Grid.Row="0">
+									<Grid Grid.Column="0">
+										<TextBox HorizontalAlignment="Left" Width="234" Padding="1" x:Name="FilterTextBox2" Text="text" />
+										<TextBlock IsHitTestVisible="False" Text="Filter..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="{DynamicResource MainWindow_TextBoxPlaceholder}">
+											<TextBlock.Style>
+												<Style TargetType="{x:Type TextBlock}">
+													<Setter Property="Visibility" Value="Collapsed"/>
+													<Style.Triggers>
+														<DataTrigger Binding="{Binding Text, ElementName=FilterTextBox2}" Value="">
+															<Setter Property="Visibility" Value="Visible"/>
+														</DataTrigger>
+													</Style.Triggers>
+												</Style>
+											</TextBlock.Style>
+										</TextBlock>
+									</Grid>
+								</Grid>
+							</StackPanel>
 						</TabItem>
-						<TabItem Header="Tab Two">
+						<TabItem Header="TextBlocks">
 							<StackPanel>
 								<TextBlock HorizontalAlignment="Left" Margin="10,8" VerticalAlignment="Top" Width="55" Text="Muted" Style="{StaticResource GrayText}" />
 								<TextBlock HorizontalAlignment="Left" Margin="10,8" VerticalAlignment="Top" Width="55" Text="Warning" Style="{StaticResource WarningText}" />
 							</StackPanel>
+						</TabItem>
+						<TabItem Header="4 Controls">
+							<Grid Margin="0,45,0,0" VerticalAlignment="Top">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*" />
+									<ColumnDefinition Width="*" />
+									<ColumnDefinition Width="*" />
+									<ColumnDefinition Width="*" />
+								</Grid.ColumnDefinitions>
+
+								<TabControl Width="60" Height="26" Margin="0" Grid.Column="0">
+									<TabItem Header="Text">
+									</TabItem>
+								</TabControl>
+
+								<Button Width="60" Height="22" Margin="0" Grid.Column="1" Content="Text" VerticalAlignment="Top" />
+
+								<Grid DockPanel.Dock="Top" Height="22" VerticalAlignment="Top" Grid.Column="2">
+									<Grid Grid.Column="0">
+										<TextBox Width="60" Margin="0" Padding="1" Text="Text" />
+									</Grid>
+								</Grid>
+
+								<ComboBox SelectedIndex="0" VerticalAlignment="Top" Width="60" Grid.Column="3">
+									<ComboBoxItem Content="Text" />
+								</ComboBox>
+							</Grid>
 						</TabItem>
 					</TabControl>
 
@@ -61,7 +124,7 @@
 							<RowDefinition Height="32" />
 						</Grid.RowDefinitions>
 
-						<TextBlock Text="Done! 10 mods installed." HorizontalAlignment="Left" Margin="0,4,0,0" Grid.Row="0" Style="{StaticResource MutedText}" VerticalAlignment="Top" Height="30" />
+						<TextBlock Text="Done! 10 mods installed." HorizontalAlignment="Left" Margin="4,8,0,0" Grid.Row="0" Style="{StaticResource MutedText}" VerticalAlignment="Top" Height="30" />
 
 						<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="0">
 							<Button Margin="4,6,4,4" Content="Install mods" VerticalAlignment="Top" HorizontalAlignment="Right" Width="120" Height="22">
@@ -79,44 +142,8 @@
 						</StackPanel>
 					</Grid>
 
-					<Grid DockPanel.Dock="Top" Height="22" Margin="0,20,0,6" VerticalAlignment="Top" Grid.Row="0">
-						<Grid Grid.Column="0">
-							<TextBox HorizontalAlignment="Left" Width="234" Padding="1" x:Name="FilterTextBox1" />
-							<TextBlock IsHitTestVisible="False" Text="Filter..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="{DynamicResource MainWindow_TextBoxPlaceholder}">
-								<TextBlock.Style>
-									<Style TargetType="{x:Type TextBlock}">
-										<Setter Property="Visibility" Value="Collapsed"/>
-										<Style.Triggers>
-											<DataTrigger Binding="{Binding Text, ElementName=FilterTextBox1}" Value="">
-												<Setter Property="Visibility" Value="Visible"/>
-											</DataTrigger>
-										</Style.Triggers>
-									</Style>
-								</TextBlock.Style>
-							</TextBlock>
-						</Grid>
-					</Grid>
-
-					<Grid DockPanel.Dock="Top" Height="22" Margin="0,2,0,20" VerticalAlignment="Top" Grid.Row="0">
-						<Grid Grid.Column="0">
-							<TextBox HorizontalAlignment="Left" Width="234" Padding="1" x:Name="FilterTextBox2" Text="text" />
-							<TextBlock IsHitTestVisible="False" Text="Filter..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="{DynamicResource MainWindow_TextBoxPlaceholder}">
-								<TextBlock.Style>
-									<Style TargetType="{x:Type TextBlock}">
-										<Setter Property="Visibility" Value="Collapsed"/>
-										<Style.Triggers>
-											<DataTrigger Binding="{Binding Text, ElementName=FilterTextBox2}" Value="">
-												<Setter Property="Visibility" Value="Visible"/>
-											</DataTrigger>
-										</Style.Triggers>
-									</Style>
-								</TextBlock.Style>
-							</TextBlock>
-						</Grid>
-					</Grid>
-
 					<!-- 6. CheckBox (Normal & Disabled) -->
-					<CheckBox Content="Normal CheckBox" Margin="0,0,0,5"/>
+					<CheckBox Content="Normal CheckBox" Margin="0,20,0,5"/>
 					<CheckBox Content="Disabled CheckBox" IsEnabled="False" Margin="0,0,0,10"/>
 					<CheckBox Content="Normal CheckBox" IsChecked="True" Margin="0,0,0,5"/>
 					<CheckBox Content="Disabled CheckBox" IsChecked="True" IsEnabled="False" Margin="0,0,0,10"/>
@@ -142,7 +169,7 @@
 					</ScrollViewer>
 
 					<local:ListViewEx Grid.Row="1" VirtualizingStackPanel.VirtualizationMode="Recycling"
-								  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible"
+								  ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible"
 								  SelectionMode="Single" Height="150" VerticalAlignment="Top">
 						<ListViewItem Content="Item 1" />
 						<ListViewItem Content="Item 2" />
@@ -171,15 +198,78 @@
 						<TextBlock Text="TextBlock" Margin="125,0,0,0" Style="{StaticResource WarningText}"/>
 						<TextBlock Text="TextBlock" Margin="245,0,0,0" Style="{StaticResource GrayText}"/>
 					</Grid>
-					<TabControl Height="90" Margin="0,0,0,0">
-						<TabItem Header="Tab One">
-							<TextBlock Text="Content inside Tab One." Margin="5"/>
+					<TabControl Height="140" Margin="0,0,0,0">
+						<TabItem Header="Inputs">
+							<StackPanel Margin="5">
+								<Grid DockPanel.Dock="Top" Height="22" Margin="0,6,0,6" VerticalAlignment="Top" Grid.Row="0">
+									<Grid Grid.Column="0">
+										<TextBox HorizontalAlignment="Left" Width="234" Padding="1" x:Name="FilterTextBox3" />
+										<TextBlock IsHitTestVisible="False" Text="Filter..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="{DynamicResource MainWindow_TextBoxPlaceholder}">
+											<TextBlock.Style>
+												<Style TargetType="{x:Type TextBlock}">
+													<Setter Property="Visibility" Value="Collapsed"/>
+													<Style.Triggers>
+														<DataTrigger Binding="{Binding Text, ElementName=FilterTextBox3}" Value="">
+															<Setter Property="Visibility" Value="Visible"/>
+														</DataTrigger>
+													</Style.Triggers>
+												</Style>
+											</TextBlock.Style>
+										</TextBlock>
+									</Grid>
+								</Grid>
+
+								<Grid DockPanel.Dock="Top" Height="22" Margin="0,2,0,20" VerticalAlignment="Top" Grid.Row="0">
+									<Grid Grid.Column="0">
+										<TextBox HorizontalAlignment="Left" Width="234" Padding="1" x:Name="FilterTextBox4" Text="text" />
+										<TextBlock IsHitTestVisible="False" Text="Filter..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="{DynamicResource MainWindow_TextBoxPlaceholder}">
+											<TextBlock.Style>
+												<Style TargetType="{x:Type TextBlock}">
+													<Setter Property="Visibility" Value="Collapsed"/>
+													<Style.Triggers>
+														<DataTrigger Binding="{Binding Text, ElementName=FilterTextBox4}" Value="">
+															<Setter Property="Visibility" Value="Visible"/>
+														</DataTrigger>
+													</Style.Triggers>
+												</Style>
+											</TextBlock.Style>
+										</TextBlock>
+									</Grid>
+								</Grid>
+							</StackPanel>
 						</TabItem>
-						<TabItem Header="Tab Two">
+						<TabItem Header="TextBlocks">
 							<StackPanel>
 								<TextBlock HorizontalAlignment="Left" Margin="10,8" VerticalAlignment="Top" Width="55" Text="Muted" Style="{StaticResource GrayText}" />
 								<TextBlock HorizontalAlignment="Left" Margin="10,8" VerticalAlignment="Top" Width="55" Text="Warning" Style="{StaticResource WarningText}" />
 							</StackPanel>
+						</TabItem>
+						<TabItem Header="4 Controls">
+							<Grid Margin="0,45,0,0" VerticalAlignment="Top">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*" />
+									<ColumnDefinition Width="*" />
+									<ColumnDefinition Width="*" />
+									<ColumnDefinition Width="*" />
+								</Grid.ColumnDefinitions>
+
+								<TabControl Width="60" Height="26" Margin="0" Grid.Column="0">
+									<TabItem Header="Text">
+									</TabItem>
+								</TabControl>
+
+								<Button Width="60" Height="22" Margin="0" Grid.Column="1" Content="Text" VerticalAlignment="Top" />
+
+								<Grid DockPanel.Dock="Top" Height="22" VerticalAlignment="Top" Grid.Column="2">
+									<Grid Grid.Column="0">
+										<TextBox Width="60" Margin="0" Padding="1" Text="Text" />
+									</Grid>
+								</Grid>
+
+								<ComboBox SelectedIndex="0" VerticalAlignment="Top" Width="60" Grid.Column="3">
+									<ComboBoxItem Content="Text" />
+								</ComboBox>
+							</Grid>
 						</TabItem>
 					</TabControl>
 
@@ -188,7 +278,7 @@
 							<RowDefinition Height="32" />
 						</Grid.RowDefinitions>
 
-						<TextBlock Text="Done! 10 mods installed." HorizontalAlignment="Left" Margin="0,4,0,0" Grid.Row="0" Style="{StaticResource MutedText}" VerticalAlignment="Top" Height="30" />
+						<TextBlock Text="Done! 10 mods installed." HorizontalAlignment="Left" Margin="4,8,0,0" Grid.Row="0" Style="{StaticResource MutedText}" VerticalAlignment="Top" Height="30" />
 
 						<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="0">
 							<Button Margin="4,6,4,4" Content="Install mods" VerticalAlignment="Top" HorizontalAlignment="Right" Width="120" Height="22">
@@ -206,44 +296,8 @@
 						</StackPanel>
 					</Grid>
 
-					<Grid DockPanel.Dock="Top" Height="22" Margin="0,20,0,6" VerticalAlignment="Top" Grid.Row="0">
-						<Grid Grid.Column="0">
-							<TextBox HorizontalAlignment="Left" Width="234" Padding="1" x:Name="FilterTextBox3" />
-							<TextBlock IsHitTestVisible="False" Text="Filter..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="{DynamicResource MainWindow_TextBoxPlaceholder}">
-								<TextBlock.Style>
-									<Style TargetType="{x:Type TextBlock}">
-										<Setter Property="Visibility" Value="Collapsed"/>
-										<Style.Triggers>
-											<DataTrigger Binding="{Binding Text, ElementName=FilterTextBox3}" Value="">
-												<Setter Property="Visibility" Value="Visible"/>
-											</DataTrigger>
-										</Style.Triggers>
-									</Style>
-								</TextBlock.Style>
-							</TextBlock>
-						</Grid>
-					</Grid>
-
-					<Grid DockPanel.Dock="Top" Height="22" Margin="0,2,0,20" VerticalAlignment="Top" Grid.Row="0">
-						<Grid Grid.Column="0">
-							<TextBox HorizontalAlignment="Left" Width="234" Padding="1" x:Name="FilterTextBox4" Text="text" />
-							<TextBlock IsHitTestVisible="False" Text="Filter..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="{DynamicResource MainWindow_TextBoxPlaceholder}">
-								<TextBlock.Style>
-									<Style TargetType="{x:Type TextBlock}">
-										<Setter Property="Visibility" Value="Collapsed"/>
-										<Style.Triggers>
-											<DataTrigger Binding="{Binding Text, ElementName=FilterTextBox4}" Value="">
-												<Setter Property="Visibility" Value="Visible"/>
-											</DataTrigger>
-										</Style.Triggers>
-									</Style>
-								</TextBlock.Style>
-							</TextBlock>
-						</Grid>
-					</Grid>
-
 					<!-- 6. CheckBox (Normal & Disabled) -->
-					<CheckBox Content="Normal CheckBox" Margin="0,0,0,5"/>
+					<CheckBox Content="Normal CheckBox" Margin="0,20,0,5"/>
 					<CheckBox Content="Disabled CheckBox" IsEnabled="False" Margin="0,0,0,10"/>
 					<CheckBox Content="Normal CheckBox" IsChecked="True" Margin="0,0,0,5"/>
 					<CheckBox Content="Disabled CheckBox" IsChecked="True" IsEnabled="False" Margin="0,0,0,10"/>
@@ -267,7 +321,7 @@
 					</ScrollViewer>
 
 					<local:ListViewEx Grid.Row="1" VirtualizingStackPanel.VirtualizationMode="Recycling"
-								  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible"
+								  ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible"
 								  SelectionMode="Single" Height="150" VerticalAlignment="Top">
 						<ListViewItem Content="Item 1" />
 						<ListViewItem Content="Item 2" />
