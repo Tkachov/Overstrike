@@ -140,7 +140,7 @@
 								<TextBlock Text="Suit:" Margin="0,1,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" />
 								<ComboBox x:Name="_SuitLoadoutComboBox" Margin="65,0,0,0" SelectionChanged="SuitLoadoutComboBox_SelectionChanged">
 									<ComboBox.ItemContainerStyle>
-										<Style TargetType="{x:Type ComboBoxItem}"><Setter Property="IsEnabled" Value="{Binding IsEnabled}" /></Style>
+										<Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}"><Setter Property="IsEnabled" Value="{Binding IsEnabled}" /></Style>
 									</ComboBox.ItemContainerStyle>
 									<ComboBox.ItemTemplate><DataTemplate><TextBlock Text="{Binding Name}" /></DataTemplate></ComboBox.ItemTemplate>
 								</ComboBox>
@@ -169,9 +169,9 @@
 								<Grid>
 									<TextBlock Text="Wings:" Margin="0,1,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" />
 									<ComboBox x:Name="_SuitWebwingsComboBox" Margin="65,0,0,0" SelectionChanged="SuitWebwingsComboBox_SelectionChanged">
-										<ComboBox.ItemContainerStyle>
-											<Style TargetType="{x:Type ComboBoxItem}"><Setter Property="IsEnabled" Value="{Binding IsEnabled}" /></Style>
-										</ComboBox.ItemContainerStyle>
+									<ComboBox.ItemContainerStyle>
+										<Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}"><Setter Property="IsEnabled" Value="{Binding IsEnabled}" /></Style>
+									</ComboBox.ItemContainerStyle>
 										<ComboBox.ItemTemplate><DataTemplate><TextBlock Text="{Binding Name}" /></DataTemplate></ComboBox.ItemTemplate>
 									</ComboBox>
 								</Grid>

@@ -161,7 +161,7 @@
 											</ContextMenu>
 										</Grid.ContextMenu>
 										
-										<TextBlock HorizontalAlignment="Left" Margin="2,5,5,5" VerticalAlignment="Top" Text="{Binding Order}" Style="{StaticResource MutedText}" />
+										<TextBlock HorizontalAlignment="Left" Margin="2,5,5,5" VerticalAlignment="Top" Text="{Binding Order}" Style="{DynamicResource MutedText}" />
 
 										<CheckBox IsChecked="{Binding Install}" HorizontalAlignment="Left" Margin="22,6,0,0"  VerticalAlignment="Top" />
 

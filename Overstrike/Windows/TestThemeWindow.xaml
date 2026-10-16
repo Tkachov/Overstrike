@@ -41,8 +41,8 @@
 
 					<Grid Margin="0,10,0,10">
 						<TextBlock Text="TextBlock" Margin="5,0,0,0"/>
-						<TextBlock Text="TextBlock" Margin="125,0,0,0" Style="{StaticResource WarningText}"/>
-						<TextBlock Text="TextBlock" Margin="245,0,0,0" Style="{StaticResource GrayText}"/>
+						<TextBlock Text="TextBlock" Margin="125,0,0,0" Style="{DynamicResource WarningText}"/>
+						<TextBlock Text="TextBlock" Margin="245,0,0,0" Style="{DynamicResource GrayText}"/>
 					</Grid>
 					<TabControl Height="140" Margin="0,0,0,0">
 						<TabItem Header="Inputs">
@@ -86,8 +86,8 @@
 						</TabItem>
 						<TabItem Header="TextBlocks">
 							<StackPanel>
-								<TextBlock HorizontalAlignment="Left" Margin="10,8" VerticalAlignment="Top" Width="55" Text="Muted" Style="{StaticResource GrayText}" />
-								<TextBlock HorizontalAlignment="Left" Margin="10,8" VerticalAlignment="Top" Width="55" Text="Warning" Style="{StaticResource WarningText}" />
+								<TextBlock HorizontalAlignment="Left" Margin="10,8" VerticalAlignment="Top" Width="55" Text="Muted" Style="{DynamicResource GrayText}" />
+								<TextBlock HorizontalAlignment="Left" Margin="10,8" VerticalAlignment="Top" Width="55" Text="Warning" Style="{DynamicResource WarningText}" />
 							</StackPanel>
 						</TabItem>
 						<TabItem Header="4 Controls">
@@ -124,7 +124,7 @@
 							<RowDefinition Height="32" />
 						</Grid.RowDefinitions>
 
-						<TextBlock Text="Done! 10 mods installed." HorizontalAlignment="Left" Margin="4,8,0,0" Grid.Row="0" Style="{StaticResource MutedText}" VerticalAlignment="Top" Height="30" />
+						<TextBlock Text="Done! 10 mods installed." HorizontalAlignment="Left" Margin="4,8,0,0" Grid.Row="0" Style="{DynamicResource MutedText}" VerticalAlignment="Top" Height="30" />
 
 						<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="0">
 							<Button Margin="4,6,4,4" Content="Install mods" VerticalAlignment="Top" HorizontalAlignment="Right" Width="120" Height="22">
@@ -195,8 +195,8 @@
 
 					<Grid Margin="0,10,0,10">
 						<TextBlock Text="TextBlock" Margin="5,0,0,0"/>
-						<TextBlock Text="TextBlock" Margin="125,0,0,0" Style="{StaticResource WarningText}"/>
-						<TextBlock Text="TextBlock" Margin="245,0,0,0" Style="{StaticResource GrayText}"/>
+						<TextBlock Text="TextBlock" Margin="125,0,0,0" Style="{DynamicResource WarningText}"/>
+						<TextBlock Text="TextBlock" Margin="245,0,0,0" Style="{DynamicResource GrayText}"/>
 					</Grid>
 					<TabControl Height="140" Margin="0,0,0,0">
 						<TabItem Header="Inputs">
@@ -240,8 +240,8 @@
 						</TabItem>
 						<TabItem Header="TextBlocks">
 							<StackPanel>
-								<TextBlock HorizontalAlignment="Left" Margin="10,8" VerticalAlignment="Top" Width="55" Text="Muted" Style="{StaticResource GrayText}" />
-								<TextBlock HorizontalAlignment="Left" Margin="10,8" VerticalAlignment="Top" Width="55" Text="Warning" Style="{StaticResource WarningText}" />
+								<TextBlock HorizontalAlignment="Left" Margin="10,8" VerticalAlignment="Top" Width="55" Text="Muted" Style="{DynamicResource GrayText}" />
+								<TextBlock HorizontalAlignment="Left" Margin="10,8" VerticalAlignment="Top" Width="55" Text="Warning" Style="{DynamicResource WarningText}" />
 							</StackPanel>
 						</TabItem>
 						<TabItem Header="4 Controls">
@@ -278,7 +278,7 @@
 							<RowDefinition Height="32" />
 						</Grid.RowDefinitions>
 
-						<TextBlock Text="Done! 10 mods installed." HorizontalAlignment="Left" Margin="4,8,0,0" Grid.Row="0" Style="{StaticResource MutedText}" VerticalAlignment="Top" Height="30" />
+						<TextBlock Text="Done! 10 mods installed." HorizontalAlignment="Left" Margin="4,8,0,0" Grid.Row="0" Style="{DynamicResource MutedText}" VerticalAlignment="Top" Height="30" />
 
 						<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="0">
 							<Button Margin="4,6,4,4" Content="Install mods" VerticalAlignment="Top" HorizontalAlignment="Right" Width="120" Height="22">

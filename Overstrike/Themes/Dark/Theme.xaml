@@ -53,9 +53,9 @@
 + error log
 + toc mismatch
 
-- bugs:
-- textbox w/h both scrollbars: white square in corner
-- some dropdowns use wrong style (suits menu wings?) - make them match
++ bugs:
++ textbox w/h both scrollbars: white square in corner
++ some dropdowns use wrong style (suits menu wings?) - make them match
 
 -->
 
@@ -178,11 +178,11 @@
 
 	<SolidColorBrush x:Key="MainWindow_ModsOrderLabelForeground" Color="{StaticResource mutedText}" />
 
-	<SolidColorBrush x:Key="MainWindow_StatusMessageForeground" Color="{DynamicResource mutedText}" />
-	<SolidColorBrush x:Key="MainWindow_StatusMessageErrorForeground" Color="{DynamicResource redText}" />
+	<SolidColorBrush x:Key="MainWindow_StatusMessageForeground" Color="{StaticResource mutedText}" />
+	<SolidColorBrush x:Key="MainWindow_StatusMessageErrorForeground" Color="{StaticResource redText}" />
 
-	<SolidColorBrush x:Key="MainWindow_SettingsGlobalDescriptionForeground" Color="{DynamicResource grayText}" />
-	<SolidColorBrush x:Key="MainWindow_ScriptWarningForeground" Color="{DynamicResource redText}" />
+	<SolidColorBrush x:Key="MainWindow_SettingsGlobalDescriptionForeground" Color="{StaticResource grayText}" />
+	<SolidColorBrush x:Key="MainWindow_ScriptWarningForeground" Color="{StaticResource redText}" />
 
 	<SolidColorBrush x:Key="FirstLaunch_WindowTopBorder" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="FirstLaunch_Background" Color="{StaticResource background}" />
@@ -206,7 +206,7 @@
 
 	<SolidColorBrush x:Key="TocMismatchDialog_WindowTopBorder" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="TocMismatchDialog_Background" Color="{StaticResource background}" />
-	<SolidColorBrush x:Key="TocMismatchDialog_FooterForeground" Color="{DynamicResource grayText}" />
+	<SolidColorBrush x:Key="TocMismatchDialog_FooterForeground" Color="{StaticResource grayText}" />
 
 	<Color x:Key="SuitsMenu_SideBackground">#202024</Color> <!-- ==background -->
 	<Color x:Key="SuitsMenu_Divider">#303035</Color> <!-- ==border -->
@@ -534,17 +534,17 @@
 		</Style.Triggers>
 	</Style>
 
-	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewHover.Background" Color="{DynamicResource backgroundHover}"/>
-	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewHover.Border" Color="{DynamicResource borderHover}"/>
+	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewHover.Background" Color="{StaticResource backgroundHover}"/>
+	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewHover.Border" Color="{StaticResource borderHover}"/>
 	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelected.Background" Color="#24344B"/> <!-- == Item.SelectedActive.Background -->
-	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelected.Border" Color="{DynamicResource borderFocused}"/>
+	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelected.Border" Color="{StaticResource borderFocused}"/>
 	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelectedHover.Background" Color="#2A3D59"/>
 	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelectedHover.Border" Color="#5A9FFF"/>
 	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelectedNoFocus.Background" Color="#33333C"/> <!-- == Item.SelectedInactive.Background -->
 	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelectedNoFocus.Border" Color="#666675"/> <!-- == Item.SelectedInactive.Border -->
-	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewFocus.Border" Color="{DynamicResource borderFocused}"/>
+	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewFocus.Border" Color="{StaticResource borderFocused}"/>
 	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewHoverFocus.Background" Color="#2F425E"/>
-	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewHoverFocus.Border" Color="{DynamicResource borderFocused}"/>
+	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewHoverFocus.Border" Color="{StaticResource borderFocused}"/>
 
 	<Style TargetType="{x:Type ComboBoxItem}">
 		<Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -976,6 +976,12 @@
 	<SolidColorBrush x:Key="ScrollBar.Disabled.Background" Color="{StaticResource buttonDisableBackground}"/>
 	<SolidColorBrush x:Key="ScrollBar.Disabled.Border" Color="{StaticResource buttonDisableBackground}"/>
 	<SolidColorBrush x:Key="ScrollBar.Disabled.Glyph" Color="{StaticResource buttonDisableText}"/>
+
+	<!-- The default ScrollViewer/ListBox template paints the empty square between two scrollbars with
+	     SystemColors.ControlBrush (a light system colour). Repoint it at the scrollbar surface so the
+	     corner matches the surrounding scrollbars instead of showing a white square. -->
+	<SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="{StaticResource buttonDisableBackground}"/>
+
 	<Style x:Key="RepeatButtonTransparent" TargetType="{x:Type RepeatButton}">
 		<Setter Property="OverridesDefaultStyle" Value="true"/>
 		<Setter Property="Background" Value="Transparent"/>
@@ -1212,9 +1218,9 @@
 	
 	<!-- listbox -->
 
-	<SolidColorBrush x:Key="ListView_BackgroundBrush" Color="{DynamicResource background}" />
-	<SolidColorBrush x:Key="ListView_BorderBrush" Color="{DynamicResource border}" />
-	<SolidColorBrush x:Key="ListView_ForegroundBrush" Color="{DynamicResource text}" />
+	<SolidColorBrush x:Key="ListView_BackgroundBrush" Color="{StaticResource background}" />
+	<SolidColorBrush x:Key="ListView_BorderBrush" Color="{StaticResource border}" />
+	<SolidColorBrush x:Key="ListView_ForegroundBrush" Color="{StaticResource text}" />
 
 	<Style TargetType="{x:Type ListView}">
 		<Setter Property="Background" Value="{DynamicResource ListView_BackgroundBrush}"/>
@@ -1382,7 +1388,7 @@
 	<SolidColorBrush x:Key="MenuItem.Highlight.Border" Color="#39F"/> <!-- == Item.SelectedActive.Border -->
 
 	<SolidColorBrush x:Key="MenuItem.Gutter.Background" Color="#1D1D21" />
-	<SolidColorBrush x:Key="MenuItem.Gutter.Separator1" Color="{DynamicResource border}" />
+	<SolidColorBrush x:Key="MenuItem.Gutter.Separator1" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="MenuItem.Gutter.Separator2" Color="{StaticResource background}" />
 
 	<Style TargetType="{x:Type ContextMenu}">

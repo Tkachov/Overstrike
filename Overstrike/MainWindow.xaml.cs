@@ -173,7 +173,7 @@ namespace Overstrike {
 		}
 
 		private void UpdateStatusMessageBrush() {
-			StatusMessage.Foreground = (Brush)FindResource(_statusMessageErrorShown ? "MainWindow_StatusMessageErrorForeground" : "MainWindow_StatusMessageForeground");
+			StatusMessage.SetResourceReference(TextBlock.ForegroundProperty, _statusMessageErrorShown ? "MainWindow_StatusMessageErrorForeground" : "MainWindow_StatusMessageForeground");
 		}
 
 		private void FirstSwitchToProfile() {
