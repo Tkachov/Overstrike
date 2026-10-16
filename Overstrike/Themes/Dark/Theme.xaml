@@ -538,13 +538,13 @@
 	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewHover.Border" Color="{StaticResource borderHover}"/>
 	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelected.Background" Color="#24344B"/> <!-- == Item.SelectedActive.Background -->
 	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelected.Border" Color="{StaticResource borderFocused}"/>
-	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelectedHover.Background" Color="#2A3D59"/>
-	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelectedHover.Border" Color="#5A9FFF"/>
+	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelectedHover.Background" Color="#24344B"/>
+	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelectedHover.Border" Color="{StaticResource borderFocused}"/>
 	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelectedNoFocus.Background" Color="#33333C"/> <!-- == Item.SelectedInactive.Background -->
 	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelectedNoFocus.Border" Color="#666675"/> <!-- == Item.SelectedInactive.Border -->
-	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewFocus.Border" Color="{StaticResource borderFocused}"/>
-	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewHoverFocus.Background" Color="#2F425E"/>
-	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewHoverFocus.Border" Color="{StaticResource borderFocused}"/>
+	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewFocus.Border" Color="{StaticResource borderHover}"/>
+	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewHoverFocus.Background" Color="{StaticResource backgroundHover}"/>
+	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewHoverFocus.Border" Color="{StaticResource borderHover}"/>
 
 	<Style TargetType="{x:Type ComboBoxItem}">
 		<Setter Property="SnapsToDevicePixels" Value="True"/>
