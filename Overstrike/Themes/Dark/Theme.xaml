@@ -28,7 +28,7 @@
 + button
 + context menu
 	
-- TODO: revisit button, input, dropdown (, tab?) - white-ish border on the button? check the normal/hover for combobox to be matching (list)item?
++ TODO: revisit button, input, dropdown (, tab?) - white-ish border on the button? check the normal/hover for combobox to be matching (list)item?
 - TODO: revisit text, have somewhat more muted? // might have to remake icons then
 - TODO: cleanup the base file, see if there are strange color names or unnecessary ones
 - TODO: cleanup the file, rearrange definitions, define colors with better names and merge what's the same
@@ -832,16 +832,26 @@
 	
 	<!-- button -->
 
-	<SolidColorBrush x:Key="Button.Static.Background" Color="{StaticResource buttonBackground}"/>
-	<SolidColorBrush x:Key="Button.Static.Border" Color="{StaticResource buttonBorder}"/>
+	<Color x:Key="actuallyButtonBackground">#2E2E33</Color>
+	<Color x:Key="actuallyButtonBorder">#47474C</Color>
+	<Color x:Key="actuallyButtonHoverBackground">#333338</Color>
+	<Color x:Key="actuallyButtonHoverBorder">#57575C</Color>
+	<Color x:Key="actuallyButtonPressBackground">#38383D</Color>
+	<Color x:Key="actuallyButtonPressBorder">#4C4C51</Color>
+	<Color x:Key="actuallyButtonDisableBackground">#27272C</Color>
+	<Color x:Key="actuallyButtonDisableBorder">#303035</Color>
+	<Color x:Key="actuallyButtonDisableText">#66666E</Color>
+
+	<SolidColorBrush x:Key="Button.Static.Background" Color="{StaticResource actuallyButtonBackground}"/>
+	<SolidColorBrush x:Key="Button.Static.Border" Color="{StaticResource actuallyButtonBorder}"/>
 	<SolidColorBrush x:Key="Button.Static.Foreground" Color="{StaticResource text}"/>
-	<SolidColorBrush x:Key="Button.MouseOver.Background" Color="{StaticResource buttonHoverBackground}"/>
-	<SolidColorBrush x:Key="Button.MouseOver.Border" Color="{StaticResource buttonHoverBorder}"/>
-	<SolidColorBrush x:Key="Button.Pressed.Background" Color="{StaticResource buttonPressBackground}"/>
-	<SolidColorBrush x:Key="Button.Pressed.Border" Color="{StaticResource buttonPressBorder}"/>
-	<SolidColorBrush x:Key="Button.Disabled.Background" Color="{StaticResource buttonDisableBackground}"/>
-	<SolidColorBrush x:Key="Button.Disabled.Border" Color="{StaticResource buttonDisableBorder}"/>
-	<SolidColorBrush x:Key="Button.Disabled.Foreground" Color="{StaticResource buttonDisableText}"/>
+	<SolidColorBrush x:Key="Button.MouseOver.Background" Color="{StaticResource actuallyButtonHoverBackground}"/>
+	<SolidColorBrush x:Key="Button.MouseOver.Border" Color="{StaticResource actuallyButtonHoverBorder}"/>
+	<SolidColorBrush x:Key="Button.Pressed.Background" Color="{StaticResource actuallyButtonPressBackground}"/>
+	<SolidColorBrush x:Key="Button.Pressed.Border" Color="{StaticResource actuallyButtonPressBorder}"/>
+	<SolidColorBrush x:Key="Button.Disabled.Background" Color="{StaticResource actuallyButtonDisableBackground}"/>
+	<SolidColorBrush x:Key="Button.Disabled.Border" Color="{StaticResource actuallyButtonDisableBorder}"/>
+	<SolidColorBrush x:Key="Button.Disabled.Foreground" Color="{StaticResource actuallyButtonDisableText}"/>
 	<Style TargetType="{x:Type Button}">
 		<!-- <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/> -->
 		<Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
