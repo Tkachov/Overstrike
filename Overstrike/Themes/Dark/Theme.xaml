@@ -29,6 +29,7 @@
 + context menu
 	
 + TODO: revisit button, input, dropdown (, tab?) - white-ish border on the button? check the normal/hover for combobox to be matching (list)item?
++ TODO: expander button border
 - TODO: revisit text, have somewhat more muted? // might have to remake icons then
 - TODO: cleanup the base file, see if there are strange color names or unnecessary ones
 - TODO: cleanup the file, rearrange definitions, define colors with better names and merge what's the same
@@ -1627,19 +1628,47 @@
 	
 	<!-- expander -->
 
-	<SolidColorBrush x:Key="Expander.Static.Circle.Stroke" Color="{StaticResource border}"/>
+	<!--
+	<Color x:Key="exbuttonBorder">#303035</Color>
+	<Color x:Key="exborderHover">#3B3B40</Color>
+	<Color x:Key="exbuttonHoverBorder">#47474C</Color>
+	<Color x:Key="exbuttonPressBorder">#4C4C51</Color>
+	<Color x:Key="exbuttonDisableBorder">#303035</Color>
+	<Color x:Key="exborderDisabledDarker">#42424E</Color>
+	-->
+
+	<!--
+	<Color x:Key="exbuttonBorder">#303035</Color>
+	<Color x:Key="exborderHover">#3B3B40</Color>
+	<Color x:Key="exbuttonPressBorder">#4C4C51</Color>
+	<Color x:Key="exborderDisabledDarker">#42424E</Color>
+	-->
+
+	<!--
+	<Color x:Key="exbuttonBorder">#808088</Color>
+	<Color x:Key="exborderHover">#909099</Color>
+	<Color x:Key="exbuttonPressBorder">#707077</Color>
+	<Color x:Key="exborderDisabledDarker">#AAAAAE</Color>
+	-->
+
+	<Color x:Key="exbuttonBorder">#606066</Color>
+	<Color x:Key="exborderHover">#707077</Color>
+	<Color x:Key="exbuttonPressBorder">#505055</Color>
+	<Color x:Key="exborderDisabledDarker">#99999C</Color>
+
+	<SolidColorBrush x:Key="Expander.Static.Circle.Stroke" Color="{StaticResource exbuttonBorder}"/>
 	<SolidColorBrush x:Key="Expander.Static.Circle.Fill" Color="#17171E"/> <!-- like TextBox {StaticResource background}"/> -->
 	<SolidColorBrush x:Key="Expander.Static.Arrow.Stroke" Color="{StaticResource text}"/>
 
-	<SolidColorBrush x:Key="Expander.MouseOver.Circle.Stroke" Color="{StaticResource borderHover}"/>
+	<SolidColorBrush x:Key="Expander.MouseOver.Circle.Stroke" Color="{StaticResource exborderHover}"/>
 	<SolidColorBrush x:Key="Expander.MouseOver.Circle.Fill" Color="{StaticResource buttonHoverBackground}"/>
 	<SolidColorBrush x:Key="Expander.MouseOver.Arrow.Stroke" Color="{StaticResource textHover}"/>
 
-	<SolidColorBrush x:Key="Expander.Pressed.Circle.Stroke" Color="{StaticResource buttonPressBorder}"/>
+	<SolidColorBrush x:Key="Expander.Pressed.Circle.Stroke" Color="{StaticResource exbuttonPressBorder}"/>
 	<SolidColorBrush x:Key="Expander.Pressed.Circle.Fill" Color="{StaticResource buttonPressBackground}"/>
 	<SolidColorBrush x:Key="Expander.Pressed.Arrow.Stroke" Color="{StaticResource textHover}"/>
 
-	<SolidColorBrush x:Key="Expander.Disabled.Circle.Stroke" Color="{StaticResource borderDisabledDarker}"/>
+	<SolidColorBrush x:Key="Expander.Disabled.Circle.Stroke" Color="{StaticResource exborderDisabledDarker}"/>
 	<SolidColorBrush x:Key="Expander.Disabled.Circle.Fill" Color="{StaticResource backgroundDisabledDarker}"/>
 	<SolidColorBrush x:Key="Expander.Disabled.Arrow.Stroke" Color="{StaticResource textDisabled}"/>
 
