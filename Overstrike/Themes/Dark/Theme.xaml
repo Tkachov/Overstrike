@@ -30,7 +30,7 @@
 	
 + TODO: revisit button, input, dropdown (, tab?) - white-ish border on the button? check the normal/hover for combobox to be matching (list)item?
 + TODO: expander button border
-- TODO: revisit text, have somewhat more muted? // might have to remake icons then
++ TODO: revisit text, have somewhat more muted? // might have to remake icons then
 - TODO: cleanup the base file, see if there are strange color names or unnecessary ones
 - TODO: cleanup the file, rearrange definitions, define colors with better names and merge what's the same
 - TODO: when all done, final pass on all windows & on built app.
@@ -62,7 +62,7 @@
 
 	<Color x:Key="background">#202024</Color>
 	<Color x:Key="border">#303035</Color>
-	<Color x:Key="text">#DDD</Color> <!-- TODO: slightly more muted? -->
+	<Color x:Key="text">#D9D9D9</Color> <!-- TODO: slightly more muted? -->
 	<Color x:Key="redText">#D24</Color>
 	<Color x:Key="grayText">#A6A6AE</Color>
 	<Color x:Key="mutedText">#96969E</Color>
