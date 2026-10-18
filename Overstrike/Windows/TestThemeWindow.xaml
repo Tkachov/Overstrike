@@ -50,7 +50,7 @@
 								<Grid DockPanel.Dock="Top" Height="22" Margin="0,6,0,6" VerticalAlignment="Top" Grid.Row="0">
 									<Grid Grid.Column="0">
 										<TextBox HorizontalAlignment="Left" Width="234" Padding="1" x:Name="FilterTextBox1" />
-										<TextBlock IsHitTestVisible="False" Text="Filter..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="{DynamicResource MainWindow_TextBoxPlaceholder}">
+										<TextBlock IsHitTestVisible="False" Text="Filter..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="{DynamicResource Controls_TextBoxPlaceholder}">
 											<TextBlock.Style>
 												<Style TargetType="{x:Type TextBlock}">
 													<Setter Property="Visibility" Value="Collapsed"/>
@@ -68,7 +68,7 @@
 								<Grid DockPanel.Dock="Top" Height="22" Margin="0,2,0,20" VerticalAlignment="Top" Grid.Row="0">
 									<Grid Grid.Column="0">
 										<TextBox HorizontalAlignment="Left" Width="234" Padding="1" x:Name="FilterTextBox2" Text="text" />
-										<TextBlock IsHitTestVisible="False" Text="Filter..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="{DynamicResource MainWindow_TextBoxPlaceholder}">
+										<TextBlock IsHitTestVisible="False" Text="Filter..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="{DynamicResource Controls_TextBoxPlaceholder}">
 											<TextBlock.Style>
 												<Style TargetType="{x:Type TextBlock}">
 													<Setter Property="Visibility" Value="Collapsed"/>
@@ -204,7 +204,7 @@
 								<Grid DockPanel.Dock="Top" Height="22" Margin="0,6,0,6" VerticalAlignment="Top" Grid.Row="0">
 									<Grid Grid.Column="0">
 										<TextBox HorizontalAlignment="Left" Width="234" Padding="1" x:Name="FilterTextBox3" />
-										<TextBlock IsHitTestVisible="False" Text="Filter..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="{DynamicResource MainWindow_TextBoxPlaceholder}">
+										<TextBlock IsHitTestVisible="False" Text="Filter..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="{DynamicResource Controls_TextBoxPlaceholder}">
 											<TextBlock.Style>
 												<Style TargetType="{x:Type TextBlock}">
 													<Setter Property="Visibility" Value="Collapsed"/>
@@ -222,7 +222,7 @@
 								<Grid DockPanel.Dock="Top" Height="22" Margin="0,2,0,20" VerticalAlignment="Top" Grid.Row="0">
 									<Grid Grid.Column="0">
 										<TextBox HorizontalAlignment="Left" Width="234" Padding="1" x:Name="FilterTextBox4" Text="text" />
-										<TextBlock IsHitTestVisible="False" Text="Filter..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="{DynamicResource MainWindow_TextBoxPlaceholder}">
+										<TextBlock IsHitTestVisible="False" Text="Filter..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="{DynamicResource Controls_TextBoxPlaceholder}">
 											<TextBlock.Style>
 												<Style TargetType="{x:Type TextBlock}">
 													<Setter Property="Visibility" Value="Collapsed"/>

@@ -10,7 +10,7 @@
 		<Grid Background="{DynamicResource CreateProfile_Background}">
 			<Grid Height="22" Margin="7,7,7,0" VerticalAlignment="Top">
 				<TextBox x:Name="NameTextBox" Text="" VerticalAlignment="Top" Height="22" Padding="1" TextChanged="NameTextBox_TextChanged" />
-				<TextBlock IsHitTestVisible="False" Text="Profile Name" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="{DynamicResource MainWindow_TextBoxPlaceholder}">
+				<TextBlock IsHitTestVisible="False" Text="Profile Name" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="{DynamicResource Controls_TextBoxPlaceholder}">
 					<TextBlock.Style>
 						<Style TargetType="{x:Type TextBlock}">
 							<Setter Property="Visibility" Value="Collapsed"/>

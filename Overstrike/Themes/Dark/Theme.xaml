@@ -31,7 +31,7 @@
 + TODO: revisit button, input, dropdown (, tab?) - white-ish border on the button? check the normal/hover for combobox to be matching (list)item?
 + TODO: expander button border
 + TODO: revisit text, have somewhat more muted? // might have to remake icons then
-- TODO: cleanup the base file, see if there are strange color names or unnecessary ones
++ TODO: cleanup the base file, see if there are strange color names or unnecessary ones
 - TODO: cleanup the file, rearrange definitions, define colors with better names and merge what's the same
 - TODO: when all done, final pass on all windows & on built app.
 
@@ -894,7 +894,7 @@
 	
 	<!-- input -->
 
-	<SolidColorBrush x:Key="MainWindow_TextBoxPlaceholder" Color="{StaticResource mutedText}" />
+	<SolidColorBrush x:Key="Controls_TextBoxPlaceholder" Color="{StaticResource mutedText}" />
 
 	<!--<SolidColorBrush x:Key="ControlBackgroundBrush" Color="#35363A" />
 	<SolidColorBrush x:Key="SelectionBrush" Color="#3D5875" />
