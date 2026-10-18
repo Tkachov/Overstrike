@@ -65,40 +65,37 @@
 
 	<SolidColorBrush x:Key="Controls_TextBoxPlaceholder" Color="{StaticResource mutedText}" />
 
+	<SolidColorBrush x:Key="MainWindow_Background" Color="{StaticResource background}" />
+	<SolidColorBrush x:Key="MainWindow_WindowTopBorder" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="MainWindow_IconButtonHoverBackground" Color="{StaticResource buttonHoverBackground}" />
 	<SolidColorBrush x:Key="MainWindow_IconButtonPressedBackground" Color="{StaticResource buttonPressBackground}" />
-	<SolidColorBrush x:Key="MainWindow_WindowTopBorder" Color="{StaticResource border}" />
-	<SolidColorBrush x:Key="MainWindow_Background" Color="{StaticResource background}" />
 	<SolidColorBrush x:Key="MainWindow_OverlayBackground" Color="{StaticResource border}" Opacity=".75"/>
 	<SolidColorBrush x:Key="MainWindow_OverlayPanelBackground" Color="{StaticResource background}" />
-	<SolidColorBrush x:Key="MainWindow_ModsOrderLabelForeground" Color="{StaticResource mutedText}" />
 	<SolidColorBrush x:Key="MainWindow_StatusMessageForeground" Color="{StaticResource mutedText}" />
 	<SolidColorBrush x:Key="MainWindow_StatusMessageErrorForeground" Color="{StaticResource redText}" />
-	<SolidColorBrush x:Key="MainWindow_SettingsGlobalDescriptionForeground" Color="{StaticResource grayText}" />
-	<SolidColorBrush x:Key="MainWindow_ScriptWarningForeground" Color="{StaticResource redText}" />
 
-	<SolidColorBrush x:Key="FirstLaunch_WindowTopBorder" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="FirstLaunch_Background" Color="{StaticResource background}" />
+	<SolidColorBrush x:Key="FirstLaunch_WindowTopBorder" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="FirstLaunch_ProfilesHeaderBackground" Color="{StaticResource buttonDisableBackground}" />
 	<SolidColorBrush x:Key="FirstLaunch_ProfilesHeaderForeground" Color="{StaticResource mutedText}" /> <!-- maybe should be gray? -->
 	<SolidColorBrush x:Key="FirstLaunch_ProfilesBorder" Color="{StaticResource border}" />
 
-	<SolidColorBrush x:Key="CreateProfile_WindowTopBorder" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="CreateProfile_Background" Color="{StaticResource background}" />
+	<SolidColorBrush x:Key="CreateProfile_WindowTopBorder" Color="{StaticResource border}" />
 
-	<SolidColorBrush x:Key="ModsDetectionSplash_TopBorder" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="ModsDetectionSplash_Background" Color="{StaticResource background}" />
+	<SolidColorBrush x:Key="ModsDetectionSplash_TopBorder" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="ModsDetectionSplash_OperationForeground" Color="{StaticResource grayText}" />
 
 	<SolidColorBrush x:Key="ErrorLogWindow_Background" Color="{StaticResource backgroundDisabled}" />
 
-	<SolidColorBrush x:Key="ModularWizard_Border" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="ModularWizard_MainBackground" Color="{StaticResource background}" />
+	<SolidColorBrush x:Key="ModularWizard_Border" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="ModularWizard_FooterBackground" Color="{StaticResource background}" />
 	<SolidColorBrush x:Key="ModularWizard_NumberLabelForeground" Color="#666" /> <!-- very muted -->
 
-	<SolidColorBrush x:Key="TocMismatchDialog_WindowTopBorder" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="TocMismatchDialog_Background" Color="{StaticResource background}" />
+	<SolidColorBrush x:Key="TocMismatchDialog_WindowTopBorder" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="TocMismatchDialog_FooterForeground" Color="{StaticResource grayText}" />
 
 	<Color x:Key="SuitsMenu_SideBackground">#202024</Color> <!-- ==background -->
@@ -107,40 +104,40 @@
 	<Color x:Key="SuitsMenu_ListBackground">#1A1A1E</Color>
 	<Color x:Key="SuitsMenu_Background">#101014</Color>
 
-	<SolidColorBrush x:Key="MSMRSuitsMenu_ListSelectionBackground" Color="{StaticResource SuitsMenu_Selection}" />
-	<SolidColorBrush x:Key="MSMRSuitsMenu_OuterBorder" Color="{StaticResource SuitsMenu_ListBackground}" />
-	<SolidColorBrush x:Key="MSMRSuitsMenu_Background" Color="{StaticResource SuitsMenu_Background}" />
-	<SolidColorBrush x:Key="MSMRSuitsMenu_ListBackground" Color="{StaticResource SuitsMenu_ListBackground}" />
-	<SolidColorBrush x:Key="MSMRSuitsMenu_SlotBorder" Color="{StaticResource SuitsMenu_Selection}" />
 	<SolidColorBrush x:Key="MSMRSuitsMenu_SideBackground" Color="{StaticResource SuitsMenu_SideBackground}" />
 	<SolidColorBrush x:Key="MSMRSuitsMenu_Divider" Color="{StaticResource SuitsMenu_Divider}" />
+	<SolidColorBrush x:Key="MSMRSuitsMenu_Background" Color="{StaticResource SuitsMenu_Background}" />
+	<SolidColorBrush x:Key="MSMRSuitsMenu_ListBackground" Color="{StaticResource SuitsMenu_ListBackground}" />
+	<SolidColorBrush x:Key="MSMRSuitsMenu_OuterBorder" Color="{StaticResource SuitsMenu_ListBackground}" />
+	<SolidColorBrush x:Key="MSMRSuitsMenu_SlotBorder" Color="{StaticResource SuitsMenu_Selection}" />
+	<SolidColorBrush x:Key="MSMRSuitsMenu_ListSelectionBackground" Color="{StaticResource SuitsMenu_Selection}" />
 
-	<SolidColorBrush x:Key="MMSuitsMenu_ListSelectionBackground" Color="{StaticResource SuitsMenu_Selection}" />
-	<SolidColorBrush x:Key="MMSuitsMenu_OuterBorder" Color="{StaticResource SuitsMenu_ListBackground}" />
-	<SolidColorBrush x:Key="MMSuitsMenu_Background" Color="{StaticResource SuitsMenu_Background}" />
-	<SolidColorBrush x:Key="MMSuitsMenu_ListBackground" Color="{StaticResource SuitsMenu_ListBackground}" />
-	<SolidColorBrush x:Key="MMSuitsMenu_SlotBorder" Color="{StaticResource SuitsMenu_Selection}" />
 	<SolidColorBrush x:Key="MMSuitsMenu_SideBackground" Color="{StaticResource SuitsMenu_SideBackground}" />
 	<SolidColorBrush x:Key="MMSuitsMenu_Divider" Color="{StaticResource SuitsMenu_Divider}" />
+	<SolidColorBrush x:Key="MMSuitsMenu_Background" Color="{StaticResource SuitsMenu_Background}" />
+	<SolidColorBrush x:Key="MMSuitsMenu_ListBackground" Color="{StaticResource SuitsMenu_ListBackground}" />
+	<SolidColorBrush x:Key="MMSuitsMenu_OuterBorder" Color="{StaticResource SuitsMenu_ListBackground}" />
+	<SolidColorBrush x:Key="MMSuitsMenu_SlotBorder" Color="{StaticResource SuitsMenu_Selection}" />
+	<SolidColorBrush x:Key="MMSuitsMenu_ListSelectionBackground" Color="{StaticResource SuitsMenu_Selection}" />
 
+	<SolidColorBrush x:Key="MSM2SuitsMenu_SideBackground" Color="{StaticResource SuitsMenu_SideBackground}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_HeaderDivider" Color="{StaticResource SuitsMenu_Divider}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_FooterDivider" Color="{StaticResource SuitsMenu_Divider}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_SpiderArmsWarningForeground" Color="{StaticResource mutedText}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_Background" Color="{StaticResource SuitsMenu_Background}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_ListBackground" Color="{StaticResource SuitsMenu_ListBackground}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_OuterBorder" Color="{StaticResource SuitsMenu_ListBackground}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_SlotBorder" Color="{StaticResource SuitsMenu_Selection}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_ListSelectionBackground" Color="{StaticResource SuitsMenu_Selection}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_TabStripBackground" Color="{StaticResource backgroundD}" />
 	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabForeground" Color="{StaticResource mutedText}" />
 	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabBackground" Color="{StaticResource backgroundD}" />
 	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabBorder" Color="{StaticResource backgroundD}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabHoverBorder" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabHoverForeground" Color="{StaticResource textHover}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabActiveForeground" Color="{StaticResource text}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabHoverBorder" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabActiveBackground" Color="{StaticResource border}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabActiveForeground" Color="{StaticResource text}" />
 	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabActiveBorder" Color="{StaticResource border}" /> <!-- TabItem.Selected.Border -->
-	<SolidColorBrush x:Key="MSM2SuitsMenu_ListSelectionBackground" Color="{StaticResource SuitsMenu_Selection}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_OuterBorder" Color="{StaticResource SuitsMenu_ListBackground}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_Background" Color="{StaticResource SuitsMenu_Background}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_TabStripBackground" Color="{StaticResource backgroundD}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_ListBackground" Color="{StaticResource SuitsMenu_ListBackground}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_SlotBorder" Color="{StaticResource SuitsMenu_Selection}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_SideBackground" Color="{StaticResource SuitsMenu_SideBackground}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_HeaderDivider" Color="{StaticResource SuitsMenu_Divider}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_SpiderArmsWarningForeground" Color="{StaticResource mutedText}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_FooterDivider" Color="{StaticResource SuitsMenu_Divider}" />
 
 	<BitmapImage x:Key="banner_msm2_back.png" UriSource="Resources/banner_msm2_back.png" />
 	<BitmapImage x:Key="banner_i30_back.png" UriSource="Resources/banner_i30_back.png" />
@@ -852,7 +849,6 @@
 		<Setter Property="Background" Value="{StaticResource TextBox.Background}"/>
 		<Setter Property="BorderBrush" Value="{StaticResource TextBox.Static.Border}"/>
 		<Setter Property="Foreground" Value="{StaticResource TextBox.Text}"/>
-		<!-- <Setter Property="CaretBrush" Value="{DynamicResource TextBrush}" /> -->
 		<Setter Property="BorderThickness" Value="1"/>
 		<Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
 		<Setter Property="HorizontalContentAlignment" Value="Left"/>
@@ -881,7 +877,6 @@
 			</Setter.Value>
 		</Setter>
 		<Setter Property="SelectionBrush" Value="{StaticResource TextBox.SelectionBrush}" />
-		<!-- <Setter Property="SelectionTextBrush" Value="{DynamicResource ThemeTextPrimaryBrush}" /> -->
 	</Style>
 
 	<!-- scrollbar -->
@@ -905,9 +900,7 @@
 	<SolidColorBrush x:Key="ScrollBar.Disabled.Border" Color="{StaticResource buttonDisableBackground}"/>
 	<SolidColorBrush x:Key="ScrollBar.Disabled.Glyph" Color="{StaticResource buttonDisableText}"/>
 
-	<!-- The default ScrollViewer/ListBox template paints the empty square between two scrollbars with
-	     SystemColors.ControlBrush (a light system colour). Repoint it at the scrollbar surface so the
-	     corner matches the surrounding scrollbars instead of showing a white square. -->
+	<!-- fix square between two scrollbars -->
 	<SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="{StaticResource buttonDisableBackground}"/>
 
 	<Style x:Key="RepeatButtonTransparent" TargetType="{x:Type RepeatButton}">
