@@ -7,62 +7,15 @@
 	<sys:String x:Key="Theme.Version">1.8.1.0</sys:String>
 
 <!--
-
-+ banner
-+ background
-+ labels
-+ dropdown
-+ dropdown items
-
-+ tabs
-+ filter
-+ plus/refresh icons
-
-+ scrollbox
-+ scrollbar
-+ list item
-+ checkbox
-+ mod icons
-+ banners
-
-+ button
-+ context menu
-	
-+ TODO: revisit button, input, dropdown (, tab?) - white-ish border on the button? check the normal/hover for combobox to be matching (list)item?
-+ TODO: expander button border
-+ TODO: revisit text, have somewhat more muted? // might have to remake icons then
-+ TODO: cleanup the base file, see if there are strange color names or unnecessary ones
 - TODO: cleanup the file, rearrange definitions, define colors with better names and merge what's the same
 - TODO: when all done, final pass on all windows & on built app.
-
-+ suits menu
-
-+ settings collapser
-+ settings muted text
-+ settings red text
-
-+ modular
-+ create profile
-	+ disabled button
-+ scan library
-+ first launch
-	+ checkbox
-	+ list item
-	+ tooltip
-	+ disabled button
-	+ custom colors (header panel, list border)
-+ error log
-+ toc mismatch
-
-+ bugs:
-+ textbox w/h both scrollbars: white square in corner
-+ some dropdowns use wrong style (suits menu wings?) - make them match
-
 -->
 
+	<!-- colors -->
+	
 	<Color x:Key="background">#202024</Color>
 	<Color x:Key="border">#303035</Color>
-	<Color x:Key="text">#D9D9D9</Color> <!-- TODO: slightly more muted? -->
+	<Color x:Key="text">#D9D9D9</Color>
 	<Color x:Key="redText">#D24</Color>
 	<Color x:Key="grayText">#A6A6AE</Color>
 	<Color x:Key="mutedText">#96969E</Color>
@@ -72,42 +25,6 @@
 	<SolidColorBrush x:Key="mutedTextBrush" Color="{StaticResource mutedText}" />
 	<SolidColorBrush x:Key="grayTextBrush" Color="{StaticResource grayText}" />
 	<SolidColorBrush x:Key="warningTextBrush" Color="{StaticResource redText}" />
-
-	<Style TargetType="TextBlock">
-		<Setter Property="Foreground" Value="{DynamicResource textBrush}" />
-		<Style.Triggers>
-			<Trigger Property="IsEnabled" Value="False">
-				<Setter Property="Foreground" Value="{DynamicResource textDisabledBrush}" />
-			</Trigger>
-		</Style.Triggers>
-	</Style>
-
-	<Style x:Key="MutedText" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
-		<Setter Property="Foreground" Value="{DynamicResource mutedTextBrush}" />
-	</Style>
-	<Style x:Key="GrayText" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
-		<Setter Property="Foreground" Value="{DynamicResource grayTextBrush}" />
-	</Style>
-	<Style x:Key="WarningText" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
-		<Setter Property="Foreground" Value="{DynamicResource warningTextBrush}" />
-	</Style>
-
-	<Style x:Key="MenuItemHeaderText" TargetType="TextBlock">
-		<Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type MenuItem}}}" />
-		<Style.Triggers>
-			<Trigger Property="IsEnabled" Value="False">
-				<Setter Property="Foreground" Value="{DynamicResource textDisabledBrush}" />
-			</Trigger>
-		</Style.Triggers>
-	</Style>
-	<Style x:Key="TabItemHeaderText" TargetType="TextBlock">
-		<Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type TabItem}}}" />
-		<Style.Triggers>
-			<Trigger Property="IsEnabled" Value="False">
-				<Setter Property="Foreground" Value="{DynamicResource textDisabledBrush}" />
-			</Trigger>
-		</Style.Triggers>
-	</Style>
 
 	<!-- inactive/non-selected, not disabled/grayed-out -->
 	<Color x:Key="backgroundD">#1A1A1E</Color>
@@ -129,27 +46,24 @@
 	<Color x:Key="borderDisabled">#2B2B31</Color>
 	<Color x:Key="textDisabled">#66666E</Color>
 	<SolidColorBrush x:Key="textDisabledBrush" Color="{StaticResource textDisabled}" />
-	
+
 	<!-- button -->
 	<Color x:Key="buttonBackground">#2E2E33</Color>
 	<Color x:Key="buttonBorder">#303035</Color>
 	<Color x:Key="buttonHoverBackground">#333338</Color>
 	<Color x:Key="buttonHoverBorder">#47474C</Color>
-	<!--
-	<Color x:Key="buttonBackground">#202024</Color>
-	<Color x:Key="buttonBorder">#303035</Color>
-	<Color x:Key="buttonHoverBackground">#292930</Color>
-	<Color x:Key="buttonHoverBorder">#3B3B40</Color>
-	-->
-	
+
 	<Color x:Key="buttonPressBackground">#38383D</Color>
 	<Color x:Key="buttonPressBorder">#4C4C51</Color>
 	<Color x:Key="buttonDisableBackground">#27272C</Color> <!-- TODO: better contrast against normal button; use other keys because these are shared with scrollbars -->
 	<Color x:Key="buttonDisableBorder">#303035</Color>
 	<Color x:Key="buttonDisableText">#66666E</Color> <!-- == textDisabled -->
-	<!-- for better contrast = bck: #232326, brd: #303035, txt: #454549 -->
 
 	<Color x:Key="borderFocused">#39F</Color>
+
+	<!-- overrides -->
+
+	<SolidColorBrush x:Key="Controls_TextBoxPlaceholder" Color="{StaticResource mutedText}" />
 
 	<SolidColorBrush x:Key="MainWindow_IconButtonHoverBackground" Color="{StaticResource buttonHoverBackground}" />
 	<SolidColorBrush x:Key="MainWindow_IconButtonPressedBackground" Color="{StaticResource buttonPressBackground}" />
@@ -157,31 +71,9 @@
 	<SolidColorBrush x:Key="MainWindow_Background" Color="{StaticResource background}" />
 	<SolidColorBrush x:Key="MainWindow_OverlayBackground" Color="{StaticResource border}" Opacity=".75"/>
 	<SolidColorBrush x:Key="MainWindow_OverlayPanelBackground" Color="{StaticResource background}" />
-
-	<BitmapImage x:Key="banner_msm2_back.png" UriSource="Resources/banner_msm2_back.png" />
-	<BitmapImage x:Key="banner_i30_back.png" UriSource="Resources/banner_i30_back.png" />
-	<BitmapImage x:Key="banner_i33_back.png" UriSource="Resources/banner_i30_back.png" />
-	<BitmapImage x:Key="banner_mm_back.png" UriSource="Resources/banner_mm_back.png" />
-	<BitmapImage x:Key="banner_msmr_back.png" UriSource="Resources/banner_msmr_back.png" />
-	<BitmapImage x:Key="banner_rcra_back.png" UriSource="Resources/banner_rcra_back.png" />
-	<BitmapImage x:Key="add_icon.png" UriSource="Resources/add_icon.png" />
-	<BitmapImage x:Key="reload_icon.png" UriSource="Resources/reload_icon.png" />
-	<BitmapImage x:Key="badge_mmpc.png" UriSource="Resources/badge_mmpc.png" />
-	<BitmapImage x:Key="badge_modular.png" UriSource="Resources/badge_modular.png" />
-	<BitmapImage x:Key="badge_script.png" UriSource="Resources/badge_script.png" />
-	<BitmapImage x:Key="badge_smpc.png" UriSource="Resources/badge_smpc.png" />
-	<BitmapImage x:Key="badge_stage.png" UriSource="Resources/badge_stage.png" />
-	<BitmapImage x:Key="badge_style.png" UriSource="Resources/badge_style.png" />
-	<BitmapImage x:Key="badge_suit.png" UriSource="Resources/badge_suit.png" />
-	<BitmapImage x:Key="badge_suit2.png" UriSource="Resources/badge_suit2.png" />	
-	
-	<!-- common elements -->
-
 	<SolidColorBrush x:Key="MainWindow_ModsOrderLabelForeground" Color="{StaticResource mutedText}" />
-
 	<SolidColorBrush x:Key="MainWindow_StatusMessageForeground" Color="{StaticResource mutedText}" />
 	<SolidColorBrush x:Key="MainWindow_StatusMessageErrorForeground" Color="{StaticResource redText}" />
-
 	<SolidColorBrush x:Key="MainWindow_SettingsGlobalDescriptionForeground" Color="{StaticResource grayText}" />
 	<SolidColorBrush x:Key="MainWindow_ScriptWarningForeground" Color="{StaticResource redText}" />
 
@@ -250,20 +142,65 @@
 	<SolidColorBrush x:Key="MSM2SuitsMenu_SpiderArmsWarningForeground" Color="{StaticResource mutedText}" />
 	<SolidColorBrush x:Key="MSM2SuitsMenu_FooterDivider" Color="{StaticResource SuitsMenu_Divider}" />
 
+	<BitmapImage x:Key="banner_msm2_back.png" UriSource="Resources/banner_msm2_back.png" />
+	<BitmapImage x:Key="banner_i30_back.png" UriSource="Resources/banner_i30_back.png" />
+	<BitmapImage x:Key="banner_i33_back.png" UriSource="Resources/banner_i30_back.png" />
+	<BitmapImage x:Key="banner_mm_back.png" UriSource="Resources/banner_mm_back.png" />
+	<BitmapImage x:Key="banner_msmr_back.png" UriSource="Resources/banner_msmr_back.png" />
+	<BitmapImage x:Key="banner_rcra_back.png" UriSource="Resources/banner_rcra_back.png" />
+	<BitmapImage x:Key="add_icon.png" UriSource="Resources/add_icon.png" />
+	<BitmapImage x:Key="reload_icon.png" UriSource="Resources/reload_icon.png" />
+	<BitmapImage x:Key="badge_mmpc.png" UriSource="Resources/badge_mmpc.png" />
+	<BitmapImage x:Key="badge_modular.png" UriSource="Resources/badge_modular.png" />
+	<BitmapImage x:Key="badge_script.png" UriSource="Resources/badge_script.png" />
+	<BitmapImage x:Key="badge_smpc.png" UriSource="Resources/badge_smpc.png" />
+	<BitmapImage x:Key="badge_stage.png" UriSource="Resources/badge_stage.png" />
+	<BitmapImage x:Key="badge_style.png" UriSource="Resources/badge_style.png" />
+	<BitmapImage x:Key="badge_suit.png" UriSource="Resources/badge_suit.png" />
+	<BitmapImage x:Key="badge_suit2.png" UriSource="Resources/badge_suit2.png" />
+	
+	<!-- TextBlock -->
+
+	<Style TargetType="TextBlock">
+		<Setter Property="Foreground" Value="{DynamicResource textBrush}" />
+		<Style.Triggers>
+			<Trigger Property="IsEnabled" Value="False">
+				<Setter Property="Foreground" Value="{DynamicResource textDisabledBrush}" />
+			</Trigger>
+		</Style.Triggers>
+	</Style>
+
+	<Style x:Key="MutedText" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+		<Setter Property="Foreground" Value="{DynamicResource mutedTextBrush}" />
+	</Style>
+	<Style x:Key="GrayText" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+		<Setter Property="Foreground" Value="{DynamicResource grayTextBrush}" />
+	</Style>
+	<Style x:Key="WarningText" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+		<Setter Property="Foreground" Value="{DynamicResource warningTextBrush}" />
+	</Style>
+
+	<Style x:Key="MenuItemHeaderText" TargetType="TextBlock">
+		<Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type MenuItem}}}" />
+		<Style.Triggers>
+			<Trigger Property="IsEnabled" Value="False">
+				<Setter Property="Foreground" Value="{DynamicResource textDisabledBrush}" />
+			</Trigger>
+		</Style.Triggers>
+	</Style>
+	<Style x:Key="TabItemHeaderText" TargetType="TextBlock">
+		<Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type TabItem}}}" />
+		<Style.Triggers>
+			<Trigger Property="IsEnabled" Value="False">
+				<Setter Property="Foreground" Value="{DynamicResource textDisabledBrush}" />
+			</Trigger>
+		</Style.Triggers>
+	</Style>
+
 	<!-- ComboBox -->
 
-<!--
-	<Style x:Key="FocusVisual">
-		<Setter Property="Control.Template">
-			<Setter.Value>
-				<ControlTemplate>
-					<Rectangle Margin="2" StrokeDashArray="1 2" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" SnapsToDevicePixels="true" StrokeThickness="1"/>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
--->
 	<SolidColorBrush x:Key="TextBox.Static.Background" Color="{StaticResource background}"/>
+	
 	<Style x:Key="ComboBoxEditableTextBox" TargetType="{x:Type TextBox}">
 		<Setter Property="OverridesDefaultStyle" Value="true"/>
 		<Setter Property="AllowDrop" Value="true"/>
@@ -300,7 +237,7 @@
 	</LinearGradientBrush>
 	<SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Button.Border" Color="#FF7EB4EA"/>
 
-	<SolidColorBrush x:Key="ComboBox.Pressed.Background" Color="{StaticResource backgroundHover}"/> <!-- TODO: have pressed colors? -->
+	<SolidColorBrush x:Key="ComboBox.Pressed.Background" Color="{StaticResource backgroundHover}"/>
 	<SolidColorBrush x:Key="ComboBox.Pressed.Border" Color="{StaticResource borderHover}"/>
 	<SolidColorBrush x:Key="ComboBox.Pressed.Glyph" Color="{StaticResource textHover}"/>
 	<SolidColorBrush x:Key="ComboBox.Pressed.Editable.Background" Color="#FF0000"/> <!-- ? -->
@@ -318,7 +255,6 @@
 	<SolidColorBrush x:Key="ComboBox.Disabled.Editable.Border" Color="#FFBFBFBF"/>
 	<SolidColorBrush x:Key="ComboBox.Disabled.Editable.Button.Background" Color="Transparent"/>
 	<SolidColorBrush x:Key="ComboBox.Disabled.Editable.Button.Border" Color="Transparent"/>
-
 	
 	<SolidColorBrush x:Key="ComboBox.Popup.Background" Color="{StaticResource background}"/>
 	<SolidColorBrush x:Key="ComboBox.Popup.Border" Color="{StaticResource border}"/>
@@ -514,7 +450,6 @@
 		</ControlTemplate.Triggers>
 	</ControlTemplate>
 	<Style TargetType="{x:Type ComboBox}">
-		<!-- <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/> -->
 		<Setter Property="Background" Value="{StaticResource ComboBox.Static.Background}"/>
 		<Setter Property="BorderBrush" Value="{StaticResource ComboBox.Static.Border}"/>
 		<Setter Property="Foreground" Value="{DynamicResource textBrush}"/>
@@ -537,13 +472,18 @@
 
 	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewHover.Background" Color="{StaticResource backgroundHover}"/>
 	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewHover.Border" Color="{StaticResource borderHover}"/>
+	
 	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelected.Background" Color="#24344B"/> <!-- == Item.SelectedActive.Background -->
 	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelected.Border" Color="{StaticResource borderFocused}"/>
+	
 	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelectedHover.Background" Color="#24344B"/>
 	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelectedHover.Border" Color="{StaticResource borderFocused}"/>
+	
 	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelectedNoFocus.Background" Color="#33333C"/> <!-- == Item.SelectedInactive.Background -->
 	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelectedNoFocus.Border" Color="#666675"/> <!-- == Item.SelectedInactive.Border -->
+	
 	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewFocus.Border" Color="{StaticResource borderHover}"/>
+	
 	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewHoverFocus.Background" Color="{StaticResource backgroundHover}"/>
 	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewHoverFocus.Border" Color="{StaticResource borderHover}"/>
 
@@ -555,7 +495,6 @@
 		<Setter Property="Background" Value="Transparent"/>
 		<Setter Property="BorderBrush" Value="Transparent"/>
 		<Setter Property="BorderThickness" Value="1"/>
-		<!-- <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/> -->
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type ComboBoxItem}">
@@ -625,7 +564,7 @@
 	</Style>
 
 	<!-- tab control & tab item -->
-	
+
 	<Style TargetType="TabControl">
 		<Setter Property="Background" Value="{DynamicResource backgroundBrush}"/>
 		<Setter Property="BorderBrush" Value="{StaticResource borderBrush}"/>
@@ -633,10 +572,13 @@
 
 	<SolidColorBrush x:Key="TabItem.MouseOver.Background" Color="{StaticResource backgroundH}"/>
 	<SolidColorBrush x:Key="TabItem.MouseOver.Border" Color="{StaticResource borderH}"/>
+	
 	<SolidColorBrush x:Key="TabItem.Selected.Background" Color="{StaticResource background}"/>
 	<SolidColorBrush x:Key="TabItem.Selected.Border" Color="{StaticResource border}"/>
+	
 	<SolidColorBrush x:Key="TabItem.Disabled.Background" Color="#F033F0"/>
 	<SolidColorBrush x:Key="TabItem.Disabled.Border" Color="#D900D9"/>
+	
 	<ControlTemplate x:Key="TabItemTemplate" TargetType="TabItem">
 		<Grid x:Name="templateRoot" SnapsToDevicePixels="true">
 			<Border x:Name="mainBorder" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1,1,1,0" Margin="0">
@@ -820,7 +762,7 @@
 		</Setter>
 
 		<Setter Property="Template" Value="{StaticResource TabItemTemplate}"/>
-		
+
 		<Style.Triggers>
 			<Trigger Property="IsSelected" Value="true">
 				<Setter Property="Foreground" Value="{DynamicResource textBrush}"/>
@@ -830,7 +772,7 @@
 			</Trigger>
 		</Style.Triggers>
 	</Style>
-	
+
 	<!-- button -->
 
 	<Color x:Key="actuallyButtonBackground">#2E2E33</Color>
@@ -846,15 +788,18 @@
 	<SolidColorBrush x:Key="Button.Static.Background" Color="{StaticResource actuallyButtonBackground}"/>
 	<SolidColorBrush x:Key="Button.Static.Border" Color="{StaticResource actuallyButtonBorder}"/>
 	<SolidColorBrush x:Key="Button.Static.Foreground" Color="{StaticResource text}"/>
+	
 	<SolidColorBrush x:Key="Button.MouseOver.Background" Color="{StaticResource actuallyButtonHoverBackground}"/>
 	<SolidColorBrush x:Key="Button.MouseOver.Border" Color="{StaticResource actuallyButtonHoverBorder}"/>
+	
 	<SolidColorBrush x:Key="Button.Pressed.Background" Color="{StaticResource actuallyButtonPressBackground}"/>
 	<SolidColorBrush x:Key="Button.Pressed.Border" Color="{StaticResource actuallyButtonPressBorder}"/>
+	
 	<SolidColorBrush x:Key="Button.Disabled.Background" Color="{StaticResource actuallyButtonDisableBackground}"/>
 	<SolidColorBrush x:Key="Button.Disabled.Border" Color="{StaticResource actuallyButtonDisableBorder}"/>
 	<SolidColorBrush x:Key="Button.Disabled.Foreground" Color="{StaticResource actuallyButtonDisableText}"/>
+
 	<Style TargetType="{x:Type Button}">
-		<!-- <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/> -->
 		<Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
 		<Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
 		<Setter Property="Foreground" Value="{StaticResource Button.Static.Foreground}"/>
@@ -891,41 +836,23 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
-	
+
 	<!-- input -->
 
-	<SolidColorBrush x:Key="Controls_TextBoxPlaceholder" Color="{StaticResource mutedText}" />
-
-	<!--<SolidColorBrush x:Key="ControlBackgroundBrush" Color="#35363A" />
-	<SolidColorBrush x:Key="SelectionBrush" Color="#3D5875" />
-
-	<Style TargetType="{x:Type TextBox}">
-		<Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}" />
-		<Setter Property="Foreground" Value="{DynamicResource textBrush}" />
-		<Setter Property="BorderBrush" Value="{DynamicResource borderBrush}" />
-		<Setter Property="CaretBrush" Value="{DynamicResource textBrush}" />
-		<Setter Property="SelectionBrush" Value="{DynamicResource SelectionBrush}" />
-	</Style> -->
-	
-	<SolidColorBrush x:Key="2TextBox.Background" Color="#FFF"/> <!-- {DynamicResource {x:Static SystemColors.WindowBrushKey}} -->
-	<SolidColorBrush x:Key="2TextBox.Text" Color="#000"/> <!-- {DynamicResource {x:Static SystemColors.ControlTextBrushKey}} -->
-	<SolidColorBrush x:Key="2TextBox.Static.Border" Color="#FFABAdB3"/>
-	<SolidColorBrush x:Key="2TextBox.MouseOver.Border" Color="#FF7EB4EA"/>
-	<SolidColorBrush x:Key="2TextBox.Focus.Border" Color="#FF569DE5"/>
-	<SolidColorBrush x:Key="2TextBox.SelectionBrush" Color="#69F"/> <!-- {DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}} -->
 	<SolidColorBrush x:Key="TextBox.Background" Color="#17171E"/>
 	<SolidColorBrush x:Key="TextBox.Text" Color="{StaticResource text}"/>
+	
 	<SolidColorBrush x:Key="TextBox.Static.Border" Color="{StaticResource border}"/>
 	<SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="{StaticResource borderHover}"/>
 	<SolidColorBrush x:Key="TextBox.Focus.Border" Color="{StaticResource borderFocused}"/>
-	<SolidColorBrush x:Key="3TextBox.SelectionBrush" Color="#69F"/>
-	<SolidColorBrush x:Key="4TextBox.SelectionBrush" Color="#0539A3"/>
-	<SolidColorBrush x:Key="5TextBox.SelectionBrush" Color="#F00"/>
+
 	<SolidColorBrush x:Key="TextBox.SelectionBrush" Color="#39F"/>
+
 	<Style TargetType="{x:Type TextBox}">
 		<Setter Property="Background" Value="{StaticResource TextBox.Background}"/>
 		<Setter Property="BorderBrush" Value="{StaticResource TextBox.Static.Border}"/>
 		<Setter Property="Foreground" Value="{StaticResource TextBox.Text}"/>
+		<!-- <Setter Property="CaretBrush" Value="{DynamicResource TextBrush}" /> -->
 		<Setter Property="BorderThickness" Value="1"/>
 		<Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
 		<Setter Property="HorizontalContentAlignment" Value="Left"/>
@@ -954,19 +881,9 @@
 			</Setter.Value>
 		</Setter>
 		<Setter Property="SelectionBrush" Value="{StaticResource TextBox.SelectionBrush}" />
-		<!--
-		<Style.Triggers>
-			<MultiTrigger>
-				<MultiTrigger.Conditions>
-					<Condition Property="IsInactiveSelectionHighlightEnabled" Value="true"/>
-					<Condition Property="IsSelectionActive" Value="false"/>
-				</MultiTrigger.Conditions>
-				<Setter Property="SelectionBrush" Value="{StaticResource TextBox.SelectionBrush}"/>
-			</MultiTrigger>
-		</Style.Triggers>
-		-->
+		<!-- <Setter Property="SelectionTextBrush" Value="{DynamicResource ThemeTextPrimaryBrush}" /> -->
 	</Style>
-	
+
 	<!-- scrollbar -->
 
 	<SolidColorBrush x:Key="ScrollBar.Static.Background" Color="{StaticResource buttonDisableBackground}"/>
@@ -974,7 +891,7 @@
 	<SolidColorBrush x:Key="ScrollBar.Static.Glyph" Color="{StaticResource textDisabled}"/>
 	<SolidColorBrush x:Key="ScrollBar.Static.Thumb" Color="{StaticResource textDisabled}"/>
 
-	<SolidColorBrush x:Key="ScrollBar.MouseOver.Background" Color="{StaticResource buttonBorder}"/> <!-- TODO: maybe revisit? -->
+	<SolidColorBrush x:Key="ScrollBar.MouseOver.Background" Color="{StaticResource buttonBorder}"/>
 	<SolidColorBrush x:Key="ScrollBar.MouseOver.Border" Color="{StaticResource buttonBorder}"/>
 	<SolidColorBrush x:Key="ScrollBar.MouseOver.Glyph" Color="{StaticResource mutedText}"/>
 	<SolidColorBrush x:Key="ScrollBar.MouseOver.Thumb" Color="{StaticResource mutedText}"/>
@@ -1007,7 +924,6 @@
 		</Setter>
 	</Style>
 	<Style x:Key="ScrollBarButton" TargetType="{x:Type RepeatButton}">
-		<!-- <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/> -->
 		<Setter Property="BorderThickness" Value="1"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -1226,8 +1142,8 @@
 			</Trigger>
 		</Style.Triggers>
 	</Style>
-	
-	<!-- listbox -->
+
+	<!-- list view -->
 
 	<SolidColorBrush x:Key="ListView_BackgroundBrush" Color="{StaticResource background}" />
 	<SolidColorBrush x:Key="ListView_BorderBrush" Color="{StaticResource border}" />
@@ -1239,7 +1155,7 @@
 		<Setter Property="BorderBrush" Value="{DynamicResource ListView_BorderBrush}" />
 	</Style>
 	<Style TargetType="{x:Type local:ListViewEx}" BasedOn="{StaticResource {x:Type ListView}}" />
-	
+
 	<!-- list item -->
 
 	<SolidColorBrush x:Key="Item.MouseOver.Background" Color="#292930"/> <!-- == backgroundHover -->
@@ -1333,6 +1249,7 @@
 	<SolidColorBrush x:Key="OptionMark.Disabled.Background" Color="{StaticResource backgroundDisabledDarker}"/>
 	<SolidColorBrush x:Key="OptionMark.Disabled.Border" Color="{StaticResource borderDisabledDarker}"/>
 	<SolidColorBrush x:Key="OptionMark.Disabled.Glyph" Color="{StaticResource textDisabled}"/>
+
 	<Style TargetType="{x:Type CheckBox}">
 		<Setter Property="Background" Value="{StaticResource OptionMark.Static.Background}"/>
 		<Setter Property="BorderBrush" Value="{StaticResource OptionMark.Static.Border}"/>
@@ -1627,30 +1544,7 @@
 	<Style x:Key="{x:Static MenuItem.SeparatorStyleKey}" TargetType="{x:Type Separator}" BasedOn="{StaticResource {x:Type Separator}}" />
 	
 	<!-- expander -->
-
-	<!--
-	<Color x:Key="exbuttonBorder">#303035</Color>
-	<Color x:Key="exborderHover">#3B3B40</Color>
-	<Color x:Key="exbuttonHoverBorder">#47474C</Color>
-	<Color x:Key="exbuttonPressBorder">#4C4C51</Color>
-	<Color x:Key="exbuttonDisableBorder">#303035</Color>
-	<Color x:Key="exborderDisabledDarker">#42424E</Color>
-	-->
-
-	<!--
-	<Color x:Key="exbuttonBorder">#303035</Color>
-	<Color x:Key="exborderHover">#3B3B40</Color>
-	<Color x:Key="exbuttonPressBorder">#4C4C51</Color>
-	<Color x:Key="exborderDisabledDarker">#42424E</Color>
-	-->
-
-	<!--
-	<Color x:Key="exbuttonBorder">#808088</Color>
-	<Color x:Key="exborderHover">#909099</Color>
-	<Color x:Key="exbuttonPressBorder">#707077</Color>
-	<Color x:Key="exborderDisabledDarker">#AAAAAE</Color>
-	-->
-
+	
 	<Color x:Key="exbuttonBorder">#606066</Color>
 	<Color x:Key="exborderHover">#707077</Color>
 	<Color x:Key="exbuttonPressBorder">#505055</Color>
@@ -1910,5 +1804,64 @@
 	</Style>
 
 	<!-- / -->
+
+	<!-- alt colors -->
+	
+	<Color x:Key="Theme.Panel">#1B2735</Color>
+	<Color x:Key="Theme.PanelAlt">#243447</Color>
+	<Color x:Key="Theme.Accent">#5BC0BE</Color>
+	<Color x:Key="Theme.AccentStrong">#6FFFE9</Color>
+	<Color x:Key="Theme.TextMuted">#B7C4D3</Color>
+	<Color x:Key="Theme.Error">#FF6B6B</Color>
+	
+	<Color x:Key="ThemeTextPrimaryColor">#E7ECF6</Color>
+	<Color x:Key="ThemeTextMutedColor">#A8B3C8</Color>
+	<Color x:Key="ThemeInputBackgroundColor">#101622</Color>
+	<Color x:Key="ThemeSelectionColor">#2D7ED4</Color>
+	<Color x:Key="ThemeSelectionInactiveColor">#2E3B52</Color>
+
+	<SolidColorBrush x:Key="ThemeWindowBackgroundBrush" Color="#141821" />
+	<SolidColorBrush x:Key="ThemeSurfaceBackgroundBrush" Color="#1B2231" />
+	<SolidColorBrush x:Key="ThemeSurfaceAltBackgroundBrush" Color="#20283A" />
+	<SolidColorBrush x:Key="ThemeBorderBrushh" Color="#2F3A4F" />
+	<SolidColorBrush x:Key="ThemeTextPrimaryBrush" Color="{StaticResource ThemeTextPrimaryColor}" />
+	<SolidColorBrush x:Key="ThemeTextSecondaryBrush" Color="{StaticResource ThemeTextMutedColor}" />
+	<SolidColorBrush x:Key="ThemeInputBackgroundBrush" Color="{StaticResource ThemeInputBackgroundColor}" />
+	<SolidColorBrush x:Key="ThemeInputBorderBrush" Color="#3D4960" />
+	<SolidColorBrush x:Key="ThemeButtonBackgroundBrush" Color="#2A3448" />
+	<SolidColorBrush x:Key="ThemeButtonHoverBrush" Color="#35445E" />
+	<SolidColorBrush x:Key="ThemeButtonPressedBrush" Color="#1F293B" />
+	<SolidColorBrush x:Key="ThemeSelectionBrush" Color="{StaticResource ThemeSelectionColor}" />
+	<SolidColorBrush x:Key="ThemeSelectionInactiveBrush" Color="{StaticResource ThemeSelectionInactiveColor}" />
+	
+	<!-- alt colors 2: light/dark -->
+
+	<SolidColorBrush x:Key="AppBackgroundBrush" Color="#FFFFFF" />
+	<SolidColorBrush x:Key="SurfaceBrush" Color="#FFFFFF" />
+	<SolidColorBrush x:Key="SurfaceAltBrush" Color="#F6F6F6" />
+	<SolidColorBrush x:Key="SelectedTabBrush" Color="#FFFFFF" />
+	<SolidColorBrush x:Key="ControlBackgroundBrush" Color="#FFFFFF" />
+	<SolidColorBrush x:Key="TextBrush" Color="#1F1F1F" />
+	<SolidColorBrush x:Key="SecondaryTextBrush" Color="#666666" />
+	<SolidColorBrush x:Key="SubtleTextBrush" Color="#999999" />
+	<SolidColorBrush x:Key="ThemeBorderBrush" Color="#CCCCCC" />
+	<SolidColorBrush x:Key="HoverBrush" Color="#EEEEEE" />
+	<SolidColorBrush x:Key="PressedBrush" Color="#CCCCCC" />
+	<SolidColorBrush x:Key="SelectionBrush" Color="#CCE8FF" />
+	<SolidColorBrush x:Key="DisabledTextBrush" Color="#888888" />
+	
+	<SolidColorBrush x:Key="AppBackgroundBrush2" Color="#202124" />
+	<SolidColorBrush x:Key="SurfaceBrush2" Color="#292A2D" />
+	<SolidColorBrush x:Key="SurfaceAltBrush2" Color="#313236" />
+	<SolidColorBrush x:Key="SelectedTabBrush2" Color="#232427" />
+	<SolidColorBrush x:Key="ControlBackgroundBrush2" Color="#35363A" />
+	<SolidColorBrush x:Key="TextBrush2" Color="#F1F3F4" />
+	<SolidColorBrush x:Key="SecondaryTextBrush2" Color="#BDC1C6" />
+	<SolidColorBrush x:Key="SubtleTextBrush2" Color="#9AA0A6" />
+	<SolidColorBrush x:Key="ThemeBorderBrush2" Color="#4B4D52" />
+	<SolidColorBrush x:Key="HoverBrush2" Color="#3C4043" />
+	<SolidColorBrush x:Key="PressedBrush2" Color="#50545A" />
+	<SolidColorBrush x:Key="SelectionBrush2" Color="#3D5875" />
+	<SolidColorBrush x:Key="DisabledTextBrush2" Color="#777A80" />
 
 </ResourceDictionary>
