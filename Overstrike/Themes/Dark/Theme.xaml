@@ -1218,12 +1218,7 @@
 	</Style>
 	
 	<!-- checkbox -->
-
-	<Color x:Key="backgroundHover2">#292930</Color>
-	<Color x:Key="borderHover2">#3B3B40</Color>
-	<Color x:Key="textHover2">#F3F3F3</Color>
-	<Color x:Key="buttonHoverBackground2">#333338</Color>
-	<Color x:Key="buttonHoverBorder2">#47474C</Color>
+	
 	<Color x:Key="buttonPressBackground2">#58585D</Color>
 	<Color x:Key="buttonPressBorder2">#6C6C70</Color>
 
