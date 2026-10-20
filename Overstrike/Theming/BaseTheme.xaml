@@ -240,26 +240,25 @@
 	<SolidColorBrush x:Key="warningTextBrush" Color="{StaticResource redText}" />
 	-->
 
-	<SolidColorBrush x:Key="s_suitsMenuBackground" Color="{StaticResource dark-20}" />
-	<SolidColorBrush x:Key="s_suitsMenuSideBackground" Color="{Binding Color, Source={StaticResource s_background}}" />
-	<SolidColorBrush x:Key="s_suitsMenuDivider" Color="{Binding Color, Source={StaticResource s_border}}" />
-
 	<!-- TODO: check inactive tabs for use of old names -->
 	<!-- inactive/muted, but not disabled -->
 	<SolidColorBrush x:Key="s_secondaryBackground" Color="{StaticResource dark-10}" /> <!-- backgroundD, backgroundDBrush -->
 	<SolidColorBrush x:Key="s_secondaryBorder" Color="{Binding Color, Source={StaticResource s_border}}" /> <!-- borderD, borderDBrush -->
 	<SolidColorBrush x:Key="s_secondaryText" Color="{Binding Color, Source={StaticResource s_mutedText}}" /> <!-- textD, textDBrush -->
 
+	<SolidColorBrush x:Key="s_suitsMenuBackground" Color="{StaticResource dark-20}" />
+	<SolidColorBrush x:Key="s_suitsMenuListBackground" Color="{Binding Color, Source={StaticResource s_secondaryBackground}}" />
+	<SolidColorBrush x:Key="s_suitsMenuSideBackground" Color="{Binding Color, Source={StaticResource s_background}}" />
+	<SolidColorBrush x:Key="s_suitsMenuDivider" Color="{Binding Color, Source={StaticResource s_border}}" />
+
 	<!-- tab hover -->
-	<Color x:Key="backgroundH">#242428</Color>
-	<Color x:Key="borderH">#343439</Color>
+	<SolidColorBrush x:Key="s_tabBackgroundHover" Color="{StaticResource dark+05}" /> <!-- backgroundH -->
+	<SolidColorBrush x:Key="s_tabBorderHover" Color="{StaticResource dark+35c}" /> <!-- borderH -->
 
 	<!-- combobox, item, list item -->
-	<Color x:Key="backgroundHover">#292930</Color> <!-- Item.MouseOver.Background -->
-	<Color x:Key="listItemHoverBackground">#292930</Color> <!-- == backgroundHover -->
-	<Color x:Key="borderHover">#3B3B40</Color>
-	<Color x:Key="listItemHoverBorder">#3B3B40</Color> <!-- == borderHover -->
-	<Color x:Key="textHover">#F3F3F3</Color>
+	<SolidColorBrush x:Key="s_itemBackgroundHover" Color="{StaticResource dark+15}" /> <!-- backgroundHover, listItemHoverBackground -->
+	<SolidColorBrush x:Key="s_itemBorderHover" Color="{StaticResource dark+45}" /> <!-- borderHover, listItemHoverBorder -->
+	<SolidColorBrush x:Key="s_itemTextHover" Color="{StaticResource light+30}" /> <!-- textHover -->
 
 	<!-- disabled -->
 	<Color x:Key="backgroundDisabled">#1A1A1E</Color> <!-- combobox, ErrorLogWindow_Background -->
@@ -366,16 +365,16 @@
 	<SolidColorBrush x:Key="MSMRSuitsMenu_SideBackground" Color="{Binding Color, Source={StaticResource s_suitsMenuSideBackground}}" />
 	<SolidColorBrush x:Key="MSMRSuitsMenu_Divider" Color="{Binding Color, Source={StaticResource s_suitsMenuDivider}}" />
 	<SolidColorBrush x:Key="MSMRSuitsMenu_Background" Color="{Binding Color, Source={StaticResource s_suitsMenuBackground}}" />
-	<SolidColorBrush x:Key="MSMRSuitsMenu_ListBackground" Color="{StaticResource SuitsMenu_ListBackground}" />
-	<SolidColorBrush x:Key="MSMRSuitsMenu_OuterBorder" Color="{StaticResource SuitsMenu_ListBackground}" />
+	<SolidColorBrush x:Key="MSMRSuitsMenu_ListBackground" Color="{Binding Color, Source={StaticResource s_suitsMenuListBackground}}" />
+	<SolidColorBrush x:Key="MSMRSuitsMenu_OuterBorder" Color="{Binding Color, Source={StaticResource s_suitsMenuListBackground}}" />
 	<SolidColorBrush x:Key="MSMRSuitsMenu_SlotBorder" Color="{StaticResource SuitsMenu_Selection}" />
 	<SolidColorBrush x:Key="MSMRSuitsMenu_ListSelectionBackground" Color="{StaticResource SuitsMenu_Selection}" />
 
 	<SolidColorBrush x:Key="MMSuitsMenu_SideBackground" Color="{Binding Color, Source={StaticResource s_suitsMenuSideBackground}}" />
 	<SolidColorBrush x:Key="MMSuitsMenu_Divider" Color="{Binding Color, Source={StaticResource s_suitsMenuDivider}}" />
 	<SolidColorBrush x:Key="MMSuitsMenu_Background" Color="{Binding Color, Source={StaticResource s_suitsMenuBackground}}" />
-	<SolidColorBrush x:Key="MMSuitsMenu_ListBackground" Color="{StaticResource SuitsMenu_ListBackground}" />
-	<SolidColorBrush x:Key="MMSuitsMenu_OuterBorder" Color="{StaticResource SuitsMenu_ListBackground}" />
+	<SolidColorBrush x:Key="MMSuitsMenu_ListBackground" Color="{Binding Color, Source={StaticResource s_suitsMenuListBackground}}" />
+	<SolidColorBrush x:Key="MMSuitsMenu_OuterBorder" Color="{Binding Color, Source={StaticResource s_suitsMenuListBackground}}" />
 	<SolidColorBrush x:Key="MMSuitsMenu_SlotBorder" Color="{StaticResource SuitsMenu_Selection}" />
 	<SolidColorBrush x:Key="MMSuitsMenu_ListSelectionBackground" Color="{StaticResource SuitsMenu_Selection}" />
 
@@ -384,20 +383,20 @@
 	<SolidColorBrush x:Key="MSM2SuitsMenu_FooterDivider" Color="{Binding Color, Source={StaticResource s_suitsMenuDivider}}" />
 	<SolidColorBrush x:Key="MSM2SuitsMenu_SpiderArmsWarningForeground" Color="{StaticResource mutedText}" />
 	<SolidColorBrush x:Key="MSM2SuitsMenu_Background" Color="{Binding Color, Source={StaticResource s_suitsMenuBackground}}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_ListBackground" Color="{StaticResource SuitsMenu_ListBackground}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_OuterBorder" Color="{StaticResource SuitsMenu_ListBackground}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_ListBackground" Color="{Binding Color, Source={StaticResource s_suitsMenuListBackground}}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_OuterBorder" Color="{Binding Color, Source={StaticResource s_suitsMenuListBackground}}" />
 	<SolidColorBrush x:Key="MSM2SuitsMenu_SlotBorder" Color="{StaticResource SuitsMenu_Selection}" />
 	<SolidColorBrush x:Key="MSM2SuitsMenu_ListSelectionBackground" Color="{StaticResource SuitsMenu_Selection}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_TabStripBackground" Color="{Binding Color, Source={StaticResource s_secondaryBackground}}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_TabStripBackground" Color="{Binding Color, Source={StaticResource s_suitsMenuListBackground}}" />
 	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabForeground" Color="{StaticResource mutedText}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabBackground" Color="{Binding Color, Source={StaticResource s_secondaryBackground}}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabBorder" Color="{Binding Color, Source={StaticResource s_secondaryBackground}}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabHoverForeground" Color="{StaticResource textHover}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabBackground" Color="{Binding Color, Source={StaticResource s_suitsMenuListBackground}}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabBorder" Color="{Binding Color, Source={StaticResource s_suitsMenuListBackground}}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabHoverForeground" Color="{Binding Color, Source={StaticResource s_itemTextHover}}" />
 	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabHoverBorder" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabActiveBackground" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabActiveForeground" Color="{StaticResource text}" />
 	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabActiveBorder" Color="{StaticResource border}" /> <!-- TabItem.Selected.Border -->
-	
+
 	<SolidColorBrush x:Key="TextBox.Static.Background" Color="{StaticResource background}"/>
 
 	<SolidColorBrush x:Key="ComboBox.Static.Background" Color="{StaticResource background}"/>
@@ -408,20 +407,20 @@
 	<SolidColorBrush x:Key="ComboBox.Static.Editable.Button.Background" Color="Transparent"/>
 	<SolidColorBrush x:Key="ComboBox.Static.Editable.Button.Border" Color="Transparent"/>
 
-	<SolidColorBrush x:Key="ComboBox.MouseOver.Background" Color="{StaticResource backgroundHover}"/>
-	<SolidColorBrush x:Key="ComboBox.MouseOver.Border" Color="{StaticResource borderHover}"/>
-	<SolidColorBrush x:Key="ComboBox.MouseOver.Glyph" Color="{StaticResource textHover}"/>
-	<SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Background" Color="{StaticResource backgroundHover}"/>
-	<SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Border" Color="{StaticResource borderHover}"/>
+	<SolidColorBrush x:Key="ComboBox.MouseOver.Background" Color="{Binding Color, Source={StaticResource s_itemBackgroundHover}}" />
+	<SolidColorBrush x:Key="ComboBox.MouseOver.Border" Color="{Binding Color, Source={StaticResource s_itemBorderHover}}" />
+	<SolidColorBrush x:Key="ComboBox.MouseOver.Glyph" Color="{Binding Color, Source={StaticResource s_itemTextHover}}" />
+	<SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Background" Color="{Binding Color, Source={StaticResource s_itemBackgroundHover}}" />
+	<SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Border" Color="{Binding Color, Source={StaticResource s_itemBorderHover}}" />
 	<LinearGradientBrush x:Key="ComboBox.MouseOver.Editable.Button.Background" EndPoint="0,1" StartPoint="0,0">
 		<GradientStop Color="#FFEBF4FC" Offset="0.0"/>
 		<GradientStop Color="#FFDCECFC" Offset="1.0"/>
 	</LinearGradientBrush>
 	<SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Button.Border" Color="#FF7EB4EA"/>
 
-	<SolidColorBrush x:Key="ComboBox.Pressed.Background" Color="{StaticResource backgroundHover}"/>
-	<SolidColorBrush x:Key="ComboBox.Pressed.Border" Color="{StaticResource borderHover}"/>
-	<SolidColorBrush x:Key="ComboBox.Pressed.Glyph" Color="{StaticResource textHover}"/>
+	<SolidColorBrush x:Key="ComboBox.Pressed.Background" Color="{Binding Color, Source={StaticResource s_itemBackgroundHover}}" />
+	<SolidColorBrush x:Key="ComboBox.Pressed.Border" Color="{Binding Color, Source={StaticResource s_itemBorderHover}}" />
+	<SolidColorBrush x:Key="ComboBox.Pressed.Glyph" Color="{Binding Color, Source={StaticResource s_itemTextHover}}" />
 	<SolidColorBrush x:Key="ComboBox.Pressed.Editable.Background" Color="#FF0000"/>
 	<!-- ? -->
 	<SolidColorBrush x:Key="ComboBox.Pressed.Editable.Border" Color="#FF569DE5"/>
@@ -442,8 +441,8 @@
 	<SolidColorBrush x:Key="ComboBox.Popup.Background" Color="{StaticResource background}"/>
 	<SolidColorBrush x:Key="ComboBox.Popup.Border" Color="{StaticResource border}"/>
 
-	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewHover.Background" Color="{StaticResource backgroundHover}"/>
-	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewHover.Border" Color="{StaticResource borderHover}"/>
+	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewHover.Background" Color="{Binding Color, Source={StaticResource s_itemBackgroundHover}}" />
+	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewHover.Border" Color="{Binding Color, Source={StaticResource s_itemBorderHover}}" />
 
 	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelected.Background" Color="{StaticResource ComboItemSelectedBackground}"/>
 	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelected.Border" Color="{StaticResource borderFocused}"/>
@@ -454,16 +453,16 @@
 	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelectedNoFocus.Background" Color="{StaticResource ComboItemNoFocusBackground}"/>
 	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelectedNoFocus.Border" Color="{StaticResource ComboItemNoFocusBorder}"/>
 
-	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewFocus.Border" Color="{StaticResource borderHover}"/>
+	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewFocus.Border" Color="{Binding Color, Source={StaticResource s_itemBorderHover}}" />
 
-	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewHoverFocus.Background" Color="{StaticResource backgroundHover}"/>
-	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewHoverFocus.Border" Color="{StaticResource borderHover}"/>
+	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewHoverFocus.Background" Color="{Binding Color, Source={StaticResource s_itemBackgroundHover}}" />
+	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewHoverFocus.Border" Color="{Binding Color, Source={StaticResource s_itemBorderHover}}" />
 
-	<SolidColorBrush x:Key="TabItem.MouseOver.Background" Color="{StaticResource backgroundH}"/>
-	<SolidColorBrush x:Key="TabItem.MouseOver.Border" Color="{StaticResource borderH}"/>
+	<SolidColorBrush x:Key="TabItem.MouseOver.Background" Color="{Binding Color, Source={StaticResource s_tabBackgroundHover}}" />
+	<SolidColorBrush x:Key="TabItem.MouseOver.Border" Color="{Binding Color, Source={StaticResource s_tabBorderHover}}" />
 
-	<SolidColorBrush x:Key="TabItem.Selected.Background" Color="{StaticResource background}"/>
-	<SolidColorBrush x:Key="TabItem.Selected.Border" Color="{StaticResource border}"/>
+	<SolidColorBrush x:Key="TabItem.Selected.Background" Color="{Binding Color, Source={StaticResource s_background}}" />
+	<SolidColorBrush x:Key="TabItem.Selected.Border" Color="{Binding Color, Source={StaticResource s_border}}" />
 
 	<SolidColorBrush x:Key="TabItem.Disabled.Background" Color="#F033F0"/>
 	<SolidColorBrush x:Key="TabItem.Disabled.Border" Color="#D900D9"/>
@@ -486,7 +485,7 @@
 	<SolidColorBrush x:Key="TextBox.Text" Color="{StaticResource text}"/>
 
 	<SolidColorBrush x:Key="TextBox.Static.Border" Color="{StaticResource border}"/>
-	<SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="{StaticResource borderHover}"/>
+	<SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="{Binding Color, Source={StaticResource s_itemBorderHover}}" />
 	<SolidColorBrush x:Key="TextBox.Focus.Border" Color="{StaticResource borderFocused}"/>
 
 	<SolidColorBrush x:Key="TextBox.SelectionBrush" Color="{StaticResource TextBoxSelection}"/>
@@ -517,8 +516,8 @@
 	<SolidColorBrush x:Key="ListView_BorderBrush" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="ListView_ForegroundBrush" Color="{StaticResource text}" />
 
-	<SolidColorBrush x:Key="Item.MouseOver.Background" Color="{StaticResource listItemHoverBackground}" />
-	<SolidColorBrush x:Key="Item.MouseOver.Border" Color="{StaticResource listItemHoverBorder}" />
+	<SolidColorBrush x:Key="Item.MouseOver.Background" Color="{Binding Color, Source={StaticResource s_itemBackgroundHover}}" />
+	<SolidColorBrush x:Key="Item.MouseOver.Border" Color="{Binding Color, Source={StaticResource s_itemBorderHover}}" />
 	<SolidColorBrush x:Key="Item.SelectedInactive.Background" Color="{StaticResource listItemInactiveBackground}" />
 	<SolidColorBrush x:Key="Item.SelectedInactive.Border" Color="{StaticResource listItemInactiveBorder}" />
 	<SolidColorBrush x:Key="Item.SelectedActive.Background" Color="{StaticResource listItemActiveBackground}" />
@@ -532,10 +531,10 @@
 	<SolidColorBrush x:Key="OptionMark.Static.Glyph" Color="{StaticResource text}"/>
 	<SolidColorBrush x:Key="OptionMark.MouseOver.Background" Color="{StaticResource buttonHoverBackground}"/>
 	<SolidColorBrush x:Key="OptionMark.MouseOver.Border" Color="{StaticResource buttonHoverBorder}"/>
-	<SolidColorBrush x:Key="OptionMark.MouseOver.Glyph" Color="{StaticResource textHover}"/>
+	<SolidColorBrush x:Key="OptionMark.MouseOver.Glyph" Color="{Binding Color, Source={StaticResource s_itemTextHover}}" />
 	<SolidColorBrush x:Key="OptionMark.Pressed.Background" Color="{StaticResource buttonPressBackground2}"/>
 	<SolidColorBrush x:Key="OptionMark.Pressed.Border" Color="{StaticResource buttonPressBorder2}"/>
-	<SolidColorBrush x:Key="OptionMark.Pressed.Glyph" Color="{StaticResource textHover}"/>
+	<SolidColorBrush x:Key="OptionMark.Pressed.Glyph" Color="{Binding Color, Source={StaticResource s_itemTextHover}}" />
 	<SolidColorBrush x:Key="OptionMark.Disabled.Background" Color="{StaticResource backgroundDisabledDarker}"/>
 	<SolidColorBrush x:Key="OptionMark.Disabled.Border" Color="{StaticResource borderDisabledDarker}"/>
 	<SolidColorBrush x:Key="OptionMark.Disabled.Glyph" Color="{StaticResource textDisabled}"/>
@@ -556,11 +555,11 @@
 
 	<SolidColorBrush x:Key="Expander.MouseOver.Circle.Stroke" Color="{StaticResource exborderHover}"/>
 	<SolidColorBrush x:Key="Expander.MouseOver.Circle.Fill" Color="{StaticResource buttonHoverBackground}"/>
-	<SolidColorBrush x:Key="Expander.MouseOver.Arrow.Stroke" Color="{StaticResource textHover}"/>
+	<SolidColorBrush x:Key="Expander.MouseOver.Arrow.Stroke" Color="{Binding Color, Source={StaticResource s_itemTextHover}}" />
 
 	<SolidColorBrush x:Key="Expander.Pressed.Circle.Stroke" Color="{StaticResource exbuttonPressBorder}"/>
 	<SolidColorBrush x:Key="Expander.Pressed.Circle.Fill" Color="{StaticResource buttonPressBackground}"/>
-	<SolidColorBrush x:Key="Expander.Pressed.Arrow.Stroke" Color="{StaticResource textHover}"/>
+	<SolidColorBrush x:Key="Expander.Pressed.Arrow.Stroke" Color="{Binding Color, Source={StaticResource s_itemTextHover}}" />
 
 	<SolidColorBrush x:Key="Expander.Disabled.Circle.Stroke" Color="{StaticResource exborderDisabledDarker}"/>
 	<SolidColorBrush x:Key="Expander.Disabled.Circle.Fill" Color="{StaticResource backgroundDisabledDarker}"/>
