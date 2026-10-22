@@ -294,23 +294,21 @@
 	<SolidColorBrush x:Key="s_buttonBorderPressed" Color="{StaticResource dark+60}" />
 	<SolidColorBrush x:Key="s_buttonBorderDisabled" Color="{StaticResource dark+30a}" />
 
-	<Color x:Key="TextBoxBack">#17171E</Color>
-	<Color x:Key="checkmarkBackground">#17171E</Color> <!-- like TextBox {StaticResource background}"/> -->
-	<Color x:Key="exFill">#17171E</Color> <!-- like TextBox {StaticResource background}"/> -->
+	<SolidColorBrush x:Key="s_inputBackground" Color="{StaticResource dark-15}" /> <!-- TextBoxBack, checkmarkBackground, exFill -->
 
+	<SolidColorBrush x:Key="s_checkboxBackgroundPressed" Color="{StaticResource dark+75b}" /> <!-- buttonPressBackground2 (checkbox pressed) -->
+	<SolidColorBrush x:Key="s_checkboxBorderPressed" Color="{StaticResource dark+90}" /> <!-- buttonPressBorder2 (checkbox pressed) -->
+	<SolidColorBrush x:Key="s_checkboxBackgroundDisabled" Color="{StaticResource dark+30b}" /> <!-- backgroundDisabledDarker (checkbox disabled) -->
+	<SolidColorBrush x:Key="s_checkboxBorderDisabled" Color="{StaticResource dark+50}" /> <!-- borderDisabledDarker (checkbox disabled) -->
 	
-	<Color x:Key="buttonPressBackground2">#58585D</Color>
-	<Color x:Key="buttonPressBorder2">#6C6C70</Color>
-
-	<Color x:Key="backgroundDisabledDarker">#303039</Color>
-	<Color x:Key="borderDisabledDarker">#42424E</Color>
+	<SolidColorBrush x:Key="s_expanderBackgroundDisabled" Color="{StaticResource dark+30b}" /> <!-- backgroundDisabledDarker (expander disabled) -->
+	<SolidColorBrush x:Key="s_expanderBorderDisabled" Color="{StaticResource light-55}" /> <!-- exborderDisabledDarker (expander disabled) -->
 
 	<Color x:Key="menuGutterBackground">#1D1D21</Color>
 
 	<Color x:Key="exbuttonBorder">#606066</Color>
 	<Color x:Key="exborderHover">#707077</Color>
 	<Color x:Key="exbuttonPressBorder">#505055</Color>
-	<Color x:Key="exborderDisabledDarker">#99999C</Color>
 
 	<Color x:Key="NumberLabelForeground">#666</Color> <!-- very muted -->
 
@@ -470,7 +468,7 @@
 	<SolidColorBrush x:Key="Button.Disabled.Border" Color="{Binding Color, Source={StaticResource s_buttonBorderDisabled}}" />
 	<SolidColorBrush x:Key="Button.Disabled.Foreground" Color="{Binding Color, Source={StaticResource s_disabledText}}"/>
 
-	<SolidColorBrush x:Key="TextBox.Background" Color="{StaticResource TextBoxBack}"/>
+	<SolidColorBrush x:Key="TextBox.Background" Color="{Binding Color, Source={StaticResource s_inputBackground}}" />
 	<SolidColorBrush x:Key="TextBox.Text" Color="{Binding Color, Source={StaticResource s_text}}"/>
 
 	<SolidColorBrush x:Key="TextBox.Static.Border" Color="{Binding Color, Source={StaticResource s_border}}" />
@@ -515,17 +513,17 @@
 	<SolidColorBrush x:Key="Tooltip_BorderBrush" Color="{Binding Color, Source={StaticResource s_tooltipBorder}}" />
 	<SolidColorBrush x:Key="Tooltip_BackgroundBrush" Color="{Binding Color, Source={StaticResource s_tooltipBackground}}" />
 
-	<SolidColorBrush x:Key="OptionMark.Static.Background" Color="{StaticResource checkmarkBackground}" />
+	<SolidColorBrush x:Key="OptionMark.Static.Background" Color="{Binding Color, Source={StaticResource s_inputBackground}}" />
 	<SolidColorBrush x:Key="OptionMark.Static.Border" Color="{Binding Color, Source={StaticResource s_border}}" />
 	<SolidColorBrush x:Key="OptionMark.Static.Glyph" Color="{Binding Color, Source={StaticResource s_text}}" />
 	<SolidColorBrush x:Key="OptionMark.MouseOver.Background" Color="{Binding Color, Source={StaticResource s_hoverBackground}}" />
 	<SolidColorBrush x:Key="OptionMark.MouseOver.Border" Color="{Binding Color, Source={StaticResource s_hoverBorder}}" />
 	<SolidColorBrush x:Key="OptionMark.MouseOver.Glyph" Color="{Binding Color, Source={StaticResource s_itemTextHover}}" />
-	<SolidColorBrush x:Key="OptionMark.Pressed.Background" Color="{StaticResource buttonPressBackground2}"/>
-	<SolidColorBrush x:Key="OptionMark.Pressed.Border" Color="{StaticResource buttonPressBorder2}"/>
+	<SolidColorBrush x:Key="OptionMark.Pressed.Background" Color="{Binding Color, Source={StaticResource s_checkboxBackgroundPressed}}" />
+	<SolidColorBrush x:Key="OptionMark.Pressed.Border" Color="{Binding Color, Source={StaticResource s_checkboxBorderPressed}}" />
 	<SolidColorBrush x:Key="OptionMark.Pressed.Glyph" Color="{Binding Color, Source={StaticResource s_itemTextHover}}" />
-	<SolidColorBrush x:Key="OptionMark.Disabled.Background" Color="{StaticResource backgroundDisabledDarker}"/>
-	<SolidColorBrush x:Key="OptionMark.Disabled.Border" Color="{StaticResource borderDisabledDarker}"/>
+	<SolidColorBrush x:Key="OptionMark.Disabled.Background" Color="{Binding Color, Source={StaticResource s_checkboxBackgroundDisabled}}" />
+	<SolidColorBrush x:Key="OptionMark.Disabled.Border" Color="{Binding Color, Source={StaticResource s_checkboxBorderDisabled}}" />
 	<SolidColorBrush x:Key="OptionMark.Disabled.Glyph" Color="{Binding Color, Source={StaticResource s_disabledText}}"/>
 
 	<SolidColorBrush x:Key="MenuItem.Popup.Background" Color="{Binding Color, Source={StaticResource s_background}}" />
@@ -539,7 +537,7 @@
 	<SolidColorBrush x:Key="MenuItem.Gutter.Separator2" Color="{Binding Color, Source={StaticResource s_background}}" />
 
 	<SolidColorBrush x:Key="Expander.Static.Circle.Stroke" Color="{StaticResource exbuttonBorder}"/>
-	<SolidColorBrush x:Key="Expander.Static.Circle.Fill" Color="{StaticResource exFill}"/>
+	<SolidColorBrush x:Key="Expander.Static.Circle.Fill" Color="{Binding Color, Source={StaticResource s_inputBackground}}" />
 	<SolidColorBrush x:Key="Expander.Static.Arrow.Stroke" Color="{Binding Color, Source={StaticResource s_text}}" />
 
 	<SolidColorBrush x:Key="Expander.MouseOver.Circle.Stroke" Color="{StaticResource exborderHover}"/>
@@ -550,8 +548,8 @@
 	<SolidColorBrush x:Key="Expander.Pressed.Circle.Fill" Color="{Binding Color, Source={StaticResource s_pressBackground}}" />
 	<SolidColorBrush x:Key="Expander.Pressed.Arrow.Stroke" Color="{Binding Color, Source={StaticResource s_itemTextHover}}" />
 
-	<SolidColorBrush x:Key="Expander.Disabled.Circle.Stroke" Color="{StaticResource exborderDisabledDarker}"/>
-	<SolidColorBrush x:Key="Expander.Disabled.Circle.Fill" Color="{StaticResource backgroundDisabledDarker}"/>
+	<SolidColorBrush x:Key="Expander.Disabled.Circle.Stroke" Color="{Binding Color, Source={StaticResource s_expanderBorderDisabled}}" />
+	<SolidColorBrush x:Key="Expander.Disabled.Circle.Fill" Color="{Binding Color, Source={StaticResource s_expanderBackgroundDisabled}}" />
 	<SolidColorBrush x:Key="Expander.Disabled.Arrow.Stroke" Color="{Binding Color, Source={StaticResource s_disabledText}}"/>
 	
 	
