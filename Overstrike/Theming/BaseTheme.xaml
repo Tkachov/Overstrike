@@ -270,17 +270,15 @@
 	<SolidColorBrush x:Key="s_tooltipBorder" Color="{StaticResource dark+30a}" /> <!-- buttonDisableBorder (tooltip) -->
 
 	<SolidColorBrush x:Key="s_scrollbar" Color="{StaticResource dark+85b}" />
+	<SolidColorBrush x:Key="s_scrollbarBackground" Color="{StaticResource dark+10}" /> <!-- buttonDisableBackground (scrollbar) -->
 	<SolidColorBrush x:Key="s_scrollbarBackgroundHover" Color="{StaticResource dark+30a}" /> <!-- buttonBorder (scrollbar) -->
+	<SolidColorBrush x:Key="s_scrollbarBackgroundPressed" Color="{StaticResource dark+60}" /> <!-- buttonPressBorder (scrollbar) -->
 
-	<!-- TODO: better naming for these two -->
+	<!-- TODO: better naming for these four -->
 	<SolidColorBrush x:Key="s_hoverBackground" Color="{StaticResource dark+25}" /> <!-- buttonHoverBackground (main, checkmark, expander) -->
 	<SolidColorBrush x:Key="s_hoverBorder" Color="{StaticResource dark+30a}" /> <!-- buttonHoverBorder (checkmark) -->
-
-	<Color x:Key="buttonPressBackground">#38383D</Color> <!-- main, expander -->
-	<Color x:Key="buttonPressBorder">#4C4C51</Color> <!-- scrollbar -->
-	<Color x:Key="buttonDisableBackground">#27272C</Color> <!-- scrollbar & first launch header back -->
-	<!-- TODO: better contrast against normal button; use other keys because these are shared with scrollbars -->
-	<Color x:Key="buttonDisableBorder">#303035</Color> <!-- tooltip -->
+	<SolidColorBrush x:Key="s_pressBackground" Color="{StaticResource dark+40}" /> <!-- buttonPressBackground (main, expander) -->
+	<SolidColorBrush x:Key="s_firstLaunchHeaderBackground" Color="{StaticResource dark+10}" /> <!-- buttonDisableBackground (first launch header back) -->
 
 	<Color x:Key="borderFocused">#39F</Color> <!-- checkbox, input, list item -->
 	<Color x:Key="listItemActiveBorder">#39F</Color> <!-- == borderFocused -->
@@ -333,7 +331,7 @@
 	<SolidColorBrush x:Key="MainWindow_Background" Color="{StaticResource background}" />
 	<SolidColorBrush x:Key="MainWindow_WindowTopBorder" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="MainWindow_IconButtonHoverBackground" Color="{Binding Color, Source={StaticResource s_hoverBackground}}" />
-	<SolidColorBrush x:Key="MainWindow_IconButtonPressedBackground" Color="{StaticResource buttonPressBackground}" />
+	<SolidColorBrush x:Key="MainWindow_IconButtonPressedBackground" Color="{Binding Color, Source={StaticResource s_pressBackground}}" />
 	<SolidColorBrush x:Key="MainWindow_OverlayBackground" Color="{StaticResource border}" Opacity=".75"/>
 	<SolidColorBrush x:Key="MainWindow_OverlayPanelBackground" Color="{StaticResource background}" />
 	<SolidColorBrush x:Key="MainWindow_StatusMessageForeground" Color="{StaticResource mutedText}" />
@@ -341,7 +339,7 @@
 
 	<SolidColorBrush x:Key="FirstLaunch_Background" Color="{StaticResource background}" />
 	<SolidColorBrush x:Key="FirstLaunch_WindowTopBorder" Color="{StaticResource border}" />
-	<SolidColorBrush x:Key="FirstLaunch_ProfilesHeaderBackground" Color="{StaticResource buttonDisableBackground}" />
+	<SolidColorBrush x:Key="FirstLaunch_ProfilesHeaderBackground" Color="{Binding Color, Source={StaticResource s_firstLaunchHeaderBackground}}" />
 	<SolidColorBrush x:Key="FirstLaunch_ProfilesHeaderForeground" Color="{StaticResource mutedText}" /> <!-- maybe should be gray? -->
 	<SolidColorBrush x:Key="FirstLaunch_ProfilesBorder" Color="{StaticResource border}" />
 
@@ -491,8 +489,8 @@
 
 	<SolidColorBrush x:Key="TextBox.SelectionBrush" Color="{StaticResource TextBoxSelection}"/>
 
-	<SolidColorBrush x:Key="ScrollBar.Static.Background" Color="{StaticResource buttonDisableBackground}"/>
-	<SolidColorBrush x:Key="ScrollBar.Static.Border" Color="{StaticResource buttonDisableBackground}"/>
+	<SolidColorBrush x:Key="ScrollBar.Static.Background" Color="{Binding Color, Source={StaticResource s_scrollbarBackground}}" />
+	<SolidColorBrush x:Key="ScrollBar.Static.Border" Color="{Binding Color, Source={StaticResource s_scrollbarBackground}}" />
 	<SolidColorBrush x:Key="ScrollBar.Static.Glyph" Color="{Binding Color, Source={StaticResource s_scrollbar}}"/>
 	<SolidColorBrush x:Key="ScrollBar.Static.Thumb" Color="{Binding Color, Source={StaticResource s_scrollbar}}"/>
 
@@ -501,17 +499,17 @@
 	<SolidColorBrush x:Key="ScrollBar.MouseOver.Glyph" Color="{StaticResource mutedText}"/>
 	<SolidColorBrush x:Key="ScrollBar.MouseOver.Thumb" Color="{StaticResource mutedText}"/>
 
-	<SolidColorBrush x:Key="ScrollBar.Pressed.Background" Color="{StaticResource buttonPressBorder}"/>
-	<SolidColorBrush x:Key="ScrollBar.Pressed.Border" Color="{StaticResource buttonPressBorder}"/>
+	<SolidColorBrush x:Key="ScrollBar.Pressed.Background" Color="{Binding Color, Source={StaticResource s_scrollbarBackgroundPressed}}" />
+	<SolidColorBrush x:Key="ScrollBar.Pressed.Border" Color="{Binding Color, Source={StaticResource s_scrollbarBackgroundPressed}}" />
 	<SolidColorBrush x:Key="ScrollBar.Pressed.Glyph" Color="{StaticResource grayText}"/>
 	<SolidColorBrush x:Key="ScrollBar.Pressed.Thumb" Color="{StaticResource grayText}"/>
 
-	<SolidColorBrush x:Key="ScrollBar.Disabled.Background" Color="{StaticResource buttonDisableBackground}"/>
-	<SolidColorBrush x:Key="ScrollBar.Disabled.Border" Color="{StaticResource buttonDisableBackground}"/>
+	<SolidColorBrush x:Key="ScrollBar.Disabled.Background" Color="{Binding Color, Source={StaticResource s_scrollbarBackground}}" />
+	<SolidColorBrush x:Key="ScrollBar.Disabled.Border" Color="{Binding Color, Source={StaticResource s_scrollbarBackground}}" />
 	<SolidColorBrush x:Key="ScrollBar.Disabled.Glyph" Color="{Binding Color, Source={StaticResource s_disabledText}}"/>
 
 	<!-- fix square between two scrollbars -->
-	<SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="{StaticResource buttonDisableBackground}"/>
+	<SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="{Binding Color, Source={StaticResource s_scrollbarBackground}}" />
 
 	<SolidColorBrush x:Key="ListView_BackgroundBrush" Color="{StaticResource background}" />
 	<SolidColorBrush x:Key="ListView_BorderBrush" Color="{StaticResource border}" />
@@ -559,7 +557,7 @@
 	<SolidColorBrush x:Key="Expander.MouseOver.Arrow.Stroke" Color="{Binding Color, Source={StaticResource s_itemTextHover}}" />
 
 	<SolidColorBrush x:Key="Expander.Pressed.Circle.Stroke" Color="{StaticResource exbuttonPressBorder}"/>
-	<SolidColorBrush x:Key="Expander.Pressed.Circle.Fill" Color="{StaticResource buttonPressBackground}"/>
+	<SolidColorBrush x:Key="Expander.Pressed.Circle.Fill" Color="{Binding Color, Source={StaticResource s_pressBackground}}" />
 	<SolidColorBrush x:Key="Expander.Pressed.Arrow.Stroke" Color="{Binding Color, Source={StaticResource s_itemTextHover}}" />
 
 	<SolidColorBrush x:Key="Expander.Disabled.Circle.Stroke" Color="{StaticResource exborderDisabledDarker}"/>
