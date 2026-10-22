@@ -261,19 +261,20 @@
 	<SolidColorBrush x:Key="s_itemTextHover" Color="{StaticResource light+30}" /> <!-- textHover -->
 
 	<!-- disabled -->
-	<Color x:Key="backgroundDisabled">#1A1A1E</Color> <!-- combobox, ErrorLogWindow_Background -->
-	<Color x:Key="borderDisabled">#2B2B31</Color> <!-- combobox disabled -->
-	<Color x:Key="textDisabled">#66666E</Color> <!-- also used for glyphs -->
-	<Color x:Key="buttonDisableText">#66666E</Color> <!-- scrollbar --> <!-- == textDisabled -->
-	<Color x:Key="actuallyButtonDisableText">#66666E</Color>
-	<SolidColorBrush x:Key="textDisabledBrush" Color="{StaticResource textDisabled}" />
-	<Color x:Key="SuitsMenu_ListBackground">#1A1A1E</Color>
+	<SolidColorBrush x:Key="s_disabledBackground" Color="{StaticResource dark-10}" /> <!-- backgroundDisabled (combobox, ErrorLogWindow_Background), SuitsMenu_ListBackground -->
+	<SolidColorBrush x:Key="s_disabledBorder" Color="{StaticResource dark+20}" /> <!-- borderDisabled (combobox disabled) -->
+	<SolidColorBrush x:Key="s_disabledText" Color="{StaticResource dark+85b}" /> <!-- textDisabled (also used for glyphs), textDisabledBrush, buttonDisableText (scrollbar), actuallyButtonDisableText -->
 
 	<!-- button -->
-	<Color x:Key="buttonBackground">#2E2E33</Color> <!-- only used in tooltip -->
-	<Color x:Key="buttonBorder">#303035</Color> <!-- scrollbar -->
-	<Color x:Key="buttonHoverBackground">#333338</Color> <!-- main, checkmark, expander -->
-	<Color x:Key="buttonHoverBorder">#47474C</Color> <!-- checkmark -->
+	<SolidColorBrush x:Key="s_tooltipBackground" Color="{StaticResource dark+25}" /> <!-- buttonBackground (only used in tooltip) -->
+	<SolidColorBrush x:Key="s_tooltipBorder" Color="{StaticResource dark+30a}" /> <!-- buttonDisableBorder (tooltip) -->
+
+	<SolidColorBrush x:Key="s_scrollbar" Color="{StaticResource dark+85b}" />
+	<SolidColorBrush x:Key="s_scrollbarBackgroundHover" Color="{StaticResource dark+30a}" /> <!-- buttonBorder (scrollbar) -->
+
+	<!-- TODO: better naming for these two -->
+	<SolidColorBrush x:Key="s_hoverBackground" Color="{StaticResource dark+25}" /> <!-- buttonHoverBackground (main, checkmark, expander) -->
+	<SolidColorBrush x:Key="s_hoverBorder" Color="{StaticResource dark+30a}" /> <!-- buttonHoverBorder (checkmark) -->
 
 	<Color x:Key="buttonPressBackground">#38383D</Color> <!-- main, expander -->
 	<Color x:Key="buttonPressBorder">#4C4C51</Color> <!-- scrollbar -->
@@ -331,7 +332,7 @@
 
 	<SolidColorBrush x:Key="MainWindow_Background" Color="{StaticResource background}" />
 	<SolidColorBrush x:Key="MainWindow_WindowTopBorder" Color="{StaticResource border}" />
-	<SolidColorBrush x:Key="MainWindow_IconButtonHoverBackground" Color="{StaticResource buttonHoverBackground}" />
+	<SolidColorBrush x:Key="MainWindow_IconButtonHoverBackground" Color="{Binding Color, Source={StaticResource s_hoverBackground}}" />
 	<SolidColorBrush x:Key="MainWindow_IconButtonPressedBackground" Color="{StaticResource buttonPressBackground}" />
 	<SolidColorBrush x:Key="MainWindow_OverlayBackground" Color="{StaticResource border}" Opacity=".75"/>
 	<SolidColorBrush x:Key="MainWindow_OverlayPanelBackground" Color="{StaticResource background}" />
@@ -351,7 +352,7 @@
 	<SolidColorBrush x:Key="ModsDetectionSplash_TopBorder" Color="{StaticResource border}" />
 	<SolidColorBrush x:Key="ModsDetectionSplash_OperationForeground" Color="{StaticResource grayText}" />
 
-	<SolidColorBrush x:Key="ErrorLogWindow_Background" Color="{StaticResource backgroundDisabled}" />
+	<SolidColorBrush x:Key="ErrorLogWindow_Background" Color="{Binding Color, Source={StaticResource s_secondaryBackground}}" />
 
 	<SolidColorBrush x:Key="ModularWizard_MainBackground" Color="{StaticResource background}" />
 	<SolidColorBrush x:Key="ModularWizard_Border" Color="{StaticResource border}" />
@@ -430,9 +431,9 @@
 	</LinearGradientBrush>
 	<SolidColorBrush x:Key="ComboBox.Pressed.Editable.Button.Border" Color="#FF569DE5"/>
 
-	<SolidColorBrush x:Key="ComboBox.Disabled.Background" Color="{StaticResource backgroundDisabled}"/>
-	<SolidColorBrush x:Key="ComboBox.Disabled.Border" Color="{StaticResource borderDisabled}"/>
-	<SolidColorBrush x:Key="ComboBox.Disabled.Glyph" Color="{StaticResource textDisabled}"/>
+	<SolidColorBrush x:Key="ComboBox.Disabled.Background" Color="{Binding Color, Source={StaticResource s_disabledBackground}}" />
+	<SolidColorBrush x:Key="ComboBox.Disabled.Border" Color="{Binding Color, Source={StaticResource s_disabledBorder}}"/>
+	<SolidColorBrush x:Key="ComboBox.Disabled.Glyph" Color="{Binding Color, Source={StaticResource s_disabledText}}"/>
 	<SolidColorBrush x:Key="ComboBox.Disabled.Editable.Background" Color="#FF0000"/>
 	<SolidColorBrush x:Key="ComboBox.Disabled.Editable.Border" Color="#FFBFBFBF"/>
 	<SolidColorBrush x:Key="ComboBox.Disabled.Editable.Button.Background" Color="Transparent"/>
@@ -479,7 +480,7 @@
 
 	<SolidColorBrush x:Key="Button.Disabled.Background" Color="{StaticResource actuallyButtonDisableBackground}"/>
 	<SolidColorBrush x:Key="Button.Disabled.Border" Color="{StaticResource actuallyButtonDisableBorder}"/>
-	<SolidColorBrush x:Key="Button.Disabled.Foreground" Color="{StaticResource actuallyButtonDisableText}"/>
+	<SolidColorBrush x:Key="Button.Disabled.Foreground" Color="{Binding Color, Source={StaticResource s_disabledText}}"/>
 
 	<SolidColorBrush x:Key="TextBox.Background" Color="{StaticResource TextBoxBack}"/>
 	<SolidColorBrush x:Key="TextBox.Text" Color="{StaticResource text}"/>
@@ -492,11 +493,11 @@
 
 	<SolidColorBrush x:Key="ScrollBar.Static.Background" Color="{StaticResource buttonDisableBackground}"/>
 	<SolidColorBrush x:Key="ScrollBar.Static.Border" Color="{StaticResource buttonDisableBackground}"/>
-	<SolidColorBrush x:Key="ScrollBar.Static.Glyph" Color="{StaticResource textDisabled}"/>
-	<SolidColorBrush x:Key="ScrollBar.Static.Thumb" Color="{StaticResource textDisabled}"/>
+	<SolidColorBrush x:Key="ScrollBar.Static.Glyph" Color="{Binding Color, Source={StaticResource s_scrollbar}}"/>
+	<SolidColorBrush x:Key="ScrollBar.Static.Thumb" Color="{Binding Color, Source={StaticResource s_scrollbar}}"/>
 
-	<SolidColorBrush x:Key="ScrollBar.MouseOver.Background" Color="{StaticResource buttonBorder}"/>
-	<SolidColorBrush x:Key="ScrollBar.MouseOver.Border" Color="{StaticResource buttonBorder}"/>
+	<SolidColorBrush x:Key="ScrollBar.MouseOver.Background" Color="{Binding Color, Source={StaticResource s_scrollbarBackgroundHover}}" />
+	<SolidColorBrush x:Key="ScrollBar.MouseOver.Border" Color="{Binding Color, Source={StaticResource s_scrollbarBackgroundHover}}" />
 	<SolidColorBrush x:Key="ScrollBar.MouseOver.Glyph" Color="{StaticResource mutedText}"/>
 	<SolidColorBrush x:Key="ScrollBar.MouseOver.Thumb" Color="{StaticResource mutedText}"/>
 
@@ -507,7 +508,7 @@
 
 	<SolidColorBrush x:Key="ScrollBar.Disabled.Background" Color="{StaticResource buttonDisableBackground}"/>
 	<SolidColorBrush x:Key="ScrollBar.Disabled.Border" Color="{StaticResource buttonDisableBackground}"/>
-	<SolidColorBrush x:Key="ScrollBar.Disabled.Glyph" Color="{StaticResource buttonDisableText}"/>
+	<SolidColorBrush x:Key="ScrollBar.Disabled.Glyph" Color="{Binding Color, Source={StaticResource s_disabledText}}"/>
 
 	<!-- fix square between two scrollbars -->
 	<SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="{StaticResource buttonDisableBackground}"/>
@@ -523,21 +524,21 @@
 	<SolidColorBrush x:Key="Item.SelectedActive.Background" Color="{StaticResource listItemActiveBackground}" />
 	<SolidColorBrush x:Key="Item.SelectedActive.Border" Color="{StaticResource listItemActiveBorder}" />
 
-	<SolidColorBrush x:Key="Tooltip_BorderBrush" Color="{StaticResource buttonDisableBorder}" />
-	<SolidColorBrush x:Key="Tooltip_BackgroundBrush" Color="{StaticResource buttonBackground}" />
+	<SolidColorBrush x:Key="Tooltip_BorderBrush" Color="{Binding Color, Source={StaticResource s_tooltipBorder}}" />
+	<SolidColorBrush x:Key="Tooltip_BackgroundBrush" Color="{Binding Color, Source={StaticResource s_tooltipBackground}}" />
 
 	<SolidColorBrush x:Key="OptionMark.Static.Background" Color="{StaticResource checkmarkBackground}" />
 	<SolidColorBrush x:Key="OptionMark.Static.Border" Color="{StaticResource border}"/>
 	<SolidColorBrush x:Key="OptionMark.Static.Glyph" Color="{StaticResource text}"/>
-	<SolidColorBrush x:Key="OptionMark.MouseOver.Background" Color="{StaticResource buttonHoverBackground}"/>
-	<SolidColorBrush x:Key="OptionMark.MouseOver.Border" Color="{StaticResource buttonHoverBorder}"/>
+	<SolidColorBrush x:Key="OptionMark.MouseOver.Background" Color="{Binding Color, Source={StaticResource s_hoverBackground}}" />
+	<SolidColorBrush x:Key="OptionMark.MouseOver.Border" Color="{Binding Color, Source={StaticResource s_hoverBorder}}" />
 	<SolidColorBrush x:Key="OptionMark.MouseOver.Glyph" Color="{Binding Color, Source={StaticResource s_itemTextHover}}" />
 	<SolidColorBrush x:Key="OptionMark.Pressed.Background" Color="{StaticResource buttonPressBackground2}"/>
 	<SolidColorBrush x:Key="OptionMark.Pressed.Border" Color="{StaticResource buttonPressBorder2}"/>
 	<SolidColorBrush x:Key="OptionMark.Pressed.Glyph" Color="{Binding Color, Source={StaticResource s_itemTextHover}}" />
 	<SolidColorBrush x:Key="OptionMark.Disabled.Background" Color="{StaticResource backgroundDisabledDarker}"/>
 	<SolidColorBrush x:Key="OptionMark.Disabled.Border" Color="{StaticResource borderDisabledDarker}"/>
-	<SolidColorBrush x:Key="OptionMark.Disabled.Glyph" Color="{StaticResource textDisabled}"/>
+	<SolidColorBrush x:Key="OptionMark.Disabled.Glyph" Color="{Binding Color, Source={StaticResource s_disabledText}}"/>
 
 	<SolidColorBrush x:Key="MenuItem.Popup.Background" Color="{StaticResource background}" />
 	<SolidColorBrush x:Key="MenuItem.Popup.Border" Color="{StaticResource border}" />
@@ -554,7 +555,7 @@
 	<SolidColorBrush x:Key="Expander.Static.Arrow.Stroke" Color="{StaticResource text}"/>
 
 	<SolidColorBrush x:Key="Expander.MouseOver.Circle.Stroke" Color="{StaticResource exborderHover}"/>
-	<SolidColorBrush x:Key="Expander.MouseOver.Circle.Fill" Color="{StaticResource buttonHoverBackground}"/>
+	<SolidColorBrush x:Key="Expander.MouseOver.Circle.Fill" Color="{Binding Color, Source={StaticResource s_hoverBackground}}" />
 	<SolidColorBrush x:Key="Expander.MouseOver.Arrow.Stroke" Color="{Binding Color, Source={StaticResource s_itemTextHover}}" />
 
 	<SolidColorBrush x:Key="Expander.Pressed.Circle.Stroke" Color="{StaticResource exbuttonPressBorder}"/>
@@ -563,7 +564,7 @@
 
 	<SolidColorBrush x:Key="Expander.Disabled.Circle.Stroke" Color="{StaticResource exborderDisabledDarker}"/>
 	<SolidColorBrush x:Key="Expander.Disabled.Circle.Fill" Color="{StaticResource backgroundDisabledDarker}"/>
-	<SolidColorBrush x:Key="Expander.Disabled.Arrow.Stroke" Color="{StaticResource textDisabled}"/>
+	<SolidColorBrush x:Key="Expander.Disabled.Arrow.Stroke" Color="{Binding Color, Source={StaticResource s_disabledText}}"/>
 	
 	
 </ResourceDictionary>
