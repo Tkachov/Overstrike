@@ -95,6 +95,7 @@ namespace Overstrike.Installers {
 
 		private static bool AllDependenciesMet(List<ScriptDefinition> scriptDefinitions) {
 			var allDependenciesMet = true;
+			var dependenciesUserFriendlyList = "";
 
 			var availableVersions = new Dictionary<string, List<string>>(); // TODO: do we allow multiple versions of the same mod installed at once?
 			foreach (var def in scriptDefinitions) {
@@ -143,10 +144,12 @@ namespace Overstrike.Installers {
 
 							ErrorLogger.WriteError($"\t\t'{dep}' -- no matches found in {list}!\n");
 							allDependenciesMet = false;
+							dependenciesUserFriendlyList += $"\t- '{dep}' (you have wrong version)";
 						}
 					} else {
 						ErrorLogger.WriteError($"\t\t'{dep}' -- missing!\n");
 						allDependenciesMet = false;
+						dependenciesUserFriendlyList += $"\t- '{name}' (missing)";
 					}
 				}
 
@@ -156,7 +159,7 @@ namespace Overstrike.Installers {
 			if (allDependenciesMet) {
 				ErrorLogger.WriteInfo("\tDone.\n\n");
 			} else {
-				throw new Exception("Not all script dependencies met.");
+				throw new Exception("Not all script dependencies met.\n\n\tCheck that you have these scripts installed:\n" + dependenciesUserFriendlyList + "\n");
 			}
 
 			return allDependenciesMet;
