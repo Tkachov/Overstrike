@@ -20,6 +20,14 @@
 
   <ItemGroup>
     <Content Include="Properties\Resources\icon.ico" />
+    <Content Include="Themes\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="Themes\**\*.xaml" />
+    <Resource Include="Properties\Resources\*.png" />
   </ItemGroup>
 
   <ItemGroup>

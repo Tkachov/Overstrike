@@ -1,0 +1,335 @@
+﻿<Window x:Class="Overstrike.Windows.TestThemeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Overstrike"
+        mc:Ignorable="d"
+        Title="Theme Test" Height="875" Width="900">
+
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+
+		<!-- LEFT COLUMN: Default Theme Controls -->
+		<ScrollViewer Grid.Column="0" Grid.Row="1" VerticalScrollBarVisibility="Auto" Background="{DynamicResource MainWindow_Background}">
+			<ScrollViewer.Resources>
+				<ResourceDictionary>
+					<ResourceDictionary.MergedDictionaries>
+						<ResourceDictionary Source="../Theming/BaseTheme.xaml" />
+					</ResourceDictionary.MergedDictionaries>
+				</ResourceDictionary>
+			</ScrollViewer.Resources>
+			
+			<Border BorderThickness="0,1,0,0" BorderBrush="{DynamicResource MainWindow_WindowTopBorder}">
+				<StackPanel Margin="10,10,10,10">
+					<Grid>
+						<TextBlock Text="Profile:" HorizontalAlignment="Left" Margin="5,8,5,5" VerticalAlignment="Top" Width="55"/>
+						<ComboBox SelectedIndex="0" Margin="55,5,5,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="180">
+							<ComboBoxItem Content="Option 1" />
+							<ComboBoxItem Content="Option 2" />
+							<ComboBoxItem Content="Option 3" />
+						</ComboBox>
+					</Grid>
+
+					<Grid Margin="0,10,0,10">
+						<TextBlock Text="TextBlock" Margin="5,0,0,0"/>
+						<TextBlock Text="TextBlock" Margin="125,0,0,0" Style="{DynamicResource WarningText}"/>
+						<TextBlock Text="TextBlock" Margin="245,0,0,0" Style="{DynamicResource GrayText}"/>
+					</Grid>
+					<TabControl Height="140" Margin="0,0,0,0">
+						<TabItem Header="Inputs">
+							<StackPanel Margin="5">
+								<Grid DockPanel.Dock="Top" Height="22" Margin="0,6,0,6" VerticalAlignment="Top" Grid.Row="0">
+									<Grid Grid.Column="0">
+										<TextBox HorizontalAlignment="Left" Width="234" Padding="1" x:Name="FilterTextBox1" />
+										<TextBlock IsHitTestVisible="False" Text="Filter..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="{DynamicResource Controls_TextBoxPlaceholder}">
+											<TextBlock.Style>
+												<Style TargetType="{x:Type TextBlock}">
+													<Setter Property="Visibility" Value="Collapsed"/>
+													<Style.Triggers>
+														<DataTrigger Binding="{Binding Text, ElementName=FilterTextBox1}" Value="">
+															<Setter Property="Visibility" Value="Visible"/>
+														</DataTrigger>
+													</Style.Triggers>
+												</Style>
+											</TextBlock.Style>
+										</TextBlock>
+									</Grid>
+								</Grid>
+
+								<Grid DockPanel.Dock="Top" Height="22" Margin="0,2,0,20" VerticalAlignment="Top" Grid.Row="0">
+									<Grid Grid.Column="0">
+										<TextBox HorizontalAlignment="Left" Width="234" Padding="1" x:Name="FilterTextBox2" Text="text" />
+										<TextBlock IsHitTestVisible="False" Text="Filter..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="{DynamicResource Controls_TextBoxPlaceholder}">
+											<TextBlock.Style>
+												<Style TargetType="{x:Type TextBlock}">
+													<Setter Property="Visibility" Value="Collapsed"/>
+													<Style.Triggers>
+														<DataTrigger Binding="{Binding Text, ElementName=FilterTextBox2}" Value="">
+															<Setter Property="Visibility" Value="Visible"/>
+														</DataTrigger>
+													</Style.Triggers>
+												</Style>
+											</TextBlock.Style>
+										</TextBlock>
+									</Grid>
+								</Grid>
+							</StackPanel>
+						</TabItem>
+						<TabItem Header="TextBlocks">
+							<StackPanel>
+								<TextBlock HorizontalAlignment="Left" Margin="10,8" VerticalAlignment="Top" Width="55" Text="Muted" Style="{DynamicResource GrayText}" />
+								<TextBlock HorizontalAlignment="Left" Margin="10,8" VerticalAlignment="Top" Width="55" Text="Warning" Style="{DynamicResource WarningText}" />
+							</StackPanel>
+						</TabItem>
+						<TabItem Header="4 Controls">
+							<Grid Margin="0,45,0,0" VerticalAlignment="Top">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*" />
+									<ColumnDefinition Width="*" />
+									<ColumnDefinition Width="*" />
+									<ColumnDefinition Width="*" />
+								</Grid.ColumnDefinitions>
+
+								<TabControl Width="60" Height="26" Margin="0" Grid.Column="0">
+									<TabItem Header="Text">
+									</TabItem>
+								</TabControl>
+
+								<Button Width="60" Height="22" Margin="0" Grid.Column="1" Content="Text" VerticalAlignment="Top" />
+
+								<Grid DockPanel.Dock="Top" Height="22" VerticalAlignment="Top" Grid.Column="2">
+									<Grid Grid.Column="0">
+										<TextBox Width="60" Margin="0" Padding="1" Text="Text" />
+									</Grid>
+								</Grid>
+
+								<ComboBox SelectedIndex="0" VerticalAlignment="Top" Width="60" Grid.Column="3">
+									<ComboBoxItem Content="Text" />
+								</ComboBox>
+							</Grid>
+						</TabItem>
+					</TabControl>
+
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="32" />
+						</Grid.RowDefinitions>
+
+						<TextBlock Text="Done! 10 mods installed." HorizontalAlignment="Left" Margin="4,8,0,0" Grid.Row="0" Style="{DynamicResource MutedText}" VerticalAlignment="Top" Height="30" />
+
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="0">
+							<Button Margin="4,6,4,4" Content="Install mods" VerticalAlignment="Top" HorizontalAlignment="Right" Width="120" Height="22">
+								<Button.ContextMenu>
+									<ContextMenu>
+										<MenuItem Header="Uninstall all mods" />
+										<MenuItem Header="Launch the game" />
+										<Separator />
+										<MenuItem Header="Reset 'toc'" />
+									</ContextMenu>
+								</Button.ContextMenu>
+							</Button>
+
+							<Button Margin="4,6,0,4" Content="Run modded game" VerticalAlignment="Top" HorizontalAlignment="Right" Width="120" Height="22" IsEnabled="False" />
+						</StackPanel>
+					</Grid>
+
+					<!-- 6. CheckBox (Normal & Disabled) -->
+					<CheckBox Content="Normal CheckBox" Margin="0,20,0,5"/>
+					<CheckBox Content="Disabled CheckBox" IsEnabled="False" Margin="0,0,0,10"/>
+					<CheckBox Content="Normal CheckBox" IsChecked="True" Margin="0,0,0,5"/>
+					<CheckBox Content="Disabled CheckBox" IsChecked="True" IsEnabled="False" Margin="0,0,0,10"/>
+
+					<!-- 7. TabControl & TabItem -->
+
+					<!-- 8. Expander -->
+					<Expander Header="Click to Expand" Margin="0,0,0,10">
+					</Expander>
+					<Expander Header="Click to Expand" IsExpanded="True" Margin="0,0,0,10">
+						<TextBlock Text="Hidden content revealed inside the Expander." Margin="5"/>
+					</Expander>
+
+					<!-- 9. ScrollViewer (Working & Disabled Scrollbar variants) -->
+					<TextBlock Text="ScrollViewer (Active Scrollbar):" FontSize="11" Margin="0,0,0,2"/>
+					<ScrollViewer Height="80" VerticalScrollBarVisibility="Visible" Margin="0,0,0,10">
+						<TextBlock Text="Line 1: Scrollable content here...&#x0a;Line 2: Keep scrolling down...&#x0a;Line 3: More text items...&#x0a;Line 4: End of content line.&#x0a;Line 5&#x0a;Line 6&#x0a;Line 7&#x0a;Line 8&#x0a;Line 9" />
+					</ScrollViewer>
+
+					<TextBlock Text="ScrollViewer (Disabled):" FontSize="11" Margin="0,0,0,2"/>
+					<ScrollViewer Height="80" VerticalScrollBarVisibility="Visible" Margin="0,0,0,10">
+						<TextBlock Text="Line 1: Disabled scroll content...&#x0a;Line 2: Locked text state...&#x0a;Line 3: More text items...&#x0a;Line 4: End of content line." />
+					</ScrollViewer>
+
+					<local:ListViewEx Grid.Row="1" VirtualizingStackPanel.VirtualizationMode="Recycling"
+								  ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible"
+								  SelectionMode="Single" Height="150" VerticalAlignment="Top">
+						<ListViewItem Content="Item 1" />
+						<ListViewItem Content="Item 2" />
+						<ListViewItem Content="Item 3" />
+						<ListViewItem Content="Disabled Item" IsEnabled="False" />
+					</local:ListViewEx>
+				</StackPanel>
+			</Border>
+		</ScrollViewer>
+
+		<!-- RIGHT COLUMN: Dark Theme Controls (Scoped via Resources) -->
+		<ScrollViewer Grid.Column="1" Grid.Row="1" VerticalScrollBarVisibility="Auto" Background="{DynamicResource MainWindow_Background}" x:Name="RightColumn">
+			<Border BorderThickness="0,1,0,0" BorderBrush="{DynamicResource MainWindow_WindowTopBorder}">
+				<StackPanel Margin="10,10,10,10">
+					<Grid>
+						<TextBlock Text="Profile:" HorizontalAlignment="Left" Margin="5,8,5,5" VerticalAlignment="Top" Width="55"/>
+						<ComboBox SelectedIndex="0" Margin="55,5,5,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="180">
+							<ComboBoxItem Content="Option 1" />
+							<ComboBoxItem Content="Option 2" />
+							<ComboBoxItem Content="Option 3" />
+						</ComboBox>
+					</Grid>
+
+					<Grid Margin="0,10,0,10">
+						<TextBlock Text="TextBlock" Margin="5,0,0,0"/>
+						<TextBlock Text="TextBlock" Margin="125,0,0,0" Style="{DynamicResource WarningText}"/>
+						<TextBlock Text="TextBlock" Margin="245,0,0,0" Style="{DynamicResource GrayText}"/>
+					</Grid>
+					<TabControl Height="140" Margin="0,0,0,0">
+						<TabItem Header="Inputs">
+							<StackPanel Margin="5">
+								<Grid DockPanel.Dock="Top" Height="22" Margin="0,6,0,6" VerticalAlignment="Top" Grid.Row="0">
+									<Grid Grid.Column="0">
+										<TextBox HorizontalAlignment="Left" Width="234" Padding="1" x:Name="FilterTextBox3" />
+										<TextBlock IsHitTestVisible="False" Text="Filter..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="{DynamicResource Controls_TextBoxPlaceholder}">
+											<TextBlock.Style>
+												<Style TargetType="{x:Type TextBlock}">
+													<Setter Property="Visibility" Value="Collapsed"/>
+													<Style.Triggers>
+														<DataTrigger Binding="{Binding Text, ElementName=FilterTextBox3}" Value="">
+															<Setter Property="Visibility" Value="Visible"/>
+														</DataTrigger>
+													</Style.Triggers>
+												</Style>
+											</TextBlock.Style>
+										</TextBlock>
+									</Grid>
+								</Grid>
+
+								<Grid DockPanel.Dock="Top" Height="22" Margin="0,2,0,20" VerticalAlignment="Top" Grid.Row="0">
+									<Grid Grid.Column="0">
+										<TextBox HorizontalAlignment="Left" Width="234" Padding="1" x:Name="FilterTextBox4" Text="text" />
+										<TextBlock IsHitTestVisible="False" Text="Filter..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,-1,0,0" Padding="1" Foreground="{DynamicResource Controls_TextBoxPlaceholder}">
+											<TextBlock.Style>
+												<Style TargetType="{x:Type TextBlock}">
+													<Setter Property="Visibility" Value="Collapsed"/>
+													<Style.Triggers>
+														<DataTrigger Binding="{Binding Text, ElementName=FilterTextBox4}" Value="">
+															<Setter Property="Visibility" Value="Visible"/>
+														</DataTrigger>
+													</Style.Triggers>
+												</Style>
+											</TextBlock.Style>
+										</TextBlock>
+									</Grid>
+								</Grid>
+							</StackPanel>
+						</TabItem>
+						<TabItem Header="TextBlocks">
+							<StackPanel>
+								<TextBlock HorizontalAlignment="Left" Margin="10,8" VerticalAlignment="Top" Width="55" Text="Muted" Style="{DynamicResource GrayText}" />
+								<TextBlock HorizontalAlignment="Left" Margin="10,8" VerticalAlignment="Top" Width="55" Text="Warning" Style="{DynamicResource WarningText}" />
+							</StackPanel>
+						</TabItem>
+						<TabItem Header="4 Controls">
+							<Grid Margin="0,45,0,0" VerticalAlignment="Top">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*" />
+									<ColumnDefinition Width="*" />
+									<ColumnDefinition Width="*" />
+									<ColumnDefinition Width="*" />
+								</Grid.ColumnDefinitions>
+
+								<TabControl Width="60" Height="26" Margin="0" Grid.Column="0">
+									<TabItem Header="Text">
+									</TabItem>
+								</TabControl>
+
+								<Button Width="60" Height="22" Margin="0" Grid.Column="1" Content="Text" VerticalAlignment="Top" />
+
+								<Grid DockPanel.Dock="Top" Height="22" VerticalAlignment="Top" Grid.Column="2">
+									<Grid Grid.Column="0">
+										<TextBox Width="60" Margin="0" Padding="1" Text="Text" />
+									</Grid>
+								</Grid>
+
+								<ComboBox SelectedIndex="0" VerticalAlignment="Top" Width="60" Grid.Column="3">
+									<ComboBoxItem Content="Text" />
+								</ComboBox>
+							</Grid>
+						</TabItem>
+					</TabControl>
+
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="32" />
+						</Grid.RowDefinitions>
+
+						<TextBlock Text="Done! 10 mods installed." HorizontalAlignment="Left" Margin="4,8,0,0" Grid.Row="0" Style="{DynamicResource MutedText}" VerticalAlignment="Top" Height="30" />
+
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="0">
+							<Button Margin="4,6,4,4" Content="Install mods" VerticalAlignment="Top" HorizontalAlignment="Right" Width="120" Height="22">
+								<Button.ContextMenu>
+									<ContextMenu>
+										<MenuItem Header="Uninstall all mods" />
+										<MenuItem Header="Launch the game" />
+										<Separator />
+										<MenuItem Header="Reset 'toc'" />
+									</ContextMenu>
+								</Button.ContextMenu>
+							</Button>
+
+							<Button Margin="4,6,0,4" Content="Run modded game" VerticalAlignment="Top" HorizontalAlignment="Right" Width="120" Height="22" IsEnabled="False" />
+						</StackPanel>
+					</Grid>
+
+					<!-- 6. CheckBox (Normal & Disabled) -->
+					<CheckBox Content="Normal CheckBox" Margin="0,20,0,5"/>
+					<CheckBox Content="Disabled CheckBox" IsEnabled="False" Margin="0,0,0,10"/>
+					<CheckBox Content="Normal CheckBox" IsChecked="True" Margin="0,0,0,5"/>
+					<CheckBox Content="Disabled CheckBox" IsChecked="True" IsEnabled="False" Margin="0,0,0,10"/>
+
+					<!-- 8. Expander -->
+					<Expander Header="Click to Expand" Margin="0,0,0,10">
+					</Expander>
+					<Expander Header="Click to Expand" IsExpanded="True" Margin="0,0,0,10">
+						<TextBlock Text="Hidden content revealed inside the Expander." Margin="5"/>
+					</Expander>
+
+					<!-- 9. ScrollViewer (Working & Disabled Scrollbar variants) -->
+					<TextBlock Text="ScrollViewer (Active Scrollbar):" FontSize="11" Margin="0,0,0,2"/>
+					<ScrollViewer Height="80" VerticalScrollBarVisibility="Visible" Margin="0,0,0,10">
+						<TextBlock Text="Line 1: Scrollable content here...&#x0a;Line 2: Keep scrolling down...&#x0a;Line 3: More text items...&#x0a;Line 4: End of content line.&#x0a;Line 5&#x0a;Line 6&#x0a;Line 7&#x0a;Line 8&#x0a;Line 9" />
+					</ScrollViewer>
+
+					<TextBlock Text="ScrollViewer (Disabled):" FontSize="11" Margin="0,0,0,2"/>
+					<ScrollViewer Height="80" VerticalScrollBarVisibility="Visible" Margin="0,0,0,10">
+						<TextBlock Text="Line 1: Disabled scroll content...&#x0a;Line 2: Locked text state...&#x0a;Line 3: More text items...&#x0a;Line 4: End of content line." />
+					</ScrollViewer>
+
+					<local:ListViewEx Grid.Row="1" VirtualizingStackPanel.VirtualizationMode="Recycling"
+								  ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible"
+								  SelectionMode="Single" Height="150" VerticalAlignment="Top">
+						<ListViewItem Content="Item 1" />
+						<ListViewItem Content="Item 2" />
+						<ListViewItem Content="Item 3" />
+						<ListViewItem Content="Disabled Item" IsEnabled="False" />
+					</local:ListViewEx>
+				</StackPanel>
+			</Border>
+		</ScrollViewer>
+	</Grid>
+</Window>

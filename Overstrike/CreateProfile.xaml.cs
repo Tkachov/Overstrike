@@ -95,7 +95,7 @@ namespace Overstrike {
 				}
 			}
 
-			ErrorMessage.Content = message;
+			ErrorMessage.Text = message;
 			CreateProfileButton.IsEnabled = profileOk && pathOk;
 		}
 

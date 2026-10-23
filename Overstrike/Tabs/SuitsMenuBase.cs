@@ -52,7 +52,7 @@ namespace Overstrike.Tabs {
 		protected abstract ComboBox SuitIconComboBox { get; }
 		protected abstract ComboBox SuitBigIconComboBox { get; }
 		protected abstract Button ToggleSuitDeleteButton { get; }
-		protected abstract Label NotModifiedStatusLabel { get; }
+		protected abstract TextBlock NotModifiedStatusLabel { get; }
 		protected abstract Button ResetButton { get; }
 
 		protected abstract bool HasBigIcons { get; }
@@ -191,6 +191,25 @@ namespace Overstrike.Tabs {
 
 		public void Reopen() {
 			OnOpen();
+		}
+
+		public virtual void ThemeChanged() {
+			if (!Dispatcher.CheckAccess()) {
+				Dispatcher.Invoke(ThemeChanged);
+				return;
+			}
+
+			_placeholderImage = null;
+			_bigPlaceholderImage = null;
+
+			if (!_loaded) return;
+
+			var selectedSuitId = GetCurrentlySelectedSuitId();
+			MakeDisplayedSuits();
+			SelectSuitWithId(selectedSuitId);
+			if (SuitsSlots.SelectedItem != null) {
+				SuitSelected((SuitSlot)SuitsSlots.SelectedItem);
+			}
 		}
 
 		public virtual void OnOpen() {
@@ -687,7 +706,7 @@ namespace Overstrike.Tabs {
 				return _icons[path];
 
 			if (_placeholderImage == null)
-				_placeholderImage = Utils.Imaging.ConvertToBitmapImage(HasBigIcons ? Properties.Resources.suit_missing_mm : Properties.Resources.suit_missing);
+				_placeholderImage = ((App)Application.Current).Themes.GetBitmapImage(HasBigIcons ? "suit_missing_mm.png" : "suit_missing.png");
 
 			return _placeholderImage;
 		}
@@ -700,7 +719,7 @@ namespace Overstrike.Tabs {
 				return _icons[path];
 
 			if (_bigPlaceholderImage == null)
-				_bigPlaceholderImage = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.suit_missing_mm_big); // no MSMR variant since there are no big icons in it
+				_bigPlaceholderImage = ((App)Application.Current).Themes.GetBitmapImage("suit_missing_mm_big.png"); // no MSMR variant since there are no big icons in it
 
 			return _bigPlaceholderImage;
 		}
@@ -804,7 +823,7 @@ namespace Overstrike.Tabs {
 		protected void SetWasReset(bool wasReset) {
 			_wasReset = wasReset;
 
-			NotModifiedStatusLabel.Content = _wasReset ? "No changes at all" : "No unsaved changes";
+			NotModifiedStatusLabel.Text = _wasReset ? "No changes at all" : "No unsaved changes";
 			ResetButton.Content = _wasReset ? "Undo reset" : "Reset";
 		}
 

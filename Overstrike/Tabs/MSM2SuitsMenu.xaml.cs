@@ -48,7 +48,7 @@ namespace Overstrike.Tabs {
 		protected override ComboBox SuitIconComboBox { get => _SuitIconComboBox; }
 		protected override ComboBox SuitBigIconComboBox { get => null; }
 		protected override Button ToggleSuitDeleteButton { get => _ToggleSuitDeleteButton; }
-		protected override Label NotModifiedStatusLabel { get => _NotModifiedStatusLabel; }
+		protected override TextBlock NotModifiedStatusLabel { get => _NotModifiedStatusLabel; }
 		protected override Button ResetButton { get => _ResetButton; }
 
 		protected override bool HasBigIcons { get => false; }
@@ -257,7 +257,7 @@ namespace Overstrike.Tabs {
 				return _icons[path];
 
 			if (_placeholderImage == null)
-				_placeholderImage = Utils.Imaging.ConvertToBitmapImage(Properties.Resources.suit_missing_msm2);
+				_placeholderImage = ((App)Application.Current).Themes.GetBitmapImage("suit_missing_msm2.png");
 
 			return _placeholderImage;
 		}

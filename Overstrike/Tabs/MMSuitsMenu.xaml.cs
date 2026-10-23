@@ -24,7 +24,7 @@ namespace Overstrike.Tabs {
 		protected override ComboBox SuitIconComboBox { get => _SuitIconComboBox; }
 		protected override ComboBox SuitBigIconComboBox { get => _SuitBigIconComboBox; }
 		protected override Button ToggleSuitDeleteButton { get => _ToggleSuitDeleteButton; }
-		protected override Label NotModifiedStatusLabel { get => _NotModifiedStatusLabel; }
+		protected override TextBlock NotModifiedStatusLabel { get => _NotModifiedStatusLabel; }
 		protected override Button ResetButton { get => _ResetButton; }
 
 		protected override bool HasBigIcons { get => true; }

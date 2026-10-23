@@ -9,6 +9,7 @@ using Overstrike.Games;
 using Overstrike.Installers;
 using Overstrike.MetaInstallers;
 using Overstrike.Tabs;
+using Overstrike.Theming;
 using Overstrike.Utils;
 using Overstrike.Windows;
 using System;
@@ -97,6 +98,14 @@ namespace Overstrike {
 			}
 		}
 
+		private class ThemeItem {
+			public string Text { get; set; }
+			public AppTheme Theme { get; set; }
+		}
+
+		private ObservableCollection<ThemeItem> _themeItems = new();
+		private bool _reactToThemeSelectionChange = true;
+
 		private class LanguageItem {
 			public string Name { get; set; }
 			public string InternalName { get; set; }
@@ -130,9 +139,7 @@ namespace Overstrike {
 			_profiles = profiles;
 			_mods = mods;
 
-			AddModsIcon.Source = Imaging.ConvertToBitmapImage(Properties.Resources.add_icon);
-			RefreshIcon.Source = Imaging.ConvertToBitmapImage(Properties.Resources.reload_icon);
-
+			MakeThemeItems();
 			MakeProfileItems();
 			FirstSwitchToProfile();
 			StartTickThread();
@@ -148,6 +155,25 @@ namespace Overstrike {
 		private void SaveSettings() {
 			// TODO: run a timer so multiple calls in the row are aggregated into one actual file write
 			((App)App.Current).WriteSettings();
+		}
+
+
+		private void ApplyThemeVisuals() {
+			UpdateStatusMessageBrush();
+			UpdateSelectedThemeItem();
+
+			ModEntry.ResetBadgeCache();
+			if (_selectedProfile != null) {
+				MakeModsItems();
+			}
+
+			MSMRSuitsMenuContent.ThemeChanged();
+			MMSuitsMenuContent.ThemeChanged();
+			MSM2SuitsMenuContent.ThemeChanged();
+		}
+
+		private void UpdateStatusMessageBrush() {
+			StatusMessage.SetResourceReference(TextBlock.ForegroundProperty, _statusMessageErrorShown ? "MainWindow_StatusMessageErrorForeground" : "MainWindow_StatusMessageForeground");
 		}
 
 		private void FirstSwitchToProfile() {
@@ -169,7 +195,7 @@ namespace Overstrike {
 			SaveSettings();
 
 			SetupBanner();
-			ProfileGamePath.Content = profile.GamePath;
+			ProfileGamePath.Text = profile.GamePath;
 
 			UpdateSuitMenuTabs();
 			MakeModsItems();
@@ -178,9 +204,9 @@ namespace Overstrike {
 		private bool _reactToScriptSettingsChange = true;
 
 		private void SetupBanner() {
-			GradientImage.Source = _selectedGame.BannerBackground;
-			LogoImage.Source = _selectedGame.BannerLogoLeft;
-			LogoImage2.Source = _selectedGame.BannerLogoRight;
+			GradientImage.SetResourceReference(Image.SourceProperty, _selectedGame.BannerBackgroundResourceKey);
+			LogoImage.SetResourceReference(Image.SourceProperty, _selectedGame.BannerLogoLeftResourceKey);
+			LogoImage2.SetResourceReference(Image.SourceProperty, _selectedGame.BannerLogoRightResourceKey);
 
 			if (_selectedGame.HasSuitsSettingsSection) {
 				SuitModsSettings.Visibility = Visibility.Visible;
@@ -343,6 +369,49 @@ namespace Overstrike {
 			ProfileComboBox.ItemsSource = new CompositeCollection {
 				new CollectionContainer() { Collection = _profilesItems }
 			};
+		}
+
+		private void MakeThemeItems() {
+			_themeItems.Clear();
+
+			foreach (var theme in ((App)App.Current).Themes.AvailableThemes) {
+				_themeItems.Add(new ThemeItem() { Text = theme.DisplayName, Theme = theme });
+			}
+
+			SettingsThemeComboBox.ItemsSource = new CompositeCollection {
+				new CollectionContainer() { Collection = _themeItems }
+			};
+
+			UpdateSelectedThemeItem();
+		}
+
+		private void UpdateSelectedThemeItem() {
+			if (SettingsThemeComboBox == null) return;
+
+			_reactToThemeSelectionChange = false;
+			ThemeItem selectedItem = null;
+			foreach (var item in _themeItems) {
+				if (item.Theme.Id == _settings.SelectedTheme) {
+					selectedItem = item;
+					break;
+				}
+			}
+
+			SettingsThemeComboBox.SelectedItem = selectedItem;
+			_reactToThemeSelectionChange = true;
+		}
+
+		private void SettingsThemeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+			if (!_reactToThemeSelectionChange) return;
+			if (e.AddedItems.Count <= 0) return;
+
+			ThemeItem item = (ThemeItem)e.AddedItems[0];
+			var changed = ((App)App.Current).Themes.ApplyThemeById(item.Theme.Id);
+			_settings.SelectedTheme = ((App)App.Current).Themes.ActiveTheme.Id;
+			SaveSettings();
+			if (changed) {
+				ApplyThemeVisuals();
+			}
 		}
 
 		private void MakeModsItems() {
@@ -976,19 +1045,22 @@ namespace Overstrike {
 		}
 
 		private void ShowStatusMessage(string text) {
-			StatusMessage.Content = text;
+			StatusMessage.Text = text;
 			_statusMessageErrorShown = false;
+			UpdateStatusMessageBrush();
 			PlayAnimation("ShowStatusMessage");
 		}
 
 		private void ShowStatusMessageError(string text) {
-			StatusMessage.Content = text;
+			StatusMessage.Text = text;
 			_statusMessageErrorShown = true;
+			UpdateStatusMessageBrush();
 			PlayAnimation("ShowStatusMessageError");
 		}
 
 		private void HideStatusMessageError() {
 			_statusMessageErrorShown = false;
+			UpdateStatusMessageBrush();
 			PlayAnimation("HideStatusMessageError");
 		}
 
@@ -1256,6 +1328,8 @@ namespace Overstrike {
 
 		private void ProfileGamePath_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
 			try {
+				if (e.ClickCount != 2) return;
+
 				var path = _selectedProfile.GamePath;
 
 				if (e.ChangedButton == MouseButton.Right) {

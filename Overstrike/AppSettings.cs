@@ -4,6 +4,7 @@
 // A copy of the that license should come with this program (LICENSE.txt). If not, see <http://www.gnu.org/licenses/>.
 
 using Newtonsoft.Json.Linq;
+using Overstrike.Theming;
 using System.IO;
 
 namespace Overstrike {
@@ -13,6 +14,7 @@ namespace Overstrike {
 		public bool PreferCachedModsLibrary;
 		public bool CheckUpdates;
 		public bool OpenErrorLog;
+		public string SelectedTheme;
 
 		public AppSettings() {
 			CurrentProfile = null;
@@ -20,6 +22,7 @@ namespace Overstrike {
 			PreferCachedModsLibrary = false;
 			CheckUpdates = true;
 			OpenErrorLog = true;
+			SelectedTheme = AppTheme.DEFAULT_THEME_ID;
 		}
 
 		public AppSettings(string file) {
@@ -42,6 +45,13 @@ namespace Overstrike {
 			} else {
 				OpenErrorLog = true;
 			}
+
+			var themeKey = "theme";
+			if (json.ContainsKey(themeKey)) {
+				SelectedTheme = (string?)json[themeKey] ?? AppTheme.DEFAULT_THEME_ID;
+			} else {
+				SelectedTheme = AppTheme.DEFAULT_THEME_ID;
+			}
 		}
 
 		public void Save(string file) {
@@ -51,6 +61,7 @@ namespace Overstrike {
 				["prefer_cached_mods_library"] = PreferCachedModsLibrary,
 				["check_updates"] = CheckUpdates,
 				["open_error_log"] = OpenErrorLog,
+				["theme"] = SelectedTheme,
 			};
 			File.WriteAllText(file, j.ToString());
 		}

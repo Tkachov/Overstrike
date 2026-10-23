@@ -7,6 +7,8 @@ using Overstrike.Data;
 using Overstrike.Detectors;
 using Overstrike.Games;
 using Overstrike.MetaInstallers;
+using Overstrike.Theming;
+using Overstrike.Windows;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,6 +21,7 @@ namespace Overstrike {
 		List<Profile> Profiles = new List<Profile>();
 		List<ModEntry> Mods = new List<ModEntry>();
 		public SuitsCache SuitsCache = new();
+		internal ThemeManager Themes { get; private set; }
 
 		ModsDetection? _detection = null;
 
@@ -33,6 +36,13 @@ namespace Overstrike {
 					Shutdown(exitCode);
 					return;
 				}
+			}
+
+			Themes = new ThemeManager(this);
+			Themes.LoadThemes(Settings.SelectedTheme);
+			if (Settings.SelectedTheme != Themes.ActiveTheme.Id) {
+				Settings.SelectedTheme = Themes.ActiveTheme.Id;
+				WriteSettings();
 			}
 			
 			ShutdownMode = ShutdownMode.OnExplicitShutdown;
@@ -58,6 +68,13 @@ namespace Overstrike {
 			}
 
 			ShutdownMode = ShutdownMode.OnLastWindowClose;
+
+			if (e.Args.Length >= 1 && e.Args[0] == "test-theme") {
+				var window = new TestThemeWindow();
+				window.Show();
+				return;
+			}
+
 			if (Profiles.Count > 0) {
 				var window = new MainWindow(Settings, Profiles, Mods);
 				window.Show();

@@ -29,7 +29,7 @@ namespace Overstrike.Windows {
 		//
 
 		protected override Grid MainGrid { get => _MainGrid; }
-		protected override Label NumberLabel { get => _NumberLabel; }
+		protected override TextBlock NumberLabel { get => _NumberLabel; }
 		protected override TextBox NumberBox { get => _NumberBox; }
 
 		protected override string ModName { get => _mod.Name; }
