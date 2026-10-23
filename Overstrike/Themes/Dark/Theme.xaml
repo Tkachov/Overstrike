@@ -6,11 +6,6 @@
 	<sys:String x:Key="Theme.Name">Overstrike Dark by Tkachov</sys:String>
 	<sys:String x:Key="Theme.Version">1.8.1.0</sys:String>
 
-<!--
-- TODO: cleanup the file, rearrange definitions, define colors with better names and merge what's the same
-- TODO: when all done, final pass on all windows & on built app.
--->
-
 	<!-- colors -->
 
 	<!-- base -->
@@ -1852,66 +1847,4 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
-
-	<!-- / -->
-
-	<!-- alt colors -->
-	
-	<Color x:Key="Theme.Panel">#1B2735</Color>
-	<Color x:Key="Theme.PanelAlt">#243447</Color>
-	<Color x:Key="Theme.Accent">#5BC0BE</Color>
-	<Color x:Key="Theme.AccentStrong">#6FFFE9</Color>
-	<Color x:Key="Theme.TextMuted">#B7C4D3</Color>
-	<Color x:Key="Theme.Error">#FF6B6B</Color>
-	
-	<Color x:Key="ThemeTextPrimaryColor">#E7ECF6</Color>
-	<Color x:Key="ThemeTextMutedColor">#A8B3C8</Color>
-	<Color x:Key="ThemeInputBackgroundColor">#101622</Color>
-	<Color x:Key="ThemeSelectionColor">#2D7ED4</Color>
-	<Color x:Key="ThemeSelectionInactiveColor">#2E3B52</Color>
-
-	<SolidColorBrush x:Key="ThemeWindowBackgroundBrush" Color="#141821" />
-	<SolidColorBrush x:Key="ThemeSurfaceBackgroundBrush" Color="#1B2231" />
-	<SolidColorBrush x:Key="ThemeSurfaceAltBackgroundBrush" Color="#20283A" />
-	<SolidColorBrush x:Key="ThemeBorderBrushh" Color="#2F3A4F" />
-	<SolidColorBrush x:Key="ThemeTextPrimaryBrush" Color="{StaticResource ThemeTextPrimaryColor}" />
-	<SolidColorBrush x:Key="ThemeTextSecondaryBrush" Color="{StaticResource ThemeTextMutedColor}" />
-	<SolidColorBrush x:Key="ThemeInputBackgroundBrush" Color="{StaticResource ThemeInputBackgroundColor}" />
-	<SolidColorBrush x:Key="ThemeInputBorderBrush" Color="#3D4960" />
-	<SolidColorBrush x:Key="ThemeButtonBackgroundBrush" Color="#2A3448" />
-	<SolidColorBrush x:Key="ThemeButtonHoverBrush" Color="#35445E" />
-	<SolidColorBrush x:Key="ThemeButtonPressedBrush" Color="#1F293B" />
-	<SolidColorBrush x:Key="ThemeSelectionBrush" Color="{StaticResource ThemeSelectionColor}" />
-	<SolidColorBrush x:Key="ThemeSelectionInactiveBrush" Color="{StaticResource ThemeSelectionInactiveColor}" />
-	
-	<!-- alt colors 2: light/dark -->
-
-	<SolidColorBrush x:Key="AppBackgroundBrush" Color="#FFFFFF" />
-	<SolidColorBrush x:Key="SurfaceBrush" Color="#FFFFFF" />
-	<SolidColorBrush x:Key="SurfaceAltBrush" Color="#F6F6F6" />
-	<SolidColorBrush x:Key="SelectedTabBrush" Color="#FFFFFF" />
-	<SolidColorBrush x:Key="ControlBackgroundBrush" Color="#FFFFFF" />
-	<SolidColorBrush x:Key="TextBrush" Color="#1F1F1F" />
-	<SolidColorBrush x:Key="SecondaryTextBrush" Color="#666666" />
-	<SolidColorBrush x:Key="SubtleTextBrush" Color="#999999" />
-	<SolidColorBrush x:Key="ThemeBorderBrush" Color="#CCCCCC" />
-	<SolidColorBrush x:Key="HoverBrush" Color="#EEEEEE" />
-	<SolidColorBrush x:Key="PressedBrush" Color="#CCCCCC" />
-	<SolidColorBrush x:Key="SelectionBrush" Color="#CCE8FF" />
-	<SolidColorBrush x:Key="DisabledTextBrush" Color="#888888" />
-	
-	<SolidColorBrush x:Key="AppBackgroundBrush2" Color="#202124" />
-	<SolidColorBrush x:Key="SurfaceBrush2" Color="#292A2D" />
-	<SolidColorBrush x:Key="SurfaceAltBrush2" Color="#313236" />
-	<SolidColorBrush x:Key="SelectedTabBrush2" Color="#232427" />
-	<SolidColorBrush x:Key="ControlBackgroundBrush2" Color="#35363A" />
-	<SolidColorBrush x:Key="TextBrush2" Color="#F1F3F4" />
-	<SolidColorBrush x:Key="SecondaryTextBrush2" Color="#BDC1C6" />
-	<SolidColorBrush x:Key="SubtleTextBrush2" Color="#9AA0A6" />
-	<SolidColorBrush x:Key="ThemeBorderBrush2" Color="#4B4D52" />
-	<SolidColorBrush x:Key="HoverBrush2" Color="#3C4043" />
-	<SolidColorBrush x:Key="PressedBrush2" Color="#50545A" />
-	<SolidColorBrush x:Key="SelectionBrush2" Color="#3D5875" />
-	<SolidColorBrush x:Key="DisabledTextBrush2" Color="#777A80" />
-
 </ResourceDictionary>
