@@ -20,200 +20,200 @@
 	<Color x:Key="bright">#39F</Color>
 
 	<!-- shades -->
-	<Color x:Key="dark-20">#101014</Color>
-	<Color x:Key="dark-15">#17171E</Color>
-	<Color x:Key="dark-10">#1A1A1E</Color>
-	<Color x:Key="dark-05">#1D1D21</Color>
-	<Color x:Key="dark+05">#242428</Color>
-	<Color x:Key="dark+05+blue">#24344B</Color>
-	<Color x:Key="dark+10">#27272C</Color>
-	<Color x:Key="dark+15">#292930</Color>
-	<Color x:Key="dark+20">#2B2B31</Color>
-	<Color x:Key="dark+25">#2E2E33</Color>
-	<Color x:Key="dark+30a">#303035</Color>
-	<Color x:Key="dark+30b">#303039</Color>
-	<Color x:Key="dark+35a">#333338</Color>
-	<Color x:Key="dark+35b">#33333C</Color>
-	<Color x:Key="dark+35c">#343439</Color>
-	<Color x:Key="dark+40">#38383D</Color>
-	<Color x:Key="dark+45">#3B3B40</Color>
-	<Color x:Key="dark+50">#42424E</Color>
-	<Color x:Key="dark+55">#47474C</Color>
-	<Color x:Key="dark+60">#4C4C51</Color>
-	<Color x:Key="dark+65">#505055</Color>
-	<Color x:Key="dark+75a">#57575C</Color>
-	<Color x:Key="dark+75b">#58585D</Color>
-	<Color x:Key="dark+80">#606066</Color>
-	<Color x:Key="dark+85a">#666</Color>
-	<Color x:Key="dark+85b">#66666E</Color>
-	<Color x:Key="dark+85c">#666675</Color>
-	<Color x:Key="dark+90">#6C6C70</Color>
-	<Color x:Key="dark+95">#707077</Color>
+	<Color x:Key="dark.m20">#101014</Color>
+	<Color x:Key="dark.m15">#17171E</Color>
+	<Color x:Key="dark.m10">#1A1A1E</Color>
+	<Color x:Key="dark.m05">#1D1D21</Color>
+	<Color x:Key="dark.p05">#242428</Color>
+	<Color x:Key="dark.p05.pBlue">#24344B</Color>
+	<Color x:Key="dark.p10">#27272C</Color>
+	<Color x:Key="dark.p15">#292930</Color>
+	<Color x:Key="dark.p20">#2B2B31</Color>
+	<Color x:Key="dark.p25">#2E2E33</Color>
+	<Color x:Key="dark.p30a">#303035</Color>
+	<Color x:Key="dark.p30b">#303039</Color>
+	<Color x:Key="dark.p35a">#333338</Color>
+	<Color x:Key="dark.p35b">#33333C</Color>
+	<Color x:Key="dark.p35c">#343439</Color>
+	<Color x:Key="dark.p40">#38383D</Color>
+	<Color x:Key="dark.p45">#3B3B40</Color>
+	<Color x:Key="dark.p50">#42424E</Color>
+	<Color x:Key="dark.p55">#47474C</Color>
+	<Color x:Key="dark.p60">#4C4C51</Color>
+	<Color x:Key="dark.p65">#505055</Color>
+	<Color x:Key="dark.p75a">#57575C</Color>
+	<Color x:Key="dark.p75b">#58585D</Color>
+	<Color x:Key="dark.p80">#606066</Color>
+	<Color x:Key="dark.p85a">#666</Color>
+	<Color x:Key="dark.p85b">#66666E</Color>
+	<Color x:Key="dark.p85c">#666675</Color>
+	<Color x:Key="dark.p90">#6C6C70</Color>
+	<Color x:Key="dark.p95">#707077</Color>
 
-	<Color x:Key="light-60">#96969E</Color>
-	<Color x:Key="light-55">#99999C</Color>
-	<Color x:Key="light-45">#A6A6AE</Color>
-	<Color x:Key="light+30">#F3F3F3</Color>
+	<Color x:Key="light.m60">#96969E</Color>
+	<Color x:Key="light.m55">#99999C</Color>
+	<Color x:Key="light.m45">#A6A6AE</Color>
+	<Color x:Key="light.p30">#F3F3F3</Color>
 
 	<!-- semantics -->
 	
-	<SolidColorBrush x:Key="s_background" Color="{StaticResource dark}" />
-	<SolidColorBrush x:Key="s_border" Color="{StaticResource dark+30a}" />
-	<SolidColorBrush x:Key="s_activeBorder" Color="{StaticResource bright}" />
-	<SolidColorBrush x:Key="s_text" Color="{StaticResource light}" />
-	<SolidColorBrush x:Key="s_warningText" Color="{StaticResource danger}" />
-	<SolidColorBrush x:Key="s_grayText" Color="{StaticResource light-45}" />
-	<SolidColorBrush x:Key="s_mutedText" Color="{StaticResource light-60}" />
+	<SolidColorBrush x:Key="darkTheme.background" Color="{StaticResource dark}" />
+	<SolidColorBrush x:Key="darkTheme.border" Color="{StaticResource dark.p30a}" />
+	<SolidColorBrush x:Key="darkTheme.activeBorder" Color="{StaticResource bright}" />
+	<SolidColorBrush x:Key="darkTheme.text" Color="{StaticResource light}" />
+	<SolidColorBrush x:Key="darkTheme.warningText" Color="{StaticResource danger}" />
+	<SolidColorBrush x:Key="darkTheme.grayText" Color="{StaticResource light.m45}" />
+	<SolidColorBrush x:Key="darkTheme.mutedText" Color="{StaticResource light.m60}" />
 
-	<SolidColorBrush x:Key="s_secondaryBackground" Color="{StaticResource dark-10}" />
-	<SolidColorBrush x:Key="s_secondaryBorder" Color="{Binding Color, Source={StaticResource s_border}}" />
-	<SolidColorBrush x:Key="s_secondaryText" Color="{Binding Color, Source={StaticResource s_mutedText}}" />
+	<SolidColorBrush x:Key="darkTheme.secondaryBackground" Color="{StaticResource dark.m10}" />
+	<SolidColorBrush x:Key="darkTheme.secondaryBorder" Color="{Binding Color, Source={StaticResource darkTheme.border}}" />
+	<SolidColorBrush x:Key="darkTheme.secondaryText" Color="{Binding Color, Source={StaticResource darkTheme.mutedText}}" />
 	
-	<SolidColorBrush x:Key="s_disabledBackground" Color="{StaticResource dark-10}" />
-	<SolidColorBrush x:Key="s_disabledBorder" Color="{StaticResource dark+20}" />
-	<SolidColorBrush x:Key="s_disabledText" Color="{StaticResource dark+85b}" />
+	<SolidColorBrush x:Key="darkTheme.disabledBackground" Color="{StaticResource dark.m10}" />
+	<SolidColorBrush x:Key="darkTheme.disabledBorder" Color="{StaticResource dark.p20}" />
+	<SolidColorBrush x:Key="darkTheme.disabledText" Color="{StaticResource dark.p85b}" />
 	
-	<SolidColorBrush x:Key="s_hoverBackground" Color="{StaticResource dark+25}" />
-	<SolidColorBrush x:Key="s_hoverBorder" Color="{StaticResource dark+30a}" />
-	<SolidColorBrush x:Key="s_pressBackground" Color="{StaticResource dark+40}" />
+	<SolidColorBrush x:Key="darkTheme.hoverBackground" Color="{StaticResource dark.p25}" />
+	<SolidColorBrush x:Key="darkTheme.hoverBorder" Color="{StaticResource dark.p30a}" />
+	<SolidColorBrush x:Key="darkTheme.pressBackground" Color="{StaticResource dark.p40}" />
 
 	<!-- button -->
-	<SolidColorBrush x:Key="s_buttonBackground" Color="{StaticResource dark+25}" />
-	<SolidColorBrush x:Key="s_buttonBackgroundHover" Color="{StaticResource dark+35a}" />
-	<SolidColorBrush x:Key="s_buttonBackgroundPressed" Color="{StaticResource dark+40}" />
-	<SolidColorBrush x:Key="s_buttonBackgroundDisabled" Color="{StaticResource dark+10}" />
-	<SolidColorBrush x:Key="s_buttonBorder" Color="{StaticResource dark+55}" />
-	<SolidColorBrush x:Key="s_buttonBorderHover" Color="{StaticResource dark+75a}" />
-	<SolidColorBrush x:Key="s_buttonBorderPressed" Color="{StaticResource dark+60}" />
-	<SolidColorBrush x:Key="s_buttonBorderDisabled" Color="{StaticResource dark+30a}" />
+	<SolidColorBrush x:Key="darkTheme.buttonBackground" Color="{StaticResource dark.p25}" />
+	<SolidColorBrush x:Key="darkTheme.buttonBackgroundHover" Color="{StaticResource dark.p35a}" />
+	<SolidColorBrush x:Key="darkTheme.buttonBackgroundPressed" Color="{StaticResource dark.p40}" />
+	<SolidColorBrush x:Key="darkTheme.buttonBackgroundDisabled" Color="{StaticResource dark.p10}" />
+	<SolidColorBrush x:Key="darkTheme.buttonBorder" Color="{StaticResource dark.p55}" />
+	<SolidColorBrush x:Key="darkTheme.buttonBorderHover" Color="{StaticResource dark.p75a}" />
+	<SolidColorBrush x:Key="darkTheme.buttonBorderPressed" Color="{StaticResource dark.p60}" />
+	<SolidColorBrush x:Key="darkTheme.buttonBorderDisabled" Color="{StaticResource dark.p30a}" />
 	
 	<!-- tab -->
-	<SolidColorBrush x:Key="s_tabBackgroundHover" Color="{StaticResource dark+05}" />
-	<SolidColorBrush x:Key="s_tabBorderHover" Color="{StaticResource dark+35c}" />
+	<SolidColorBrush x:Key="darkTheme.tabBackgroundHover" Color="{StaticResource dark.p05}" />
+	<SolidColorBrush x:Key="darkTheme.tabBorderHover" Color="{StaticResource dark.p35c}" />
 
 	<!-- combobox, item, list item -->
-	<SolidColorBrush x:Key="s_itemBackgroundHover" Color="{StaticResource dark+15}" />
-	<SolidColorBrush x:Key="s_itemBorderHover" Color="{StaticResource dark+45}" />
-	<SolidColorBrush x:Key="s_itemTextHover" Color="{StaticResource light+30}" />
+	<SolidColorBrush x:Key="darkTheme.itemBackgroundHover" Color="{StaticResource dark.p15}" />
+	<SolidColorBrush x:Key="darkTheme.itemBorderHover" Color="{StaticResource dark.p45}" />
+	<SolidColorBrush x:Key="darkTheme.itemTextHover" Color="{StaticResource light.p30}" />
 	
 	<!-- list/menu items -->
-	<SolidColorBrush x:Key="s_itemBackgroundActive" Color="{StaticResource dark+05+blue}" />
-	<SolidColorBrush x:Key="s_itemBackgroundInactive" Color="{StaticResource dark+35b}" />
-	<SolidColorBrush x:Key="s_itemBorderInactive" Color="{StaticResource dark+85c}" />
+	<SolidColorBrush x:Key="darkTheme.itemBackgroundActive" Color="{StaticResource dark.p05.pBlue}" />
+	<SolidColorBrush x:Key="darkTheme.itemBackgroundInactive" Color="{StaticResource dark.p35b}" />
+	<SolidColorBrush x:Key="darkTheme.itemBorderInactive" Color="{StaticResource dark.p85c}" />
 	
-	<SolidColorBrush x:Key="s_menuGutterBackground" Color="{StaticResource dark-05}" />
+	<SolidColorBrush x:Key="darkTheme.menuGutterBackground" Color="{StaticResource dark.m05}" />
 
 	<!-- tooltip -->
-	<SolidColorBrush x:Key="s_tooltipBackground" Color="{StaticResource dark+25}" />
-	<SolidColorBrush x:Key="s_tooltipBorder" Color="{StaticResource dark+30a}" />
+	<SolidColorBrush x:Key="darkTheme.tooltipBackground" Color="{StaticResource dark.p25}" />
+	<SolidColorBrush x:Key="darkTheme.tooltipBorder" Color="{StaticResource dark.p30a}" />
 
 	<!-- scrollbar -->
-	<SolidColorBrush x:Key="s_scrollbarBackground" Color="{StaticResource dark+10}" />
-	<SolidColorBrush x:Key="s_scrollbarBackgroundHover" Color="{StaticResource dark+30a}" />
-	<SolidColorBrush x:Key="s_scrollbarBackgroundPressed" Color="{StaticResource dark+60}" />
-	<SolidColorBrush x:Key="s_scrollbar" Color="{StaticResource dark+85b}" />
-	<SolidColorBrush x:Key="s_scrollbarHover" Color="{StaticResource light-60}" />
-	<SolidColorBrush x:Key="s_scrollbarPressed" Color="{StaticResource light-45}" />
+	<SolidColorBrush x:Key="darkTheme.scrollbarBackground" Color="{StaticResource dark.p10}" />
+	<SolidColorBrush x:Key="darkTheme.scrollbarBackgroundHover" Color="{StaticResource dark.p30a}" />
+	<SolidColorBrush x:Key="darkTheme.scrollbarBackgroundPressed" Color="{StaticResource dark.p60}" />
+	<SolidColorBrush x:Key="darkTheme.scrollbar" Color="{StaticResource dark.p85b}" />
+	<SolidColorBrush x:Key="darkTheme.scrollbarHover" Color="{StaticResource light.m60}" />
+	<SolidColorBrush x:Key="darkTheme.scrollbarPressed" Color="{StaticResource light.m45}" />
 
 	<!-- inputs -->
-	<SolidColorBrush x:Key="s_inputBackground" Color="{StaticResource dark-15}" />
-	<SolidColorBrush x:Key="s_textboxSelection" Color="{StaticResource bright}" />
+	<SolidColorBrush x:Key="darkTheme.inputBackground" Color="{StaticResource dark.m15}" />
+	<SolidColorBrush x:Key="darkTheme.textboxSelection" Color="{StaticResource bright}" />
 
 	<!-- checkbox -->
-	<SolidColorBrush x:Key="s_checkboxBackgroundPressed" Color="{StaticResource dark+75b}" />
-	<SolidColorBrush x:Key="s_checkboxBorderPressed" Color="{StaticResource dark+90}" />
-	<SolidColorBrush x:Key="s_checkboxBackgroundDisabled" Color="{StaticResource dark+30b}" />
-	<SolidColorBrush x:Key="s_checkboxBorderDisabled" Color="{StaticResource dark+50}" />
+	<SolidColorBrush x:Key="darkTheme.checkboxBackgroundPressed" Color="{StaticResource dark.p75b}" />
+	<SolidColorBrush x:Key="darkTheme.checkboxBorderPressed" Color="{StaticResource dark.p90}" />
+	<SolidColorBrush x:Key="darkTheme.checkboxBackgroundDisabled" Color="{StaticResource dark.p30b}" />
+	<SolidColorBrush x:Key="darkTheme.checkboxBorderDisabled" Color="{StaticResource dark.p50}" />
 
 	<!-- spoiler -->
-	<SolidColorBrush x:Key="s_expanderBackgroundDisabled" Color="{StaticResource dark+30b}" />
-	<SolidColorBrush x:Key="s_expanderBorderDisabled" Color="{StaticResource light-55}" />
-	<SolidColorBrush x:Key="s_expanderBorder" Color="{StaticResource dark+80}" />
-	<SolidColorBrush x:Key="s_expanderBorderHover" Color="{StaticResource dark+95}" />
-	<SolidColorBrush x:Key="s_expanderBorderPressed" Color="{StaticResource dark+65}" />
+	<SolidColorBrush x:Key="darkTheme.expanderBackgroundDisabled" Color="{StaticResource dark.p30b}" />
+	<SolidColorBrush x:Key="darkTheme.expanderBorderDisabled" Color="{StaticResource light.m55}" />
+	<SolidColorBrush x:Key="darkTheme.expanderBorder" Color="{StaticResource dark.p80}" />
+	<SolidColorBrush x:Key="darkTheme.expanderBorderHover" Color="{StaticResource dark.p95}" />
+	<SolidColorBrush x:Key="darkTheme.expanderBorderPressed" Color="{StaticResource dark.p65}" />
 
 	<!-- app-specific -->
-	<SolidColorBrush x:Key="s_firstLaunchHeaderBackground" Color="{StaticResource dark+10}" />
-	<SolidColorBrush x:Key="s_overlayColor" Color="{StaticResource dark+30a}" />
-	<SolidColorBrush x:Key="s_modularWizardNumberLabel" Color="{StaticResource dark+85a}" />
+	<SolidColorBrush x:Key="darkTheme.firstLaunchHeaderBackground" Color="{StaticResource dark.p10}" />
+	<SolidColorBrush x:Key="darkTheme.overlayColor" Color="{StaticResource dark.p30a}" />
+	<SolidColorBrush x:Key="darkTheme.modularWizardNumberLabel" Color="{StaticResource dark.p85a}" />
 	
-	<SolidColorBrush x:Key="s_suitsMenuBackground" Color="{StaticResource dark-20}" />
-	<SolidColorBrush x:Key="s_suitsMenuListBackground" Color="{Binding Color, Source={StaticResource s_secondaryBackground}}" />
-	<SolidColorBrush x:Key="s_suitsMenuSideBackground" Color="{Binding Color, Source={StaticResource s_background}}" />
-	<SolidColorBrush x:Key="s_suitsMenuDivider" Color="{Binding Color, Source={StaticResource s_border}}" />
-	<SolidColorBrush x:Key="s_suitsMenuActiveTab" Color="{StaticResource dark+30a}" />
+	<SolidColorBrush x:Key="darkTheme.suitsMenuBackground" Color="{StaticResource dark.m20}" />
+	<SolidColorBrush x:Key="darkTheme.suitsMenuListBackground" Color="{Binding Color, Source={StaticResource darkTheme.secondaryBackground}}" />
+	<SolidColorBrush x:Key="darkTheme.suitsMenuSideBackground" Color="{Binding Color, Source={StaticResource darkTheme.background}}" />
+	<SolidColorBrush x:Key="darkTheme.suitsMenuDivider" Color="{Binding Color, Source={StaticResource darkTheme.border}}" />
+	<SolidColorBrush x:Key="darkTheme.suitsMenuActiveTab" Color="{StaticResource dark.p30a}" />
 
 	<!-- overrides -->
 
-	<SolidColorBrush x:Key="Controls_TextBoxPlaceholder" Color="{Binding Color, Source={StaticResource s_mutedText}}" />
+	<SolidColorBrush x:Key="Controls_TextBoxPlaceholder" Color="{Binding Color, Source={StaticResource darkTheme.mutedText}}" />
 
-	<SolidColorBrush x:Key="MainWindow_Background" Color="{Binding Color, Source={StaticResource s_background}}" />
-	<SolidColorBrush x:Key="MainWindow_WindowTopBorder" Color="{Binding Color, Source={StaticResource s_border}}" />
-	<SolidColorBrush x:Key="MainWindow_IconButtonHoverBackground" Color="{Binding Color, Source={StaticResource s_hoverBackground}}" />
-	<SolidColorBrush x:Key="MainWindow_IconButtonPressedBackground" Color="{Binding Color, Source={StaticResource s_pressBackground}}" />
-	<SolidColorBrush x:Key="MainWindow_OverlayBackground" Color="{Binding Color, Source={StaticResource s_overlayColor}}" Opacity=".75"/>
-	<SolidColorBrush x:Key="MainWindow_OverlayPanelBackground" Color="{Binding Color, Source={StaticResource s_background}}" />
-	<SolidColorBrush x:Key="MainWindow_StatusMessageForeground" Color="{Binding Color, Source={StaticResource s_mutedText}}" />
-	<SolidColorBrush x:Key="MainWindow_StatusMessageErrorForeground" Color="{Binding Color, Source={StaticResource s_warningText}}" />
+	<SolidColorBrush x:Key="MainWindow_Background" Color="{Binding Color, Source={StaticResource darkTheme.background}}" />
+	<SolidColorBrush x:Key="MainWindow_WindowTopBorder" Color="{Binding Color, Source={StaticResource darkTheme.border}}" />
+	<SolidColorBrush x:Key="MainWindow_IconButtonHoverBackground" Color="{Binding Color, Source={StaticResource darkTheme.hoverBackground}}" />
+	<SolidColorBrush x:Key="MainWindow_IconButtonPressedBackground" Color="{Binding Color, Source={StaticResource darkTheme.pressBackground}}" />
+	<SolidColorBrush x:Key="MainWindow_OverlayBackground" Color="{Binding Color, Source={StaticResource darkTheme.overlayColor}}" Opacity=".75"/>
+	<SolidColorBrush x:Key="MainWindow_OverlayPanelBackground" Color="{Binding Color, Source={StaticResource darkTheme.background}}" />
+	<SolidColorBrush x:Key="MainWindow_StatusMessageForeground" Color="{Binding Color, Source={StaticResource darkTheme.mutedText}}" />
+	<SolidColorBrush x:Key="MainWindow_StatusMessageErrorForeground" Color="{Binding Color, Source={StaticResource darkTheme.warningText}}" />
 
-	<SolidColorBrush x:Key="FirstLaunch_Background" Color="{Binding Color, Source={StaticResource s_background}}" />
-	<SolidColorBrush x:Key="FirstLaunch_WindowTopBorder" Color="{Binding Color, Source={StaticResource s_border}}" />
-	<SolidColorBrush x:Key="FirstLaunch_ProfilesHeaderBackground" Color="{Binding Color, Source={StaticResource s_firstLaunchHeaderBackground}}" />
-	<SolidColorBrush x:Key="FirstLaunch_ProfilesHeaderForeground" Color="{Binding Color, Source={StaticResource s_mutedText}}" />
-	<SolidColorBrush x:Key="FirstLaunch_ProfilesBorder" Color="{Binding Color, Source={StaticResource s_border}}" />
+	<SolidColorBrush x:Key="FirstLaunch_Background" Color="{Binding Color, Source={StaticResource darkTheme.background}}" />
+	<SolidColorBrush x:Key="FirstLaunch_WindowTopBorder" Color="{Binding Color, Source={StaticResource darkTheme.border}}" />
+	<SolidColorBrush x:Key="FirstLaunch_ProfilesHeaderBackground" Color="{Binding Color, Source={StaticResource darkTheme.firstLaunchHeaderBackground}}" />
+	<SolidColorBrush x:Key="FirstLaunch_ProfilesHeaderForeground" Color="{Binding Color, Source={StaticResource darkTheme.mutedText}}" />
+	<SolidColorBrush x:Key="FirstLaunch_ProfilesBorder" Color="{Binding Color, Source={StaticResource darkTheme.border}}" />
 
-	<SolidColorBrush x:Key="CreateProfile_Background" Color="{Binding Color, Source={StaticResource s_background}}" />
-	<SolidColorBrush x:Key="CreateProfile_WindowTopBorder" Color="{Binding Color, Source={StaticResource s_border}}" />
+	<SolidColorBrush x:Key="CreateProfile_Background" Color="{Binding Color, Source={StaticResource darkTheme.background}}" />
+	<SolidColorBrush x:Key="CreateProfile_WindowTopBorder" Color="{Binding Color, Source={StaticResource darkTheme.border}}" />
 
-	<SolidColorBrush x:Key="ModsDetectionSplash_Background" Color="{Binding Color, Source={StaticResource s_background}}" />
-	<SolidColorBrush x:Key="ModsDetectionSplash_TopBorder" Color="{Binding Color, Source={StaticResource s_border}}" />
-	<SolidColorBrush x:Key="ModsDetectionSplash_OperationForeground" Color="{Binding Color, Source={StaticResource s_grayText}}" />
+	<SolidColorBrush x:Key="ModsDetectionSplash_Background" Color="{Binding Color, Source={StaticResource darkTheme.background}}" />
+	<SolidColorBrush x:Key="ModsDetectionSplash_TopBorder" Color="{Binding Color, Source={StaticResource darkTheme.border}}" />
+	<SolidColorBrush x:Key="ModsDetectionSplash_OperationForeground" Color="{Binding Color, Source={StaticResource darkTheme.grayText}}" />
 
-	<SolidColorBrush x:Key="ErrorLogWindow_Background" Color="{Binding Color, Source={StaticResource s_secondaryBackground}}" />
+	<SolidColorBrush x:Key="ErrorLogWindow_Background" Color="{Binding Color, Source={StaticResource darkTheme.secondaryBackground}}" />
 
-	<SolidColorBrush x:Key="ModularWizard_MainBackground" Color="{Binding Color, Source={StaticResource s_background}}" />
-	<SolidColorBrush x:Key="ModularWizard_Border" Color="{Binding Color, Source={StaticResource s_border}}" />
-	<SolidColorBrush x:Key="ModularWizard_FooterBackground" Color="{Binding Color, Source={StaticResource s_background}}" />
-	<SolidColorBrush x:Key="ModularWizard_NumberLabelForeground" Color="{Binding Color, Source={StaticResource s_modularWizardNumberLabel}}" />
+	<SolidColorBrush x:Key="ModularWizard_MainBackground" Color="{Binding Color, Source={StaticResource darkTheme.background}}" />
+	<SolidColorBrush x:Key="ModularWizard_Border" Color="{Binding Color, Source={StaticResource darkTheme.border}}" />
+	<SolidColorBrush x:Key="ModularWizard_FooterBackground" Color="{Binding Color, Source={StaticResource darkTheme.background}}" />
+	<SolidColorBrush x:Key="ModularWizard_NumberLabelForeground" Color="{Binding Color, Source={StaticResource darkTheme.modularWizardNumberLabel}}" />
 
-	<SolidColorBrush x:Key="TocMismatchDialog_Background" Color="{Binding Color, Source={StaticResource s_background}}" />
-	<SolidColorBrush x:Key="TocMismatchDialog_WindowTopBorder" Color="{Binding Color, Source={StaticResource s_border}}" />
-	<SolidColorBrush x:Key="TocMismatchDialog_FooterForeground" Color="{Binding Color, Source={StaticResource s_grayText}}" />
+	<SolidColorBrush x:Key="TocMismatchDialog_Background" Color="{Binding Color, Source={StaticResource darkTheme.background}}" />
+	<SolidColorBrush x:Key="TocMismatchDialog_WindowTopBorder" Color="{Binding Color, Source={StaticResource darkTheme.border}}" />
+	<SolidColorBrush x:Key="TocMismatchDialog_FooterForeground" Color="{Binding Color, Source={StaticResource darkTheme.grayText}}" />
 
-	<SolidColorBrush x:Key="MSMRSuitsMenu_SideBackground" Color="{Binding Color, Source={StaticResource s_suitsMenuSideBackground}}" />
-	<SolidColorBrush x:Key="MSMRSuitsMenu_Divider" Color="{Binding Color, Source={StaticResource s_suitsMenuDivider}}" />
-	<SolidColorBrush x:Key="MSMRSuitsMenu_Background" Color="{Binding Color, Source={StaticResource s_suitsMenuBackground}}" />
-	<SolidColorBrush x:Key="MSMRSuitsMenu_ListBackground" Color="{Binding Color, Source={StaticResource s_suitsMenuListBackground}}" />
-	<SolidColorBrush x:Key="MSMRSuitsMenu_OuterBorder" Color="{Binding Color, Source={StaticResource s_suitsMenuListBackground}}" />
-	<SolidColorBrush x:Key="MSMRSuitsMenu_SlotBorder" Color="{Binding Color, Source={StaticResource s_activeBorder}}" />
-	<SolidColorBrush x:Key="MSMRSuitsMenu_ListSelectionBackground" Color="{Binding Color, Source={StaticResource s_activeBorder}}" />
+	<SolidColorBrush x:Key="MSMRSuitsMenu_SideBackground" Color="{Binding Color, Source={StaticResource darkTheme.suitsMenuSideBackground}}" />
+	<SolidColorBrush x:Key="MSMRSuitsMenu_Divider" Color="{Binding Color, Source={StaticResource darkTheme.suitsMenuDivider}}" />
+	<SolidColorBrush x:Key="MSMRSuitsMenu_Background" Color="{Binding Color, Source={StaticResource darkTheme.suitsMenuBackground}}" />
+	<SolidColorBrush x:Key="MSMRSuitsMenu_ListBackground" Color="{Binding Color, Source={StaticResource darkTheme.suitsMenuListBackground}}" />
+	<SolidColorBrush x:Key="MSMRSuitsMenu_OuterBorder" Color="{Binding Color, Source={StaticResource darkTheme.suitsMenuListBackground}}" />
+	<SolidColorBrush x:Key="MSMRSuitsMenu_SlotBorder" Color="{Binding Color, Source={StaticResource darkTheme.activeBorder}}" />
+	<SolidColorBrush x:Key="MSMRSuitsMenu_ListSelectionBackground" Color="{Binding Color, Source={StaticResource darkTheme.activeBorder}}" />
 
-	<SolidColorBrush x:Key="MMSuitsMenu_SideBackground" Color="{Binding Color, Source={StaticResource s_suitsMenuSideBackground}}" />
-	<SolidColorBrush x:Key="MMSuitsMenu_Divider" Color="{Binding Color, Source={StaticResource s_suitsMenuDivider}}" />
-	<SolidColorBrush x:Key="MMSuitsMenu_Background" Color="{Binding Color, Source={StaticResource s_suitsMenuBackground}}" />
-	<SolidColorBrush x:Key="MMSuitsMenu_ListBackground" Color="{Binding Color, Source={StaticResource s_suitsMenuListBackground}}" />
-	<SolidColorBrush x:Key="MMSuitsMenu_OuterBorder" Color="{Binding Color, Source={StaticResource s_suitsMenuListBackground}}" />
-	<SolidColorBrush x:Key="MMSuitsMenu_SlotBorder" Color="{Binding Color, Source={StaticResource s_activeBorder}}" />
-	<SolidColorBrush x:Key="MMSuitsMenu_ListSelectionBackground" Color="{Binding Color, Source={StaticResource s_activeBorder}}" />
+	<SolidColorBrush x:Key="MMSuitsMenu_SideBackground" Color="{Binding Color, Source={StaticResource darkTheme.suitsMenuSideBackground}}" />
+	<SolidColorBrush x:Key="MMSuitsMenu_Divider" Color="{Binding Color, Source={StaticResource darkTheme.suitsMenuDivider}}" />
+	<SolidColorBrush x:Key="MMSuitsMenu_Background" Color="{Binding Color, Source={StaticResource darkTheme.suitsMenuBackground}}" />
+	<SolidColorBrush x:Key="MMSuitsMenu_ListBackground" Color="{Binding Color, Source={StaticResource darkTheme.suitsMenuListBackground}}" />
+	<SolidColorBrush x:Key="MMSuitsMenu_OuterBorder" Color="{Binding Color, Source={StaticResource darkTheme.suitsMenuListBackground}}" />
+	<SolidColorBrush x:Key="MMSuitsMenu_SlotBorder" Color="{Binding Color, Source={StaticResource darkTheme.activeBorder}}" />
+	<SolidColorBrush x:Key="MMSuitsMenu_ListSelectionBackground" Color="{Binding Color, Source={StaticResource darkTheme.activeBorder}}" />
 
-	<SolidColorBrush x:Key="MSM2SuitsMenu_SideBackground" Color="{Binding Color, Source={StaticResource s_suitsMenuSideBackground}}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_HeaderDivider" Color="{Binding Color, Source={StaticResource s_suitsMenuDivider}}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_FooterDivider" Color="{Binding Color, Source={StaticResource s_suitsMenuDivider}}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_SpiderArmsWarningForeground" Color="{Binding Color, Source={StaticResource s_mutedText}}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_Background" Color="{Binding Color, Source={StaticResource s_suitsMenuBackground}}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_ListBackground" Color="{Binding Color, Source={StaticResource s_suitsMenuListBackground}}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_OuterBorder" Color="{Binding Color, Source={StaticResource s_suitsMenuListBackground}}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_SlotBorder" Color="{Binding Color, Source={StaticResource s_activeBorder}}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_ListSelectionBackground" Color="{Binding Color, Source={StaticResource s_activeBorder}}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_TabStripBackground" Color="{Binding Color, Source={StaticResource s_suitsMenuListBackground}}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabForeground" Color="{Binding Color, Source={StaticResource s_mutedText}}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabBackground" Color="{Binding Color, Source={StaticResource s_suitsMenuListBackground}}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabBorder" Color="{Binding Color, Source={StaticResource s_suitsMenuListBackground}}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabHoverForeground" Color="{Binding Color, Source={StaticResource s_itemTextHover}}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabHoverBorder" Color="{Binding Color, Source={StaticResource s_suitsMenuActiveTab}}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabActiveBackground" Color="{Binding Color, Source={StaticResource s_suitsMenuActiveTab}}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabActiveForeground" Color="{Binding Color, Source={StaticResource s_text}}" />
-	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabActiveBorder" Color="{Binding Color, Source={StaticResource s_suitsMenuActiveTab}}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_SideBackground" Color="{Binding Color, Source={StaticResource darkTheme.suitsMenuSideBackground}}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_HeaderDivider" Color="{Binding Color, Source={StaticResource darkTheme.suitsMenuDivider}}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_FooterDivider" Color="{Binding Color, Source={StaticResource darkTheme.suitsMenuDivider}}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_SpiderArmsWarningForeground" Color="{Binding Color, Source={StaticResource darkTheme.mutedText}}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_Background" Color="{Binding Color, Source={StaticResource darkTheme.suitsMenuBackground}}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_ListBackground" Color="{Binding Color, Source={StaticResource darkTheme.suitsMenuListBackground}}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_OuterBorder" Color="{Binding Color, Source={StaticResource darkTheme.suitsMenuListBackground}}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_SlotBorder" Color="{Binding Color, Source={StaticResource darkTheme.activeBorder}}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_ListSelectionBackground" Color="{Binding Color, Source={StaticResource darkTheme.activeBorder}}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_TabStripBackground" Color="{Binding Color, Source={StaticResource darkTheme.suitsMenuListBackground}}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabForeground" Color="{Binding Color, Source={StaticResource darkTheme.mutedText}}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabBackground" Color="{Binding Color, Source={StaticResource darkTheme.suitsMenuListBackground}}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabBorder" Color="{Binding Color, Source={StaticResource darkTheme.suitsMenuListBackground}}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabHoverForeground" Color="{Binding Color, Source={StaticResource darkTheme.itemTextHover}}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabHoverBorder" Color="{Binding Color, Source={StaticResource darkTheme.suitsMenuActiveTab}}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabActiveBackground" Color="{Binding Color, Source={StaticResource darkTheme.suitsMenuActiveTab}}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabActiveForeground" Color="{Binding Color, Source={StaticResource darkTheme.text}}" />
+	<SolidColorBrush x:Key="MSM2SuitsMenu_CharacterTabActiveBorder" Color="{Binding Color, Source={StaticResource darkTheme.suitsMenuActiveTab}}" />
 
 	<BitmapImage x:Key="banner_msm2_back.png" UriSource="Resources/banner_msm2_back.png" />
 	<BitmapImage x:Key="banner_i30_back.png" UriSource="Resources/banner_i30_back.png" />
@@ -235,29 +235,29 @@
 	<!-- TextBlock -->
 
 	<Style TargetType="TextBlock">
-		<Setter Property="Foreground" Value="{StaticResource s_text}" />
+		<Setter Property="Foreground" Value="{StaticResource darkTheme.text}" />
 		<Style.Triggers>
 			<Trigger Property="IsEnabled" Value="False">
-				<Setter Property="Foreground" Value="{StaticResource s_disabledText}" />
+				<Setter Property="Foreground" Value="{StaticResource darkTheme.disabledText}" />
 			</Trigger>
 		</Style.Triggers>
 	</Style>
 
 	<Style x:Key="MutedText" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
-		<Setter Property="Foreground" Value="{StaticResource s_mutedText}" />
+		<Setter Property="Foreground" Value="{StaticResource darkTheme.mutedText}" />
 	</Style>
 	<Style x:Key="GrayText" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
-		<Setter Property="Foreground" Value="{StaticResource s_grayText}" />
+		<Setter Property="Foreground" Value="{StaticResource darkTheme.grayText}" />
 	</Style>
 	<Style x:Key="WarningText" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
-		<Setter Property="Foreground" Value="{StaticResource s_warningText}" />
+		<Setter Property="Foreground" Value="{StaticResource darkTheme.warningText}" />
 	</Style>
 
 	<Style x:Key="MenuItemHeaderText" TargetType="TextBlock">
 		<Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type MenuItem}}}" />
 		<Style.Triggers>
 			<Trigger Property="IsEnabled" Value="False">
-				<Setter Property="Foreground" Value="{StaticResource s_disabledText}" />
+				<Setter Property="Foreground" Value="{StaticResource darkTheme.disabledText}" />
 			</Trigger>
 		</Style.Triggers>
 	</Style>
@@ -265,14 +265,14 @@
 		<Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type TabItem}}}" />
 		<Style.Triggers>
 			<Trigger Property="IsEnabled" Value="False">
-				<Setter Property="Foreground" Value="{StaticResource s_disabledText}" />
+				<Setter Property="Foreground" Value="{StaticResource darkTheme.disabledText}" />
 			</Trigger>
 		</Style.Triggers>
 	</Style>
 
 	<!-- ComboBox -->
 
-	<SolidColorBrush x:Key="TextBox.Static.Background" Color="{Binding Color, Source={StaticResource s_background}}" />
+	<SolidColorBrush x:Key="TextBox.Static.Background" Color="{Binding Color, Source={StaticResource darkTheme.background}}" />
 	
 	<Style x:Key="ComboBoxEditableTextBox" TargetType="{x:Type TextBox}">
 		<Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -291,28 +291,28 @@
 		</Setter>
 	</Style>
 	
-	<SolidColorBrush x:Key="ComboBox.Static.Background" Color="{Binding Color, Source={StaticResource s_background}}" />
-	<SolidColorBrush x:Key="ComboBox.Static.Border" Color="{Binding Color, Source={StaticResource s_border}}" />
-	<SolidColorBrush x:Key="ComboBox.Static.Glyph" Color="{Binding Color, Source={StaticResource s_text}}" />
-	<SolidColorBrush x:Key="ComboBox.Static.Editable.Background" Color="{Binding Color, Source={StaticResource s_background}}" />
-	<SolidColorBrush x:Key="ComboBox.Static.Editable.Border" Color="{Binding Color, Source={StaticResource s_border}}" />
+	<SolidColorBrush x:Key="ComboBox.Static.Background" Color="{Binding Color, Source={StaticResource darkTheme.background}}" />
+	<SolidColorBrush x:Key="ComboBox.Static.Border" Color="{Binding Color, Source={StaticResource darkTheme.border}}" />
+	<SolidColorBrush x:Key="ComboBox.Static.Glyph" Color="{Binding Color, Source={StaticResource darkTheme.text}}" />
+	<SolidColorBrush x:Key="ComboBox.Static.Editable.Background" Color="{Binding Color, Source={StaticResource darkTheme.background}}" />
+	<SolidColorBrush x:Key="ComboBox.Static.Editable.Border" Color="{Binding Color, Source={StaticResource darkTheme.border}}" />
 	<SolidColorBrush x:Key="ComboBox.Static.Editable.Button.Background" Color="Transparent"/>
 	<SolidColorBrush x:Key="ComboBox.Static.Editable.Button.Border" Color="Transparent"/>
 
-	<SolidColorBrush x:Key="ComboBox.MouseOver.Background" Color="{Binding Color, Source={StaticResource s_itemBackgroundHover}}" />
-	<SolidColorBrush x:Key="ComboBox.MouseOver.Border" Color="{Binding Color, Source={StaticResource s_itemBorderHover}}" />
-	<SolidColorBrush x:Key="ComboBox.MouseOver.Glyph" Color="{Binding Color, Source={StaticResource s_itemTextHover}}" />
-	<SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Background" Color="{Binding Color, Source={StaticResource s_itemBackgroundHover}}" />
-	<SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Border" Color="{Binding Color, Source={StaticResource s_itemBorderHover}}" />
+	<SolidColorBrush x:Key="ComboBox.MouseOver.Background" Color="{Binding Color, Source={StaticResource darkTheme.itemBackgroundHover}}" />
+	<SolidColorBrush x:Key="ComboBox.MouseOver.Border" Color="{Binding Color, Source={StaticResource darkTheme.itemBorderHover}}" />
+	<SolidColorBrush x:Key="ComboBox.MouseOver.Glyph" Color="{Binding Color, Source={StaticResource darkTheme.itemTextHover}}" />
+	<SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Background" Color="{Binding Color, Source={StaticResource darkTheme.itemBackgroundHover}}" />
+	<SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Border" Color="{Binding Color, Source={StaticResource darkTheme.itemBorderHover}}" />
 	<LinearGradientBrush x:Key="ComboBox.MouseOver.Editable.Button.Background" EndPoint="0,1" StartPoint="0,0">
 		<GradientStop Color="#FFEBF4FC" Offset="0.0"/>
 		<GradientStop Color="#FFDCECFC" Offset="1.0"/>
 	</LinearGradientBrush>
 	<SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Button.Border" Color="#FF7EB4EA"/>
 
-	<SolidColorBrush x:Key="ComboBox.Pressed.Background" Color="{Binding Color, Source={StaticResource s_itemBackgroundHover}}" />
-	<SolidColorBrush x:Key="ComboBox.Pressed.Border" Color="{Binding Color, Source={StaticResource s_itemBorderHover}}" />
-	<SolidColorBrush x:Key="ComboBox.Pressed.Glyph" Color="{Binding Color, Source={StaticResource s_itemTextHover}}" />
+	<SolidColorBrush x:Key="ComboBox.Pressed.Background" Color="{Binding Color, Source={StaticResource darkTheme.itemBackgroundHover}}" />
+	<SolidColorBrush x:Key="ComboBox.Pressed.Border" Color="{Binding Color, Source={StaticResource darkTheme.itemBorderHover}}" />
+	<SolidColorBrush x:Key="ComboBox.Pressed.Glyph" Color="{Binding Color, Source={StaticResource darkTheme.itemTextHover}}" />
 	<SolidColorBrush x:Key="ComboBox.Pressed.Editable.Background" Color="#FF0000"/> <!-- ? -->
 	<SolidColorBrush x:Key="ComboBox.Pressed.Editable.Border" Color="#FF569DE5"/>
 	<LinearGradientBrush x:Key="ComboBox.Pressed.Editable.Button.Background" EndPoint="0,1" StartPoint="0,0">
@@ -321,16 +321,16 @@
 	</LinearGradientBrush>
 	<SolidColorBrush x:Key="ComboBox.Pressed.Editable.Button.Border" Color="#FF569DE5"/>
 
-	<SolidColorBrush x:Key="ComboBox.Disabled.Background" Color="{Binding Color, Source={StaticResource s_disabledBackground}}" />
-	<SolidColorBrush x:Key="ComboBox.Disabled.Border" Color="{Binding Color, Source={StaticResource s_disabledBorder}}" />
-	<SolidColorBrush x:Key="ComboBox.Disabled.Glyph" Color="{Binding Color, Source={StaticResource s_disabledText}}" />
+	<SolidColorBrush x:Key="ComboBox.Disabled.Background" Color="{Binding Color, Source={StaticResource darkTheme.disabledBackground}}" />
+	<SolidColorBrush x:Key="ComboBox.Disabled.Border" Color="{Binding Color, Source={StaticResource darkTheme.disabledBorder}}" />
+	<SolidColorBrush x:Key="ComboBox.Disabled.Glyph" Color="{Binding Color, Source={StaticResource darkTheme.disabledText}}" />
 	<SolidColorBrush x:Key="ComboBox.Disabled.Editable.Background" Color="#FF0000"/>
 	<SolidColorBrush x:Key="ComboBox.Disabled.Editable.Border" Color="#FFBFBFBF"/>
 	<SolidColorBrush x:Key="ComboBox.Disabled.Editable.Button.Background" Color="Transparent"/>
 	<SolidColorBrush x:Key="ComboBox.Disabled.Editable.Button.Border" Color="Transparent"/>
 
-	<SolidColorBrush x:Key="ComboBox.Popup.Background" Color="{Binding Color, Source={StaticResource s_background}}" />
-	<SolidColorBrush x:Key="ComboBox.Popup.Border" Color="{Binding Color, Source={StaticResource s_border}}" />
+	<SolidColorBrush x:Key="ComboBox.Popup.Background" Color="{Binding Color, Source={StaticResource darkTheme.background}}" />
+	<SolidColorBrush x:Key="ComboBox.Popup.Border" Color="{Binding Color, Source={StaticResource darkTheme.border}}" />
 
 	<Style x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
 		<Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -525,7 +525,7 @@
 	<Style TargetType="{x:Type ComboBox}">
 		<Setter Property="Background" Value="{StaticResource ComboBox.Static.Background}"/>
 		<Setter Property="BorderBrush" Value="{StaticResource ComboBox.Static.Border}"/>
-		<Setter Property="Foreground" Value="{StaticResource s_text}"/>
+		<Setter Property="Foreground" Value="{StaticResource darkTheme.text}"/>
 		<Setter Property="BorderThickness" Value="1"/>
 		<Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
 		<Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
@@ -543,22 +543,22 @@
 		</Style.Triggers>
 	</Style>
 
-	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewHover.Background" Color="{Binding Color, Source={StaticResource s_itemBackgroundHover}}" />
-	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewHover.Border" Color="{Binding Color, Source={StaticResource s_itemBorderHover}}" />
+	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewHover.Background" Color="{Binding Color, Source={StaticResource darkTheme.itemBackgroundHover}}" />
+	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewHover.Border" Color="{Binding Color, Source={StaticResource darkTheme.itemBorderHover}}" />
 
-	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelected.Background" Color="{Binding Color, Source={StaticResource s_itemBackgroundActive}}" />
-	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelected.Border" Color="{Binding Color, Source={StaticResource s_activeBorder}}" />
+	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelected.Background" Color="{Binding Color, Source={StaticResource darkTheme.itemBackgroundActive}}" />
+	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelected.Border" Color="{Binding Color, Source={StaticResource darkTheme.activeBorder}}" />
 
-	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelectedHover.Background" Color="{Binding Color, Source={StaticResource s_itemBackgroundActive}}" />
-	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelectedHover.Border" Color="{Binding Color, Source={StaticResource s_activeBorder}}" />
+	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelectedHover.Background" Color="{Binding Color, Source={StaticResource darkTheme.itemBackgroundActive}}" />
+	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelectedHover.Border" Color="{Binding Color, Source={StaticResource darkTheme.activeBorder}}" />
 
-	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelectedNoFocus.Background" Color="{Binding Color, Source={StaticResource s_itemBackgroundInactive}}" />
-	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelectedNoFocus.Border" Color="{Binding Color, Source={StaticResource s_itemBorderInactive}}" />
+	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelectedNoFocus.Background" Color="{Binding Color, Source={StaticResource darkTheme.itemBackgroundInactive}}" />
+	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewSelectedNoFocus.Border" Color="{Binding Color, Source={StaticResource darkTheme.itemBorderInactive}}" />
 
-	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewFocus.Border" Color="{Binding Color, Source={StaticResource s_itemBorderHover}}" />
+	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewFocus.Border" Color="{Binding Color, Source={StaticResource darkTheme.itemBorderHover}}" />
 
-	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewHoverFocus.Background" Color="{Binding Color, Source={StaticResource s_itemBackgroundHover}}" />
-	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewHoverFocus.Border" Color="{Binding Color, Source={StaticResource s_itemBorderHover}}" />
+	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewHoverFocus.Background" Color="{Binding Color, Source={StaticResource darkTheme.itemBackgroundHover}}" />
+	<SolidColorBrush x:Key="ComboBoxItem.ItemsviewHoverFocus.Border" Color="{Binding Color, Source={StaticResource darkTheme.itemBorderHover}}" />
 
 	<Style TargetType="{x:Type ComboBoxItem}">
 		<Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -576,7 +576,7 @@
 					</Border>
 					<ControlTemplate.Triggers>
 						<Trigger Property="IsEnabled" Value="False">
-							<Setter Property="TextElement.Foreground" TargetName="Bd" Value="{DynamicResource s_disabledText}"/>
+							<Setter Property="TextElement.Foreground" TargetName="Bd" Value="{DynamicResource darkTheme.disabledText}"/>
 						</Trigger>
 						<MultiTrigger>
 							<MultiTrigger.Conditions>
@@ -646,15 +646,15 @@
 	<!-- tab control & tab item -->
 
 	<Style TargetType="TabControl">
-		<Setter Property="Background" Value="{StaticResource s_background}" />
-		<Setter Property="BorderBrush" Value="{StaticResource s_border}" />
+		<Setter Property="Background" Value="{StaticResource darkTheme.background}" />
+		<Setter Property="BorderBrush" Value="{StaticResource darkTheme.border}" />
 	</Style>
 
-	<SolidColorBrush x:Key="TabItem.MouseOver.Background" Color="{Binding Color, Source={StaticResource s_tabBackgroundHover}}" />
-	<SolidColorBrush x:Key="TabItem.MouseOver.Border" Color="{Binding Color, Source={StaticResource s_tabBorderHover}}" />
+	<SolidColorBrush x:Key="TabItem.MouseOver.Background" Color="{Binding Color, Source={StaticResource darkTheme.tabBackgroundHover}}" />
+	<SolidColorBrush x:Key="TabItem.MouseOver.Border" Color="{Binding Color, Source={StaticResource darkTheme.tabBorderHover}}" />
 
-	<SolidColorBrush x:Key="TabItem.Selected.Background" Color="{Binding Color, Source={StaticResource s_background}}" />
-	<SolidColorBrush x:Key="TabItem.Selected.Border" Color="{Binding Color, Source={StaticResource s_border}}" />
+	<SolidColorBrush x:Key="TabItem.Selected.Background" Color="{Binding Color, Source={StaticResource darkTheme.background}}" />
+	<SolidColorBrush x:Key="TabItem.Selected.Border" Color="{Binding Color, Source={StaticResource darkTheme.border}}" />
 
 	<SolidColorBrush x:Key="TabItem.Disabled.Background" Color="#F033F0"/>
 	<SolidColorBrush x:Key="TabItem.Disabled.Border" Color="#D900D9"/>
@@ -830,9 +830,9 @@
 		</ControlTemplate.Triggers>
 	</ControlTemplate>
 	<Style TargetType="TabItem">
-		<Setter Property="Background" Value="{StaticResource s_secondaryBackground}"/> <!-- non-active -->
-		<Setter Property="BorderBrush" Value="{StaticResource s_secondaryBorder}"/>
-		<Setter Property="Foreground" Value="{StaticResource s_secondaryText}"/>
+		<Setter Property="Background" Value="{StaticResource darkTheme.secondaryBackground}"/> <!-- non-active -->
+		<Setter Property="BorderBrush" Value="{StaticResource darkTheme.secondaryBorder}"/>
+		<Setter Property="Foreground" Value="{StaticResource darkTheme.secondaryText}"/>
 		<Setter Property="HeaderTemplate">
 			<Setter.Value>
 				<DataTemplate>
@@ -845,29 +845,29 @@
 
 		<Style.Triggers>
 			<Trigger Property="IsSelected" Value="true">
-				<Setter Property="Foreground" Value="{StaticResource s_text}"/>
+				<Setter Property="Foreground" Value="{StaticResource darkTheme.text}"/>
 			</Trigger>
 			<Trigger Property="IsMouseOver" Value="true">
-				<Setter Property="Foreground" Value="{StaticResource s_text}"/>
+				<Setter Property="Foreground" Value="{StaticResource darkTheme.text}"/>
 			</Trigger>
 		</Style.Triggers>
 	</Style>
 
 	<!-- button -->
 
-	<SolidColorBrush x:Key="Button.Static.Background" Color="{Binding Color, Source={StaticResource s_buttonBackground}}" />
-	<SolidColorBrush x:Key="Button.Static.Border" Color="{Binding Color, Source={StaticResource s_buttonBorder}}" />
-	<SolidColorBrush x:Key="Button.Static.Foreground" Color="{Binding Color, Source={StaticResource s_text}}" />
+	<SolidColorBrush x:Key="Button.Static.Background" Color="{Binding Color, Source={StaticResource darkTheme.buttonBackground}}" />
+	<SolidColorBrush x:Key="Button.Static.Border" Color="{Binding Color, Source={StaticResource darkTheme.buttonBorder}}" />
+	<SolidColorBrush x:Key="Button.Static.Foreground" Color="{Binding Color, Source={StaticResource darkTheme.text}}" />
 
-	<SolidColorBrush x:Key="Button.MouseOver.Background" Color="{Binding Color, Source={StaticResource s_buttonBackgroundHover}}" />
-	<SolidColorBrush x:Key="Button.MouseOver.Border" Color="{Binding Color, Source={StaticResource s_buttonBorderHover}}" />
+	<SolidColorBrush x:Key="Button.MouseOver.Background" Color="{Binding Color, Source={StaticResource darkTheme.buttonBackgroundHover}}" />
+	<SolidColorBrush x:Key="Button.MouseOver.Border" Color="{Binding Color, Source={StaticResource darkTheme.buttonBorderHover}}" />
 
-	<SolidColorBrush x:Key="Button.Pressed.Background" Color="{Binding Color, Source={StaticResource s_buttonBackgroundPressed}}" />
-	<SolidColorBrush x:Key="Button.Pressed.Border" Color="{Binding Color, Source={StaticResource s_buttonBorderPressed}}" />
+	<SolidColorBrush x:Key="Button.Pressed.Background" Color="{Binding Color, Source={StaticResource darkTheme.buttonBackgroundPressed}}" />
+	<SolidColorBrush x:Key="Button.Pressed.Border" Color="{Binding Color, Source={StaticResource darkTheme.buttonBorderPressed}}" />
 
-	<SolidColorBrush x:Key="Button.Disabled.Background" Color="{Binding Color, Source={StaticResource s_buttonBackgroundDisabled}}" />
-	<SolidColorBrush x:Key="Button.Disabled.Border" Color="{Binding Color, Source={StaticResource s_buttonBorderDisabled}}" />
-	<SolidColorBrush x:Key="Button.Disabled.Foreground" Color="{Binding Color, Source={StaticResource s_disabledText}}" />
+	<SolidColorBrush x:Key="Button.Disabled.Background" Color="{Binding Color, Source={StaticResource darkTheme.buttonBackgroundDisabled}}" />
+	<SolidColorBrush x:Key="Button.Disabled.Border" Color="{Binding Color, Source={StaticResource darkTheme.buttonBorderDisabled}}" />
+	<SolidColorBrush x:Key="Button.Disabled.Foreground" Color="{Binding Color, Source={StaticResource darkTheme.disabledText}}" />
 
 	<Style TargetType="{x:Type Button}">
 		<Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
@@ -909,14 +909,14 @@
 
 	<!-- input -->
 
-	<SolidColorBrush x:Key="TextBox.Background" Color="{Binding Color, Source={StaticResource s_inputBackground}}" />
-	<SolidColorBrush x:Key="TextBox.Text" Color="{Binding Color, Source={StaticResource s_text}}" />
+	<SolidColorBrush x:Key="TextBox.Background" Color="{Binding Color, Source={StaticResource darkTheme.inputBackground}}" />
+	<SolidColorBrush x:Key="TextBox.Text" Color="{Binding Color, Source={StaticResource darkTheme.text}}" />
 
-	<SolidColorBrush x:Key="TextBox.Static.Border" Color="{Binding Color, Source={StaticResource s_border}}" />
-	<SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="{Binding Color, Source={StaticResource s_itemBorderHover}}" />
-	<SolidColorBrush x:Key="TextBox.Focus.Border" Color="{Binding Color, Source={StaticResource s_activeBorder}}" />
+	<SolidColorBrush x:Key="TextBox.Static.Border" Color="{Binding Color, Source={StaticResource darkTheme.border}}" />
+	<SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="{Binding Color, Source={StaticResource darkTheme.itemBorderHover}}" />
+	<SolidColorBrush x:Key="TextBox.Focus.Border" Color="{Binding Color, Source={StaticResource darkTheme.activeBorder}}" />
 
-	<SolidColorBrush x:Key="TextBox.SelectionBrush" Color="{Binding Color, Source={StaticResource s_textboxSelection}}" />
+	<SolidColorBrush x:Key="TextBox.SelectionBrush" Color="{Binding Color, Source={StaticResource darkTheme.textboxSelection}}" />
 
 	<Style TargetType="{x:Type TextBox}">
 		<Setter Property="Background" Value="{StaticResource TextBox.Background}"/>
@@ -954,27 +954,27 @@
 
 	<!-- scrollbar -->
 
-	<SolidColorBrush x:Key="ScrollBar.Static.Background" Color="{Binding Color, Source={StaticResource s_scrollbarBackground}}" />
-	<SolidColorBrush x:Key="ScrollBar.Static.Border" Color="{Binding Color, Source={StaticResource s_scrollbarBackground}}" />
-	<SolidColorBrush x:Key="ScrollBar.Static.Glyph" Color="{Binding Color, Source={StaticResource s_scrollbar}}" />
-	<SolidColorBrush x:Key="ScrollBar.Static.Thumb" Color="{Binding Color, Source={StaticResource s_scrollbar}}" />
+	<SolidColorBrush x:Key="ScrollBar.Static.Background" Color="{Binding Color, Source={StaticResource darkTheme.scrollbarBackground}}" />
+	<SolidColorBrush x:Key="ScrollBar.Static.Border" Color="{Binding Color, Source={StaticResource darkTheme.scrollbarBackground}}" />
+	<SolidColorBrush x:Key="ScrollBar.Static.Glyph" Color="{Binding Color, Source={StaticResource darkTheme.scrollbar}}" />
+	<SolidColorBrush x:Key="ScrollBar.Static.Thumb" Color="{Binding Color, Source={StaticResource darkTheme.scrollbar}}" />
 
-	<SolidColorBrush x:Key="ScrollBar.MouseOver.Background" Color="{Binding Color, Source={StaticResource s_scrollbarBackgroundHover}}" />
-	<SolidColorBrush x:Key="ScrollBar.MouseOver.Border" Color="{Binding Color, Source={StaticResource s_scrollbarBackgroundHover}}" />
-	<SolidColorBrush x:Key="ScrollBar.MouseOver.Glyph" Color="{Binding Color, Source={StaticResource s_scrollbarHover}}" />
-	<SolidColorBrush x:Key="ScrollBar.MouseOver.Thumb" Color="{Binding Color, Source={StaticResource s_scrollbarHover}}" />
+	<SolidColorBrush x:Key="ScrollBar.MouseOver.Background" Color="{Binding Color, Source={StaticResource darkTheme.scrollbarBackgroundHover}}" />
+	<SolidColorBrush x:Key="ScrollBar.MouseOver.Border" Color="{Binding Color, Source={StaticResource darkTheme.scrollbarBackgroundHover}}" />
+	<SolidColorBrush x:Key="ScrollBar.MouseOver.Glyph" Color="{Binding Color, Source={StaticResource darkTheme.scrollbarHover}}" />
+	<SolidColorBrush x:Key="ScrollBar.MouseOver.Thumb" Color="{Binding Color, Source={StaticResource darkTheme.scrollbarHover}}" />
 
-	<SolidColorBrush x:Key="ScrollBar.Pressed.Background" Color="{Binding Color, Source={StaticResource s_scrollbarBackgroundPressed}}" />
-	<SolidColorBrush x:Key="ScrollBar.Pressed.Border" Color="{Binding Color, Source={StaticResource s_scrollbarBackgroundPressed}}" />
-	<SolidColorBrush x:Key="ScrollBar.Pressed.Glyph" Color="{Binding Color, Source={StaticResource s_scrollbarPressed}}" />
-	<SolidColorBrush x:Key="ScrollBar.Pressed.Thumb" Color="{Binding Color, Source={StaticResource s_scrollbarPressed}}" />
+	<SolidColorBrush x:Key="ScrollBar.Pressed.Background" Color="{Binding Color, Source={StaticResource darkTheme.scrollbarBackgroundPressed}}" />
+	<SolidColorBrush x:Key="ScrollBar.Pressed.Border" Color="{Binding Color, Source={StaticResource darkTheme.scrollbarBackgroundPressed}}" />
+	<SolidColorBrush x:Key="ScrollBar.Pressed.Glyph" Color="{Binding Color, Source={StaticResource darkTheme.scrollbarPressed}}" />
+	<SolidColorBrush x:Key="ScrollBar.Pressed.Thumb" Color="{Binding Color, Source={StaticResource darkTheme.scrollbarPressed}}" />
 
-	<SolidColorBrush x:Key="ScrollBar.Disabled.Background" Color="{Binding Color, Source={StaticResource s_scrollbarBackground}}" />
-	<SolidColorBrush x:Key="ScrollBar.Disabled.Border" Color="{Binding Color, Source={StaticResource s_scrollbarBackground}}" />
-	<SolidColorBrush x:Key="ScrollBar.Disabled.Glyph" Color="{Binding Color, Source={StaticResource s_disabledText}}" />
+	<SolidColorBrush x:Key="ScrollBar.Disabled.Background" Color="{Binding Color, Source={StaticResource darkTheme.scrollbarBackground}}" />
+	<SolidColorBrush x:Key="ScrollBar.Disabled.Border" Color="{Binding Color, Source={StaticResource darkTheme.scrollbarBackground}}" />
+	<SolidColorBrush x:Key="ScrollBar.Disabled.Glyph" Color="{Binding Color, Source={StaticResource darkTheme.disabledText}}" />
 
 	<!-- fix square between two scrollbars -->
-	<SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="{Binding Color, Source={StaticResource s_scrollbarBackground}}" />
+	<SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="{Binding Color, Source={StaticResource darkTheme.scrollbarBackground}}" />
 
 	<Style x:Key="RepeatButtonTransparent" TargetType="{x:Type RepeatButton}">
 		<Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -1211,9 +1211,9 @@
 
 	<!-- list view -->
 
-	<SolidColorBrush x:Key="ListView_BackgroundBrush" Color="{Binding Color, Source={StaticResource s_background}}" />
-	<SolidColorBrush x:Key="ListView_BorderBrush" Color="{Binding Color, Source={StaticResource s_border}}" />
-	<SolidColorBrush x:Key="ListView_ForegroundBrush" Color="{Binding Color, Source={StaticResource s_text}}" />
+	<SolidColorBrush x:Key="ListView_BackgroundBrush" Color="{Binding Color, Source={StaticResource darkTheme.background}}" />
+	<SolidColorBrush x:Key="ListView_BorderBrush" Color="{Binding Color, Source={StaticResource darkTheme.border}}" />
+	<SolidColorBrush x:Key="ListView_ForegroundBrush" Color="{Binding Color, Source={StaticResource darkTheme.text}}" />
 
 	<Style TargetType="{x:Type ListView}">
 		<Setter Property="Background" Value="{DynamicResource ListView_BackgroundBrush}"/>
@@ -1224,12 +1224,12 @@
 
 	<!-- list item -->
 
-	<SolidColorBrush x:Key="Item.MouseOver.Background" Color="{Binding Color, Source={StaticResource s_itemBackgroundHover}}" />
-	<SolidColorBrush x:Key="Item.MouseOver.Border" Color="{Binding Color, Source={StaticResource s_itemBorderHover}}" />
-	<SolidColorBrush x:Key="Item.SelectedInactive.Background" Color="{Binding Color, Source={StaticResource s_itemBackgroundInactive}}" />
-	<SolidColorBrush x:Key="Item.SelectedInactive.Border" Color="{Binding Color, Source={StaticResource s_itemBorderInactive}}" />
-	<SolidColorBrush x:Key="Item.SelectedActive.Background" Color="{Binding Color, Source={StaticResource s_itemBackgroundActive}}" />
-	<SolidColorBrush x:Key="Item.SelectedActive.Border" Color="{Binding Color, Source={StaticResource s_activeBorder}}" />
+	<SolidColorBrush x:Key="Item.MouseOver.Background" Color="{Binding Color, Source={StaticResource darkTheme.itemBackgroundHover}}" />
+	<SolidColorBrush x:Key="Item.MouseOver.Border" Color="{Binding Color, Source={StaticResource darkTheme.itemBorderHover}}" />
+	<SolidColorBrush x:Key="Item.SelectedInactive.Background" Color="{Binding Color, Source={StaticResource darkTheme.itemBackgroundInactive}}" />
+	<SolidColorBrush x:Key="Item.SelectedInactive.Border" Color="{Binding Color, Source={StaticResource darkTheme.itemBorderInactive}}" />
+	<SolidColorBrush x:Key="Item.SelectedActive.Background" Color="{Binding Color, Source={StaticResource darkTheme.itemBackgroundActive}}" />
+	<SolidColorBrush x:Key="Item.SelectedActive.Border" Color="{Binding Color, Source={StaticResource darkTheme.activeBorder}}" />
 
 	<Style TargetType="{x:Type ListViewItem}">
 		<Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -1270,7 +1270,7 @@
 							<Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.SelectedActive.Border}"/>
 						</MultiTrigger>
 						<Trigger Property="IsEnabled" Value="False">
-							<Setter Property="TextElement.Foreground" TargetName="Bd" Value="{StaticResource s_mutedText}"/>
+							<Setter Property="TextElement.Foreground" TargetName="Bd" Value="{StaticResource darkTheme.mutedText}"/>
 						</Trigger>
 					</ControlTemplate.Triggers>
 				</ControlTemplate>
@@ -1281,34 +1281,34 @@
 
 	<!-- tooltip -->
 
-	<SolidColorBrush x:Key="Tooltip_BorderBrush" Color="{Binding Color, Source={StaticResource s_tooltipBorder}}" />
-	<SolidColorBrush x:Key="Tooltip_BackgroundBrush" Color="{Binding Color, Source={StaticResource s_tooltipBackground}}" />
+	<SolidColorBrush x:Key="Tooltip_BorderBrush" Color="{Binding Color, Source={StaticResource darkTheme.tooltipBorder}}" />
+	<SolidColorBrush x:Key="Tooltip_BackgroundBrush" Color="{Binding Color, Source={StaticResource darkTheme.tooltipBackground}}" />
 
 	<Style TargetType="ToolTip">
 		<Setter Property="BorderBrush" Value="{StaticResource Tooltip_BorderBrush}"/>
 		<Setter Property="Background" Value="{StaticResource Tooltip_BackgroundBrush}"/>
-		<Setter Property="Foreground" Value="{StaticResource s_disabledText}"/>
+		<Setter Property="Foreground" Value="{StaticResource darkTheme.disabledText}"/>
 	</Style>
 	
 	<!-- checkbox -->
 
-	<SolidColorBrush x:Key="OptionMark.Static.Background" Color="{Binding Color, Source={StaticResource s_inputBackground}}" />
-	<SolidColorBrush x:Key="OptionMark.Static.Border" Color="{Binding Color, Source={StaticResource s_border}}" />
-	<SolidColorBrush x:Key="OptionMark.Static.Glyph" Color="{Binding Color, Source={StaticResource s_text}}" />
-	<SolidColorBrush x:Key="OptionMark.MouseOver.Background" Color="{Binding Color, Source={StaticResource s_hoverBackground}}" />
-	<SolidColorBrush x:Key="OptionMark.MouseOver.Border" Color="{Binding Color, Source={StaticResource s_hoverBorder}}" />
-	<SolidColorBrush x:Key="OptionMark.MouseOver.Glyph" Color="{Binding Color, Source={StaticResource s_itemTextHover}}" />
-	<SolidColorBrush x:Key="OptionMark.Pressed.Background" Color="{Binding Color, Source={StaticResource s_checkboxBackgroundPressed}}" />
-	<SolidColorBrush x:Key="OptionMark.Pressed.Border" Color="{Binding Color, Source={StaticResource s_checkboxBorderPressed}}" />
-	<SolidColorBrush x:Key="OptionMark.Pressed.Glyph" Color="{Binding Color, Source={StaticResource s_itemTextHover}}" />
-	<SolidColorBrush x:Key="OptionMark.Disabled.Background" Color="{Binding Color, Source={StaticResource s_checkboxBackgroundDisabled}}" />
-	<SolidColorBrush x:Key="OptionMark.Disabled.Border" Color="{Binding Color, Source={StaticResource s_checkboxBorderDisabled}}" />
-	<SolidColorBrush x:Key="OptionMark.Disabled.Glyph" Color="{Binding Color, Source={StaticResource s_disabledText}}" />
+	<SolidColorBrush x:Key="OptionMark.Static.Background" Color="{Binding Color, Source={StaticResource darkTheme.inputBackground}}" />
+	<SolidColorBrush x:Key="OptionMark.Static.Border" Color="{Binding Color, Source={StaticResource darkTheme.border}}" />
+	<SolidColorBrush x:Key="OptionMark.Static.Glyph" Color="{Binding Color, Source={StaticResource darkTheme.text}}" />
+	<SolidColorBrush x:Key="OptionMark.MouseOver.Background" Color="{Binding Color, Source={StaticResource darkTheme.hoverBackground}}" />
+	<SolidColorBrush x:Key="OptionMark.MouseOver.Border" Color="{Binding Color, Source={StaticResource darkTheme.hoverBorder}}" />
+	<SolidColorBrush x:Key="OptionMark.MouseOver.Glyph" Color="{Binding Color, Source={StaticResource darkTheme.itemTextHover}}" />
+	<SolidColorBrush x:Key="OptionMark.Pressed.Background" Color="{Binding Color, Source={StaticResource darkTheme.checkboxBackgroundPressed}}" />
+	<SolidColorBrush x:Key="OptionMark.Pressed.Border" Color="{Binding Color, Source={StaticResource darkTheme.checkboxBorderPressed}}" />
+	<SolidColorBrush x:Key="OptionMark.Pressed.Glyph" Color="{Binding Color, Source={StaticResource darkTheme.itemTextHover}}" />
+	<SolidColorBrush x:Key="OptionMark.Disabled.Background" Color="{Binding Color, Source={StaticResource darkTheme.checkboxBackgroundDisabled}}" />
+	<SolidColorBrush x:Key="OptionMark.Disabled.Border" Color="{Binding Color, Source={StaticResource darkTheme.checkboxBorderDisabled}}" />
+	<SolidColorBrush x:Key="OptionMark.Disabled.Glyph" Color="{Binding Color, Source={StaticResource darkTheme.disabledText}}" />
 
 	<Style TargetType="{x:Type CheckBox}">
 		<Setter Property="Background" Value="{StaticResource OptionMark.Static.Background}"/>
 		<Setter Property="BorderBrush" Value="{StaticResource OptionMark.Static.Border}"/>
-		<Setter Property="Foreground" Value="{StaticResource s_text}" />
+		<Setter Property="Foreground" Value="{StaticResource darkTheme.text}" />
 		<Setter Property="BorderThickness" Value="1"/>
 		<Setter Property="Template">
 			<Setter.Value>
@@ -1364,20 +1364,20 @@
 
 	<!-- context menu / menu item -->
 
-	<SolidColorBrush x:Key="MenuItem.Popup.Background" Color="{Binding Color, Source={StaticResource s_background}}" />
-	<SolidColorBrush x:Key="MenuItem.Popup.Border" Color="{Binding Color, Source={StaticResource s_border}}" />
+	<SolidColorBrush x:Key="MenuItem.Popup.Background" Color="{Binding Color, Source={StaticResource darkTheme.background}}" />
+	<SolidColorBrush x:Key="MenuItem.Popup.Border" Color="{Binding Color, Source={StaticResource darkTheme.border}}" />
 
-	<SolidColorBrush x:Key="MenuItem.Highlight.Background" Color="{Binding Color, Source={StaticResource s_itemBackgroundActive}}" />
-	<SolidColorBrush x:Key="MenuItem.Highlight.Border" Color="{Binding Color, Source={StaticResource s_activeBorder}}" />
+	<SolidColorBrush x:Key="MenuItem.Highlight.Background" Color="{Binding Color, Source={StaticResource darkTheme.itemBackgroundActive}}" />
+	<SolidColorBrush x:Key="MenuItem.Highlight.Border" Color="{Binding Color, Source={StaticResource darkTheme.activeBorder}}" />
 
-	<SolidColorBrush x:Key="MenuItem.Gutter.Background" Color="{Binding Color, Source={StaticResource s_menuGutterBackground}}" />
-	<SolidColorBrush x:Key="MenuItem.Gutter.Separator1" Color="{Binding Color, Source={StaticResource s_border}}" />
-	<SolidColorBrush x:Key="MenuItem.Gutter.Separator2" Color="{Binding Color, Source={StaticResource s_background}}" />
+	<SolidColorBrush x:Key="MenuItem.Gutter.Background" Color="{Binding Color, Source={StaticResource darkTheme.menuGutterBackground}}" />
+	<SolidColorBrush x:Key="MenuItem.Gutter.Separator1" Color="{Binding Color, Source={StaticResource darkTheme.border}}" />
+	<SolidColorBrush x:Key="MenuItem.Gutter.Separator2" Color="{Binding Color, Source={StaticResource darkTheme.background}}" />
 
 	<Style TargetType="{x:Type ContextMenu}">
 		<Setter Property="OverridesDefaultStyle" Value="True" />
-		<Setter Property="TextElement.Foreground" Value="{StaticResource s_text}" />
-		<Setter Property="Foreground" Value="{StaticResource s_text}" />
+		<Setter Property="TextElement.Foreground" Value="{StaticResource darkTheme.text}" />
+		<Setter Property="Foreground" Value="{StaticResource darkTheme.text}" />
 		<Setter Property="Background" Value="{DynamicResource MenuItem.Popup.Background}" />
 		<Setter Property="BorderBrush" Value="{DynamicResource MenuItem.Popup.Border}" />
 		<Setter Property="BorderThickness" Value="1" />
@@ -1414,7 +1414,7 @@
 					<ColumnDefinition Width="Auto" />
 				</Grid.ColumnDefinitions>
 				<ContentPresenter x:Name="Icon" ContentSource="Icon" SnapsToDevicePixels="True" VerticalAlignment="Center" HorizontalAlignment="Center" Width="16" Height="16" Margin="3" />
-				<Path x:Name="GlyphPanel" Data="F1 M 10.0,1.2 L 4.7,9.1 L 4.5,9.1 L 0,5.2 L 1.3,3.5 L 4.3,6.1L 8.3,0 L 10.0,1.2 Z" FlowDirection="LeftToRight" Margin="3" Visibility="Collapsed" VerticalAlignment="Center" Fill="{StaticResource s_text}" />
+				<Path x:Name="GlyphPanel" Data="F1 M 10.0,1.2 L 4.7,9.1 L 4.5,9.1 L 0,5.2 L 1.3,3.5 L 4.3,6.1L 8.3,0 L 10.0,1.2 Z" FlowDirection="LeftToRight" Margin="3" Visibility="Collapsed" VerticalAlignment="Center" Fill="{StaticResource darkTheme.text}" />
 				<ContentPresenter Grid.Column="1" ContentSource="Header" RecognizesAccessKey="True" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="True" />
 			</Grid>
 		</Border>
@@ -1431,7 +1431,7 @@
 				<Setter Property="BorderBrush" TargetName="Bd" Value="{DynamicResource MenuItem.Highlight.Border}" />
 			</Trigger>
 			<Trigger Property="IsEnabled" Value="False">
-				<Setter Property="TextElement.Foreground" TargetName="Bd" Value="{StaticResource s_disabledText}" />
+				<Setter Property="TextElement.Foreground" TargetName="Bd" Value="{StaticResource darkTheme.disabledText}" />
 			</Trigger>
 		</ControlTemplate.Triggers>
 	</ControlTemplate>
@@ -1443,7 +1443,7 @@
 					<ColumnDefinition Width="Auto" />
 				</Grid.ColumnDefinitions>
 				<ContentPresenter x:Name="Icon" ContentSource="Icon" SnapsToDevicePixels="True" VerticalAlignment="Center" HorizontalAlignment="Center" Width="16" Height="16" Margin="3" />
-				<Path x:Name="GlyphPanel" Data="F1 M 10.0,1.2 L 4.7,9.1 L 4.5,9.1 L 0,5.2 L 1.3,3.5 L 4.3,6.1L 8.3,0 L 10.0,1.2 Z" FlowDirection="LeftToRight" Margin="3" Visibility="Collapsed" VerticalAlignment="Center" Fill="{StaticResource s_text}" />
+				<Path x:Name="GlyphPanel" Data="F1 M 10.0,1.2 L 4.7,9.1 L 4.5,9.1 L 0,5.2 L 1.3,3.5 L 4.3,6.1L 8.3,0 L 10.0,1.2 Z" FlowDirection="LeftToRight" Margin="3" Visibility="Collapsed" VerticalAlignment="Center" Fill="{StaticResource darkTheme.text}" />
 				<ContentPresenter Grid.Column="1" ContentSource="Header" RecognizesAccessKey="True" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="True" />
 				<Popup x:Name="PART_Popup" AllowsTransparency="True" Focusable="False" IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}" Placement="Bottom" PlacementTarget="{Binding ElementName=Bd}" PopupAnimation="None">
 					<Border Background="{DynamicResource MenuItem.Popup.Background}" BorderBrush="{DynamicResource MenuItem.Popup.Border}" BorderThickness="1" Padding="2" SnapsToDevicePixels="True">
@@ -1470,7 +1470,7 @@
 				<Setter Property="BorderBrush" TargetName="Bd" Value="{DynamicResource MenuItem.Highlight.Border}" />
 			</Trigger>
 			<Trigger Property="IsEnabled" Value="False">
-				<Setter Property="TextElement.Foreground" TargetName="Bd" Value="{StaticResource s_disabledText}" />
+				<Setter Property="TextElement.Foreground" TargetName="Bd" Value="{StaticResource darkTheme.disabledText}" />
 			</Trigger>
 		</ControlTemplate.Triggers>
 	</ControlTemplate>
@@ -1487,10 +1487,10 @@
 				</Grid.ColumnDefinitions>
 				<ContentPresenter x:Name="Icon" ContentSource="Icon" SnapsToDevicePixels="True" VerticalAlignment="Center" HorizontalAlignment="Center" Width="16" Height="16" Margin="3" />
 				<Border x:Name="GlyphPanel" Visibility="Hidden" Height="22" Width="22" VerticalAlignment="Center" HorizontalAlignment="Center" Background="{DynamicResource MenuItem.Highlight.Background}" BorderBrush="{DynamicResource MenuItem.Highlight.Border}" BorderThickness="1" ClipToBounds="False" Margin="-1,0,0,0">
-					<Path x:Name="Glyph" Data="F1 M 10.0,1.2 L 4.7,9.1 L 4.5,9.1 L 0,5.2 L 1.3,3.5 L 4.3,6.1L 8.3,0 L 10.0,1.2 Z" FlowDirection="LeftToRight" Height="11" Width="10" Fill="{StaticResource s_text}" />
+					<Path x:Name="Glyph" Data="F1 M 10.0,1.2 L 4.7,9.1 L 4.5,9.1 L 0,5.2 L 1.3,3.5 L 4.3,6.1L 8.3,0 L 10.0,1.2 Z" FlowDirection="LeftToRight" Height="11" Width="10" Fill="{StaticResource darkTheme.text}" />
 				</Border>
 				<ContentPresenter x:Name="menuHeaderContainer" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" ContentSource="Header" RecognizesAccessKey="True" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="True" />
-				<TextBlock x:Name="menuGestureText" Grid.Column="4" Text="{TemplateBinding InputGestureText}" Margin="{TemplateBinding Padding}" VerticalAlignment="Center" Opacity="0.7" Foreground="{StaticResource s_mutedText}" />
+				<TextBlock x:Name="menuGestureText" Grid.Column="4" Text="{TemplateBinding InputGestureText}" Margin="{TemplateBinding Padding}" VerticalAlignment="Center" Opacity="0.7" Foreground="{StaticResource darkTheme.mutedText}" />
 			</Grid>
 		</Border>
 		<ControlTemplate.Triggers>
@@ -1506,7 +1506,7 @@
 				<Setter Property="BorderBrush" TargetName="Bd" Value="{DynamicResource MenuItem.Highlight.Border}" />
 			</Trigger>
 			<Trigger Property="IsEnabled" Value="False">
-				<Setter Property="Fill" TargetName="Glyph" Value="{StaticResource s_disabledText}" />
+				<Setter Property="Fill" TargetName="Glyph" Value="{StaticResource darkTheme.disabledText}" />
 			</Trigger>
 		</ControlTemplate.Triggers>
 	</ControlTemplate>
@@ -1523,11 +1523,11 @@
 				</Grid.ColumnDefinitions>
 				<ContentPresenter x:Name="Icon" ContentSource="Icon" SnapsToDevicePixels="True" VerticalAlignment="Center" HorizontalAlignment="Center" Width="16" Height="16" Margin="3" />
 				<Border x:Name="GlyphPanel" BorderThickness="1" Height="22" Width="22" Visibility="Hidden" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="-1,0,0,0" BorderBrush="{DynamicResource MenuItem.Highlight.Border}" Background="{DynamicResource MenuItem.Highlight.Background}">
-					<Path x:Name="Glyph" Data="F1 M 10.0,1.2 L 4.7,9.1 L 4.5,9.1 L 0,5.2 L 1.3,3.5 L 4.3,6.1L 8.3,0 L 10.0,1.2 Z" FlowDirection="LeftToRight" Height="11" Width="10" Fill="{StaticResource s_text}" />
+					<Path x:Name="Glyph" Data="F1 M 10.0,1.2 L 4.7,9.1 L 4.5,9.1 L 0,5.2 L 1.3,3.5 L 4.3,6.1L 8.3,0 L 10.0,1.2 Z" FlowDirection="LeftToRight" Height="11" Width="10" Fill="{StaticResource darkTheme.text}" />
 				</Border>
 				<ContentPresenter Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" ContentSource="Header" RecognizesAccessKey="True" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="True" />
-				<TextBlock Grid.Column="4" Text="{TemplateBinding InputGestureText}" VerticalAlignment="Center" Margin="{TemplateBinding Padding}" Opacity="0.7" Foreground="{StaticResource s_mutedText}" />
-				<Path x:Name="RightArrow" Grid.Column="5" Data="M 0,0 L 4,3.5 L 0,7 Z" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" Fill="{StaticResource s_text}" />
+				<TextBlock Grid.Column="4" Text="{TemplateBinding InputGestureText}" VerticalAlignment="Center" Margin="{TemplateBinding Padding}" Opacity="0.7" Foreground="{StaticResource darkTheme.mutedText}" />
+				<Path x:Name="RightArrow" Grid.Column="5" Data="M 0,0 L 4,3.5 L 0,7 Z" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" Fill="{StaticResource darkTheme.text}" />
 				<Popup x:Name="PART_Popup" AllowsTransparency="True" Focusable="False" IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}" Placement="Right" HorizontalOffset="-2" VerticalOffset="-3" PopupAnimation="None">
 					<Border Background="{DynamicResource MenuItem.Popup.Background}" BorderBrush="{DynamicResource MenuItem.Popup.Border}" BorderThickness="1" Padding="2" SnapsToDevicePixels="True">
 						<ScrollViewer CanContentScroll="True" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
@@ -1553,8 +1553,8 @@
 				<Setter Property="BorderBrush" TargetName="Bd" Value="{DynamicResource MenuItem.Highlight.Border}" />
 			</Trigger>
 			<Trigger Property="IsEnabled" Value="False">
-				<Setter Property="Fill" TargetName="Glyph" Value="{StaticResource s_disabledText}" />
-				<Setter Property="Fill" TargetName="RightArrow" Value="{StaticResource s_disabledText}" />
+				<Setter Property="Fill" TargetName="Glyph" Value="{StaticResource darkTheme.disabledText}" />
+				<Setter Property="Fill" TargetName="RightArrow" Value="{StaticResource darkTheme.disabledText}" />
 			</Trigger>
 		</ControlTemplate.Triggers>
 	</ControlTemplate>
@@ -1563,7 +1563,7 @@
 		<Setter Property="Background" Value="Transparent" />
 		<Setter Property="BorderBrush" Value="Transparent" />
 		<Setter Property="BorderThickness" Value="1" />
-		<Setter Property="Foreground" Value="{StaticResource s_text}" />
+		<Setter Property="Foreground" Value="{StaticResource darkTheme.text}" />
 		<Setter Property="HeaderTemplate" Value="{StaticResource MenuItemHeaderTemplate}" />
 		<Style.Triggers>
 			<Trigger Property="Role" Value="TopLevelHeader">
@@ -1584,7 +1584,7 @@
 	</Style>
 
 	<Style TargetType="{x:Type Separator}">
-		<Setter Property="Background" Value="{StaticResource s_border}" />
+		<Setter Property="Background" Value="{StaticResource darkTheme.border}" />
 		<Setter Property="MinHeight" Value="1" />
 		<Setter Property="SnapsToDevicePixels" Value="True" />
 		<Setter Property="OverridesDefaultStyle" Value="True" />
@@ -1600,21 +1600,21 @@
 	
 	<!-- expander -->
 
-	<SolidColorBrush x:Key="Expander.Static.Circle.Stroke" Color="{Binding Color, Source={StaticResource s_expanderBorder}}" />
-	<SolidColorBrush x:Key="Expander.Static.Circle.Fill" Color="{Binding Color, Source={StaticResource s_inputBackground}}" />
-	<SolidColorBrush x:Key="Expander.Static.Arrow.Stroke" Color="{Binding Color, Source={StaticResource s_text}}" />
+	<SolidColorBrush x:Key="Expander.Static.Circle.Stroke" Color="{Binding Color, Source={StaticResource darkTheme.expanderBorder}}" />
+	<SolidColorBrush x:Key="Expander.Static.Circle.Fill" Color="{Binding Color, Source={StaticResource darkTheme.inputBackground}}" />
+	<SolidColorBrush x:Key="Expander.Static.Arrow.Stroke" Color="{Binding Color, Source={StaticResource darkTheme.text}}" />
 
-	<SolidColorBrush x:Key="Expander.MouseOver.Circle.Stroke" Color="{Binding Color, Source={StaticResource s_expanderBorderHover}}" />
-	<SolidColorBrush x:Key="Expander.MouseOver.Circle.Fill" Color="{Binding Color, Source={StaticResource s_hoverBackground}}" />
-	<SolidColorBrush x:Key="Expander.MouseOver.Arrow.Stroke" Color="{Binding Color, Source={StaticResource s_itemTextHover}}" />
+	<SolidColorBrush x:Key="Expander.MouseOver.Circle.Stroke" Color="{Binding Color, Source={StaticResource darkTheme.expanderBorderHover}}" />
+	<SolidColorBrush x:Key="Expander.MouseOver.Circle.Fill" Color="{Binding Color, Source={StaticResource darkTheme.hoverBackground}}" />
+	<SolidColorBrush x:Key="Expander.MouseOver.Arrow.Stroke" Color="{Binding Color, Source={StaticResource darkTheme.itemTextHover}}" />
 
-	<SolidColorBrush x:Key="Expander.Pressed.Circle.Stroke" Color="{Binding Color, Source={StaticResource s_expanderBorderPressed}}" />
-	<SolidColorBrush x:Key="Expander.Pressed.Circle.Fill" Color="{Binding Color, Source={StaticResource s_pressBackground}}" />
-	<SolidColorBrush x:Key="Expander.Pressed.Arrow.Stroke" Color="{Binding Color, Source={StaticResource s_itemTextHover}}" />
+	<SolidColorBrush x:Key="Expander.Pressed.Circle.Stroke" Color="{Binding Color, Source={StaticResource darkTheme.expanderBorderPressed}}" />
+	<SolidColorBrush x:Key="Expander.Pressed.Circle.Fill" Color="{Binding Color, Source={StaticResource darkTheme.pressBackground}}" />
+	<SolidColorBrush x:Key="Expander.Pressed.Arrow.Stroke" Color="{Binding Color, Source={StaticResource darkTheme.itemTextHover}}" />
 
-	<SolidColorBrush x:Key="Expander.Disabled.Circle.Stroke" Color="{Binding Color, Source={StaticResource s_expanderBorderDisabled}}" />
-	<SolidColorBrush x:Key="Expander.Disabled.Circle.Fill" Color="{Binding Color, Source={StaticResource s_expanderBackgroundDisabled}}" />
-	<SolidColorBrush x:Key="Expander.Disabled.Arrow.Stroke" Color="{Binding Color, Source={StaticResource s_disabledText}}" />
+	<SolidColorBrush x:Key="Expander.Disabled.Circle.Stroke" Color="{Binding Color, Source={StaticResource darkTheme.expanderBorderDisabled}}" />
+	<SolidColorBrush x:Key="Expander.Disabled.Circle.Fill" Color="{Binding Color, Source={StaticResource darkTheme.expanderBackgroundDisabled}}" />
+	<SolidColorBrush x:Key="Expander.Disabled.Arrow.Stroke" Color="{Binding Color, Source={StaticResource darkTheme.disabledText}}" />
 
 	<Style x:Key="ExpanderDownHeaderStyle" TargetType="{x:Type ToggleButton}">
 		<Setter Property="Template">
@@ -1810,7 +1810,7 @@
 		</Setter>
 	</Style>
 	<Style TargetType="{x:Type Expander}">
-		<Setter Property="Foreground" Value="{StaticResource s_text}"/>
+		<Setter Property="Foreground" Value="{StaticResource darkTheme.text}"/>
 		<Setter Property="Background" Value="Transparent"/>
 		<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
 		<Setter Property="VerticalContentAlignment" Value="Stretch"/>
@@ -1845,7 +1845,7 @@
 							<Setter Property="Style" TargetName="HeaderSite" Value="{StaticResource ExpanderLeftHeaderStyle}"/>
 						</Trigger>
 						<Trigger Property="IsEnabled" Value="false">
-							<Setter Property="Foreground" Value="{StaticResource s_disabledText}"/>
+							<Setter Property="Foreground" Value="{StaticResource darkTheme.disabledText}"/>
 						</Trigger>
 					</ControlTemplate.Triggers>
 				</ControlTemplate>
