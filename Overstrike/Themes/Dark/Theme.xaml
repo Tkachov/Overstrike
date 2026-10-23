@@ -12,9 +12,6 @@
 -->
 
 	<!-- colors -->
-	
-
-	<!-- colors -->
 
 	<!-- base -->
 	<Color x:Key="dark">#202024</Color> <!-- background, SuitsMenu_SideBackground -->
@@ -59,6 +56,7 @@
 	<Color x:Key="light+30">#F3F3F3</Color> <!-- textHover -->
 
 	<!-- semantics -->
+	
 	<SolidColorBrush x:Key="s_background" Color="{StaticResource dark}" />
 	<SolidColorBrush x:Key="s_border" Color="{StaticResource dark+30a}" />
 	<SolidColorBrush x:Key="s_activeBorder" Color="{StaticResource bright}" />
@@ -142,56 +140,6 @@
 	<SolidColorBrush x:Key="s_menuGutterBackground" Color="{StaticResource dark-05}" /> <!-- menuGutterBackground -->
 
 	<SolidColorBrush x:Key="s_modularWizardNumberLabel" Color="{StaticResource dark+85a}" /> <!-- NumberLabelForeground -->
-	
-	<Color x:Key="background">#202024</Color>
-	<Color x:Key="border">#303035</Color>
-	<Color x:Key="text">#D9D9D9</Color>
-	<Color x:Key="redText">#D24</Color>
-	<Color x:Key="grayText">#A6A6AE</Color>
-	<Color x:Key="mutedText">#96969E</Color>
-	<SolidColorBrush x:Key="textBrush" Color="{StaticResource text}" />
-	<SolidColorBrush x:Key="borderBrush" Color="{StaticResource border}" />
-	<SolidColorBrush x:Key="backgroundBrush" Color="{StaticResource background}" />
-	<SolidColorBrush x:Key="mutedTextBrush" Color="{StaticResource mutedText}" />
-	<SolidColorBrush x:Key="grayTextBrush" Color="{StaticResource grayText}" />
-	<SolidColorBrush x:Key="warningTextBrush" Color="{StaticResource redText}" />
-
-	<!-- inactive/non-selected, not disabled/grayed-out -->
-	<Color x:Key="backgroundD">#1A1A1E</Color>
-	<Color x:Key="borderD">#303035</Color> <!-- follows 'border' -->
-	<Color x:Key="textD">#96969E</Color>
-	<SolidColorBrush x:Key="borderDBrush" Color="{StaticResource borderD}" />
-	<SolidColorBrush x:Key="backgroundDBrush" Color="{StaticResource backgroundD}" />
-	<SolidColorBrush x:Key="textDBrush" Color="{StaticResource textD}" />
-
-	<Color x:Key="backgroundH">#242428</Color>
-	<Color x:Key="borderH">#343439</Color>
-
-	<Color x:Key="backgroundHover">#292930</Color>
-	<Color x:Key="borderHover">#3B3B40</Color>
-	<Color x:Key="textHover">#F3F3F3</Color>
-
-	<!-- disabled -->
-	<Color x:Key="backgroundDisabled">#1A1A1E</Color>
-	<Color x:Key="borderDisabled">#2B2B31</Color>
-	<Color x:Key="textDisabled">#66666E</Color>
-	<SolidColorBrush x:Key="textDisabledBrush" Color="{StaticResource textDisabled}" />
-
-	<!-- button -->
-	<Color x:Key="buttonBackground">#2E2E33</Color>
-	<Color x:Key="buttonBorder">#303035</Color>
-	<Color x:Key="buttonHoverBackground">#333338</Color>
-	<Color x:Key="buttonHoverBorder">#47474C</Color>
-
-	<Color x:Key="buttonPressBackground">#38383D</Color>
-	<Color x:Key="buttonPressBorder">#4C4C51</Color>
-	<Color x:Key="buttonDisableBackground">#27272C</Color> <!-- TODO: better contrast against normal button; use other keys because these are shared with scrollbars -->
-	<Color x:Key="buttonDisableBorder">#303035</Color>
-	<Color x:Key="buttonDisableText">#66666E</Color> <!-- == textDisabled -->
-
-	<Color x:Key="borderFocused">#39F</Color>
-
-
 
 	<!-- overrides -->
 
@@ -285,29 +233,29 @@
 	<!-- TextBlock -->
 
 	<Style TargetType="TextBlock">
-		<Setter Property="Foreground" Value="{DynamicResource textBrush}" />
+		<Setter Property="Foreground" Value="{StaticResource s_text}" />
 		<Style.Triggers>
 			<Trigger Property="IsEnabled" Value="False">
-				<Setter Property="Foreground" Value="{DynamicResource textDisabledBrush}" />
+				<Setter Property="Foreground" Value="{StaticResource s_disabledText}" />
 			</Trigger>
 		</Style.Triggers>
 	</Style>
 
 	<Style x:Key="MutedText" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
-		<Setter Property="Foreground" Value="{DynamicResource mutedTextBrush}" />
+		<Setter Property="Foreground" Value="{StaticResource s_mutedText}" />
 	</Style>
 	<Style x:Key="GrayText" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
-		<Setter Property="Foreground" Value="{DynamicResource grayTextBrush}" />
+		<Setter Property="Foreground" Value="{StaticResource s_grayText}" />
 	</Style>
 	<Style x:Key="WarningText" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
-		<Setter Property="Foreground" Value="{DynamicResource warningTextBrush}" />
+		<Setter Property="Foreground" Value="{StaticResource s_warningText}" />
 	</Style>
 
 	<Style x:Key="MenuItemHeaderText" TargetType="TextBlock">
 		<Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type MenuItem}}}" />
 		<Style.Triggers>
 			<Trigger Property="IsEnabled" Value="False">
-				<Setter Property="Foreground" Value="{DynamicResource textDisabledBrush}" />
+				<Setter Property="Foreground" Value="{StaticResource s_disabledText}" />
 			</Trigger>
 		</Style.Triggers>
 	</Style>
@@ -315,7 +263,7 @@
 		<Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type TabItem}}}" />
 		<Style.Triggers>
 			<Trigger Property="IsEnabled" Value="False">
-				<Setter Property="Foreground" Value="{DynamicResource textDisabledBrush}" />
+				<Setter Property="Foreground" Value="{StaticResource s_disabledText}" />
 			</Trigger>
 		</Style.Triggers>
 	</Style>
@@ -575,7 +523,7 @@
 	<Style TargetType="{x:Type ComboBox}">
 		<Setter Property="Background" Value="{StaticResource ComboBox.Static.Background}"/>
 		<Setter Property="BorderBrush" Value="{StaticResource ComboBox.Static.Border}"/>
-		<Setter Property="Foreground" Value="{DynamicResource textBrush}"/>
+		<Setter Property="Foreground" Value="{StaticResource s_text}"/>
 		<Setter Property="BorderThickness" Value="1"/>
 		<Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
 		<Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
@@ -626,7 +574,7 @@
 					</Border>
 					<ControlTemplate.Triggers>
 						<Trigger Property="IsEnabled" Value="False">
-							<Setter Property="TextElement.Foreground" TargetName="Bd" Value="{DynamicResource textDisabledBrush}"/>
+							<Setter Property="TextElement.Foreground" TargetName="Bd" Value="{DynamicResource s_disabledText}"/>
 						</Trigger>
 						<MultiTrigger>
 							<MultiTrigger.Conditions>
@@ -689,8 +637,8 @@
 	<!-- tab control & tab item -->
 
 	<Style TargetType="TabControl">
-		<Setter Property="Background" Value="{DynamicResource backgroundBrush}"/>
-		<Setter Property="BorderBrush" Value="{StaticResource borderBrush}"/>
+		<Setter Property="Background" Value="{StaticResource s_background}" />
+		<Setter Property="BorderBrush" Value="{StaticResource s_border}" />
 	</Style>
 
 	<SolidColorBrush x:Key="TabItem.MouseOver.Background" Color="{Binding Color, Source={StaticResource s_tabBackgroundHover}}" />
@@ -873,9 +821,9 @@
 		</ControlTemplate.Triggers>
 	</ControlTemplate>
 	<Style TargetType="TabItem">
-		<Setter Property="Background" Value="{DynamicResource backgroundDBrush}"/> <!-- non-active -->
-		<Setter Property="BorderBrush" Value="{DynamicResource borderDBrush}"/>
-		<Setter Property="Foreground" Value="{DynamicResource textDBrush}"/>
+		<Setter Property="Background" Value="{StaticResource s_secondaryBackground}"/> <!-- non-active -->
+		<Setter Property="BorderBrush" Value="{StaticResource s_secondaryBorder}"/>
+		<Setter Property="Foreground" Value="{StaticResource s_secondaryText}"/>
 		<Setter Property="HeaderTemplate">
 			<Setter.Value>
 				<DataTemplate>
@@ -888,10 +836,10 @@
 
 		<Style.Triggers>
 			<Trigger Property="IsSelected" Value="true">
-				<Setter Property="Foreground" Value="{DynamicResource textBrush}"/>
+				<Setter Property="Foreground" Value="{StaticResource s_text}"/>
 			</Trigger>
 			<Trigger Property="IsMouseOver" Value="true">
-				<Setter Property="Foreground" Value="{DynamicResource textBrush}"/>
+				<Setter Property="Foreground" Value="{StaticResource s_text}"/>
 			</Trigger>
 		</Style.Triggers>
 	</Style>
@@ -1313,7 +1261,7 @@
 							<Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.SelectedActive.Border}"/>
 						</MultiTrigger>
 						<Trigger Property="IsEnabled" Value="False">
-							<Setter Property="TextElement.Foreground" TargetName="Bd" Value="{DynamicResource mutedTextBrush}"/>
+							<Setter Property="TextElement.Foreground" TargetName="Bd" Value="{StaticResource s_mutedText}"/>
 						</Trigger>
 					</ControlTemplate.Triggers>
 				</ControlTemplate>
@@ -1330,7 +1278,7 @@
 	<Style TargetType="ToolTip">
 		<Setter Property="BorderBrush" Value="{StaticResource Tooltip_BorderBrush}"/>
 		<Setter Property="Background" Value="{StaticResource Tooltip_BackgroundBrush}"/>
-		<Setter Property="Foreground" Value="{StaticResource textDisabledBrush}"/> <!-- TODO: uses default Foreground, needs custom style, and thus probably a custom ControlTemplate -->
+		<Setter Property="Foreground" Value="{StaticResource s_disabledText}"/>
 	</Style>
 	
 	<!-- checkbox -->
@@ -1351,7 +1299,7 @@
 	<Style TargetType="{x:Type CheckBox}">
 		<Setter Property="Background" Value="{StaticResource OptionMark.Static.Background}"/>
 		<Setter Property="BorderBrush" Value="{StaticResource OptionMark.Static.Border}"/>
-		<Setter Property="Foreground" Value="{DynamicResource textBrush}" />
+		<Setter Property="Foreground" Value="{StaticResource s_text}" />
 		<Setter Property="BorderThickness" Value="1"/>
 		<Setter Property="Template">
 			<Setter.Value>
@@ -1419,8 +1367,8 @@
 
 	<Style TargetType="{x:Type ContextMenu}">
 		<Setter Property="OverridesDefaultStyle" Value="True" />
-		<Setter Property="TextElement.Foreground" Value="{DynamicResource textBrush}" />
-		<Setter Property="Foreground" Value="{DynamicResource textBrush}" />
+		<Setter Property="TextElement.Foreground" Value="{StaticResource s_text}" />
+		<Setter Property="Foreground" Value="{StaticResource s_text}" />
 		<Setter Property="Background" Value="{DynamicResource MenuItem.Popup.Background}" />
 		<Setter Property="BorderBrush" Value="{DynamicResource MenuItem.Popup.Border}" />
 		<Setter Property="BorderThickness" Value="1" />
@@ -1457,7 +1405,7 @@
 					<ColumnDefinition Width="Auto" />
 				</Grid.ColumnDefinitions>
 				<ContentPresenter x:Name="Icon" ContentSource="Icon" SnapsToDevicePixels="True" VerticalAlignment="Center" HorizontalAlignment="Center" Width="16" Height="16" Margin="3" />
-				<Path x:Name="GlyphPanel" Data="F1 M 10.0,1.2 L 4.7,9.1 L 4.5,9.1 L 0,5.2 L 1.3,3.5 L 4.3,6.1L 8.3,0 L 10.0,1.2 Z" FlowDirection="LeftToRight" Margin="3" Visibility="Collapsed" VerticalAlignment="Center" Fill="{DynamicResource textBrush}" />
+				<Path x:Name="GlyphPanel" Data="F1 M 10.0,1.2 L 4.7,9.1 L 4.5,9.1 L 0,5.2 L 1.3,3.5 L 4.3,6.1L 8.3,0 L 10.0,1.2 Z" FlowDirection="LeftToRight" Margin="3" Visibility="Collapsed" VerticalAlignment="Center" Fill="{StaticResource s_text}" />
 				<ContentPresenter Grid.Column="1" ContentSource="Header" RecognizesAccessKey="True" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="True" />
 			</Grid>
 		</Border>
@@ -1474,7 +1422,7 @@
 				<Setter Property="BorderBrush" TargetName="Bd" Value="{DynamicResource MenuItem.Highlight.Border}" />
 			</Trigger>
 			<Trigger Property="IsEnabled" Value="False">
-				<Setter Property="TextElement.Foreground" TargetName="Bd" Value="{DynamicResource textDisabledBrush}" />
+				<Setter Property="TextElement.Foreground" TargetName="Bd" Value="{StaticResource s_disabledText}" />
 			</Trigger>
 		</ControlTemplate.Triggers>
 	</ControlTemplate>
@@ -1486,7 +1434,7 @@
 					<ColumnDefinition Width="Auto" />
 				</Grid.ColumnDefinitions>
 				<ContentPresenter x:Name="Icon" ContentSource="Icon" SnapsToDevicePixels="True" VerticalAlignment="Center" HorizontalAlignment="Center" Width="16" Height="16" Margin="3" />
-				<Path x:Name="GlyphPanel" Data="F1 M 10.0,1.2 L 4.7,9.1 L 4.5,9.1 L 0,5.2 L 1.3,3.5 L 4.3,6.1L 8.3,0 L 10.0,1.2 Z" FlowDirection="LeftToRight" Margin="3" Visibility="Collapsed" VerticalAlignment="Center" Fill="{DynamicResource textBrush}" />
+				<Path x:Name="GlyphPanel" Data="F1 M 10.0,1.2 L 4.7,9.1 L 4.5,9.1 L 0,5.2 L 1.3,3.5 L 4.3,6.1L 8.3,0 L 10.0,1.2 Z" FlowDirection="LeftToRight" Margin="3" Visibility="Collapsed" VerticalAlignment="Center" Fill="{StaticResource s_text}" />
 				<ContentPresenter Grid.Column="1" ContentSource="Header" RecognizesAccessKey="True" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="True" />
 				<Popup x:Name="PART_Popup" AllowsTransparency="True" Focusable="False" IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}" Placement="Bottom" PlacementTarget="{Binding ElementName=Bd}" PopupAnimation="None">
 					<Border Background="{DynamicResource MenuItem.Popup.Background}" BorderBrush="{DynamicResource MenuItem.Popup.Border}" BorderThickness="1" Padding="2" SnapsToDevicePixels="True">
@@ -1513,7 +1461,7 @@
 				<Setter Property="BorderBrush" TargetName="Bd" Value="{DynamicResource MenuItem.Highlight.Border}" />
 			</Trigger>
 			<Trigger Property="IsEnabled" Value="False">
-				<Setter Property="TextElement.Foreground" TargetName="Bd" Value="{DynamicResource textDisabledBrush}" />
+				<Setter Property="TextElement.Foreground" TargetName="Bd" Value="{StaticResource s_disabledText}" />
 			</Trigger>
 		</ControlTemplate.Triggers>
 	</ControlTemplate>
@@ -1530,10 +1478,10 @@
 				</Grid.ColumnDefinitions>
 				<ContentPresenter x:Name="Icon" ContentSource="Icon" SnapsToDevicePixels="True" VerticalAlignment="Center" HorizontalAlignment="Center" Width="16" Height="16" Margin="3" />
 				<Border x:Name="GlyphPanel" Visibility="Hidden" Height="22" Width="22" VerticalAlignment="Center" HorizontalAlignment="Center" Background="{DynamicResource MenuItem.Highlight.Background}" BorderBrush="{DynamicResource MenuItem.Highlight.Border}" BorderThickness="1" ClipToBounds="False" Margin="-1,0,0,0">
-					<Path x:Name="Glyph" Data="F1 M 10.0,1.2 L 4.7,9.1 L 4.5,9.1 L 0,5.2 L 1.3,3.5 L 4.3,6.1L 8.3,0 L 10.0,1.2 Z" FlowDirection="LeftToRight" Height="11" Width="10" Fill="{DynamicResource textBrush}" />
+					<Path x:Name="Glyph" Data="F1 M 10.0,1.2 L 4.7,9.1 L 4.5,9.1 L 0,5.2 L 1.3,3.5 L 4.3,6.1L 8.3,0 L 10.0,1.2 Z" FlowDirection="LeftToRight" Height="11" Width="10" Fill="{StaticResource s_text}" />
 				</Border>
 				<ContentPresenter x:Name="menuHeaderContainer" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" ContentSource="Header" RecognizesAccessKey="True" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="True" />
-				<TextBlock x:Name="menuGestureText" Grid.Column="4" Text="{TemplateBinding InputGestureText}" Margin="{TemplateBinding Padding}" VerticalAlignment="Center" Opacity="0.7" Foreground="{DynamicResource mutedTextBrush}" />
+				<TextBlock x:Name="menuGestureText" Grid.Column="4" Text="{TemplateBinding InputGestureText}" Margin="{TemplateBinding Padding}" VerticalAlignment="Center" Opacity="0.7" Foreground="{StaticResource s_mutedText}" />
 			</Grid>
 		</Border>
 		<ControlTemplate.Triggers>
@@ -1549,7 +1497,7 @@
 				<Setter Property="BorderBrush" TargetName="Bd" Value="{DynamicResource MenuItem.Highlight.Border}" />
 			</Trigger>
 			<Trigger Property="IsEnabled" Value="False">
-				<Setter Property="Fill" TargetName="Glyph" Value="{DynamicResource textDisabledBrush}" />
+				<Setter Property="Fill" TargetName="Glyph" Value="{StaticResource s_disabledText}" />
 			</Trigger>
 		</ControlTemplate.Triggers>
 	</ControlTemplate>
@@ -1566,11 +1514,11 @@
 				</Grid.ColumnDefinitions>
 				<ContentPresenter x:Name="Icon" ContentSource="Icon" SnapsToDevicePixels="True" VerticalAlignment="Center" HorizontalAlignment="Center" Width="16" Height="16" Margin="3" />
 				<Border x:Name="GlyphPanel" BorderThickness="1" Height="22" Width="22" Visibility="Hidden" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="-1,0,0,0" BorderBrush="{DynamicResource MenuItem.Highlight.Border}" Background="{DynamicResource MenuItem.Highlight.Background}">
-					<Path x:Name="Glyph" Data="F1 M 10.0,1.2 L 4.7,9.1 L 4.5,9.1 L 0,5.2 L 1.3,3.5 L 4.3,6.1L 8.3,0 L 10.0,1.2 Z" FlowDirection="LeftToRight" Height="11" Width="10" Fill="{DynamicResource textBrush}" />
+					<Path x:Name="Glyph" Data="F1 M 10.0,1.2 L 4.7,9.1 L 4.5,9.1 L 0,5.2 L 1.3,3.5 L 4.3,6.1L 8.3,0 L 10.0,1.2 Z" FlowDirection="LeftToRight" Height="11" Width="10" Fill="{StaticResource s_text}" />
 				</Border>
 				<ContentPresenter Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" ContentSource="Header" RecognizesAccessKey="True" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="True" />
-				<TextBlock Grid.Column="4" Text="{TemplateBinding InputGestureText}" VerticalAlignment="Center" Margin="{TemplateBinding Padding}" Opacity="0.7" Foreground="{DynamicResource mutedTextBrush}" />
-				<Path x:Name="RightArrow" Grid.Column="5" Data="M 0,0 L 4,3.5 L 0,7 Z" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" Fill="{DynamicResource textBrush}" />
+				<TextBlock Grid.Column="4" Text="{TemplateBinding InputGestureText}" VerticalAlignment="Center" Margin="{TemplateBinding Padding}" Opacity="0.7" Foreground="{StaticResource s_mutedText}" />
+				<Path x:Name="RightArrow" Grid.Column="5" Data="M 0,0 L 4,3.5 L 0,7 Z" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" Fill="{StaticResource s_text}" />
 				<Popup x:Name="PART_Popup" AllowsTransparency="True" Focusable="False" IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}" Placement="Right" HorizontalOffset="-2" VerticalOffset="-3" PopupAnimation="None">
 					<Border Background="{DynamicResource MenuItem.Popup.Background}" BorderBrush="{DynamicResource MenuItem.Popup.Border}" BorderThickness="1" Padding="2" SnapsToDevicePixels="True">
 						<ScrollViewer CanContentScroll="True" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
@@ -1596,8 +1544,8 @@
 				<Setter Property="BorderBrush" TargetName="Bd" Value="{DynamicResource MenuItem.Highlight.Border}" />
 			</Trigger>
 			<Trigger Property="IsEnabled" Value="False">
-				<Setter Property="Fill" TargetName="Glyph" Value="{DynamicResource textDisabledBrush}" />
-				<Setter Property="Fill" TargetName="RightArrow" Value="{DynamicResource textDisabledBrush}" />
+				<Setter Property="Fill" TargetName="Glyph" Value="{StaticResource s_disabledText}" />
+				<Setter Property="Fill" TargetName="RightArrow" Value="{StaticResource s_disabledText}" />
 			</Trigger>
 		</ControlTemplate.Triggers>
 	</ControlTemplate>
@@ -1606,7 +1554,7 @@
 		<Setter Property="Background" Value="Transparent" />
 		<Setter Property="BorderBrush" Value="Transparent" />
 		<Setter Property="BorderThickness" Value="1" />
-		<Setter Property="Foreground" Value="{DynamicResource textBrush}" />
+		<Setter Property="Foreground" Value="{StaticResource s_text}" />
 		<Setter Property="HeaderTemplate" Value="{StaticResource MenuItemHeaderTemplate}" />
 		<Style.Triggers>
 			<Trigger Property="Role" Value="TopLevelHeader">
@@ -1627,7 +1575,7 @@
 	</Style>
 
 	<Style TargetType="{x:Type Separator}">
-		<Setter Property="Background" Value="{DynamicResource borderBrush}" />
+		<Setter Property="Background" Value="{StaticResource s_border}" />
 		<Setter Property="MinHeight" Value="1" />
 		<Setter Property="SnapsToDevicePixels" Value="True" />
 		<Setter Property="OverridesDefaultStyle" Value="True" />
@@ -1853,7 +1801,7 @@
 		</Setter>
 	</Style>
 	<Style TargetType="{x:Type Expander}">
-		<Setter Property="Foreground" Value="{DynamicResource textBrush}"/>
+		<Setter Property="Foreground" Value="{StaticResource s_text}"/>
 		<Setter Property="Background" Value="Transparent"/>
 		<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
 		<Setter Property="VerticalContentAlignment" Value="Stretch"/>
@@ -1888,7 +1836,7 @@
 							<Setter Property="Style" TargetName="HeaderSite" Value="{StaticResource ExpanderLeftHeaderStyle}"/>
 						</Trigger>
 						<Trigger Property="IsEnabled" Value="false">
-							<Setter Property="Foreground" Value="{DynamicResource textDisabledBrush}"/>
+							<Setter Property="Foreground" Value="{StaticResource s_disabledText}"/>
 						</Trigger>
 					</ControlTemplate.Triggers>
 				</ControlTemplate>
