@@ -58,6 +58,7 @@ namespace Overstrike {
 			TryDetectGameAllDisks("MSM2 (Steam)", ":\\SteamLibrary\\steamapps\\common\\Marvel's Spider-Man 2");
 			TryDetectGameAllDisks("MSM2 (EGS)", ":\\Program Files (x86)\\Epic Games\\Marvel's Spider-Man 2");
 			TryDetectGameAllDisks("MSM2 (EGS)", ":\\Program Files\\Epic Games\\Marvel's Spider-Man 2");
+			TryDetectGameAllDisks("MSM2 (EGS)", ":\\Program Files\\Epic Games\\marvelsspiderman2");
 
 			// EGS installs games to Documents?
 			try {
