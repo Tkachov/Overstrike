@@ -14,46 +14,46 @@
 	<!-- colors -->
 
 	<!-- base -->
-	<Color x:Key="dark">#202024</Color> <!-- background, SuitsMenu_SideBackground -->
-	<Color x:Key="light">#D9D9D9</Color> <!-- text -->
-	<Color x:Key="danger">#D24</Color> <!-- redText -->
-	<Color x:Key="bright">#39F</Color> <!-- borderFocused, listItemActiveBorder, TextBoxSelection, menuItemHoverBorder, SuitsMenu_Selection -->
-	
-	<!-- shades -->	
-	<Color x:Key="dark-20">#101014</Color> <!-- SuitsMenu_Background -->
-	<Color x:Key="dark-15">#17171E</Color> <!-- TextBoxBack, checkmarkBackground, exFill -->
-	<Color x:Key="dark-10">#1A1A1E</Color> <!-- backgroundD, backgroundDisabled, ErrorLogWindow_Background, SuitsMenu_ListBackground -->
-	<Color x:Key="dark-05">#1D1D21</Color> <!-- menuGutterBackground -->
-	<Color x:Key="dark+05">#242428</Color> <!-- backgroundH -->
-	<Color x:Key="dark+05+blue">#24344B</Color> <!-- ComboItemSelectedBackground, listItemActiveBackground, menuItemHoverBackground -->
-	<Color x:Key="dark+10">#27272C</Color> <!-- buttonDisableBackground (scrollbar & first launch header back), actuallyButtonDisableBackground -->
-	<Color x:Key="dark+15">#292930</Color> <!-- backgroundHover, listItemHoverBackground -->
-	<Color x:Key="dark+20">#2B2B31</Color> <!-- borderDisabled -->	
-	<Color x:Key="dark+25">#2E2E33</Color> <!-- buttonBackground (only used in tooltip), actuallyButtonBackground -->
-	<Color x:Key="dark+30a">#303035</Color> <!-- border, SuitsMenu_Divider, borderD, buttonBorder (scrollbar), buttonDisableBorder (tooltip), actuallyButtonDisableBorder -->
-	<Color x:Key="dark+30b">#303039</Color> <!-- backgroundDisabledDarker -->	
-	<Color x:Key="dark+35a">#333338</Color> <!-- buttonHoverBackground (main, checkmark, expander), actuallyButtonHoverBackground -->
-	<Color x:Key="dark+35b">#33333C</Color> <!-- ComboItemNoFocusBackground, listItemInactiveBackground -->
-	<Color x:Key="dark+35c">#343439</Color> <!-- borderH -->
-	<Color x:Key="dark+40">#38383D</Color> <!-- buttonPressBackground (main, expander), actuallyButtonPressBackground -->
-	<Color x:Key="dark+45">#3B3B40</Color> <!-- borderHover, listItemHoverBorder -->
-	<Color x:Key="dark+50">#42424E</Color> <!-- borderDisabledDarker -->
-	<Color x:Key="dark+55">#47474C</Color> <!-- buttonHoverBorder (checkmark), actuallyButtonBorder -->
-	<Color x:Key="dark+60">#4C4C51</Color> <!-- buttonPressBorder (scrollbar), actuallyButtonPressBorder -->
-	<Color x:Key="dark+65">#505055</Color> <!-- exbuttonPressBorder -->
-	<Color x:Key="dark+75a">#57575C</Color> <!-- actuallyButtonHoverBorder -->
-	<Color x:Key="dark+75b">#58585D</Color> <!-- buttonPressBackground2 -->
-	<Color x:Key="dark+80">#606066</Color> <!-- exbuttonBorder -->
-	<Color x:Key="dark+85a">#666</Color> <!-- NumberLabelForeground -->
-	<Color x:Key="dark+85b">#66666E</Color> <!-- textDisabled, buttonDisableText, actuallyButtonDisableText -->
-	<Color x:Key="dark+85c">#666675</Color> <!-- listItemInactiveBorder, ComboItemNoFocusBorder -->
-	<Color x:Key="dark+90">#6C6C70</Color> <!-- buttonPressBorder2 -->
-	<Color x:Key="dark+95">#707077</Color> <!-- exborderHover -->
-	
-	<Color x:Key="light-60">#96969E</Color> <!-- mutedText, textD -->
-	<Color x:Key="light-55">#99999C</Color> <!-- exborderDisabledDarker -->
-	<Color x:Key="light-45">#A6A6AE</Color> <!-- grayText -->
-	<Color x:Key="light+30">#F3F3F3</Color> <!-- textHover -->
+	<Color x:Key="dark">#202024</Color>
+	<Color x:Key="light">#D9D9D9</Color>
+	<Color x:Key="danger">#D24</Color>
+	<Color x:Key="bright">#39F</Color>
+
+	<!-- shades -->
+	<Color x:Key="dark-20">#101014</Color>
+	<Color x:Key="dark-15">#17171E</Color>
+	<Color x:Key="dark-10">#1A1A1E</Color>
+	<Color x:Key="dark-05">#1D1D21</Color>
+	<Color x:Key="dark+05">#242428</Color>
+	<Color x:Key="dark+05+blue">#24344B</Color>
+	<Color x:Key="dark+10">#27272C</Color>
+	<Color x:Key="dark+15">#292930</Color>
+	<Color x:Key="dark+20">#2B2B31</Color>
+	<Color x:Key="dark+25">#2E2E33</Color>
+	<Color x:Key="dark+30a">#303035</Color>
+	<Color x:Key="dark+30b">#303039</Color>
+	<Color x:Key="dark+35a">#333338</Color>
+	<Color x:Key="dark+35b">#33333C</Color>
+	<Color x:Key="dark+35c">#343439</Color>
+	<Color x:Key="dark+40">#38383D</Color>
+	<Color x:Key="dark+45">#3B3B40</Color>
+	<Color x:Key="dark+50">#42424E</Color>
+	<Color x:Key="dark+55">#47474C</Color>
+	<Color x:Key="dark+60">#4C4C51</Color>
+	<Color x:Key="dark+65">#505055</Color>
+	<Color x:Key="dark+75a">#57575C</Color>
+	<Color x:Key="dark+75b">#58585D</Color>
+	<Color x:Key="dark+80">#606066</Color>
+	<Color x:Key="dark+85a">#666</Color>
+	<Color x:Key="dark+85b">#66666E</Color>
+	<Color x:Key="dark+85c">#666675</Color>
+	<Color x:Key="dark+90">#6C6C70</Color>
+	<Color x:Key="dark+95">#707077</Color>
+
+	<Color x:Key="light-60">#96969E</Color>
+	<Color x:Key="light-55">#99999C</Color>
+	<Color x:Key="light-45">#A6A6AE</Color>
+	<Color x:Key="light+30">#F3F3F3</Color>
 
 	<!-- semantics -->
 	
@@ -65,54 +65,17 @@
 	<SolidColorBrush x:Key="s_grayText" Color="{StaticResource light-45}" />
 	<SolidColorBrush x:Key="s_mutedText" Color="{StaticResource light-60}" />
 
-	<SolidColorBrush x:Key="s_overlayColor" Color="{StaticResource dark+30a}" />
-
-	<!-- TODO: check inactive tabs for use of old names -->
-	<!-- inactive/muted, but not disabled -->
-	<SolidColorBrush x:Key="s_secondaryBackground" Color="{StaticResource dark-10}" /> <!-- backgroundD, backgroundDBrush -->
-	<SolidColorBrush x:Key="s_secondaryBorder" Color="{Binding Color, Source={StaticResource s_border}}" /> <!-- borderD, borderDBrush -->
-	<SolidColorBrush x:Key="s_secondaryText" Color="{Binding Color, Source={StaticResource s_mutedText}}" /> <!-- textD, textDBrush -->
-
-	<SolidColorBrush x:Key="s_suitsMenuBackground" Color="{StaticResource dark-20}" />
-	<SolidColorBrush x:Key="s_suitsMenuListBackground" Color="{Binding Color, Source={StaticResource s_secondaryBackground}}" />
-	<SolidColorBrush x:Key="s_suitsMenuSideBackground" Color="{Binding Color, Source={StaticResource s_background}}" />
-	<SolidColorBrush x:Key="s_suitsMenuDivider" Color="{Binding Color, Source={StaticResource s_border}}" />
-	<SolidColorBrush x:Key="s_suitsMenuActiveTab" Color="{StaticResource dark+30a}" />
-
-	<!-- tab hover -->
-	<SolidColorBrush x:Key="s_tabBackgroundHover" Color="{StaticResource dark+05}" /> <!-- backgroundH -->
-	<SolidColorBrush x:Key="s_tabBorderHover" Color="{StaticResource dark+35c}" /> <!-- borderH -->
-
-	<!-- combobox, item, list item -->
-	<SolidColorBrush x:Key="s_itemBackgroundHover" Color="{StaticResource dark+15}" /> <!-- backgroundHover, listItemHoverBackground -->
-	<SolidColorBrush x:Key="s_itemBorderHover" Color="{StaticResource dark+45}" /> <!-- borderHover, listItemHoverBorder -->
-	<SolidColorBrush x:Key="s_itemTextHover" Color="{StaticResource light+30}" /> <!-- textHover -->
-
-	<SolidColorBrush x:Key="s_disabledBackground" Color="{StaticResource dark-10}" /> <!-- backgroundDisabled (combobox, ErrorLogWindow_Background), SuitsMenu_ListBackground -->
-	<SolidColorBrush x:Key="s_disabledBorder" Color="{StaticResource dark+20}" /> <!-- borderDisabled (combobox disabled) -->
-	<SolidColorBrush x:Key="s_disabledText" Color="{StaticResource dark+85b}" /> <!-- textDisabled (also used for glyphs), textDisabledBrush, buttonDisableText (scrollbar), actuallyButtonDisableText -->
-
-	<SolidColorBrush x:Key="s_tooltipBackground" Color="{StaticResource dark+25}" /> <!-- buttonBackground (only used in tooltip) -->
-	<SolidColorBrush x:Key="s_tooltipBorder" Color="{StaticResource dark+30a}" /> <!-- buttonDisableBorder (tooltip) -->
-
-	<SolidColorBrush x:Key="s_scrollbar" Color="{StaticResource dark+85b}" />
-	<SolidColorBrush x:Key="s_scrollbarHover" Color="{StaticResource light-60}" />
-	<SolidColorBrush x:Key="s_scrollbarPressed" Color="{StaticResource light-45}" />
-	<SolidColorBrush x:Key="s_scrollbarBackground" Color="{StaticResource dark+10}" /> <!-- buttonDisableBackground (scrollbar) -->
-	<SolidColorBrush x:Key="s_scrollbarBackgroundHover" Color="{StaticResource dark+30a}" /> <!-- buttonBorder (scrollbar) -->
-	<SolidColorBrush x:Key="s_scrollbarBackgroundPressed" Color="{StaticResource dark+60}" /> <!-- buttonPressBorder (scrollbar) -->
-
-	<!-- TODO: better naming for these four -->
-	<SolidColorBrush x:Key="s_hoverBackground" Color="{StaticResource dark+25}" /> <!-- buttonHoverBackground (main, checkmark, expander) -->
-	<SolidColorBrush x:Key="s_hoverBorder" Color="{StaticResource dark+30a}" /> <!-- buttonHoverBorder (checkmark) -->
-	<SolidColorBrush x:Key="s_pressBackground" Color="{StaticResource dark+40}" /> <!-- buttonPressBackground (main, expander) -->
-	<SolidColorBrush x:Key="s_firstLaunchHeaderBackground" Color="{StaticResource dark+10}" /> <!-- buttonDisableBackground (first launch header back) -->
-
-	<SolidColorBrush x:Key="s_textboxSelection" Color="{StaticResource bright}" />
-
-	<SolidColorBrush x:Key="s_itemBackgroundActive" Color="{StaticResource dark+05+blue}" /> <!-- ComboItemSelectedBackground, listItemActiveBackground, menuItemHoverBackground -->
-	<SolidColorBrush x:Key="s_itemBackgroundInactive" Color="{StaticResource dark+35b}" /> <!-- ComboItemNoFocusBackground, listItemInactiveBackground -->
-	<SolidColorBrush x:Key="s_itemBorderInactive" Color="{StaticResource dark+85c}" /> <!-- ComboItemNoFocusBorder, listItemInactiveBorder -->
+	<SolidColorBrush x:Key="s_secondaryBackground" Color="{StaticResource dark-10}" />
+	<SolidColorBrush x:Key="s_secondaryBorder" Color="{Binding Color, Source={StaticResource s_border}}" />
+	<SolidColorBrush x:Key="s_secondaryText" Color="{Binding Color, Source={StaticResource s_mutedText}}" />
+	
+	<SolidColorBrush x:Key="s_disabledBackground" Color="{StaticResource dark-10}" />
+	<SolidColorBrush x:Key="s_disabledBorder" Color="{StaticResource dark+20}" />
+	<SolidColorBrush x:Key="s_disabledText" Color="{StaticResource dark+85b}" />
+	
+	<SolidColorBrush x:Key="s_hoverBackground" Color="{StaticResource dark+25}" />
+	<SolidColorBrush x:Key="s_hoverBorder" Color="{StaticResource dark+30a}" />
+	<SolidColorBrush x:Key="s_pressBackground" Color="{StaticResource dark+40}" />
 
 	<!-- button -->
 	<SolidColorBrush x:Key="s_buttonBackground" Color="{StaticResource dark+25}" />
@@ -123,23 +86,62 @@
 	<SolidColorBrush x:Key="s_buttonBorderHover" Color="{StaticResource dark+75a}" />
 	<SolidColorBrush x:Key="s_buttonBorderPressed" Color="{StaticResource dark+60}" />
 	<SolidColorBrush x:Key="s_buttonBorderDisabled" Color="{StaticResource dark+30a}" />
+	
+	<!-- tab -->
+	<SolidColorBrush x:Key="s_tabBackgroundHover" Color="{StaticResource dark+05}" />
+	<SolidColorBrush x:Key="s_tabBorderHover" Color="{StaticResource dark+35c}" />
 
-	<SolidColorBrush x:Key="s_inputBackground" Color="{StaticResource dark-15}" /> <!-- TextBoxBack, checkmarkBackground, exFill -->
+	<!-- combobox, item, list item -->
+	<SolidColorBrush x:Key="s_itemBackgroundHover" Color="{StaticResource dark+15}" />
+	<SolidColorBrush x:Key="s_itemBorderHover" Color="{StaticResource dark+45}" />
+	<SolidColorBrush x:Key="s_itemTextHover" Color="{StaticResource light+30}" />
+	
+	<!-- list/menu items -->
+	<SolidColorBrush x:Key="s_itemBackgroundActive" Color="{StaticResource dark+05+blue}" />
+	<SolidColorBrush x:Key="s_itemBackgroundInactive" Color="{StaticResource dark+35b}" />
+	<SolidColorBrush x:Key="s_itemBorderInactive" Color="{StaticResource dark+85c}" />
+	
+	<SolidColorBrush x:Key="s_menuGutterBackground" Color="{StaticResource dark-05}" />
 
-	<SolidColorBrush x:Key="s_checkboxBackgroundPressed" Color="{StaticResource dark+75b}" /> <!-- buttonPressBackground2 (checkbox pressed) -->
-	<SolidColorBrush x:Key="s_checkboxBorderPressed" Color="{StaticResource dark+90}" /> <!-- buttonPressBorder2 (checkbox pressed) -->
-	<SolidColorBrush x:Key="s_checkboxBackgroundDisabled" Color="{StaticResource dark+30b}" /> <!-- backgroundDisabledDarker (checkbox disabled) -->
-	<SolidColorBrush x:Key="s_checkboxBorderDisabled" Color="{StaticResource dark+50}" /> <!-- borderDisabledDarker (checkbox disabled) -->
+	<!-- tooltip -->
+	<SolidColorBrush x:Key="s_tooltipBackground" Color="{StaticResource dark+25}" />
+	<SolidColorBrush x:Key="s_tooltipBorder" Color="{StaticResource dark+30a}" />
 
-	<SolidColorBrush x:Key="s_expanderBackgroundDisabled" Color="{StaticResource dark+30b}" /> <!-- backgroundDisabledDarker (expander disabled) -->
-	<SolidColorBrush x:Key="s_expanderBorderDisabled" Color="{StaticResource light-55}" /> <!-- exborderDisabledDarker (expander disabled) -->
-	<SolidColorBrush x:Key="s_expanderBorder" Color="{StaticResource dark+80}" /> <!-- exbuttonBorder (expander) -->
-	<SolidColorBrush x:Key="s_expanderBorderHover" Color="{StaticResource dark+95}" /> <!-- exborderHover (expander) -->
-	<SolidColorBrush x:Key="s_expanderBorderPressed" Color="{StaticResource dark+65}" /> <!-- exbuttonPressBorder (expander) -->
+	<!-- scrollbar -->
+	<SolidColorBrush x:Key="s_scrollbarBackground" Color="{StaticResource dark+10}" />
+	<SolidColorBrush x:Key="s_scrollbarBackgroundHover" Color="{StaticResource dark+30a}" />
+	<SolidColorBrush x:Key="s_scrollbarBackgroundPressed" Color="{StaticResource dark+60}" />
+	<SolidColorBrush x:Key="s_scrollbar" Color="{StaticResource dark+85b}" />
+	<SolidColorBrush x:Key="s_scrollbarHover" Color="{StaticResource light-60}" />
+	<SolidColorBrush x:Key="s_scrollbarPressed" Color="{StaticResource light-45}" />
 
-	<SolidColorBrush x:Key="s_menuGutterBackground" Color="{StaticResource dark-05}" /> <!-- menuGutterBackground -->
+	<!-- inputs -->
+	<SolidColorBrush x:Key="s_inputBackground" Color="{StaticResource dark-15}" />
+	<SolidColorBrush x:Key="s_textboxSelection" Color="{StaticResource bright}" />
 
-	<SolidColorBrush x:Key="s_modularWizardNumberLabel" Color="{StaticResource dark+85a}" /> <!-- NumberLabelForeground -->
+	<!-- checkbox -->
+	<SolidColorBrush x:Key="s_checkboxBackgroundPressed" Color="{StaticResource dark+75b}" />
+	<SolidColorBrush x:Key="s_checkboxBorderPressed" Color="{StaticResource dark+90}" />
+	<SolidColorBrush x:Key="s_checkboxBackgroundDisabled" Color="{StaticResource dark+30b}" />
+	<SolidColorBrush x:Key="s_checkboxBorderDisabled" Color="{StaticResource dark+50}" />
+
+	<!-- spoiler -->
+	<SolidColorBrush x:Key="s_expanderBackgroundDisabled" Color="{StaticResource dark+30b}" />
+	<SolidColorBrush x:Key="s_expanderBorderDisabled" Color="{StaticResource light-55}" />
+	<SolidColorBrush x:Key="s_expanderBorder" Color="{StaticResource dark+80}" />
+	<SolidColorBrush x:Key="s_expanderBorderHover" Color="{StaticResource dark+95}" />
+	<SolidColorBrush x:Key="s_expanderBorderPressed" Color="{StaticResource dark+65}" />
+
+	<!-- app-specific -->
+	<SolidColorBrush x:Key="s_firstLaunchHeaderBackground" Color="{StaticResource dark+10}" />
+	<SolidColorBrush x:Key="s_overlayColor" Color="{StaticResource dark+30a}" />
+	<SolidColorBrush x:Key="s_modularWizardNumberLabel" Color="{StaticResource dark+85a}" />
+	
+	<SolidColorBrush x:Key="s_suitsMenuBackground" Color="{StaticResource dark-20}" />
+	<SolidColorBrush x:Key="s_suitsMenuListBackground" Color="{Binding Color, Source={StaticResource s_secondaryBackground}}" />
+	<SolidColorBrush x:Key="s_suitsMenuSideBackground" Color="{Binding Color, Source={StaticResource s_background}}" />
+	<SolidColorBrush x:Key="s_suitsMenuDivider" Color="{Binding Color, Source={StaticResource s_border}}" />
+	<SolidColorBrush x:Key="s_suitsMenuActiveTab" Color="{StaticResource dark+30a}" />
 
 	<!-- overrides -->
 
