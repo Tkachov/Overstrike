@@ -1328,6 +1328,8 @@ namespace Overstrike {
 
 		private void ProfileGamePath_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
 			try {
+				if (e.ClickCount != 2) return;
+
 				var path = _selectedProfile.GamePath;
 
 				if (e.ChangedButton == MouseButton.Right) {
