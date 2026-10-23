@@ -138,10 +138,7 @@
 						<StackPanel>
 							<Grid Margin="0,0,0,8">
 								<TextBlock Text="Suit:" Margin="0,1,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" />
-								<ComboBox x:Name="_SuitLoadoutComboBox" Margin="65,0,0,0" SelectionChanged="SuitLoadoutComboBox_SelectionChanged">
-									<ComboBox.ItemContainerStyle>
-										<Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}"><Setter Property="IsEnabled" Value="{Binding IsEnabled}" /></Style>
-									</ComboBox.ItemContainerStyle>
+								<ComboBox x:Name="_SuitLoadoutComboBox" Margin="65,0,0,0" SelectionChanged="SuitLoadoutComboBox_SelectionChanged" ItemContainerStyle="{DynamicResource MSM2SuitsMenu_SuitLoadoutCombobox}">
 									<ComboBox.ItemTemplate><DataTemplate><TextBlock Text="{Binding Name}" /></DataTemplate></ComboBox.ItemTemplate>
 								</ComboBox>
 							</Grid>
@@ -168,10 +165,7 @@
 							<StackPanel x:Name="_SuitWebwingsPanel" Margin="0,0,0,8" Visibility="Collapsed">
 								<Grid>
 									<TextBlock Text="Wings:" Margin="0,1,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" />
-									<ComboBox x:Name="_SuitWebwingsComboBox" Margin="65,0,0,0" SelectionChanged="SuitWebwingsComboBox_SelectionChanged">
-									<ComboBox.ItemContainerStyle>
-										<Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}"><Setter Property="IsEnabled" Value="{Binding IsEnabled}" /></Style>
-									</ComboBox.ItemContainerStyle>
+									<ComboBox x:Name="_SuitWebwingsComboBox" Margin="65,0,0,0" SelectionChanged="SuitWebwingsComboBox_SelectionChanged" ItemContainerStyle="{DynamicResource MSM2SuitsMenu_SuitWebwingsCombobox}">
 										<ComboBox.ItemTemplate><DataTemplate><TextBlock Text="{Binding Name}" /></DataTemplate></ComboBox.ItemTemplate>
 									</ComboBox>
 								</Grid>

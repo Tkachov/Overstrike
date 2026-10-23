@@ -633,6 +633,13 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
+	
+	<Style x:Key="MSM2SuitsMenu_SuitLoadoutCombobox" TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+		<Setter Property="IsEnabled" Value="{Binding IsEnabled}" />
+	</Style>
+	<Style x:Key="MSM2SuitsMenu_SuitWebwingsCombobox" TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+		<Setter Property="IsEnabled" Value="{Binding IsEnabled}" />
+	</Style>
 
 	<!-- tab control & tab item -->
 
