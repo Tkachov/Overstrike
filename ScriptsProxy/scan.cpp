@@ -9,14 +9,15 @@
 #include <Windows.h>
 #include <Psapi.h>
 #include <stdio.h>
+#include <string.h>
 #include <map>
 
 std::map<Scan::Pattern, Scan::ScanResult> ScanCache = {};
 
 Scan::Pattern Scan::Parse(const char* pattern) {
 	int pattern_len = (strlen(pattern) + 1) / 3;
-	char* pattern_bytes = new char[pattern_len];
-	char* mask = new char[pattern_len];
+	char* pattern_bytes = new char[pattern_len]();
+	char* mask = new char[pattern_len]();
 
 	for (int i = 0; i < strlen(pattern); i++) {
 		if (pattern[i] == ' ') {
@@ -50,7 +51,11 @@ Scan::ScanResult Scan::Internal::ScanModule(const char* moduleName, Scan::Patter
 	HMODULE module = GetModuleHandleA(moduleName);
 	MODULEINFO info {};
 	if (!GetModuleInformation(GetCurrentProcess(), module, &info, sizeof(info))) {
-		return Scan::ScanResult { false, NULL, nullptr };
+		return Scan::ScanResult { false, NULL, {} };
+	}
+
+	if (pattern.len <= 0 || static_cast<unsigned int>(pattern.len) > info.SizeOfImage) {
+		return Scan::ScanResult { false, NULL, {} };
 	}
 
 	uintptr_t base = (uintptr_t)module;
@@ -58,35 +63,55 @@ Scan::ScanResult Scan::Internal::ScanModule(const char* moduleName, Scan::Patter
 	char store[4] = {0};
 	uintptr_t loc = 0;
 
-	for (unsigned int i = 0; i < info.SizeOfImage - pattern.len; i++) {
+	int anchor = -1;
+	for (int j = 0; j < pattern.len; j++) {
+		if (pattern.mask[j] != '?' && pattern.mask[j] != '*') {
+			anchor = j;
+			break;
+		}
+	}
+
+	const char* image = (const char*)base;
+	const size_t candidates = (size_t)info.SizeOfImage - (size_t)pattern.len + 1;
+
+	for (size_t c = 0; c < candidates; ) {
+		if (anchor >= 0) {
+			const char* hit = (const char*)memchr(image + c + anchor, pattern.pattern[anchor], candidates - c);
+			if (!hit) {
+				break;
+			}
+			c = (size_t)(hit - image) - (size_t)anchor;
+		}
+
 		bool found = true;
 		int store_used = 0;
+
+		memset(store, 0, sizeof(store));
 
 		for (int j = 0; j < pattern.len; j++) {
 			if (pattern.mask[j] == '*') {
 				if (store_used < sizeof(store)) {
-					store[store_used++] = *(char*)(base + i + j);
+					store[store_used++] = image[c + j];
 				}
 				continue;
 			}
 
-			if (pattern.mask[j] != '?' && pattern.pattern[j] != *(char*)(base + i + j)) {
+			if (pattern.mask[j] != '?' && pattern.pattern[j] != image[c + j]) {
 				found = false;
 				break;
 			}
 		}
 
 		if (found) {
-			loc = base + i;
+			loc = base + c;
 			break;
 		}
+
+		c++;
 	}
 
-	Scan::ScanResult result = Scan::ScanResult {
-		loc != NULL,
-		loc,
-		store
-	};
+	Scan::ScanResult result = Scan::ScanResult { loc != NULL, loc, {} };
+	memcpy(result.store, store, sizeof(store));
 
 	ScanCache.insert(std::pair(pattern, result));
 

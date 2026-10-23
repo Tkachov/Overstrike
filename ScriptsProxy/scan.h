@@ -41,7 +41,7 @@ namespace Scan {
 	typedef struct {
 		bool found;
 		uintptr_t loc;
-		char* store;
+		char store[4];
 	} ScanResult;
 
 	namespace Internal {
