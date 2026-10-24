@@ -4,7 +4,7 @@
 					xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
 					xmlns:local="clr-namespace:Overstrike;assembly=Overstrike">
 	<sys:String x:Key="Theme.Name">Overstrike Dark by Tkachov</sys:String>
-	<sys:String x:Key="Theme.Version">1.8.1.0</sys:String>
+	<sys:String x:Key="Theme.Version">1.9.0.0</sys:String>
 
 	<!-- colors -->
 
